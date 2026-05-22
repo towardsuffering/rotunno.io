@@ -23,8 +23,6 @@
     "@astrojs/rss": "4.0.18",
     "@astrojs/sitemap": "3.7.2",
     "@fontsource-variable/inter": "5.2.8",
-    "@keystatic/astro": "5.0.6",
-    "@keystatic/core": "0.5.48",
     "@tabler/icons": "3.35.0",
     "@tailwindcss/forms": "0.5.10",
     "@tailwindcss/vite": "4.1.17",
@@ -60,10 +58,12 @@
   "pnpm": {
     "peerDependencyRules": {
       "ignoreMissing": [],
-      "allowedVersions": {
-        "@keystatic/astro>astro": "6"
-      }
+      "allowedVersions": {}
     },
-    "onlyBuiltDependencies": ["@parcel/watcher", "esbuild", "sharp"]
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "sharp"
+    ]
   }
 }
