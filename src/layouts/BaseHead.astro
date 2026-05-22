@@ -96,10 +96,18 @@ import InterVariable from "@fontsource-variable/inter/files/inter-latin-wght-nor
 <!-- no fallback as I saw issues with firefox fallback -->
 {siteSettings.useViewTransitions && <ClientRouter fallback="none" />}
 
-<!-- Google Analytics 4 — loaded after page interactive to avoid blocking render -->
+<!-- Google Analytics 4 with consent mode -->
 <script is:inline>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+
+  // Default: deny analytics until user consents
+  gtag('consent', 'default', { analytics_storage: 'denied' });
+
+  // If user already accepted in a prior session, grant immediately
+  if (localStorage.getItem('cookie-consent') === 'accept') {
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+  }
 
   function loadGA() {
     var s = document.createElement('script');

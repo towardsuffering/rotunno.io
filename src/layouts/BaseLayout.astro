@@ -52,8 +52,8 @@ const currLocale = getLocaleFromUrl(Astro.url);
   </head>
   <body id="body" class={` ${siteSettings.useAnimations === true ? "use-animations" : ""}`}>
     <div id="page" class="">
-      <!-- put cookie consent at the top of the page so it is seen first by screen readers -->
-      <!-- <CookieConsent /> -->
+      <!-- Cookie consent banner -->
+      <CookieConsent />
 
       <Nav {...navProps} />
       <main class="relative min-h-[100lvh] overflow-x-clip">
