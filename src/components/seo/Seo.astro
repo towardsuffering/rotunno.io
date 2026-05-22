@@ -96,9 +96,9 @@ const imageUrl =
       siteName: siteData.title,
     },
     image: {
-      type: "image/webp",
+      type: optimizedImage ? "image/webp" : "image/jpeg",
       width: optimizedImage?.attributes.width || "1200",
-      height: optimizedImage?.attributes.height || "800",
+      height: optimizedImage?.attributes.height || "630",
       alt: title,
     },
   }}
@@ -113,6 +113,9 @@ const imageUrl =
   noindex={noindex}
   nofollow={noindex}
 />
+
+<!-- Facebook requires og:image:secure_url for HTTPS images -->
+<meta property="og:image:secure_url" content={imageUrl} />
 
 <!-- hreflang attributes -->
 <HrefLang />
