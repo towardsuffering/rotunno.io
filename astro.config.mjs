@@ -1,5 +1,4 @@
 import mdx from "@astrojs/mdx";
-import netlify from "@astrojs/netlify";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import compress from "@playform/compress";
@@ -11,9 +10,6 @@ import icon from "astro-icon";
 // https://astro.build/config
 export default defineConfig({
   site: "https://waterlimondewds.com",
-  adapter: netlify({
-    imageCDN: false,
-  }),
   // i18n configuration must match src/config/translations.json.ts
   i18n: {
     defaultLocale: "en",
