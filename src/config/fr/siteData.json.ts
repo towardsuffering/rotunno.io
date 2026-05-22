@@ -18,7 +18,7 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-default.jpg",
+    src: "/images/og-banner.jpg",
     alt: "WaterLimon Dewds — Home of the Ancient City Splash",
   },
 };
