@@ -33,7 +33,7 @@
     --popover-foreground: oklch(0.14 0.030 140);
 
     /* Primary colors for <Button>, etc. when variant="primary" */
-    --primary: var(--color-primary-600);
+    --primary: var(--color-primary-700);
     --primary-foreground: oklch(0.99 0.005 75);
 
     /* Primary color used for text and other accents on top of the background color */
