@@ -90,3 +90,20 @@ import InterVariable from "@fontsource-variable/inter/files/inter-latin-wght-nor
 
 <!-- no fallback as I saw issues with firefox fallback -->
 {siteSettings.useViewTransitions && <ClientRouter fallback="none" />}
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RC73P2JBJL" is:inline></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RC73P2JBJL');
+
+  // Re-fire page_view on Astro view transitions navigation
+  document.addEventListener('astro:after-swap', function() {
+    gtag('event', 'page_view', {
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  });
+</script>
