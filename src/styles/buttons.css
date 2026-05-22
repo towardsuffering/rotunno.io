@@ -11,6 +11,9 @@
 }
 
 .button--primary {
+  /* hex fallback: axe-core/Lighthouse can't parse oklch; these are overridden by @apply in modern browsers */
+  background-color: #355e17;
+  color: #fefdf5;
   @apply text-primary-foreground bg-primary hover:bg-primary/90;
 }
 
