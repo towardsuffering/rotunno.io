@@ -25,7 +25,7 @@
     {
       "title": "Senior Software Engineer",
       "company": "TechCorp",
-      "companyImage": "./index/experience/0/companyImage.png",
+      "companyImage": "./index/experience/0/companyImage.jpg",
       "dates": "Jan 2021 - Present",
       "location": "San Francisco, CA",
       "responsibilities": [
@@ -38,7 +38,7 @@
     {
       "title": "Technical Lead",
       "company": "InnovateLabs",
-      "companyImage": "./index/experience/1/companyImage.png",
+      "companyImage": "./index/experience/1/companyImage.jpg",
       "dates": "Mar 2019 - Dec 2020",
       "location": "New York, NY",
       "responsibilities": [
@@ -101,31 +101,31 @@
     {
       "name": "Visual Studio Code",
       "category": "Development",
-      "image": "./index/tools/1/image.png",
+      "image": "./index/tools/1/image.jpg",
       "link": "https://code.visualstudio.com"
     },
     {
       "name": "Figma",
       "category": "Design",
-      "image": "./index/tools/2/image.png",
+      "image": "./index/tools/2/image.jpg",
       "link": "https://figma.com"
     },
     {
       "name": "Adobe XD",
       "category": "Design",
-      "image": "./index/tools/3/image.png",
+      "image": "./index/tools/3/image.jpg",
       "link": "https://adobe.com/products/xd"
     },
     {
       "name": "Webstorm",
       "category": "Development",
-      "image": "./index/tools/4/image.png",
+      "image": "./index/tools/4/image.jpg",
       "link": "https://jetbrains.com/webstorm"
     },
     {
       "name": "Docker",
       "category": "DevOps",
-      "image": "./index/tools/5/image.png",
+      "image": "./index/tools/5/image.jpg",
       "link": "https://docker.com"
     }
   ]

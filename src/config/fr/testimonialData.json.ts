@@ -2,7 +2,7 @@ import Aniket from "@images/testimonials/aniket_p.jpg";
 import BowTiedFocus from "@images/testimonials/BowTiedFocus.jpg";
 import Connor from "@images/testimonials/connor.webp";
 import Damiano from "@images/testimonials/damiano.jpg";
-import David from "@images/testimonials/david-g-davedev.png";
+import David from "@images/testimonials/david-g-davedev.jpg";
 import Geoffrey from "@images/testimonials/geoffrey.webp";
 
 import { type TestimonialItem } from "../types/configDataTypes";

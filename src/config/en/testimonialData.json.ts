@@ -1,5 +1,5 @@
-import Img1 from "@images/testimonials/man.png";
-import Img2 from "@images/testimonials/travis-b.png";
+import Img1 from "@images/testimonials/man.jpg";
+import Img2 from "@images/testimonials/travis-b.jpg";
 import Img3 from "@images/testimonials/BowTiedFocus.jpg";
 import Img4 from "@images/testimonials/geoffrey.webp";
 import Img5 from "@images/testimonials/connor.webp";
