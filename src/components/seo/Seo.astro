@@ -40,7 +40,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 if (image) {
   optimizedImage = await getImage({
     src: image,
-    format: "webp",
+    format: "jpeg",
     quality: "high",
     width: 1200,
   });
@@ -76,8 +76,8 @@ function trimEndSlash(str: string) {
 }
 
 // put together the image URL
-const imageUrl =
-  trimEndSlash(Astro.site?.toString() || "") + (optimizedImage?.src || siteData.defaultImage.src);
+const rawImageSrc = (optimizedImage?.src || siteData.defaultImage.src).split("?")[0];
+const imageUrl = trimEndSlash(Astro.site?.toString() || "") + rawImageSrc;
 ---
 
 <SEO
@@ -96,7 +96,7 @@ const imageUrl =
       siteName: siteData.title,
     },
     image: {
-      type: optimizedImage ? "image/webp" : "image/jpeg",
+      type: 'image/jpeg',
       width: optimizedImage?.attributes.width || "1200",
       height: optimizedImage?.attributes.height || "630",
       alt: title,
