@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import { type CollectionEntry } from "astro:content";
+
+import ProjectCard from "@/components/projects/ProjectCard.astro";
+import { filterCollectionByLanguage } from "@/js/localeUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+const projects = await getCollection("projects", ({ data }) => {
+  // filter out draft projects
+  return data.draft !== true;
+});
+const filteredProjects = filterCollectionByLanguage(
+  projects,
+  currLocale,
+) as CollectionEntry<"projects">[];
+const sortedProjects = filteredProjects.sort(
+  (a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity),
+);
+---
+
+<section id="showcase-cards" class="bg-background text-foreground py-16 md:py-24">
+  <div class="site-container mx-auto px-4">
+    <h2 class="h2 mb-16 text-center" data-mos="fade-up">Featured Work</h2>
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3" id="project-cards">
+      {
+        sortedProjects.map((project, idx) => (
+          <ProjectCard
+            project={project}
+            data-mos="fade-up"
+            data-mos-anchor="#project-cards"
+            data-mos-delay={0.2 * idx}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

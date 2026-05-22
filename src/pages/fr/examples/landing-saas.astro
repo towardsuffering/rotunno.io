@@ -1,0 +1,64 @@
+---
+import Contact from "@/components/contact/Contact.astro";
+import CtaBgImage from "@/components/cta/CtaBgImage.astro";
+import CtaCardBgImage from "@/components/cta/CtaCardBgImage.astro";
+import CtaCenteredNewsletter from "@/components/cta/CtaCenteredNewsletter.astro";
+import FaqAccordions from "@/components/faq/FaqAccordions.astro";
+import FaqCards from "@/components/faq/FaqCards.astro";
+import FeatureCardsMedium from "@/components/feature/FeatureCardsMedium.astro";
+import FeatureCardsSmall from "@/components/feature/FeatureCardsSmall.astro";
+import FeatureCodeToggle from "@/components/feature/FeatureCodeToggle.astro";
+import FeatureNumbers from "@/components/feature/FeatureNumbers.astro";
+import FeatureSideImage from "@/components/feature/FeatureSideImage.astro";
+import FeatureSteps from "@/components/feature/FeatureSteps.astro";
+import FeatureVideo from "@/components/feature/FeatureVideo.astro";
+import HeroSideImage from "@/components/hero/HeroSideImage.astro";
+import LogoCloudMarquee from "@/components/logo-cloud/LogoCloudMarquee.astro";
+import LogoCloudStatic from "@/components/logo-cloud/LogoCloudStatic.astro";
+import PricingFourCards from "@/components/pricing/PricingFourCards.astro";
+import PricingOnePrice from "@/components/pricing/PricingOnePrice.astro";
+import PricingOnePriceSide from "@/components/pricing/PricingOnePriceSide.astro";
+import PricingTable from "@/components/pricing/PricingTable.astro";
+import PricingThreeCards from "@/components/pricing/PricingThreeCards.astro";
+import TestimonialCards from "@/components/testimonials/TestimonialCards.astro";
+import TestimonialsMarquee from "@/components/testimonials/TestimonialsMarquee.astro";
+import TestimonialSwiper from "@/components/testimonials/TestimonialSwiper.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description} navStyle="default">
+  <HeroSideImage />
+
+  <!-- <LogoCloudStatic /> -->
+  <LogoCloudMarquee />
+
+  <FeatureCodeToggle />
+  <FeatureSteps />
+  <FeatureCardsSmall />
+  <FeatureNumbers />
+  <FeatureSideImage />
+  <!-- <FeatureCardsMedium /> -->
+  <!-- <FeatureVideo /> -->
+
+  <TestimonialsMarquee />
+  <!-- <TestimonialSwiper /> -->
+  <!-- <TestimonialCards /> -->
+
+  <!-- <PricingOnePrice /> -->
+  <!-- <PricingOnePriceSide /> -->
+  <!-- <PricingThreeCards /> -->
+  <!-- <PricingFourCards /> -->
+  <PricingTable />
+
+  <CtaCardBgImage />
+  <!-- <CtaBgImage /> -->
+  <!-- <CtaCenteredNewsletter /> -->
+
+  <FaqAccordions />
+  <!-- <FaqCards /> -->
+</BaseLayout>

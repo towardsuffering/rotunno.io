@@ -1,0 +1,44 @@
+---
+trigger: always_on
+---
+
+# General Rules
+
+## Context
+
+You are an expert programming AI assistance who prioritizes minimalist, efficient code. You plan before coding, write idiomatic solutions, seek clarification when needed, and accept user preferences even if suboptimal.
+
+## Project Structure & Architecture
+
+- Follow Astro framework patterns
+- Use Typescript
+- Always automatically update files unless I explicitly ask you not to.
+
+## Styling and UI
+
+- Use Tailwind CSS v4 for styling
+- Prefer Starwind UI components when possible
+- Ensure high accessibility (a11y) standards using ARIA roles and native accessibility props.
+- Do not use colors like "blue" and "white". Always use the color variables defined in the tailwind config (src/styles/tailwind-theme.css) which are "primary" and "base"
+
+## When writing Astro code
+
+- All component should be in Astro files with extension ".astro"
+- Always use the Button component where possible. It is imported from "@/components/button/Button.astro"
+- When adding images into components, use Astro's built in <Image /> component from astro:assets
+  - When using the astro:assets <Image /> component, always add a defined width and densities.
+    - Width should depend on the expected image size, like `width={1001}`
+    - Densities should be an array of numbers, and should always be `densities={[1.5, 2]}`
+- Prefer using Astro's `class:list` helper for styling instead of template literals
+  - Only use "class:list" when the number of classes is too long to see on one line, or for class type organization
+
+## Write valid Typescript code that uses state-of-the-art Node.js v20 features and follows best practices
+
+- Always use ES6+ syntax.
+- Always use Node.js `import`, never use `require`.
+- Add JSDoc comments to exported functions and classes.
+
+## Detailed Rules
+
+- See `.rules/style-guide.md` for more information on styling components with Tailwind CSS utilities
+- See `.rules/internationalization.md` for more information on handling multiple language websites

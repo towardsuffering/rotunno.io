@@ -1,0 +1,78 @@
+---
+import { type Page } from "astro";
+
+import Pagination from "@/components/pagination/Pagination.astro";
+import PostCard from "@/components/post-card/PostCardMultiLink.astro";
+import TagCloud from "@/components/tag-cloud/TagCloud.astro";
+import { defaultLocale } from "@/config/siteSettings.json";
+import { countItems, getAllPosts } from "@/js/blogUtils";
+import { slugify, tagify } from "@/js/textUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// generate pagination for tag pages if there are a bunch of posts for a single tag
+export async function getStaticPaths({ paginate }) {
+  const posts = await getAllPosts("fr");
+
+  // get all tags from the posts
+  const allTags = posts.map((post) => post.data.tags).flat();
+
+  // combine tags and count how many times they appear. these are "slugified"
+  const countedTags = countItems(allTags);
+
+  // pagination returns an array of objects with params and page size
+  return Object.entries(countedTags).flatMap(([tag, val]) => {
+    // get all posts that have the tag
+    const filteredPosts = posts.filter((post) => {
+      // make sure to slugify them for comparison
+      const slugifiedTags = post.data.tags.map((tag) => slugify(tag));
+      return slugifiedTags.includes(tag);
+    });
+
+    return paginate(filteredPosts, {
+      params: { tag: tag },
+      pageSize: 6,
+    });
+  });
+}
+
+const { page } = Astro.props as { page: Page };
+const { tag } = Astro.params as { tag: string };
+
+const formattedTag = tagify(tag);
+---
+
+<BaseLayout
+  title={`${formattedTag} - Blog posts`}
+  description={`A collection of blog posts about ${formattedTag.toLowerCase()}`}
+>
+  <section class="site-container py-24 md:pt-40">
+    <div class="overflow-x-clip">
+      <div class="mr-auto flex max-w-[950px] flex-col">
+        <h1 class="h1">
+          Posts tagged with <span class="border-primary border-b-2">#{formattedTag}</span>
+        </h1>
+        <p class="text-muted-foreground mt-2 md:text-lg">
+          A collection of blog posts about {formattedTag.toLowerCase()}
+        </p>
+      </div>
+
+      <div class="mt-6 flex pb-16">
+        <TagCloud />
+      </div>
+    </div>
+
+    <div class="grid gap-8 gap-y-10 md:grid-cols-2">
+      {page.data.map((post) => <PostCard post={post} showDescription={true} />)}
+    </div>
+
+    <div class="mt-10 flex justify-center md:mt-16">
+      <Pagination
+        basePath={`/tags/${tag}/`}
+        prevUrl={page.url.prev}
+        currPage={page.currentPage}
+        nextUrl={page.url.next}
+        lastPage={page.lastPage}
+      />
+    </div>
+  </section>
+</BaseLayout>

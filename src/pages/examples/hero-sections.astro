@@ -1,0 +1,27 @@
+---
+import HeroBackgroundImage from "@/components/hero/HeroBackgroundImage.astro";
+import HeroBasic from "@/components/hero/HeroBasic.astro";
+import HeroCentered from "@/components/hero/HeroCentered.astro";
+import HeroOverview from "@/components/hero/HeroOverview.astro";
+import HeroSideImage from "@/components/hero/HeroSideImage.astro";
+import LogoCloudMarquee from "@/components/logo-cloud/LogoCloudMarquee.astro";
+import LogoCloudStatic from "@/components/logo-cloud/LogoCloudStatic.astro";
+import LogoCloudStaticSimple from "@/components/logo-cloud/LogoCloudStaticSimple.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description} navStyle="default">
+  <HeroCentered />
+  <LogoCloudStaticSimple />
+  <HeroBackgroundImage />
+  <LogoCloudMarquee />
+  <HeroSideImage />
+  <LogoCloudStatic />
+  <HeroBasic />
+  <!-- <HeroOverview /> -->
+</BaseLayout>

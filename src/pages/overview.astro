@@ -1,0 +1,13 @@
+---
+import HeroBasic from "@/components/hero/HeroBasic.astro";
+import HeroOverview from "@/components/hero/HeroOverview.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData, useTranslations } from "@/js/translationUtils";
+import OverviewLayout from "@/layouts/OverviewLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+const t = useTranslations(currLocale);
+---
+
+<OverviewLayout title={siteData.title} description={siteData.description} />

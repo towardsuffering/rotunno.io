@@ -1,0 +1,113 @@
+---
+import "@/styles/global.css";
+
+import type { ComponentProps } from "astro/types";
+import { type CollectionEntry } from "astro:content";
+
+import CookieConsent from "@/components/cookie-consent/CookieConsent.astro";
+import Footer from "@/components/footer/Footer.astro";
+import Nav from "@/components/nav/Nav.astro";
+import siteSettings from "@/config/siteSettings.json";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import BaseHead from "@/layouts/BaseHead.astro";
+
+// heroImage and authorData are defined on blog posts
+// authorData could also be defined on the about author page
+interface Props extends ComponentProps<typeof Nav> {
+  type?: "blog" | "general";
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+  authorsData?: CollectionEntry<"authors">[];
+  postFrontmatter?: CollectionEntry<"blog">["data"];
+  noindex?: boolean; // you need to opt-in to no indexing, as it hides the page from search engines
+}
+
+const {
+  type = "general",
+  title,
+  description,
+  image,
+  authorsData,
+  postFrontmatter,
+  noindex = false,
+  ...navProps
+} = Astro.props as Props;
+
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+<!doctype html>
+<html lang={currLocale} transition:animate="fade">
+  <head>
+    <BaseHead
+      type={type}
+      title={title}
+      description={description}
+      image={image ? image : undefined}
+      authors={authorsData ? authorsData : undefined}
+      postFrontmatter={postFrontmatter ? postFrontmatter : undefined}
+      noindex={noindex}
+    />
+  </head>
+  <body id="body" class={` ${siteSettings.useAnimations === true ? "use-animations" : ""}`}>
+    <div id="page" class="">
+      <!-- put cookie consent at the top of the page so it is seen first by screen readers -->
+      <!-- <CookieConsent /> -->
+
+      <Nav {...navProps} />
+      <main class="relative min-h-[100lvh] overflow-x-clip">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <!-- Custom reveal animations -->
+    <script>
+      function initReveal() {
+        const els = document.querySelectorAll('[data-reveal]');
+        if (!els.length) return;
+        const timers = new Map<Element, ReturnType<typeof setTimeout>>();
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            const el = entry.target as HTMLElement;
+            if (entry.isIntersecting) {
+              const delay = parseFloat(el.dataset.revealDelay || '0') * 1000;
+              const t = setTimeout(() => el.classList.add('revealed'), delay);
+              timers.set(el, t);
+            } else {
+              clearTimeout(timers.get(el));
+              timers.delete(el);
+              el.classList.remove('revealed');
+            }
+          });
+        }, { threshold: 0.15 });
+        els.forEach(el => io.observe(el));
+      }
+      initReveal();
+      document.addEventListener('astro:after-swap', initReveal);
+    </script>
+
+    <!-- Scroll animations -->
+    <script>
+      import { MOS } from "motion-on-scroll";
+
+      import { siteSettings } from "@/config/siteSettings.json";
+
+      if (siteSettings.useAnimations === true) {
+        MOS.init({
+          offset: 100,
+          duration: 0.8,
+          timeUnits: "s",
+          distance: 20,
+          delay: 0,
+          easing: "ease-out-cubic",
+          once: true,
+          mirror: false,
+        });
+
+        document.addEventListener("astro:after-swap", MOS.refreshHard);
+      }
+    </script>
+  </body>
+</html>

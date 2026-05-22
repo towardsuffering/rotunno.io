@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 180" width="820" height="180">
+  <defs>
+    <clipPath id="tower-clip">
+      <path d="M 22 132 L 30 38 L 50 38 L 58 132 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- ── Lighthouse ── -->
+
+  <!-- Base -->
+  <rect x="18" y="132" width="44" height="24" rx="2" fill="#aaa" opacity="0.4"/>
+
+  <!-- Tower white -->
+  <path d="M 22 132 L 30 38 L 50 38 L 58 132 Z" fill="white" stroke="#555" stroke-width="1.5"/>
+
+  <!-- Black spiral stripes -->
+  <g clip-path="url(#tower-clip)">
+    <rect x="5"  y="38"  width="70" height="18" fill="black" transform="skewY(-12)"/>
+    <rect x="5"  y="74"  width="70" height="18" fill="black" transform="skewY(-12)"/>
+    <rect x="5"  y="110" width="70" height="18" fill="black" transform="skewY(-12)"/>
+  </g>
+
+  <!-- Gallery deck -->
+  <rect x="24" y="30" width="32" height="8" rx="1" fill="#333"/>
+
+  <!-- Lantern room — red -->
+  <rect x="28" y="16" width="24" height="14" rx="1" fill="#cc2200"/>
+
+  <!-- Dome — red -->
+  <path d="M 28 16 Q 40 6 52 16 Z" fill="#cc2200"/>
+
+  <!-- Light glow -->
+  <circle cx="40" cy="23" r="5" fill="white" opacity="0.95"/>
+
+  <!-- Rod -->
+  <line x1="40" y1="2" x2="40" y2="8" stroke="#333" stroke-width="2"/>
+
+  <!-- ── Text ── -->
+
+  <!-- Company name -->
+  <text
+    x="90" y="90"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="58"
+    font-weight="700"
+    fill="#1a1a1a"
+    letter-spacing="-1"
+  >WaterLimon Dewds</text>
+
+  <!-- Motto -->
+  <text
+    x="93" y="128"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="22"
+    font-weight="500"
+    fill="#cc2200"
+    letter-spacing="1"
+  >Home of the Ancient City Splash</text>
+
+</svg>

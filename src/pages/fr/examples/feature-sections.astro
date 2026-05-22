@@ -1,0 +1,29 @@
+---
+import FeatureCardsMedium from "@/components/feature/FeatureCardsMedium.astro";
+import FeatureCardsSmall from "@/components/feature/FeatureCardsSmall.astro";
+import FeatureCodeToggle from "@/components/feature/FeatureCodeToggle.astro";
+import FeatureNumbers from "@/components/feature/FeatureNumbers.astro";
+import FeatureSideImage from "@/components/feature/FeatureSideImage.astro";
+import FeatureSteps from "@/components/feature/FeatureSteps.astro";
+import FeatureVideo from "@/components/feature/FeatureVideo.astro";
+import ProcessSectionHorizontal from "@/components/process/ProcessSectionHorizontal.astro";
+import ProcessSectionVertical from "@/components/process/ProcessSectionVertical.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description} navStyle="default">
+  <FeatureCodeToggle />
+  <FeatureSteps />
+  <FeatureCardsSmall />
+  <FeatureNumbers />
+  <FeatureSideImage />
+  <FeatureCardsMedium />
+  <FeatureVideo />
+  <ProcessSectionVertical />
+  <ProcessSectionHorizontal />
+</BaseLayout>

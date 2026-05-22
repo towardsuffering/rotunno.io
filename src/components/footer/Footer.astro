@@ -1,0 +1,76 @@
+---
+import SiteLogo from "@/components/site-logo/SiteLogo.astro";
+import { Icon } from "astro-icon/components";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+
+import FooterLink from "./FooterLink.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+const today = new Date();
+
+const footerColumns = [
+  {
+    title: "Navigate",
+    links: [
+      { label: "Our Story", href: "/" },
+      { label: "What We Offer", href: "/services" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Blog", href: "/blog" },
+    ],
+  },
+  {
+    title: "Contact",
+    links: [
+      { label: "waterlimondewds@gmail.com", href: "mailto:waterlimondewds@gmail.com", pink: true },
+      { label: "(727) 221-2980", href: "tel:+17272212980", pink: true },
+    ],
+  },
+];
+---
+
+<section class="overflow-hidden pt-16 pb-10">
+  <div class="site-container">
+    <div class="border-b pb-16">
+      <div class="-m-8 flex flex-wrap">
+        <div class="w-full p-8 sm:w-1/2 lg:w-6/12">
+          <div class="lg:max-w-sm">
+            <SiteLogo />
+            <p class="text-muted-foreground mt-4 font-medium md:max-w-xs">
+              Watermelon, lime, ice, and a dash of salt. Made fresh on-site at markets and events across Florida.
+            </p>
+          </div>
+        </div>
+        {
+          footerColumns.map((col) => (
+            <div class="w-full p-8 sm:w-1/2 lg:w-2/12" aria-label={col.title}>
+              <h3 class="font-heading mb-8 text-sm font-medium uppercase">{col.title}</h3>
+              <ul class="space-y-2">
+                {col.links.map((link) => (
+                  <FooterLink label={link.label} href={link.href} pink={link.pink} />
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+    <div class="py-5 text-center space-y-1">
+      <p class="text-muted-foreground text-sm leading-normal font-medium">
+        Copyright {today.getFullYear()} {siteData.name}. All Rights Reserved
+      </p>
+      <div class="flex items-center justify-center gap-3 text-muted-foreground text-xs">
+        <span>Built with</span>
+        <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors flex items-center gap-1" aria-label="Astro">
+          <Icon name="logos/astro" class="h-4 w-auto" />
+        </a>
+        <span>&amp;</span>
+        <a href="https://claude.ai/code" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors flex items-center gap-1" aria-label="Claude Code">
+          <Icon name="logos/claude" class="size-4" />
+          <span>Claude Code</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

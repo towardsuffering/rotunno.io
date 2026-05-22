@@ -1,0 +1,185 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+
+import FilterButton from "@/components/button/FilterButton.astro";
+import ContactCentered from "@/components/contact/ContactCentered.astro";
+import ProjectCard from "@/components/projects/ProjectCard.astro";
+import { filterCollectionByLanguage } from "@/js/localeUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+const projects = await getCollection("projects", ({ data }) => {
+  // filter out draft projects
+  return data.draft !== true;
+});
+const filteredProjects = filterCollectionByLanguage(
+  projects,
+  currLocale,
+) as CollectionEntry<"projects">[];
+const sortedProjects = filteredProjects.sort(
+  (a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity),
+);
+
+// Get unique technologies from all projects
+const allTechnologies = [
+  ...new Set(projects.flatMap((project) => project.data.technologies)),
+].sort();
+---
+
+<BaseLayout
+  title="My projects"
+  description="Learn from my projects about web development, design, and more."
+>
+  <div class="site-container py-24 md:pt-40">
+    <!-- Header -->
+    <div class="mx-auto max-w-5xl">
+      <div class="text-center">
+        <h1 class="h1">Projects</h1>
+        <p class="text-muted-foreground mt-2 lg:text-xl">
+          Explore my projects and learn about my development journey
+        </p>
+      </div>
+    </div>
+
+    <!-- Technology Filters -->
+    <div class="mx-auto mt-6 max-w-5xl">
+      <div class="bg-muted rounded-md p-6 md:rounded-lg">
+        <h2 class="h3 mb-4">Filter by Technology</h2>
+        <div class="flex flex-wrap gap-2">
+          <FilterButton text="All" class="tech-filter" data-tech="all" aria-pressed="true" />
+          {
+            allTechnologies.map((tech) => (
+              <FilterButton text={tech} class="tech-filter" data-tech={tech} aria-pressed="false" />
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects grid -->
+    <div class="projects-wrapper mt-16 mb-auto w-full animate-[height]">
+      <div class="projects-grid grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {
+          sortedProjects.map((project) => (
+            <div
+              class="project-item grid opacity-0"
+              data-technologies={JSON.stringify(project.data.technologies)}
+            >
+              <ProjectCard project={project} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <ContactCentered />
+</BaseLayout>
+
+<script>
+  import { animate, type AnimationSequence, cubicBezier, stagger } from "motion";
+
+  // https://easings.net/#
+  const easeOutQuad = cubicBezier(0.5, 1, 0.89, 1);
+  const easeOutExpo = cubicBezier(0.16, 1, 0.3, 1);
+
+  const setupProjectsFiltering = () => {
+    // Get all filter buttons and project items
+    const filterButtons = document.querySelectorAll(".tech-filter");
+    const projectItems = document.querySelectorAll(".project-item") as NodeListOf<HTMLElement>;
+    const projectsGrid = document.querySelector(".projects-grid") as HTMLDivElement;
+    const projectsWrapper = document.querySelector(".projects-wrapper") as HTMLDivElement;
+
+    if (!filterButtons || !projectItems || !projectsGrid || !projectsWrapper) {
+      return;
+    }
+
+    // Initial animation
+    animate(
+      ".project-item",
+      { opacity: [0, 1], y: [20, 0] },
+      { duration: 0.5, delay: stagger(0.05), ease: easeOutQuad },
+    );
+
+    // Add click event listeners to filter buttons
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const selectedTech = button.getAttribute("data-tech");
+
+        if (button.getAttribute("aria-pressed") === "true") {
+          return;
+        }
+
+        // Update button states
+        filterButtons.forEach((btn) => {
+          btn.setAttribute("aria-pressed", "false");
+        });
+        button.setAttribute("aria-pressed", "true");
+
+        // Get initial height
+        const initialHeight = projectsWrapper.offsetHeight;
+
+        // Set initial height explicitly to enable animation
+        projectsWrapper.style.height = `${initialHeight}px`;
+
+        // First fade out all items
+        await animate(".project-item", { opacity: 0, y: 20 }, { duration: 0.4, ease: easeOutExpo })
+          .finished;
+
+        // Update visibility after fade out
+        projectItems.forEach((item) => {
+          const technologies = JSON.parse(item.getAttribute("data-technologies") || "[]");
+          if (selectedTech === "all" || technologies.includes(selectedTech)) {
+            item.classList.remove("hidden");
+          } else {
+            item.classList.add("hidden");
+          }
+        });
+
+        // Calculate new height based on grid layout
+        const visibleItems = Array.from(projectItems).filter(
+          (item) => !item.classList.contains("hidden"),
+        );
+
+        // Get dimensions of a single item (they're all the same size)
+        const sampleItem = visibleItems[0];
+        const itemHeight = sampleItem ? sampleItem.offsetHeight : 0;
+        const gridGap = 32; // 8 in Tailwind's gap-8 equals 32px
+
+        // Get the number of columns based on current viewport
+        const computedStyle = window.getComputedStyle(projectsGrid);
+        const columns = computedStyle.gridTemplateColumns.split(" ").length;
+
+        // Calculate number of rows needed
+        const rows = Math.ceil(visibleItems.length / columns);
+
+        const newHeight = rows * itemHeight + (rows - 1) * gridGap;
+
+        // Animate container height and fade in items using timeline sequence
+        // Second animation starts at 0.2s
+        const timeline = [
+          [
+            ".projects-wrapper",
+            { height: [initialHeight, newHeight] },
+            { duration: 0.6, ease: easeOutExpo },
+          ],
+          [
+            ".project-item:not(.hidden)",
+            { opacity: [0, 1], y: [20, 0] },
+            { duration: 0.4, delay: stagger(0.05), ease: easeOutQuad, at: 0.2 },
+          ],
+        ] as AnimationSequence;
+
+        await animate(timeline).finished;
+      });
+    });
+  };
+
+  // runs on initial page load
+  setupProjectsFiltering();
+
+  // runs on view transitions navigation
+  document.addEventListener("astro:after-swap", setupProjectsFiltering);
+</script>

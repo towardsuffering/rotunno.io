@@ -1,0 +1,64 @@
+---
+import Button from "@/components/button/Button.astro";
+import WatermelonSVG from "@/components/hero/WatermelonSVG.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute, useTranslations } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+---
+
+<section
+  class="relative isolate mx-auto flex w-full items-center overflow-hidden"
+  aria-label="Hero section"
+>
+  <!-- Background: deep lime left → deep watermelon right -->
+  <div
+    class="pointer-events-none absolute inset-0 z-0"
+    style="background: linear-gradient(135deg, #0e2419 0%, #4a7a22 45%, #c0304a 100%);"
+    aria-hidden="true"
+  />
+
+  <div
+    class="site-container relative flex h-full min-h-full grow flex-col items-center justify-between gap-8 md:flex-row"
+  >
+    <div id="hero-shapes-trigger" class="max-w-2xl flex-1 pt-30 md:py-44 lg:pb-50">
+      <h1
+        data-mos-anchor="#hero-shapes-trigger"
+        data-mos="fade-right"
+        class="leading-tighter font-heading mb-4 text-4xl font-semibold text-white md:text-5xl xl:text-7xl"
+      >
+        Thirst-Quenching. Mouth-Watering.
+        <span style="color: #F04B6E;">Surprisingly </span><span style="color: #8DC63F;">Delicious.</span>
+      </h1>
+      <p
+        data-mos-anchor="#hero-shapes-trigger"
+        data-mos="fade-right"
+        data-mos-delay=".2"
+        class="mb-8 text-lg text-white/75 md:text-xl"
+      >
+        Every event has hot dogs, chips, soda, and sugar-loaded lemonade.
+        We're the alternative — watermelon, lime, ice, and a dash of salt.
+        Made fresh on-site at markets and events across Florida.
+      </p>
+      <Button
+        type="button"
+        href={getLocalizedRoute(currLocale, `#contact`)}
+        variant="primary"
+        class="md:text-lg"
+        aria-label="Find Us at an Event"
+        data-mos-anchor="#hero-shapes-trigger"
+        data-mos="fade-right"
+        data-mos-delay=".4"
+      >
+        Find Us at an Event
+      </Button>
+    </div>
+
+    <div
+      class="xs:h-[360px] mt-auto flex h-[300px] justify-end md:h-[500px] md:pt-20 lg:h-[600px] xl:h-[700px]"
+    >
+      <WatermelonSVG />
+    </div>
+  </div>
+</section>

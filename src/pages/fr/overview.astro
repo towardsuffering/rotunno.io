@@ -1,0 +1,10 @@
+---
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+import OverviewLayout from "@/layouts/OverviewLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<OverviewLayout title={siteData.title} description={siteData.description} />

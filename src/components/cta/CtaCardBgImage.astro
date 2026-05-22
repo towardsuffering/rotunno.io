@@ -1,0 +1,51 @@
+---
+/**
+ * * CTA centered card with background image
+ */
+
+// take a look at the actual image to see recommended dimensions
+import bgImage from "@images/cta/storm-bg-crop.webp";
+import { Image } from "astro:assets";
+
+import Button from "@/components/button/Button.astro";
+---
+
+<section id="cta-center" class="site-container overflow-hidden py-16 md:py-20">
+  <div
+    class="dark bg-muted relative overflow-hidden rounded-2xl border px-8 py-16 md:px-10 md:py-24"
+  >
+    <!-- bg image -->
+    <div class="absolute inset-0 h-full overflow-hidden">
+      <Image
+        src={bgImage}
+        alt="background"
+        loading="lazy"
+        width={1170}
+        densities={[1, 1.5, 2]}
+        class="h-full w-full transform object-cover brightness-50"
+        aria-hidden="true"
+      />
+    </div>
+
+    <div class="relative">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="h2 text-foreground mb-4">Make your next website incredible</h2>
+        <p class="text-foreground/80 mx-auto mb-16 max-w-xl tracking-tight md:text-lg">
+          A template for the next killer SaaS. Multiple pages and sections, blog, i18n, animations,
+          CMS - all ready to go.
+        </p>
+        <div class="relative flex justify-center">
+          <Button
+            variant="secondary"
+            href="https://cosmicthemes.com/themes/starter/"
+            target="_blank"
+            arrow="right"
+            rel="noopener noreferrer"
+          >
+            Get Starter
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

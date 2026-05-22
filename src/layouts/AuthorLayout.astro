@@ -1,0 +1,68 @@
+---
+import { Image } from "astro:assets";
+import { type CollectionEntry } from "astro:content";
+
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  author: CollectionEntry<"authors">;
+}
+
+const { author } = Astro.props as Props;
+const { name, avatar, about, email, authorLink } = author.data;
+---
+
+<BaseLayout title={name} description={about} image={avatar}>
+  <article class="site-container py-20 md:py-32">
+    <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
+      {
+        avatar && (
+          <figure class="mb-6 size-32 overflow-hidden rounded-full md:size-40">
+            <Image
+              src={avatar}
+              alt={`${name} avatar`}
+              width={200}
+              densities={[1.5, 2]}
+              quality="high"
+              loading="eager"
+              class="h-full w-full rounded-full object-cover"
+            />
+          </figure>
+        )
+      }
+
+      <h1 class="h1 mb-4" transition:name={`author-name-${author.id}`}>{name}</h1>
+
+      {about && <p class="text-muted-foreground mb-6 text-lg">{about}</p>}
+
+      <div class="flex flex-wrap justify-center gap-4">
+        {
+          email && (
+            <a
+              href={`mailto:${email}`}
+              class="text-primary-accent hover:text-primary-dark hover:underline"
+            >
+              Email
+            </a>
+          )
+        }
+        {
+          authorLink && (
+            <a
+              href={authorLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary-accent hover:text-primary-dark hover:underline"
+            >
+              Website
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="markdown-content mx-auto mt-12 max-w-4xl md:mt-16">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

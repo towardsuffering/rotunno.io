@@ -1,0 +1,164 @@
+---
+import Button from "@/components/button/Button.astro";
+import LanguageSelect from "@/components/language-select/LanguageSelect.astro";
+import SiteLogo from "@/components/site-logo/SiteLogo.astro";
+import ThemeToggle from "@/components/theme-toggle/ThemeToggle.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+
+import MobileNav from "./mobile-nav/MobileNav.astro";
+import MegaMenuDropdownToggle from "./nav-dropdown/MegaMenuDropdownToggle.astro";
+import NavDropdown from "./nav-dropdown/NavDropdown.astro";
+import NavLink from "./NavLink.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const navData = getTranslatedData("navData", currLocale);
+import { locales } from "@/config/siteSettings.json";
+// console.log(JSON.stringify(navData, null, 2));
+
+interface Props {
+  navStyle?: "default" | "dark";
+  transparentNav?: boolean;
+}
+
+const { navStyle = "default", transparentNav = false } = Astro.props as Props;
+---
+
+<div
+  id="nav__container"
+  class:list={[
+    "navbar--initial fixed top-0 left-0 z-30 flex w-full flex-col border-b transition-all duration-300",
+    { dark: navStyle === "dark" },
+    { "navbar--has-hero": transparentNav },
+  ]}
+>
+  <!-- Contact strip -->
+  <div class="bg-background/80 hidden border-b border-border/50 md:block">
+    <div class="site-container flex justify-end gap-6 py-1 text-sm">
+      <a href="mailto:waterlimondewds@gmail.com" class="text-primary-accent font-medium hover:underline">
+        waterlimondewds@gmail.com
+      </a>
+      <a href="tel:+17272212980" class="text-primary-accent font-medium hover:underline">
+        (727) 221-2980
+      </a>
+    </div>
+  </div>
+  <div class="mx-auto flex w-full">
+    <div class="site-container flex h-14 w-full items-center">
+      <header class="relative flex w-full items-center gap-2">
+        <!-- home button / image -->
+        <div class="nav-logo flex flex-auto justify-start">
+          <SiteLogo />
+        </div>
+
+        <!-- <div class="flex flex-auto justify-center">
+          
+        </div> -->
+
+        <!-- desktop nav menu -->
+        <div class="flex flex-auto justify-end">
+          <nav class="my-auto hidden md:block">
+            <ul class="flex h-fit items-center px-4">
+              {
+                // if dropdown exists, setup the dropdown, otherwise it is just a link
+                navData.map((navItem) =>
+                  "dropdown" in navItem ? (
+                    // non-mobile dropdown menu
+                    <li>
+                      <NavDropdown navItem={navItem} />
+                    </li>
+                  ) : "megaMenuColumns" in navItem ? (
+                    <MegaMenuDropdownToggle {navItem} />
+                  ) : (
+                    // normal nav link
+                    <li>
+                      <NavLink {navItem} />
+                    </li>
+                  ),
+                )
+              }
+            </ul>
+          </nav>
+
+          <ThemeToggle class="mr-3 -ml-4 hidden md:block" />
+
+          <Button
+            variant="primary"
+            class="my-auto hidden px-4 py-2 md:flex"
+            href="/#contact"
+          >
+            Get In Touch
+          </Button>
+
+          {locales.length > 1 && <LanguageSelect class="ml-4 hidden md:block" />}
+
+          <!-- mobile nav menu, only load on small screens where it is visible -->
+          <div class="md:hidden">
+            <MobileNav />
+          </div>
+        </div>
+      </header>
+    </div>
+  </div>
+</div>
+
+<style>
+  @import "tailwindcss/theme" theme(reference);
+  @import "@/styles/tailwind-theme.css" theme(reference);
+
+  .navbar--scrolled {
+    @apply bg-background border-b;
+  }
+
+  .navbar--scrolled :global(.catchphrase) {
+    background: transparent !important;
+    color: var(--color-primary-accent);
+    padding: 0;
+  }
+
+  .navbar--initial {
+    @apply border-b-transparent bg-transparent py-2;
+  }
+
+  /* White text only when nav is transparent over a hero image */
+  .navbar--has-hero.navbar--initial :global(.nav__link--base) {
+    @apply text-white/90 hover:text-white hover:bg-white/10;
+  }
+
+  .navbar--has-hero.navbar--initial :global(.nav-logo a) {
+    @apply text-white;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+
+  .navbar--has-hero.navbar--initial :global(#mobile-nav__burger) {
+    @apply text-white;
+  }
+</style>
+
+<script>
+  let navbar: HTMLElement | null;
+
+  function scrollHandler() {
+    if (navbar) {
+      if (window.scrollY > 50) {
+        // if we have scrolled down the page a bit, add a frosted-glass look to the navbar
+        navbar.classList.add("navbar--scrolled");
+        navbar.classList.remove("navbar--initial");
+      } else {
+        navbar.classList.add("navbar--initial");
+        navbar.classList.remove("navbar--scrolled");
+      }
+    }
+  }
+
+  function initNav() {
+    navbar = document.getElementById("nav__container");
+    window.addEventListener("scroll", scrollHandler, { passive: true });
+  }
+
+  // runs on initial page load
+  initNav();
+
+  // runs on view transitions navigation. Not needed if item has "transition:persist"
+  document.addEventListener("astro:after-swap", initNav);
+</script>

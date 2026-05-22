@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { slugify } from "@/js/textUtils";
+import { useTranslations } from "@/js/translationUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project, ...rest } = Astro.props;
+const { title, image, technologies } = project.data;
+---
+
+<a
+  href={getLocalizedRoute(currLocale, `/projects/${slugify(project.id)}`)}
+  class="group relative overflow-hidden rounded-md border md:rounded-lg"
+  {...rest}
+>
+  <div class="aspect-video">
+    <Image
+      src={image}
+      alt={`${title} - Project Preview`}
+      width={450}
+      densities={[1.5, 2]}
+      loading="lazy"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  <div
+    class="bg-primary/90 dark absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100"
+  >
+    <div
+      class="translate-y-4 transform p-4 text-center transition-transform group-hover:translate-y-0"
+    >
+      <h3 class="text-foreground mb-2 text-xl font-semibold">{title}</h3>
+      <p class="text-foreground/80 text-sm">{technologies.join(" / ")}</p>
+      <span
+        class="text-foreground border-foreground/30 hover:border-foreground mt-4 inline-block border-b transition-colors"
+      >
+        View Project →
+      </span>
+    </div>
+  </div>
+</a>

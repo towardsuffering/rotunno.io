@@ -1,0 +1,56 @@
+---
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./accordion-small";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const faqData = getTranslatedData("faqData", currLocale);
+---
+
+<section class="overflow-hidden py-16 md:py-24">
+  <div class="site-container">
+    <div class="grid gap-8 md:grid-cols-2 md:gap-16">
+      <!-- Left Side - FAQ Content -->
+      <div class="flex h-full flex-col justify-between" data-reveal="blur-left">
+        <div class="md:max-w-lg">
+          <h2 class="text-foreground h2 mb-4">Frequently Asked Questions</h2>
+          <p class="description mr-auto mb-8 max-w-sm">
+            Can't find what you're looking for? Reach out through the contact form below.
+          </p>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-3">
+          <Accordion class="space-y-1">
+            {
+              faqData.map((faqItem, idx) => (
+                <AccordionItem value={`item-${idx}`} class="border-border border-b-2 pb-1">
+                  <AccordionTrigger class="font-heading px-0 py-4 text-lg font-semibold">
+                    {faqItem.question}
+                  </AccordionTrigger>
+                  <AccordionContent class="text-muted-foreground px-0" details={faqItem.answer} />
+                </AccordionItem>
+              ))
+            }
+          </Accordion>
+
+        </div>
+      </div>
+
+      <!-- Right Side - branded panel -->
+      <div class="order-first flex md:order-last" data-reveal="swing">
+        <div
+          class="mb-auto aspect-3/4 h-auto w-full overflow-hidden rounded-2xl flex flex-col items-center justify-center gap-4 px-8 text-center"
+          style="background: linear-gradient(135deg, #1A3A2A 0%, #8DC63F 55%, #F04B6E 100%);"
+        >
+          <p class="font-heading text-3xl font-semibold text-white leading-snug">
+            Got a question?<br />We'll keep it real.
+          </p>
+          <p class="text-white/60 text-base max-w-xs">
+            No fluff, no runaround. Just two cousins who know their juice.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

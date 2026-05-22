@@ -1,0 +1,21 @@
+---
+import PricingFourCards from "@/components/pricing/PricingFourCards.astro";
+import PricingOnePrice from "@/components/pricing/PricingOnePrice.astro";
+import PricingOnePriceSide from "@/components/pricing/PricingOnePriceSide.astro";
+import PricingTable from "@/components/pricing/PricingTable.astro";
+import PricingThreeCards from "@/components/pricing/PricingThreeCards.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description} navStyle="default">
+  <PricingOnePrice />
+  <PricingOnePriceSide />
+  <PricingThreeCards />
+  <PricingFourCards />
+  <PricingTable />
+</BaseLayout>

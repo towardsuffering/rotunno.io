@@ -1,0 +1,113 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+
+import Button from "@/components/button/Button.astro";
+import { filterCollectionByLanguage, getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute, useTranslations } from "@/js/translationUtils";
+
+import ServiceCard from "./ServiceCard.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+
+const services = await getCollection("services", ({ data }) => {
+  return data.draft !== true;
+});
+
+const filteredServices = filterCollectionByLanguage(
+  services,
+  currLocale,
+) as CollectionEntry<"services">[];
+
+const orderedServices = filteredServices.sort((a, b) => {
+  if (a.data.order !== undefined && b.data.order !== undefined) return a.data.order - b.data.order;
+  if (a.data.order !== undefined) return -1;
+  if (b.data.order !== undefined) return 1;
+  return 0;
+});
+
+const comingSoon = [
+  {
+    icon: "tabler/leaf",
+    title: "The Mint Edition",
+    description: "Watermelon, lime, ice, a dash of salt, and a fresh mint sprig. Cool, clean, and refreshing.",
+  },
+  {
+    icon: "tabler/flame",
+    title: "The Tajin Twist",
+    description: "Watermelon, lime, ice, a dash of salt, and a Tajin-salted rim. Sweet, tart, and a little spicy.",
+  },
+  {
+    icon: "tabler/bolt",
+    title: "The Ginger Kick",
+    description: "Watermelon, lime, ice, a dash of salt, and a fresh ginger press. Bright, bold, a little fiery.",
+  },
+  {
+    icon: "tabler/pepper",
+    title: "The Jalapeno Heat",
+    description: "Watermelon, lime, ice, a dash of salt, and a jalapeno infusion. For the spice lovers.",
+  },
+  {
+    icon: "tabler/candy",
+    title: "Watermelon Fruit Roll Ups",
+    description: "All-natural watermelon rolled up and ready to snack on. Pure fruit, nothing else.",
+  },
+  {
+    icon: "tabler/bottle",
+    title: "Pickled Watermelon Rinds",
+    description: "A Southern classic, done right. Tangy, crunchy, and surprisingly addictive.",
+  },
+  {
+    icon: "tabler/paw",
+    title: "Doggy Fruit Roll Ups",
+    description: "For the good boys and girls. All-natural watermelon fruit roll ups made safe for dogs — a treat they'll go wild for.",
+  },
+];
+---
+
+<section id="services-cards" class="my-12 py-12">
+  <div class="site-container" id="services-cards-trigger">
+    <h2
+      class="h2 mx-auto max-w-3xl text-center"
+      data-reveal="pop"
+    >
+      Flavor First. Sourced Right.
+    </h2>
+    <div class="mt-12 flex justify-center">
+      {
+        orderedServices.map((service, idx) => (
+          <ServiceCard
+            service={service}
+            data-reveal="rise"
+            data-reveal-delay={idx * 0.15}
+          />
+        ))
+      }
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="mt-20">
+      <h3 class="h2 mb-2 text-center" data-reveal="pop">Coming Soon</h3>
+      <p class="description mb-10 text-center" data-reveal="pop" data-reveal-delay="0.1">We're working on it. These drops are on the way.</p>
+      <div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-4">
+        {comingSoon.map((item, idx) => (
+          <div class="flex" data-reveal="rise" data-reveal-delay={idx * 0.1}>
+            <div class="bg-muted flex w-full flex-col justify-between rounded-lg border border-dashed p-8 opacity-70 md:rounded-xl">
+              <div>
+                <div class="border-primary-accent relative mr-auto flex size-18 items-center justify-center rounded-full border-2">
+                  <Icon name={item.icon} class="text-primary-accent h-full w-full p-3" />
+                </div>
+                <h3 class="font-heading mt-6 text-xl font-semibold">{item.title}</h3>
+                <p class="text-muted-foreground mt-3 text-base">{item.description}</p>
+              </div>
+              <span class="text-primary-accent mt-6 inline-block rounded-full border border-current px-3 py-1 text-xs font-semibold uppercase tracking-wider">
+                Coming Soon
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

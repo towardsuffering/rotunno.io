@@ -1,0 +1,18 @@
+---
+import Button from "@/components/starwind/button";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+---
+
+<BaseLayout title="404" description="Error 404 page not found." noindex={true}>
+  <section
+    class="site-container flex min-h-[90vh] flex-col items-center justify-center py-24 text-center"
+  >
+    <h1 class="mb-4 text-6xl font-semibold">404</h1>
+    <p class="mb-6 text-xl">Sorry, the page you are looking for could not be found.</p>
+    <Button href={getLocalizedRoute(currLocale, "/")} variant="primary"> Return Home </Button>
+  </section>
+</BaseLayout>

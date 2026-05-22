@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1584 396" width="1584" height="396">
+  <defs>
+    <clipPath id="lh">
+      <path d="M 1442 330 L 1460 90 L 1508 90 L 1526 330 Z"/>
+    </clipPath>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#1A3A2A"/>
+      <stop offset="45%"  stop-color="#8DC63F"/>
+      <stop offset="100%" stop-color="#F04B6E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1584" height="396" fill="url(#bg)"/>
+
+  <!-- Subtle watermelon accent -->
+  <circle cx="1560" cy="396" r="300" fill="#f24d6b" opacity="0.05"/>
+
+  <!-- ── Lighthouse (right side) ── -->
+
+  <!-- Base -->
+  <rect x="1436" y="330" width="96" height="56" rx="3" fill="#888" opacity="0.35"/>
+
+  <!-- Tower: white base -->
+  <path d="M 1442 330 L 1460 90 L 1508 90 L 1526 330 Z" fill="white"/>
+
+  <!-- Blue spiral stripes — skewed around tower center x=1484 -->
+  <g clip-path="url(#lh)">
+    <rect x="1430" y="90"  width="110" height="40" fill="black" transform="translate(1484 0) skewY(-14) translate(-1484 0)"/>
+    <rect x="1430" y="170" width="110" height="40" fill="black" transform="translate(1484 0) skewY(-14) translate(-1484 0)"/>
+    <rect x="1430" y="250" width="110" height="40" fill="black" transform="translate(1484 0) skewY(-14) translate(-1484 0)"/>
+  </g>
+
+  <!-- Tower outline -->
+  <path d="M 1442 330 L 1460 90 L 1508 90 L 1526 330 Z" fill="none" stroke="white" stroke-width="3"/>
+
+  <!-- Gallery deck -->
+  <rect x="1446" y="74" width="76" height="16" rx="2" fill="#333" stroke="white" stroke-width="2"/>
+
+  <!-- Lantern room — safety red -->
+  <rect x="1454" y="40" width="60" height="34" rx="2" fill="#cc2200" stroke="white" stroke-width="2"/>
+
+  <!-- Dome — safety red -->
+  <path d="M 1454 40 Q 1484 14 1514 40 Z" fill="#cc2200" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Base outline -->
+  <rect x="1436" y="330" width="96" height="56" rx="3" fill="none" stroke="white" stroke-width="2"/>
+
+  <!-- Light glow -->
+  <circle cx="1484" cy="57" r="11" fill="white" opacity="0.95"/>
+  <circle cx="1484" cy="57" r="20" fill="white" opacity="0.12"/>
+
+  <!-- Rod -->
+  <line x1="1484" y1="4" x2="1484" y2="16" stroke="white" stroke-width="3"/>
+
+  <!-- ── Text block (right-aligned, left of lighthouse) ── -->
+
+  <text x="1410" y="190" text-anchor="end"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="108" font-weight="800" fill="white" letter-spacing="-2"
+    paint-order="stroke" stroke="rgba(0,0,0,0.6)" stroke-width="10" stroke-linejoin="round"
+  >WaterLimon Dewds</text>
+
+  <text x="1410" y="252" text-anchor="end"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="34" font-weight="700" fill="white" letter-spacing="3"
+    paint-order="stroke" stroke="rgba(0,0,0,0.6)" stroke-width="8" stroke-linejoin="round"
+  >HOME OF THE ANCIENT CITY SPLASH</text>
+
+  <text x="1410" y="302" text-anchor="end"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="24" font-weight="400" fill="white" letter-spacing="2"
+    paint-order="stroke" stroke="rgba(0,0,0,0.6)" stroke-width="6" stroke-linejoin="round"
+  >Saint Augustine, FL  ·  Northeast Florida's Premier Watermelon-Inspired Brand</text>
+
+</svg>

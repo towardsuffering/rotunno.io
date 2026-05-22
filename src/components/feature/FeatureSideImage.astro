@@ -1,0 +1,60 @@
+---
+/**
+ * * These are alternating side cards with titles, text, and images
+ * Recommend using 2 or 3 cards in a row
+ */
+import image1 from "@images/feature/storm-1.webp";
+import image2 from "@images/feature/storm-2.webp";
+
+import FeatureCard from "@/components/feature-card/FeatureCardSideImage.astro";
+
+interface FeatureItem {
+  badge: string; // badge text
+  image: ImageMetadata; // an imported image
+  title: string;
+  description: string;
+  href: string; // link to learn more
+  buttonText: string; // button text
+}
+
+const featureData: FeatureItem[] = [
+  {
+    badge: "The Best",
+    image: image1,
+    title: "Highest quality",
+    description:
+      "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    href: "/sign-up",
+    buttonText: "Get Started",
+  },
+  {
+    badge: "Around",
+    image: image2,
+    title: "Guaranteed satisfaction",
+    description:
+      "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    href: "/sign-up",
+    buttonText: "Get Started",
+  },
+];
+---
+
+<section id="feature-side-image" class="my-12 overflow-hidden py-12">
+  <div class="site-container">
+    <div class="flex flex-col gap-16 md:gap-24">
+      {
+        featureData.map((feature, idx) => (
+          <FeatureCard
+            badge={feature.badge}
+            title={feature.title}
+            description={feature.description}
+            image={feature.image}
+            imageSide={idx % 2 === 0 ? "right" : "left"}
+            href={feature.href}
+            buttonText={feature.buttonText}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

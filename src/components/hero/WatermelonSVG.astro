@@ -1,0 +1,108 @@
+---
+// Animated watermelon + lime illustration for the hero section
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 400 500"
+  class="h-full w-auto"
+  aria-hidden="true"
+>
+  <defs>
+    <radialGradient id="wm-flesh" cx="42%" cy="36%" r="62%">
+      <stop offset="0%" stop-color="#ffb8cc" />
+      <stop offset="52%" stop-color="#f24d6b" />
+      <stop offset="100%" stop-color="#be2d4a" />
+    </radialGradient>
+    <radialGradient id="lime-flesh" cx="38%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#dff270" />
+      <stop offset="100%" stop-color="#8acc25" />
+    </radialGradient>
+    <filter id="wm-shadow" x="-15%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0a2a0a" flood-opacity="0.35" />
+    </filter>
+    <filter id="lime-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0a2a0a" flood-opacity="0.28" />
+    </filter>
+  </defs>
+
+  <style>
+    .wm-float {
+      animation: wm-float 5.5s ease-in-out infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .lime-float {
+      animation: wm-float 5.5s ease-in-out infinite;
+      animation-delay: -2.8s;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    @keyframes wm-float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-13px); }
+    }
+
+    .drop {
+      animation: drip var(--dur) ease-in infinite var(--delay);
+      transform-box: fill-box;
+      transform-origin: center top;
+    }
+    @keyframes drip {
+      0%   { transform: translateY(0px);   opacity: 0; }
+      6%   { opacity: 0.92; }
+      80%  { opacity: 0.80; }
+      100% { transform: translateY(100px); opacity: 0; }
+    }
+
+  </style>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  WATERMELON CROSS-SECTION                  -->
+  <!--  No SVG transform attr — safe for CSS anim -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g class="wm-float" filter="url(#wm-shadow)">
+    <circle cx="190" cy="355" r="148" fill="#173d1a" />
+    <circle cx="190" cy="355" r="133" fill="#2d6e22" />
+    <circle cx="190" cy="355" r="122" fill="#6ab830" />
+    <circle cx="190" cy="355" r="112" fill="#e4f2c8" />
+    <circle cx="190" cy="355" r="105" fill="url(#wm-flesh)" />
+    <ellipse cx="148" cy="325" rx="6"   ry="10"  fill="#0c180e" transform="rotate(-20 148 325)" />
+    <ellipse cx="202" cy="306" rx="6"   ry="10"  fill="#0c180e" transform="rotate(5 202 306)" />
+    <ellipse cx="248" cy="326" rx="6"   ry="10"  fill="#0c180e" transform="rotate(14 248 326)" />
+    <ellipse cx="135" cy="370" rx="5.5" ry="9"   fill="#0c180e" transform="rotate(-28 135 370)" />
+    <ellipse cx="188" cy="390" rx="6"   ry="10"  fill="#0c180e" transform="rotate(-3 188 390)" />
+    <ellipse cx="240" cy="378" rx="5.5" ry="9"   fill="#0c180e" transform="rotate(18 240 378)" />
+    <ellipse cx="222" cy="344" rx="4.5" ry="8"   fill="#0c180e" transform="rotate(3 222 344)" />
+    <ellipse cx="162" cy="348" rx="4.5" ry="8"   fill="#0c180e" transform="rotate(-10 162 348)" />
+    <ellipse cx="155" cy="320" rx="36"  ry="22"  fill="white" opacity="0.09" transform="rotate(-30 155 320)" />
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  LIME                                       -->
+  <!--  Outer <g> = static position (no conflict)  -->
+  <!--  Inner <g class="lime-float"> = animation   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <g filter="url(#lime-shadow)">
+    <g class="lime-float">
+      <circle cx="308" cy="82" r="56" fill="#236b10" />
+      <circle cx="308" cy="82" r="49" fill="url(#lime-flesh)" />
+      <line x1="308" y1="33"  x2="308" y2="131" stroke="#3d9818" stroke-width="1.5" opacity="0.65" />
+      <line x1="259" y1="82"  x2="357" y2="82"  stroke="#3d9818" stroke-width="1.5" opacity="0.65" />
+      <line x1="273" y1="47"  x2="343" y2="117" stroke="#3d9818" stroke-width="1.2" opacity="0.55" />
+      <line x1="343" y1="47"  x2="273" y2="117" stroke="#3d9818" stroke-width="1.2" opacity="0.55" />
+      <circle cx="308" cy="82" r="6"  fill="#3d9818" opacity="0.55" />
+      <ellipse cx="288" cy="62" rx="14" ry="9" fill="white" opacity="0.22" transform="rotate(-20 288 62)" />
+      <circle cx="308" cy="82" r="56" fill="none" stroke="#1a5510" stroke-width="3" />
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  JUICE DROPS                               -->
+  <!-- ═══════════════════════════════════════════ -->
+  <ellipse class="drop" cx="288" cy="142" rx="4.5" ry="7"   fill="#aadf2a" style="--dur:1.6s;--delay:0s;" />
+  <ellipse class="drop" cx="302" cy="145" rx="3.5" ry="5.5" fill="#c8f045" style="--dur:1.9s;--delay:0.55s;" />
+  <ellipse class="drop" cx="276" cy="148" rx="3"   ry="5"   fill="#92d818" style="--dur:2.2s;--delay:1.1s;" />
+  <ellipse class="drop" cx="295" cy="140" rx="2.5" ry="4"   fill="#bce82e" style="--dur:1.75s;--delay:0.85s;" />
+
+</svg>

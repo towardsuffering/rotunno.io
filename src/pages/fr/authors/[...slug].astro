@@ -1,0 +1,25 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+
+import ExternalLink from "@/components/markdown-components/ExternalLink.astro";
+import AuthorLayout from "@/layouts/AuthorLayout.astro";
+
+export async function getStaticPaths() {
+  const authors: CollectionEntry<"authors">[] = await getCollection("authors");
+
+  return authors.map((author) => ({
+    params: { slug: author.id },
+    props: author,
+  }));
+}
+
+type Props = CollectionEntry<"authors">;
+const author = Astro.props as Props;
+
+// convert markdown to html
+const { Content } = await render(author);
+---
+
+<AuthorLayout author={author}>
+  <Content components={{ a: ExternalLink }} />
+</AuthorLayout>

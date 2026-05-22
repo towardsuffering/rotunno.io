@@ -1,0 +1,38 @@
+---
+/**
+ * * Dropdown menu that opens on click
+ * This is for non-mobile devices
+ */
+import { Icon } from "astro-icon/components";
+
+import NavLink from "@/components/nav/NavLink.astro";
+import { Dropdown, DropdownContent, DropdownTrigger } from "@/components/starwind/dropdown";
+import { type navDropdownItem } from "@/config/types/configDataTypes";
+import { slugify } from "@/js/textUtils";
+
+interface Props {
+  navItem: navDropdownItem;
+}
+
+const { navItem } = Astro.props as Props;
+---
+
+<Dropdown>
+  <DropdownTrigger asChild>
+    <button
+      type="button"
+      class="primary-focus nav__dropdown-button nav__link--base flex h-10 w-full items-center gap-0.5 rounded-md px-3 py-2 whitespace-nowrap"
+      aria-haspopup="true"
+    >
+      {navItem.text}
+      <Icon
+        name="tabler/chevron-down"
+        aria-hidden="true"
+        class="nav__dropdown-chevron size-5 shrink-0 transition-transform"
+      />
+    </button>
+  </DropdownTrigger>
+  <DropdownContent align="start" sideOffset={12} class="min-w-[11rem] py-3">
+    {navItem.dropdown.map((dropdownItem) => <NavLink navItem={dropdownItem} class="w-full" />)}
+  </DropdownContent>
+</Dropdown>

@@ -1,0 +1,47 @@
+---
+import ContactForm from "@/components/forms/ContactForm.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute, getTranslatedData, useTranslations } from "@/js/translationUtils";
+const currLocale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(currLocale);
+---
+
+<section id="contact" class="site-container my-20 scroll-mt-20 md:my-32">
+  <div class="mt-6 grid gap-10 lg:grid-cols-2">
+    <div class="">
+      <h2 class="h2 mb-4">Book Us for Your Next Event</h2>
+      <p class="description mb-8">
+        Private parties, corporate events, trade shows, farmers markets — if you've got a crowd, we've got the juice. Reach out and we'll make it happen.
+      </p>
+      <div class="mb-8">
+        <h3 class="font-heading mb-4 text-xl leading-normal font-semibold">Contact Us Directly</h3>
+        <p class="text-muted-foreground mb-2">
+          <span class="font-semibold">Phone:</span>
+          <a class="text-foreground hover:text-primary-accent underline" href="tel:+17272212980">(727) 221-2980</a>
+        </p>
+        <p class="text-muted-foreground mb-2">
+          <span class="font-semibold">Email:</span>
+          <a
+            class="text-foreground hover:text-primary-accent hover:decoration-primary-accent underline"
+            href="mailto:waterlimondewds@gmail.com"
+            >waterlimondewds@gmail.com</a
+          >
+        </p>
+      </div>
+      <div class="mb-8">
+        <h3 class="font-heading mb-4 text-xl leading-normal font-semibold">Where We Operate</h3>
+        <p class="text-muted-foreground">
+          Based in Saint Augustine, FL — the nation's oldest city. We travel to markets, trade shows, and events across Florida. Everything is made fresh on-site, every time.
+        </p>
+      </div>
+    </div>
+    <div class="">
+      <div class="rounded-lg border p-8 shadow-md">
+        <h3 class="font-heading tracking-px-n mb-6 text-3xl leading-tight font-semibold">
+          Send Us a Message
+        </h3>
+        <ContactForm />
+      </div>
+    </div>
+  </div>
+</section>

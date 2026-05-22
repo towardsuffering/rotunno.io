@@ -1,0 +1,27 @@
+---
+import FaqAccordions from "@/components/faq/FaqAccordions.astro";
+import FaqAccordionsSideImage from "@/components/faq/FaqAccordionsSideImage.astro";
+import FaqCards from "@/components/faq/FaqCards.astro";
+import TestimonialCards from "@/components/testimonials/TestimonialCards.astro";
+import TestimonialsMarquee from "@/components/testimonials/TestimonialsMarquee.astro";
+import TestimonialsSideImage from "@/components/testimonials/TestimonialsSideImage.astro";
+import TestimonialsSwiperSide from "@/components/testimonials/TestimonialsSwiperSide.astro";
+import TestimonialSwiper from "@/components/testimonials/TestimonialSwiper.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description} navStyle="default">
+  <TestimonialsMarquee />
+  <FaqAccordions />
+  <TestimonialsSwiperSide />
+  <FaqCards />
+  <TestimonialSwiper />
+  <FaqAccordionsSideImage />
+  <TestimonialCards />
+  <TestimonialsSideImage />
+</BaseLayout>

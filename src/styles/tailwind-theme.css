@@ -1,0 +1,148 @@
+/**
+ * * Tailwind theme settings
+ * 
+ * These are in a separate file so it can be imported into <style> tags in .astro components
+ */
+@theme {
+  /* primary colors — lime green */
+  --color-primary-50:  oklch(0.975 0.022 138);
+  --color-primary-100: oklch(0.950 0.048 138);
+  --color-primary-200: oklch(0.904 0.085 138);
+  --color-primary-300: oklch(0.840 0.130 138);
+  --color-primary-400: oklch(0.752 0.168 138);
+  --color-primary-500: oklch(0.645 0.188 138);
+  --color-primary-600: oklch(0.538 0.182 140);
+  --color-primary-700: oklch(0.438 0.162 140);
+  --color-primary-800: oklch(0.342 0.130 140);
+  --color-primary-900: oklch(0.250 0.092 140);
+  --color-primary-950: oklch(0.168 0.062 140);
+
+  /* base colors — warm cream neutrals */
+  --color-base-50:  oklch(0.988 0.005 75);
+  --color-base-100: oklch(0.966 0.008 75);
+  --color-base-200: oklch(0.930 0.010 75);
+  --color-base-300: oklch(0.882 0.010 75);
+  --color-base-400: oklch(0.720 0.012 75);
+  --color-base-500: oklch(0.558 0.012 75);
+  --color-base-600: oklch(0.440 0.010 75);
+  --color-base-700: oklch(0.340 0.010 75);
+  --color-base-800: oklch(0.240 0.008 75);
+  --color-base-900: oklch(0.170 0.007 75);
+  --color-base-950: oklch(0.120 0.005 75);
+
+  /* other theme settings */
+  --button-transition-properties:
+    box-shadow, color, background-color, border-color, text-decoration-color, fill, stroke;
+
+  /* layout settings */
+  --breakpoint-xs: 400px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* font families */
+  --font-fallback:
+    "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif",
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-sans: "Inter Variable", var(--font-fallback);
+  --font-heading: "Inter Variable", var(--font-fallback);
+  --font-serif:
+    "Iowan Old Style", "Apple Garamond", "Baskerville", "Times New Roman", "Droid Serif", "Times",
+    "Source Serif Pro", "serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-mono:
+    "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace";
+
+  /* starwind and cosmic themes animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-marquee: marquee 70s linear infinite;
+  --animate-marquee-testimonials: marquee-testimonials 60s linear infinite;
+  --animate-marquee-gallery: marquee-gallery 100s linear infinite;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--starwind-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--starwind-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - 8rem));
+    }
+  }
+
+  @keyframes marquee-testimonials {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - 1.5rem));
+    }
+  }
+
+  @keyframes marquee-gallery {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - 2.5rem));
+    }
+  }
+}
+
+/* "inline" option is necessary here https://github.com/tailwindlabs/tailwindcss/discussions/15122#discussioncomment-11356322 */
+@theme inline {
+  /* starwind utilities setup */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-accent: var(--primary-accent);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-accent: var(--secondary-accent);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-outline: var(--outline);
+
+  --radius-xs: calc(var(--radius) - 0.375rem);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+  --radius-2xl: calc(var(--radius) + 0.5rem);
+  --radius-3xl: calc(var(--radius) + 1rem);
+}

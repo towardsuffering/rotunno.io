@@ -1,0 +1,55 @@
+---
+import { type Page } from "astro";
+
+import CategoryCloud from "@/components/category-cloud/CategoryCloud.astro";
+import Pagination from "@/components/pagination/Pagination.astro";
+import PostCard from "@/components/post-card/PostCardMultiLink.astro";
+import { defaultLocale } from "@/config/siteSettings.json";
+import { getAllPosts } from "@/js/blogUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export async function getStaticPaths({ paginate }) {
+  const posts = await getAllPosts(defaultLocale);
+
+  return paginate(posts, {
+    pageSize: 4,
+  });
+}
+
+const { page } = Astro.props as { page: Page };
+---
+
+<BaseLayout
+  title="Insights — WaterLimon Dewds"
+  description="Data-driven research and market analysis on functional beverages, consumer behavior, and the science of fresh drinks from the team behind the Ancient City Splash."
+>
+  <section class="site-container py-24 md:pt-40">
+    <div class="overflow-x-clip">
+      <div class="mr-auto flex max-w-5xl flex-col">
+        <h1 class="h1">Insights on Beverage, Nutrition & the Business of Fresh</h1>
+        <p class="text-muted-foreground mt-2 md:text-lg">
+          Data-driven research and market analysis from the team behind the Ancient City Splash — covering functional beverage trends, consumer behavior, and the science of what you drink.
+        </p>
+      </div>
+
+      <div class="mt-6 flex pb-16">
+        <CategoryCloud />
+      </div>
+    </div>
+
+    <div class="grid gap-8 gap-y-10 md:grid-cols-2">
+      {page.data.map((post) => <PostCard post={post} showDescription={true} data-mos="fade-up" />)}
+    </div>
+
+    <div class="mt-10 flex justify-center md:mt-16">
+      <Pagination
+        basePath={`/blog/`}
+        prevUrl={page.url.prev}
+        currPage={page.currentPage}
+        nextUrl={page.url.next}
+        lastPage={page.lastPage}
+      />
+    </div>
+  </section>
+</BaseLayout>

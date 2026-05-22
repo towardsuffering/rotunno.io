@@ -1,0 +1,231 @@
+@import url("./fonts.css");
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* tailwind plugins */
+@plugin "@tailwindcss/forms";
+
+/* dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* theme definition import */
+@import "./tailwind-theme.css";
+
+/* other imports into specific layers */
+@import "./mos.css" layer(utilities);
+@import "./markdown-content.css" layer(components);
+@import "./buttons.css" layer(components);
+
+/* https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layer */
+@layer base {
+  :root {
+    /* default color of <body> background and text */
+    --background: oklch(0.964 0.022 138);
+    --foreground: oklch(0.14 0.030 140);
+
+    /* Background and text color for <Card> */
+    --card: oklch(0.995 0.004 138);
+    --card-foreground: oklch(0.14 0.030 140);
+
+    /* Colors for popovers like <SelectContent> and <TooltipContent> */
+    --popover: oklch(0.995 0.004 138);
+    --popover-foreground: oklch(0.14 0.030 140);
+
+    /* Primary colors for <Button>, etc. when variant="primary" */
+    --primary: var(--color-primary-600);
+    --primary-foreground: oklch(0.99 0.005 75);
+
+    /* Primary color used for text and other accents on top of the background color */
+    --primary-accent: oklch(0.548 0.182 13);
+
+    /* Secondary colors — watermelon pink contrast */
+    --secondary: oklch(0.548 0.182 13);
+    --secondary-foreground: oklch(0.99 0.005 75);
+
+    /* Secondary color used for text and other accents on top of the background color */
+    --secondary-accent: oklch(0.454 0.175 13);
+
+    /* Muted colors used for <TabsList>, <Avatar>, etc. */
+    --muted: oklch(0.990 0.010 138);
+    --muted-foreground: oklch(0.42 0.025 140);
+
+    /* Accents used throughout the site */
+    --accent: oklch(0.985 0.014 138);
+    --accent-foreground: oklch(0.20 0.030 140);
+
+    /* Various component colors for variant="info" */
+    --info: var(--color-sky-300);
+    --info-foreground: var(--color-sky-950);
+
+    /* Various component colors for variant="success" */
+    --success: var(--color-green-300);
+    --success-foreground: var(--color-green-950);
+
+    /* Various component colors for variant="warning" */
+    --warning: var(--color-amber-300);
+    --warning-foreground: var(--color-amber-950);
+
+    /* Various component colors for variant="error" */
+    --error: var(--color-red-700);
+    --error-foreground: var(--color-base-50);
+
+    /* Default border color */
+    --border: oklch(0.880 0.040 138);
+
+    /* Border colors for inputs like <Input>, <Textarea>, <SelectTrigger>  */
+    --input: oklch(0.880 0.040 138);
+
+    /* Outline color for focus states */
+    --outline: var(--color-primary-600);
+
+    /* Default transition duration */
+    --default-transition-duration: 0.2s;
+
+    /* Radius for rounded corners */
+    --radius: 0.65rem;
+
+    /* Spacing for padding and margin */
+    --spacing: 0.25rem;
+
+    /* custom shiki styling for markdown code blocks. These are the variables Astro uses
+		Shiki Themes: https://shiki.style/themes   https://shiki.matsu.io/guide/theme-colors#css-variables-theme */
+    --astro-code-foreground: var(--color-base-100);
+    --astro-code-background: var(--color-base-900);
+    --astro-code-token-constant: var(--color-primary-300);
+    --astro-code-token-string: var(--color-primary-700);
+    --astro-code-token-comment: var(--color-base-400);
+    --astro-code-token-keyword: var(--color-base-300);
+    --astro-code-token-parameter: var(--color-sky-400);
+    --astro-code-token-function: var(--color-base-100);
+    --astro-code-token-string-expression: var(--color-primary-300);
+    --astro-code-token-punctuation: var(--color-base-400);
+    --astro-code-token-link: var(--color-base-200);
+  }
+
+  /* overriding above variables when a parent has the class "dark" */
+  .dark {
+    --background: var(--color-base-950);
+    --foreground: var(--color-base-50);
+    --card: var(--color-base-900);
+    --card-foreground: var(--color-base-50);
+    --popover: var(--color-base-900);
+    --popover-foreground: var(--color-base-50);
+    --primary: var(--color-primary-500);
+    --primary-foreground: oklch(0.99 0.005 75);
+    --primary-accent: oklch(0.740 0.125 11);
+    --secondary: oklch(0.635 0.160 12);
+    --secondary-foreground: oklch(0.99 0.005 75);
+    --secondary-accent: oklch(0.740 0.125 11);
+    --muted: var(--color-base-900);
+    --muted-foreground: var(--color-base-400);
+    --accent: var(--color-base-700);
+    --accent-foreground: var(--color-base-100);
+    --info: var(--color-sky-300);
+    --info-foreground: var(--color-sky-950);
+    --success: var(--color-green-300);
+    --success-foreground: var(--color-green-950);
+    --warning: var(--color-amber-300);
+    --warning-foreground: var(--color-amber-950);
+    --error: var(--color-red-800);
+    --error-foreground: var(--color-base-50);
+    --border: --alpha(var(--color-base-50) / 10%);
+    --input: --alpha(var(--color-base-50) / 15%);
+    --outline: var(--color-primary-400);
+  }
+
+  /* starwind preflight merged with Cosmic Themes */
+  * {
+    @apply border-border outline-outline/50;
+  }
+  html {
+    @apply bg-background text-foreground leading-[1.6rem] scheme-light dark:scheme-dark;
+    scroll-behavior: smooth;
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .site-container {
+    @apply mx-auto max-w-[86rem] px-4;
+  }
+
+  /* styles navbar links */
+  .nav__link--base {
+    @apply text-muted-foreground hover:text-foreground leading-tight transition;
+  }
+
+  /* various H1 styling used throughout the components */
+  .h1 {
+    @apply font-heading text-4xl leading-tight font-semibold lg:text-5xl;
+  }
+
+  /* various H2 styling used throughout the components */
+  .h2 {
+    @apply font-heading text-2xl leading-tight font-semibold md:text-3xl lg:text-4xl;
+  }
+
+  /* various H3 styling used throughout the components */
+  .h3 {
+    @apply font-heading text-lg leading-tight font-semibold md:text-xl lg:text-2xl;
+  }
+
+  /* text details immediately below a number of section headings */
+  .description {
+    @apply text-muted-foreground text-pretty md:text-lg;
+  }
+}
+
+@layer utilities {
+  /* focus utility class (for when user is tabbing through items on page) */
+  .primary-focus {
+    @apply focus-visible:outline-outline focus-visible:outline-2;
+  }
+
+  /* use with "animate-pause" to pause a CSS animation */
+  .pause {
+    animation-play-state: paused !important;
+  }
+}
+
+/* ── Custom scroll reveal animations ── */
+.use-animations [data-reveal] {
+  opacity: 0;
+  transition-property: opacity, transform, filter;
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-duration: 0.7s;
+  will-change: opacity, transform;
+}
+.use-animations [data-reveal="pop"] {
+  transform: scale(0.6);
+}
+.use-animations [data-reveal="flip-up"] {
+  transform: perspective(600px) rotateX(60deg) translateY(40px);
+  transform-origin: bottom center;
+}
+.use-animations [data-reveal="blur-left"] {
+  transform: translateX(-60px);
+  filter: blur(8px);
+}
+.use-animations [data-reveal="blur-right"] {
+  transform: translateX(60px);
+  filter: blur(8px);
+}
+.use-animations [data-reveal="rise"] {
+  transform: translateY(80px) scale(0.92);
+}
+.use-animations [data-reveal="swing"] {
+  transform: perspective(800px) rotateY(-40deg) translateX(-30px);
+  transform-origin: left center;
+}
+
+.use-animations [data-reveal].revealed {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}

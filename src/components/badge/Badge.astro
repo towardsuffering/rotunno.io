@@ -1,0 +1,14 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+import { tv } from "tailwind-variants";
+
+const badge = tv({
+  base: "font-heading text-primary-accent text-lg font-medium md:text-xl",
+});
+
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }>;
+
+const { class: className, as: Tag = "h2", ...rest } = Astro.props;
+---
+
+<Tag class={badge({ class: className })} {...rest}><slot /></Tag>
