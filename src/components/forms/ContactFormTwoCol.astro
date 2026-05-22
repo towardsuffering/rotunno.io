@@ -8,57 +8,50 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/starwind/select";
 import { Textarea } from "@/components/starwind/textarea";
-import { getLocaleFromUrl } from "@/js/localeUtils";
-import { getLocalizedRoute, getTranslatedData, useTranslations } from "@/js/translationUtils";
-
-const currLocale = getLocaleFromUrl(Astro.url);
-const t = useTranslations(currLocale);
 ---
 
-<form id="contact-form" class="@container flex flex-col gap-6">
-  <!-- Row 1: Full Name and Email Address -->
+<div id="form-success" class="hidden rounded-xl border border-green-500/30 bg-green-500/10 px-6 py-8 text-center">
+  <div class="mb-3 text-4xl">🍉</div>
+  <h3 class="font-heading mb-2 text-xl font-semibold text-green-600 dark:text-green-400">Message Sent!</h3>
+  <p class="text-muted-foreground">Thanks for reaching out — we will get back to you within 24 hours.</p>
+</div>
+
+<div id="form-error" class="hidden rounded-xl border border-red-500/30 bg-red-500/10 px-6 py-4 text-center">
+  <p class="text-sm text-red-600 dark:text-red-400">Something went wrong. Please try again or email us at <a href="mailto:waterlimondewds@gmail.com" class="underline">waterlimondewds@gmail.com</a>.</p>
+</div>
+
+<form
+  id="contact-form"
+  name="contact"
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  class="@container flex flex-col gap-6"
+>
+  <input type="hidden" name="form-name" value="contact" />
+  <p class="hidden"><input name="bot-field" /></p>
+
   <div class="grid gap-6 @md:grid-cols-2">
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-1.5">
       <Label for="full-name">Full Name</Label>
-      <Input
-        id="full-name"
-        type="text"
-        name="full-name"
-        class="min-h-12 px-4 py-3"
-        placeholder="Watermelon Willie"
-      />
+      <Input id="full-name" type="text" name="full-name" class="min-h-12 px-4 py-3" placeholder="Watermelon Willie" required />
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-1.5">
       <Label for="email">Email Address</Label>
-      <Input
-        id="email"
-        type="email"
-        name="email"
-        class="min-h-12 px-4 py-3"
-        placeholder="willie@thejuiceisloose.com"
-      />
+      <Input id="email" type="email" name="email" class="min-h-12 px-4 py-3" placeholder="willie@thejuiceisloose.com" required />
     </div>
   </div>
 
-  <!-- Row 2: Phone Number and Reason for Contact -->
   <div class="grid gap-6 @md:grid-cols-2">
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-1.5">
       <Label for="phone">Phone Number</Label>
-      <Input
-        id="phone"
-        type="tel"
-        name="phone"
-        class="min-h-12 px-4 py-3"
-        placeholder="(904) 555-0123"
-      />
+      <Input id="phone" type="tel" name="phone" class="min-h-12 px-4 py-3" placeholder="(904) 555-0123" />
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-1.5">
       <Label for="reason">Type of Inquiry</Label>
       <Select id="reason" name="reason">
         <SelectTrigger class="min-h-12 w-full px-4 py-3">
@@ -77,50 +70,63 @@ const t = useTranslations(currLocale);
     </div>
   </div>
 
-  <div class="flex flex-col">
+  <div class="flex flex-col gap-1.5">
     <Label for="message">Your Message</Label>
-    <Textarea
-      id="message"
-      name="message"
-      class="min-h-12 px-4 py-3"
-      placeholder="How can we help you?"
-      rows={4}
-    />
+    <Textarea id="message" name="message" class="min-h-12 px-4 py-3" placeholder="How can we help you?" rows={4} required />
   </div>
-  <div class="mt-2 flex flex-col">
-    <Label for="consent" class="sr-only">Are you an existing patient?</Label>
-    <div class="flex gap-1">
-      <Checkbox id="consent" variant="primary" name="consent" /><p>
-        I consent to having this website store my submitted information
-      </p>
-    </div>
+
+  <div class="flex gap-2">
+    <Checkbox id="consent" variant="primary" name="consent" />
+    <p class="text-sm">I consent to having this website store my submitted information</p>
   </div>
-  <div>
-    <Button variant="primary" type="submit" class="w-full py-3 text-lg">Send Message</Button>
-  </div>
+
+  <Button variant="primary" type="submit" id="submit-btn" class="w-full py-3 text-lg">
+    Send Message
+  </Button>
 </form>
 
 <script>
-  function handleFormSubmit() {
-    const form = document.querySelector("#contact-form") as HTMLFormElement;
-    if (form) {
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const formValues = Object.fromEntries(formData.entries());
+  function initContactForm() {
+    const form = document.querySelector("#contact-form") as HTMLFormElement | null;
+    const successMsg = document.querySelector("#form-success") as HTMLElement | null;
+    const errorMsg = document.querySelector("#form-error") as HTMLElement | null;
+    const submitBtn = document.querySelector("#submit-btn") as HTMLButtonElement | null;
 
-        // demo form data logging
-        console.log("Form submission values:", formValues);
+    if (!form) return;
 
-        // You can add additional logic here like:
-        // - Form validation
-        // - API submission
-        // - Success/error handling
-      });
-    }
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
+      }
+      errorMsg?.classList.add("hidden");
+
+      try {
+        const body = new URLSearchParams(new FormData(form) as any).toString();
+        const res = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body,
+        });
+
+        if (res.ok) {
+          form.classList.add("hidden");
+          successMsg?.classList.remove("hidden");
+        } else {
+          throw new Error(String(res.status));
+        }
+      } catch {
+        errorMsg?.classList.remove("hidden");
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send Message";
+        }
+      }
+    });
   }
 
-  handleFormSubmit();
-
-  document.addEventListener("astro:after-swap", handleFormSubmit);
+  initContactForm();
+  document.addEventListener("astro:after-swap", initContactForm);
 </script>
