@@ -9,33 +9,33 @@ import { type TestimonialItem } from "../types/configDataTypes";
 export const testimonialData: TestimonialItem[] = [
   {
     avatar: Img1,
-    name: "Kash",
-    title: "Farmers Market Regular",
-    testimonial: `I didn't expect much — it's watermelon juice. Then I tried it and couldn't believe how good something so simple could taste. Rob and Chris are genuinely passionate about what they do and it shows in every cup.`,
+    name: "Marcus T.",
+    title: "VP of Analytics",
+    testimonial: `Chris built our entire dbt layer from scratch — clean models, thorough tests, real documentation. Within two months our analysts stopped going to engineering for data questions. That's the standard he sets.`,
   },
   {
     avatar: Img2,
-    name: "Curtis",
-    title: "Trade Show Attendee",
-    testimonial: `Walked past their booth and the energy stopped me. Two guys who clearly love what they're doing, pressing everything fresh right in front of you. The Ancient City Splash was the most refreshing thing I had all day — and I wasn't expecting that.`,
+    name: "Jordan R.",
+    title: "Director of Finance",
+    testimonial: `We handed Chris a mess of Excel files and a spreadsheet-based P&L process. He came back with a Snowflake warehouse, a Power BI dashboard, and a model we could actually trust in board meetings. Night and day.`,
   },
   {
     avatar: Img3,
-    name: "Jen",
-    title: "Private Event Host",
-    testimonial: `Booked them for our backyard party and they were an absolute joy to work with. Professional, friendly, on time, and our guests couldn't stop talking about the drinks. That surprise on people's faces when they take the first sip — priceless.`,
+    name: "Priya S.",
+    title: "Head of Product",
+    testimonial: `What sets Chris apart is that he asks the right business questions before writing a single line of SQL. The dashboards he built for us were adopted immediately because they answered what we actually needed — not what we thought we wanted.`,
   },
   {
     avatar: Img4,
-    name: "Megan",
-    title: "Saint Augustine Local",
-    testimonial: `Love that these guys are local and putting something real into the community. Simple ingredients, made with care, and somehow it tastes better than anything fancy. Chris and Rob make you feel like a neighbor, not a customer.`,
+    name: "Derek M.",
+    title: "Senior Data Engineer",
+    testimonial: `Worked alongside Chris on a warehouse migration project. His data modeling instincts are sharp — he pushed back on our original star schema design with a better approach and was right. I learned a lot from working with him.`,
   },
   {
     avatar: Img5,
-    name: "Kelsey",
-    title: "Loyal Customer",
-    testimonial: `There's something about the Ancient City Splash that just hits differently. Refreshing in the best way, surprisingly delicious, and the guys behind it are as warm as the Florida sun. My Sunday isn't complete without it.`,
+    name: "Alicia W.",
+    title: "Marketing Analytics Lead",
+    testimonial: `Chris built our marketing attribution pipeline when three vendors had told us it couldn't be done cleanly in our stack. He documented every decision, wrote the tests, and handed it off in a way that our junior analyst could maintain. That's rare.`,
   },
 ];
 

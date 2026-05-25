@@ -1,8 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import splashImg from "@/assets/images/splash.png";
 
 import Contact from "@/components/contact/Contact.astro";
 import FaqAccordions from "@/components/faq/FaqAccordionsSideImage.astro";
@@ -16,7 +14,7 @@ const { service } = Astro.props as Props;
 const { data } = service;
 ---
 
-<BaseLayout title={`${data.title} — WaterLimon Dewds`} description={data.description}>
+<BaseLayout title={`${data.title} — Chris Rotunno`} description={data.description}>
   <section class="site-container mt-8 py-20 md:pt-32">
 
     <!-- Back link -->
@@ -24,7 +22,7 @@ const { data } = service;
       href="/services"
       class="text-primary-accent mb-8 inline-flex items-center gap-1 text-sm font-semibold hover:underline"
     >
-      ← All Services
+      ← All Capabilities
     </a>
 
     <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
@@ -37,22 +35,12 @@ const { data } = service;
         </div>
       </div>
 
-      <!-- Right: product photo with animated lime -->
+      <!-- Right: icon + description card -->
       <div class="relative order-first md:order-last">
-        <Image
-          src={splashImg}
-          alt="Ancient City Splash"
-          width={800}
-          class="w-full max-h-[500px] object-contain rounded-xl md:rounded-2xl"
-        />
-        <!-- Lime + dripping animation -->
-        <div class="lime-wrapper absolute -top-24 left-[62%] -translate-x-1/2">
-          <Icon name="tabler/lemon" class="lime-icon text-primary-400 size-24 drop-shadow-2xl" />
-          <span class="drop drop-1"></span>
-          <span class="drop drop-2"></span>
-          <span class="drop drop-3"></span>
-          <span class="drop drop-4"></span>
-          <span class="drop drop-5"></span>
+        <div class="rounded-2xl border bg-muted p-12 flex flex-col items-center justify-center text-center gap-6 min-h-[360px]">
+          <Icon name={data.icon} class="text-primary-accent size-24" />
+          <h2 class="h2">{data.title}</h2>
+          <p class="text-muted-foreground text-lg">{data.description}</p>
         </div>
       </div>
 
@@ -62,47 +50,3 @@ const { data } = service;
   <Contact />
   <FaqAccordions />
 </BaseLayout>
-
-<style>
-  .lime-wrapper {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .lime-icon {
-    animation: squeeze 1.8s ease-in-out infinite;
-    transform-origin: center;
-    filter: drop-shadow(0 0 12px oklch(0.752 0.168 138 / 0.7));
-  }
-
-  @keyframes squeeze {
-    0%, 100% { transform: rotate(-20deg) scale(1); }
-    35% { transform: rotate(-26deg) scale(0.82); }
-    55% { transform: rotate(-14deg) scale(1.08); }
-  }
-
-  .drop {
-    display: block;
-    border-radius: 50% 50% 60% 60%;
-    background: oklch(0.752 0.168 138);
-    opacity: 0;
-    position: absolute;
-    top: 84px;
-    box-shadow: 0 0 6px oklch(0.752 0.168 138 / 0.8);
-  }
-
-  .drop-1 { width: 7px;  height: 14px; left: 22px; animation: drip 1.8s ease-in 0s    infinite; }
-  .drop-2 { width: 5px;  height: 10px; left: 34px; animation: drip 1.8s ease-in 0.35s infinite; }
-  .drop-3 { width: 8px;  height: 16px; left: 14px; animation: drip 1.8s ease-in 0.6s  infinite; }
-  .drop-4 { width: 5px;  height: 9px;  left: 40px; animation: drip 1.8s ease-in 0.9s  infinite; }
-  .drop-5 { width: 6px;  height: 12px; left: 28px; animation: drip 1.8s ease-in 1.2s  infinite; }
-
-  @keyframes drip {
-    0%   { opacity: 0;   transform: translateY(0); }
-    8%   { opacity: 1; }
-    85%  { opacity: 0.7; transform: translateY(70px); }
-    100% { opacity: 0;   transform: translateY(90px); }
-  }
-</style>

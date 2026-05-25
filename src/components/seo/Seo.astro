@@ -81,7 +81,7 @@ const imageUrl = trimEndSlash(Astro.site?.toString() || "") + rawImageSrc;
 ---
 
 <SEO
-  title="Ancient City Splash | WaterLimon Dewds"
+  title={title}
   description={description}
   canonical={canonicalUrl.toString()}
   openGraph={{

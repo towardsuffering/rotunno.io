@@ -1,63 +1,51 @@
 ---
 import { Image } from "astro:assets";
-import robert from "@images/robert.jpg";
 import chris from "@images/chris.jpg";
 
 import Badge from "../badge/Badge.astro";
-
-const teamData = [
-  {
-    name: "Robert McKiernan",
-    specialty: "Co-Founder",
-    description: "The product guy. Exceptional cook and product developer with a sharp instinct for nutrition — the reason the Ancient City Splash tastes the way it does.",
-    image: robert,
-    imageClass: "h-full w-full object-cover",
-    imageStyle: "object-position: center 18%;",
-  },
-  {
-    name: "Christopher Rotunno",
-    specialty: "Co-Founder",
-    description: "The operations guy. Sharp eye for marketing, finance, and execution — the reason WaterLimon Dewds runs the way it does.",
-    image: chris,
-    imageClass: "h-full w-full object-cover",
-    imageStyle: "",
-  },
-];
 ---
 
 <section id="team-swiper" class="py-12 lg:py-16">
   <div class="site-container">
 
-    <!-- Three-column grid: text | founder | founder -->
-    <div class="grid gap-8 md:grid-cols-3 md:gap-12 items-center" id="team-trigger">
+    <!-- Two-column grid: text | photo -->
+    <div class="grid gap-8 md:grid-cols-2 md:gap-16 items-center" id="team-trigger">
 
       <!-- Col 1: text -->
       <div class="flex flex-col gap-4" data-reveal="blur-left">
-        <Badge>Our Story</Badge>
-        <h3 class="text-foreground h2">Two Cousins, One Mission</h3>
+        <Badge>About Me</Badge>
+        <h3 class="text-foreground h2">Chris Rotunno</h3>
         <p class="text-primary-accent font-heading font-semibold md:text-lg">
-          To establish <span class="bg-primary-400/30 text-primary-accent rounded px-1">WaterLimon Dewds</span> as Northeast Florida's premier watermelon-inspired brand — delivering bold, refreshing beverages like <span class="bg-primary-400/30 text-primary-accent rounded px-1">Ancient City Splash</span> and an expanding line of innovative products that honor the culture and spirit of St. Augustine, the oldest city in America, while creating authentic, flavorful experiences for the locals who call it home and the visitors who come to discover it.
+          Analytics Engineer & BI Leader based in <span class="bg-primary-400/30 text-primary-accent rounded px-1">St. Augustine, FL</span> — turning raw data into the dashboards, pipelines, and decisions that move businesses forward.
         </p>
+        <p class="text-muted-foreground md:text-base">
+          I've spent my career at the intersection of data engineering and business intelligence — building the infrastructure that makes analytics possible and the visualizations that make it useful. I work across the full stack: warehouse design, transformation layers in dbt, pipeline orchestration, and executive-level dashboards in Power BI and Tableau.
+        </p>
+        <p class="text-muted-foreground md:text-base">
+          I'm equally comfortable writing complex SQL, leading a BI team, and presenting findings to a C-suite. My goal on every project is the same: make data easy to trust and hard to ignore.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-2">
+          {["SQL", "Python", "dbt", "Power BI", "Snowflake", "Tableau", "Airflow"].map(tag => (
+            <span class="bg-muted border rounded-full px-3 py-1 text-sm font-medium">{tag}</span>
+          ))}
+        </div>
       </div>
 
-      <!-- Col 2 & 3: founder cards -->
-      {teamData.map((member, idx) => (
-        <div class="flex flex-col items-start text-left" data-reveal="flip-up" data-reveal-delay={idx * 0.18}>
-          <div class="founder-card w-full aspect-[7/8] overflow-hidden rounded-xl shadow-md mb-4">
-            <Image
-              src={member.image}
-              alt={`Portrait of ${member.name}`}
-              width={400}
-              densities={[1.5, 2]}
-              class={`${member.imageClass} founder-photo`}
-              style={member.imageStyle}
-            />
-          </div>
-          <span class="text-primary-accent text-lg font-semibold">{member.name}</span>
-          <p class="text-muted-foreground mt-1 text-sm font-semibold">{member.specialty}</p>
-          <p class="mt-2 text-sm">{member.description}</p>
+      <!-- Col 2: photo -->
+      <div class="flex flex-col items-start text-left" data-reveal="flip-up">
+        <div class="founder-card w-full aspect-[7/8] overflow-hidden rounded-xl shadow-md mb-4">
+          <Image
+            src={chris}
+            alt="Portrait of Chris Rotunno"
+            width={400}
+            densities={[1.5, 2]}
+            class="h-full w-full object-cover founder-photo"
+          />
         </div>
-      ))}
+        <span class="text-primary-accent text-lg font-semibold">Christopher Rotunno</span>
+        <p class="text-muted-foreground mt-1 text-sm font-semibold">Data Analytics Engineer & BI Leader</p>
+        <p class="mt-2 text-sm">Open to remote roles and hybrid positions in Northeast Florida.</p>
+      </div>
 
     </div>
 

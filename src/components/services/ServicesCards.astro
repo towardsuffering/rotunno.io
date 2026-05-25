@@ -27,41 +27,26 @@ const orderedServices = filteredServices.sort((a, b) => {
   return 0;
 });
 
-const comingSoon = [
+const additionalSkills = [
   {
-    icon: "tabler/leaf",
-    title: "The Mint Edition",
-    description: "Watermelon, lime, ice, a dash of salt, and a fresh mint sprig. Cool, clean, and refreshing.",
+    icon: "tabler/git-branch",
+    title: "Version-Controlled Data",
+    description: "All transformation and pipeline code lives in Git. Every change is peer-reviewable, rollbackable, and documented.",
   },
   {
-    icon: "tabler/flame",
-    title: "The Tajin Twist",
-    description: "Watermelon, lime, ice, a dash of salt, and a Tajin-salted rim. Sweet, tart, and a little spicy.",
+    icon: "tabler/clipboard",
+    title: "Data Quality & Testing",
+    description: "dbt tests, Great Expectations, and custom assertion layers that catch data issues before they reach a dashboard.",
   },
   {
-    icon: "tabler/bolt",
-    title: "The Ginger Kick",
-    description: "Watermelon, lime, ice, a dash of salt, and a fresh ginger press. Bright, bold, a little fiery.",
+    icon: "tabler/report-analytics",
+    title: "Executive Storytelling",
+    description: "The ability to translate complex analytical findings into clear narratives for C-suite audiences — without losing the nuance.",
   },
   {
-    icon: "tabler/pepper",
-    title: "The Jalapeno Heat",
-    description: "Watermelon, lime, ice, a dash of salt, and a jalapeno infusion. For the spice lovers.",
-  },
-  {
-    icon: "tabler/candy",
-    title: "Watermelon Fruit Roll Ups",
-    description: "All-natural watermelon rolled up and ready to snack on. Pure fruit, nothing else.",
-  },
-  {
-    icon: "tabler/bottle",
-    title: "Pickled Watermelon Rinds",
-    description: "A Southern classic, done right. Tangy, crunchy, and surprisingly addictive.",
-  },
-  {
-    icon: "tabler/paw",
-    title: "Doggy Fruit Roll Ups",
-    description: "For the good boys and girls. All-natural watermelon fruit roll ups made safe for dogs — a treat they'll go wild for.",
+    icon: "tabler/users",
+    title: "Cross-Functional Partnership",
+    description: "Proven track record of working alongside product, finance, marketing, and engineering to define and ship data that drives decisions.",
   },
 ];
 ---
@@ -72,7 +57,7 @@ const comingSoon = [
       class="h2 mx-auto max-w-3xl text-center"
       data-reveal="pop"
     >
-      Flavor First. Sourced Right.
+      Core Capabilities
     </h2>
     <div class="mt-12 flex justify-center">
       {
@@ -86,14 +71,14 @@ const comingSoon = [
       }
     </div>
 
-    <!-- Coming Soon -->
+    <!-- Additional Skills -->
     <div class="mt-20">
-      <h3 class="h2 mb-2 text-center" data-reveal="pop">Coming Soon</h3>
-      <p class="description mb-10 text-center" data-reveal="pop" data-reveal-delay="0.1">We're working on it. These drops are on the way.</p>
+      <h3 class="h2 mb-2 text-center" data-reveal="pop">Also in My Toolkit</h3>
+      <p class="description mb-10 text-center" data-reveal="pop" data-reveal-delay="0.1">Skills that make the difference between data that sits and data that ships.</p>
       <div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-4">
-        {comingSoon.map((item, idx) => (
+        {additionalSkills.map((item, idx) => (
           <div class="flex" data-reveal="rise" data-reveal-delay={idx * 0.1}>
-            <div class="bg-muted flex w-full flex-col justify-between rounded-lg border border-dashed p-8 opacity-70 md:rounded-xl">
+            <div class="bg-muted flex w-full flex-col justify-between rounded-lg border border-dashed p-8 md:rounded-xl">
               <div>
                 <div class="border-primary-accent relative mr-auto flex size-18 items-center justify-center rounded-full border-2">
                   <Icon name={item.icon} class="text-primary-accent h-full w-full p-3" />
@@ -101,9 +86,6 @@ const comingSoon = [
                 <h3 class="font-heading mt-6 text-xl font-semibold">{item.title}</h3>
                 <p class="text-muted-foreground mt-3 text-base">{item.description}</p>
               </div>
-              <span class="text-primary-accent mt-6 inline-block rounded-full border border-current px-3 py-1 text-xs font-semibold uppercase tracking-wider">
-                Coming Soon
-              </span>
             </div>
           </div>
         ))}

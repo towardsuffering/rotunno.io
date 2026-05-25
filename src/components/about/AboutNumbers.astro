@@ -12,20 +12,20 @@ interface StatItem {
 
 const stats: StatItem[] = [
   {
-    value: "2",
-    label: "Founders",
+    value: "7+",
+    label: "Years in Data",
   },
   {
-    value: "1",
-    label: "Signature Drink",
+    value: "50+",
+    label: "Dashboards Built",
   },
   {
-    value: "100+",
-    label: "Events This Year",
+    value: "10+",
+    label: "dbt Models Shipped",
   },
   {
-    value: "∞",
-    label: "Satisfied Customers",
+    value: "3",
+    label: "BI Platforms",
   },
 ];
 ---
@@ -73,14 +73,10 @@ const stats: StatItem[] = [
     function next() {
       frame++;
       const progress = frame / totalFrames;
-      // slow down as we approach end
       const delay = 20 + Math.pow(progress, 2) * 140;
 
       if (frame < totalFrames) {
-        // show random chars
         el.textContent = final.replace(/[0-9]/g, () =>
-          CHARS[Math.floor(Math.random() * CHARS.length)]
-        ).replace(/∞/, () =>
           CHARS[Math.floor(Math.random() * CHARS.length)]
         );
         setTimeout(next, delay);

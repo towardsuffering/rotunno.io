@@ -19,7 +19,7 @@ const siteData: SiteDataProps = {
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
     src: "/images/og-banner.jpg",
-    alt: "WaterLimon Dewds — Home of the Ancient City Splash",
+    alt: "Chris Rotunno — Data Analytics Engineer & BI Leader",
   },
 };
 

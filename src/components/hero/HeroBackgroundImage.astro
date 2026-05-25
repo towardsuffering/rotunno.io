@@ -1,6 +1,6 @@
 ---
 import Button from "@/components/button/Button.astro";
-import WatermelonSVG from "@/components/hero/WatermelonSVG.astro";
+import DataDashboardSVG from "@/components/hero/DataDashboardSVG.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getLocalizedRoute, useTranslations } from "@/js/translationUtils";
 
@@ -12,10 +12,10 @@ const t = useTranslations(currLocale);
   class="relative isolate mx-auto flex w-full items-center overflow-hidden"
   aria-label="Hero section"
 >
-  <!-- Background: deep lime left → deep watermelon right -->
+  <!-- Background: deep navy dark data theme -->
   <div
     class="pointer-events-none absolute inset-0 z-0"
-    style="background: linear-gradient(135deg, #0e2419 0%, #4a7a22 45%, #c0304a 100%);"
+    style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #0f2d4a 100%);"
     aria-hidden="true"
   />
 
@@ -28,8 +28,8 @@ const t = useTranslations(currLocale);
         data-mos="fade-right"
         class="leading-tighter font-heading mb-4 text-4xl font-semibold text-white md:text-5xl xl:text-7xl"
       >
-        Thirst-Quenching. Mouth-Watering.
-        <span style="color: #F04B6E;">Surprisingly </span><span style="color: #8DC63F;">Delicious.</span>
+        Data that
+        <span style="color: #38bdf8;">drives </span><span style="color: #34d399;">decisions.</span>
       </h1>
       <p
         data-mos-anchor="#hero-shapes-trigger"
@@ -37,28 +37,41 @@ const t = useTranslations(currLocale);
         data-mos-delay=".2"
         class="mb-8 text-lg text-white/75 md:text-xl"
       >
-        Every event has hot dogs, chips, soda, and sugar-loaded lemonade.
-        We're the alternative — watermelon, lime, ice, and a dash of salt.
-        Made fresh on-site at markets and events across Florida.
+        Analytics engineer and BI leader who builds the pipelines, models, and dashboards
+        that turn raw data into clarity. SQL, Python, dbt, Power BI — end to end.
       </p>
-      <Button
-        type="button"
-        href={getLocalizedRoute(currLocale, `#contact`)}
-        variant="primary"
-        class="md:text-lg"
-        aria-label="Find Us at an Event"
-        data-mos-anchor="#hero-shapes-trigger"
-        data-mos="fade-right"
-        data-mos-delay=".4"
-      >
-        Find Us at an Event
-      </Button>
+      <div class="flex flex-wrap gap-4">
+        <Button
+          type="button"
+          href={getLocalizedRoute(currLocale, `/projects`)}
+          variant="primary"
+          class="md:text-lg"
+          aria-label="View My Projects"
+          data-mos-anchor="#hero-shapes-trigger"
+          data-mos="fade-right"
+          data-mos-delay=".4"
+        >
+          View My Projects
+        </Button>
+        <Button
+          type="button"
+          href={getLocalizedRoute(currLocale, `#contact`)}
+          variant="ghost"
+          class="md:text-lg border border-white/30 text-white hover:bg-white/10"
+          aria-label="Get in Touch"
+          data-mos-anchor="#hero-shapes-trigger"
+          data-mos="fade-right"
+          data-mos-delay=".55"
+        >
+          Get in Touch
+        </Button>
+      </div>
     </div>
 
     <div
       class="xs:h-[360px] mt-auto flex h-[300px] justify-end md:h-[500px] md:pt-20 lg:h-[600px] xl:h-[700px]"
     >
-      <WatermelonSVG />
+      <DataDashboardSVG />
     </div>
   </div>
 </section>

@@ -10,44 +10,36 @@ interface Props {
 const { class: className } = Astro.props as Props;
 
 const highlights = [
-  "The Ancient City Splash — watermelon, lime, ice, and a dash of salt",
-  "Six signature variations, all built on the same foundation",
-  "Sourced from local farmers we trust, ripest fruit only",
-  "Made fresh on-site at every event — never pre-made",
-  "Available at farmers markets and trade shows across Florida",
-  "Available for private events and corporate bookings",
+  "Data warehouse design and modeling (Snowflake, BigQuery, Redshift)",
+  "dbt transformation layers — tested, documented, production-ready",
+  "Power BI and Tableau dashboards built for real adoption",
+  "ETL/ELT pipeline engineering in Python and Airflow",
+  "BI team leadership and analytics governance frameworks",
+  "Stakeholder alignment and KPI strategy from zero",
 ];
 ---
 
 <section class:list={["py-20 md:pt-32", className]}>
   <div class="site-container grid gap-8 md:grid-cols-2 md:gap-16 items-center">
 
-    <!-- Left: product photo with animated lime -->
+    <!-- Left: dashboard illustration -->
     <div class="relative flex items-center justify-center">
       <Image
         src={splashImg}
-        alt="Ancient City Splash"
+        alt="Data analytics dashboard preview"
         width={600}
-        class="w-full max-h-[500px] object-contain rounded-xl md:rounded-2xl"
+        class="w-full max-h-[500px] object-contain rounded-xl md:rounded-2xl opacity-90"
       />
-      <div class="lime-wrapper absolute -top-24 left-[62%] -translate-x-1/2">
-        <Icon name="tabler/lemon" class="lime-icon text-primary-400 size-24 drop-shadow-2xl" />
-        <span class="drop drop-1"></span>
-        <span class="drop drop-2"></span>
-        <span class="drop drop-3"></span>
-        <span class="drop drop-4"></span>
-        <span class="drop drop-5"></span>
+      <div class="absolute -top-8 left-[62%] -translate-x-1/2">
+        <Icon name="tabler/chart-dots" class="text-primary-400 size-20 drop-shadow-2xl opacity-80" />
       </div>
     </div>
 
     <!-- Right: copy -->
     <div>
-      <h2 class="h1">The Light Option at Every Event.</h2>
+      <h2 class="h1">From Raw Data to Real Decisions.</h2>
       <p class="text-muted-foreground mt-3 max-w-lg text-pretty md:text-lg">
-        Walk any trade show, farmers market, or carnival and you'll find the same thing —
-        hot dogs, chips, soda, and lemonade loaded with sugar. We're the alternative.
-        The Ancient City Splash — watermelon, lime, ice, and a dash of salt. That's it. Nothing more, nothing less.
-        Made fresh on-site at every event. Whether you sip it or gulp it, you'll want another. One straw at a time.
+        Most organizations have data. Few have the infrastructure to trust it, the models to make sense of it, or the dashboards to act on it. I build all three — end to end, from the warehouse to the boardroom. Whether you need a single dashboard or a full modern data stack, I can scope it, build it, and hand it off with documentation your team can actually maintain.
       </p>
 
       <ul class="mt-8 space-y-3">
@@ -64,42 +56,3 @@ const highlights = [
 
   </div>
 </section>
-
-<style>
-  .lime-wrapper {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .lime-icon {
-    animation: squeeze 1.8s ease-in-out infinite;
-    transform-origin: center;
-    filter: drop-shadow(0 0 12px oklch(0.752 0.168 138 / 0.7));
-  }
-  @keyframes squeeze {
-    0%, 100% { transform: rotate(-20deg) scale(1); }
-    35% { transform: rotate(-26deg) scale(0.82); }
-    55% { transform: rotate(-14deg) scale(1.08); }
-  }
-  .drop {
-    display: block;
-    border-radius: 50% 50% 60% 60%;
-    background: oklch(0.752 0.168 138);
-    opacity: 0;
-    position: absolute;
-    top: 84px;
-    box-shadow: 0 0 6px oklch(0.752 0.168 138 / 0.8);
-  }
-  .drop-1 { width: 7px;  height: 14px; left: 22px; animation: drip 1.8s ease-in 0s    infinite; }
-  .drop-2 { width: 5px;  height: 10px; left: 34px; animation: drip 1.8s ease-in 0.35s infinite; }
-  .drop-3 { width: 8px;  height: 16px; left: 14px; animation: drip 1.8s ease-in 0.6s  infinite; }
-  .drop-4 { width: 5px;  height: 9px;  left: 40px; animation: drip 1.8s ease-in 0.9s  infinite; }
-  .drop-5 { width: 6px;  height: 12px; left: 28px; animation: drip 1.8s ease-in 1.2s  infinite; }
-  @keyframes drip {
-    0%   { opacity: 0;   transform: translateY(0); }
-    8%   { opacity: 1; }
-    85%  { opacity: 0.7; transform: translateY(70px); }
-    100% { opacity: 0;   transform: translateY(90px); }
-  }
-</style>

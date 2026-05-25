@@ -1,26 +1,32 @@
 ---
-title: "Virtual Event Platform"
-description: "A comprehensive platform for hosting and managing virtual events with interactive features and analytics."
+title: "Data Warehouse Migration"
+description: "Led migration from a legacy on-premise SQL Server warehouse to Snowflake with a full dbt transformation layer — 18 months of technical debt cleared in 12 weeks."
 image: "../virtual-event-platform/atlas.jpg"
-technologies: ["Astro", "WebRTC", "Socket.io", "Redis"]
-demoUrl: "https://atlas.cosmicthemes.com/"
-githubUrl: "https://github.com/Boston343"
+technologies: ["Snowflake", "dbt", "Python", "Airflow", "Fivetran"]
 completionDate: 2024-02-01
 keyFeatures:
   [
-    "Live streaming capabilities",
-    "Interactive workshops",
-    "Networking rooms",
-    "Event analytics",
-    "Virtual booth management",
+    "Full migration from SQL Server to Snowflake with zero downtime",
+    "dbt model layer replacing 300+ stored procedures",
+    "Automated data quality testing with dbt tests and alerts",
+    "Airflow DAG orchestration replacing SSIS packages",
+    "Complete documentation in dbt schema YAML",
   ]
 order: 2
 ---
 
 ## Project Overview
 
-The Virtual Event Platform enables organizations to host engaging online events with features like live streaming, interactive workshops, and networking opportunities. It provides comprehensive analytics and management tools for event organizers.
+A mid-size company was running their analytics on an aging on-premise SQL Server warehouse — 300+ stored procedures, no version control, no documentation, minimal testing. Queries that should have run in seconds took minutes. The data team spent 60% of their time on incident response rather than new work.
+
+I scoped, planned, and led the migration to Snowflake with a modern dbt transformation layer over 12 weeks.
 
 ## Technical Implementation
 
-The platform utilizes React for the frontend, WebRTC for video streaming, and Socket.io for real-time communications. PostgreSQL handles structured data while Redis manages real-time features and caching.
+Phase 1: Fivetran connectors for all source systems, landing raw data into Snowflake staging schemas. Phase 2: dbt modeling — staging, intermediate, and mart layers built iteratively, validated against the legacy stored procedure outputs row by row. Phase 3: Airflow DAGs replacing SSIS packages for orchestration, with alerting on failed runs.
+
+The most technically challenging component was the incremental logic. Several legacy procedures had implicit state that was never documented. I reverse-engineered the behavior, documented the intent, and rebuilt it as transparent, tested dbt incremental models.
+
+## Outcome
+
+Query performance improved 10-15x on average analytical workloads. Team incident response time dropped from hours to minutes for most data issues. The data team shipped more new projects in Q1 post-migration than in the previous two quarters combined.

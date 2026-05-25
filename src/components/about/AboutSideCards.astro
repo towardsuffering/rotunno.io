@@ -1,5 +1,5 @@
 ---
-import doctorImage from "@images/card_bg-min.jpg"; // Use a doctor image for the left side
+import cardBg from "@images/card_bg-min.jpg";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 
@@ -9,22 +9,22 @@ const currLocale = getLocaleFromUrl(Astro.url);
 
 const aboutCardsData = [
   {
-    title: "Patient-Centered Care",
+    title: "End-to-End Data Engineering",
     description:
-      "At Space Coast Medicine, our doctors believe in treating the whole person, not just the symptoms. We prioritize personalized care plans tailored to your unique health needs and goals.",
-    icon: "tabler/clipboard-heart",
+      "I build the pipelines that power analytics — ETL/ELT in Python, transformation layers in dbt, orchestration with Airflow, and cloud warehouses on Snowflake or BigQuery. Clean data in, trustworthy metrics out.",
+    icon: "tabler/database",
   },
   {
-    title: "Preventive Medicine",
+    title: "BI & Dashboard Design",
     description:
-      "We focus on disease prevention and early detection through regular screenings, vaccinations, and lifestyle counseling. Our goal is to keep you healthy, not just treat you when you're sick.",
-    icon: "tabler/heart-check",
+      "I design dashboards people actually use. Power BI, Tableau, Looker — I focus on the right KPIs, clean visual hierarchy, and self-serve layouts that reduce ad-hoc requests and increase data literacy across teams.",
+    icon: "tabler/chart-bar",
   },
   {
-    title: "Compassionate Staff",
+    title: "Analytics Leadership",
     description:
-      "Our team of experienced healthcare professionals is committed to providing empathetic care with dignity and respect. We take the time to listen and understand your concerns.",
-    icon: "tabler/nurse",
+      "I've led small data teams, defined governance standards, and partnered with executives to align on metrics strategy. I communicate findings in plain language and translate business questions into analytical frameworks.",
+    icon: "tabler/users",
   },
 ];
 ---
@@ -37,8 +37,8 @@ const aboutCardsData = [
     >
       <div class="bg-primary absolute inset-0 h-full w-full overflow-hidden rounded-xl">
         <Image
-          src={doctorImage}
-          alt="About background"
+          src={cardBg}
+          alt="Data analytics background"
           width={500}
           densities={[1.5, 2]}
           class="h-full w-full object-cover mix-blend-overlay"
@@ -47,7 +47,7 @@ const aboutCardsData = [
 
       <div class="text-muted relative mb-auto flex flex-col items-center text-center">
         <div>
-          <h2 class="h1 text-pretty text-white">What Makes Our Medical Practice Different</h2>
+          <h2 class="h1 text-pretty text-white">What I Bring to Every Data Role</h2>
         </div>
       </div>
     </div>

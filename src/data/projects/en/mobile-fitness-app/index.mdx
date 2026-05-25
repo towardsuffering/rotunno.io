@@ -1,26 +1,32 @@
 ---
-title: "FitTrack Mobile App"
-description: "A comprehensive fitness tracking mobile application with workout planning, progress monitoring, and social features."
+title: "Marketing Attribution Pipeline"
+description: "Multi-touch attribution model in Python and dbt that connected ad spend to closed revenue — replacing a last-touch model that was misallocating $400K/year in budget."
 image: "../mobile-fitness-app/nova.jpg"
-technologies: ["Astro", "Redux", "Node.js"]
-demoUrl: "https://nova.cosmicthemes.com/"
-githubUrl: "https://github.com/Boston343"
+technologies: ["Python", "dbt", "BigQuery", "Airflow", "Looker"]
 completionDate: 2024-02-20
 keyFeatures:
   [
-    "Personalized workout plans",
-    "Progress tracking with charts",
-    "Social community features",
-    "Nutrition tracking",
-    "Integration with fitness devices",
+    "Multi-touch attribution across 6 acquisition channels",
+    "Custom Python attribution logic with configurable decay weights",
+    "Daily Airflow pipeline with data quality checks at each step",
+    "Looker dashboards for CMO and channel leads",
+    "A/B comparison view: last-touch vs. multi-touch attribution",
   ]
-order: 5
+order: 3
 ---
 
 ## Project Overview
 
-FitTrack is a mobile application designed to help users achieve their fitness goals through personalized workout plans and comprehensive progress tracking. The app combines social features with detailed analytics to keep users motivated and engaged.
+The marketing team was running budget decisions off a last-touch attribution model baked into their ad platform. Analysis showed the model was systematically undervaluing upper-funnel channels (content, organic search) and overvaluing retargeting — leading to an estimated $400K/year in misallocated spend.
+
+I built a multi-touch attribution pipeline from scratch, connecting raw ad event data to CRM-sourced closed revenue.
 
 ## Technical Implementation
 
-Built with React Native for cross-platform compatibility, the app uses Redux for state management and Firebase for real-time data synchronization. The backend API is implemented with Node.js and Express, providing scalable performance for thousands of concurrent users.
+Source data: Google Ads, Meta, LinkedIn, HubSpot, and Salesforce — all landed in BigQuery via Airbyte. I built a Python script implementing a time-decay attribution model with configurable channel weights, wrapped in a dbt Python model for auditability. The attribution output fed into a Looker dashboard with a side-by-side comparison view showing last-touch vs. multi-touch attribution by channel, campaign, and time period.
+
+The hardest problem was identity resolution — matching ad impressions and clicks to CRM contacts across platforms with different identifiers. I built a deterministic matching layer using email hash + device fingerprint, with a probabilistic fallback.
+
+## Outcome
+
+Marketing adopted the multi-touch model for Q3 planning. Budget reallocation toward upper-funnel channels resulted in a 22% improvement in cost-per-acquisition over the following two quarters. The CMO presented the attribution analysis at the annual board meeting.
