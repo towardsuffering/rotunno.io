@@ -42,30 +42,19 @@ const authorsData = await getEntries(authors);
         </figure>
       ) : (
         <div class="flex h-full w-full items-center justify-center overflow-hidden rounded-md md:rounded-lg"
-          style="background: linear-gradient(135deg, #1A3A2A 0%, #8DC63F 50%, #F04B6E 100%);">
+          style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f2d4a 100%);">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" class="w-48 opacity-90" aria-hidden="true">
-            <!-- rind outer -->
-            <path d="M 20 100 A 80 80 0 0 1 180 100 Z" fill="#2d6e22"/>
-            <!-- rind inner -->
-            <path d="M 28 100 A 72 72 0 0 1 172 100 Z" fill="#6ab830"/>
-            <!-- flesh -->
-            <path d="M 36 100 A 64 64 0 0 1 164 100 Z" fill="#f24d6b"/>
-            <!-- seeds -->
-            <ellipse cx="80"  cy="82" rx="4" ry="6" fill="#0c180e" transform="rotate(-15 80 82)"/>
-            <ellipse cx="100" cy="72" rx="4" ry="6" fill="#0c180e" transform="rotate(0 100 72)"/>
-            <ellipse cx="120" cy="82" rx="4" ry="6" fill="#0c180e" transform="rotate(15 120 82)"/>
-            <!-- shine -->
-            <ellipse cx="72" cy="78" rx="10" ry="5" fill="white" opacity="0.12" transform="rotate(-20 72 78)"/>
-            <!-- lime wedge -->
-            <circle cx="158" cy="38" r="22" fill="#236b10"/>
-            <circle cx="158" cy="38" r="18" fill="#8acc25"/>
-            <line x1="158" y1="20" x2="158" y2="56" stroke="#3d9818" stroke-width="1.2" opacity="0.6"/>
-            <line x1="140" y1="38" x2="176" y2="38" stroke="#3d9818" stroke-width="1.2" opacity="0.6"/>
-            <line x1="145" y1="25" x2="171" y2="51" stroke="#3d9818" stroke-width="1" opacity="0.5"/>
-            <line x1="171" y1="25" x2="145" y2="51" stroke="#3d9818" stroke-width="1" opacity="0.5"/>
-            <circle cx="158" cy="38" r="4" fill="#3d9818" opacity="0.5"/>
-            <circle cx="158" cy="38" r="22" fill="none" stroke="#1a5510" stroke-width="2"/>
-            <ellipse cx="148" cy="28" rx="7" ry="4" fill="white" opacity="0.18" transform="rotate(-20 148 28)"/>
+            <!-- mini bar chart -->
+            <rect x="28" y="80" width="16" height="28" rx="2" fill="#38bdf8" opacity="0.8"/>
+            <rect x="52" y="60" width="16" height="48" rx="2" fill="#38bdf8"/>
+            <rect x="76" y="70" width="16" height="38" rx="2" fill="#38bdf8" opacity="0.9"/>
+            <rect x="100" y="45" width="16" height="63" rx="2" fill="#34d399"/>
+            <rect x="124" y="55" width="16" height="53" rx="2" fill="#38bdf8" opacity="0.9"/>
+            <rect x="148" y="35" width="16" height="73" rx="2" fill="#34d399"/>
+            <!-- baseline -->
+            <line x1="20" y1="108" x2="180" y2="108" stroke="#334155" stroke-width="1.5"/>
+            <!-- trend line -->
+            <polyline points="36,78 60,58 84,68 108,43 132,53 156,33" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
           </svg>
         </div>
       )

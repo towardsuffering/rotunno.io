@@ -4,31 +4,31 @@
  * These are in a separate file so it can be imported into <style> tags in .astro components
  */
 @theme {
-  /* primary colors — lime green */
-  --color-primary-50:  oklch(0.975 0.022 138);
-  --color-primary-100: oklch(0.950 0.048 138);
-  --color-primary-200: oklch(0.904 0.085 138);
-  --color-primary-300: oklch(0.840 0.130 138);
-  --color-primary-400: oklch(0.752 0.168 138);
-  --color-primary-500: oklch(0.645 0.188 138);
-  --color-primary-600: oklch(0.538 0.182 140);
-  --color-primary-700: oklch(0.438 0.162 140);
-  --color-primary-800: oklch(0.342 0.130 140);
-  --color-primary-900: oklch(0.250 0.092 140);
-  --color-primary-950: oklch(0.168 0.062 140);
+  /* primary colors — sky blue (#38bdf8 at 400) */
+  --color-primary-50:  oklch(0.977 0.013 237);
+  --color-primary-100: oklch(0.951 0.026 237);
+  --color-primary-200: oklch(0.901 0.058 231);
+  --color-primary-300: oklch(0.828 0.111 230);
+  --color-primary-400: oklch(0.746 0.160 233);
+  --color-primary-500: oklch(0.685 0.169 237);
+  --color-primary-600: oklch(0.588 0.158 242);
+  --color-primary-700: oklch(0.500 0.134 243);
+  --color-primary-800: oklch(0.443 0.110 241);
+  --color-primary-900: oklch(0.391 0.090 241);
+  --color-primary-950: oklch(0.293 0.066 241);
 
-  /* base colors — warm cream neutrals */
-  --color-base-50:  oklch(0.988 0.005 75);
-  --color-base-100: oklch(0.966 0.008 75);
-  --color-base-200: oklch(0.930 0.010 75);
-  --color-base-300: oklch(0.882 0.010 75);
-  --color-base-400: oklch(0.720 0.012 75);
-  --color-base-500: oklch(0.558 0.012 75);
-  --color-base-600: oklch(0.440 0.010 75);
-  --color-base-700: oklch(0.340 0.010 75);
-  --color-base-800: oklch(0.240 0.008 75);
-  --color-base-900: oklch(0.170 0.007 75);
-  --color-base-950: oklch(0.120 0.005 75);
+  /* base colors — cool slate neutrals */
+  --color-base-50:  oklch(0.984 0.003 248);
+  --color-base-100: oklch(0.968 0.007 248);
+  --color-base-200: oklch(0.929 0.013 256);
+  --color-base-300: oklch(0.869 0.022 253);
+  --color-base-400: oklch(0.704 0.040 257);
+  --color-base-500: oklch(0.554 0.046 257);
+  --color-base-600: oklch(0.446 0.043 257);
+  --color-base-700: oklch(0.372 0.044 257);
+  --color-base-800: oklch(0.279 0.041 260);
+  --color-base-900: oklch(0.208 0.042 266);
+  --color-base-950: oklch(0.129 0.042 265);
 
   /* other theme settings */
   --button-transition-properties:

@@ -20,61 +20,55 @@
 /* https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layer */
 @layer base {
   :root {
+    /* light mode — clean slate white, sky blue accents, emerald secondary */
+
     /* default color of <body> background and text */
-    --background: oklch(0.964 0.022 138);
-    --foreground: oklch(0.14 0.030 140);
+    --background: oklch(0.984 0.003 248);
+    --foreground: oklch(0.208 0.042 266);
 
     /* Background and text color for <Card> */
-    --card: oklch(0.995 0.004 138);
-    --card-foreground: oklch(0.14 0.030 140);
+    --card: oklch(1.000 0 0);
+    --card-foreground: oklch(0.208 0.042 266);
 
     /* Colors for popovers like <SelectContent> and <TooltipContent> */
-    --popover: oklch(0.995 0.004 138);
-    --popover-foreground: oklch(0.14 0.030 140);
+    --popover: oklch(1.000 0 0);
+    --popover-foreground: oklch(0.208 0.042 266);
 
-    /* Primary colors for <Button>, etc. when variant="primary" */
+    /* Primary colors for <Button>, etc. — sky blue */
     --primary: var(--color-primary-700);
-    --primary-foreground: oklch(0.99 0.005 75);
+    --primary-foreground: oklch(0.99 0 0);
 
-    /* Primary color used for text and other accents on top of the background color */
-    --primary-accent: oklch(0.548 0.182 13);
+    /* Primary accent — sky blue, darkened for contrast on white */
+    --primary-accent: oklch(0.588 0.158 242);
 
-    /* Secondary colors — watermelon pink contrast */
-    --secondary: oklch(0.548 0.182 13);
-    --secondary-foreground: oklch(0.99 0.005 75);
+    /* Secondary — emerald green, darkened for contrast on white */
+    --secondary: oklch(0.508 0.136 163);
+    --secondary-foreground: oklch(0.99 0 0);
 
-    /* Secondary color used for text and other accents on top of the background color */
-    --secondary-accent: oklch(0.454 0.175 13);
+    /* Secondary accent — emerald */
+    --secondary-accent: oklch(0.508 0.136 163);
 
-    /* Muted colors used for <TabsList>, <Avatar>, etc. */
-    --muted: oklch(0.990 0.010 138);
-    --muted-foreground: oklch(0.42 0.025 140);
+    /* Muted colors */
+    --muted: oklch(0.968 0.007 248);
+    --muted-foreground: oklch(0.446 0.043 257);
 
-    /* Accents used throughout the site */
-    --accent: oklch(0.985 0.014 138);
-    --accent-foreground: oklch(0.20 0.030 140);
+    /* Accents */
+    --accent: oklch(0.929 0.013 256);
+    --accent-foreground: oklch(0.208 0.042 266);
 
-    /* Various component colors for variant="info" */
+    /* Status colors */
     --info: var(--color-sky-300);
     --info-foreground: var(--color-sky-950);
-
-    /* Various component colors for variant="success" */
     --success: var(--color-green-300);
     --success-foreground: var(--color-green-950);
-
-    /* Various component colors for variant="warning" */
     --warning: var(--color-amber-300);
     --warning-foreground: var(--color-amber-950);
-
-    /* Various component colors for variant="error" */
     --error: var(--color-red-700);
     --error-foreground: var(--color-base-50);
 
-    /* Default border color */
-    --border: oklch(0.880 0.040 138);
-
-    /* Border colors for inputs like <Input>, <Textarea>, <SelectTrigger>  */
-    --input: oklch(0.880 0.040 138);
+    /* Border and input */
+    --border: oklch(0.869 0.022 253);
+    --input: oklch(0.869 0.022 253);
 
     /* Outline color for focus states */
     --outline: var(--color-primary-600);
@@ -88,39 +82,51 @@
     /* Spacing for padding and margin */
     --spacing: 0.25rem;
 
-    /* custom shiki styling for markdown code blocks. These are the variables Astro uses
-		Shiki Themes: https://shiki.style/themes   https://shiki.matsu.io/guide/theme-colors#css-variables-theme */
+    /* shiki code block colors */
     --astro-code-foreground: var(--color-base-100);
     --astro-code-background: var(--color-base-900);
     --astro-code-token-constant: var(--color-primary-300);
-    --astro-code-token-string: var(--color-primary-700);
+    --astro-code-token-string: var(--color-primary-600);
     --astro-code-token-comment: var(--color-base-400);
     --astro-code-token-keyword: var(--color-base-300);
-    --astro-code-token-parameter: var(--color-sky-400);
+    --astro-code-token-parameter: oklch(0.746 0.160 233);
     --astro-code-token-function: var(--color-base-100);
     --astro-code-token-string-expression: var(--color-primary-300);
     --astro-code-token-punctuation: var(--color-base-400);
     --astro-code-token-link: var(--color-base-200);
   }
 
-  /* overriding above variables when a parent has the class "dark" */
+  /* dark mode — deep navy (#0f172a) background, sky blue + emerald accents */
   .dark {
-    --background: var(--color-base-950);
+    /* #0f172a ≈ oklch(0.145 0.025 251) */
+    --background: oklch(0.145 0.025 251);
     --foreground: var(--color-base-50);
-    --card: var(--color-base-900);
+
+    --card: oklch(0.200 0.028 255);
     --card-foreground: var(--color-base-50);
-    --popover: var(--color-base-900);
+
+    --popover: oklch(0.200 0.028 255);
     --popover-foreground: var(--color-base-50);
+
+    /* sky blue buttons in dark mode */
     --primary: var(--color-primary-500);
-    --primary-foreground: oklch(0.99 0.005 75);
-    --primary-accent: oklch(0.740 0.125 11);
-    --secondary: oklch(0.635 0.160 12);
-    --secondary-foreground: oklch(0.99 0.005 75);
-    --secondary-accent: oklch(0.740 0.125 11);
-    --muted: var(--color-base-900);
+    --primary-foreground: oklch(0.99 0 0);
+
+    /* sky blue accent — #38bdf8 */
+    --primary-accent: oklch(0.746 0.160 233);
+
+    /* emerald accent — #34d399 */
+    --secondary: oklch(0.812 0.138 163);
+    --secondary-foreground: oklch(0.145 0.025 251);
+
+    --secondary-accent: oklch(0.812 0.138 163);
+
+    --muted: oklch(0.200 0.028 255);
     --muted-foreground: var(--color-base-400);
-    --accent: var(--color-base-700);
+
+    --accent: oklch(0.260 0.035 255);
     --accent-foreground: var(--color-base-100);
+
     --info: var(--color-sky-300);
     --info-foreground: var(--color-sky-950);
     --success: var(--color-green-300);
@@ -129,6 +135,7 @@
     --warning-foreground: var(--color-amber-950);
     --error: var(--color-red-800);
     --error-foreground: var(--color-base-50);
+
     --border: --alpha(var(--color-base-50) / 10%);
     --input: --alpha(var(--color-base-50) / 15%);
     --outline: var(--color-primary-400);
