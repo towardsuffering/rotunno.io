@@ -1,132 +1,135 @@
 {
   "diplomas": [
     {
-      "title": "Master's in Computer Science",
-      "school": "Stanford University",
-      "year": 2020
-    },
-    {
-      "title": "Bachelor's in Software Engineering",
-      "school": "MIT",
-      "year": 2018
+      "title": "Bachelor of Science — [Your Degree Here]",
+      "school": "[Your University]",
+      "year": 2000
     }
   ],
   "certifications": [
     {
-      "title": "AWS Certified Solutions Architect",
-      "year": 2022
+      "title": "Google Data Analytics Professional Certificate",
+      "year": 2023
     },
     {
-      "title": "Google Cloud Professional Developer",
-      "year": 2021
+      "title": "Microsoft Power BI Data Analyst (PL-300)",
+      "year": 2024
+    },
+    {
+      "title": "dbt Analytics Engineer Certification",
+      "year": 2024
     }
   ],
   "experience": [
     {
-      "title": "Senior Software Engineer",
-      "company": "TechCorp",
+      "title": "Data Analytics Engineer",
+      "company": "[Your Company]",
       "companyImage": "./index/experience/0/companyImage.jpg",
-      "dates": "Jan 2021 - Present",
-      "location": "San Francisco, CA",
+      "dates": "Jan 2023 - Present",
+      "location": "St. Augustine, FL",
       "responsibilities": [
-        "Led development of microservices architecture",
-        "Mentored junior developers and conducted code reviews",
-        "Implemented CI/CD pipelines reducing deployment time by 50%",
-        "Architected scalable cloud solutions using AWS"
+        "Built and maintained dbt data models powering executive dashboards",
+        "Reduced reporting cycle time by 60% by automating ETL pipelines in Python",
+        "Designed dimensional data warehouse on Snowflake/BigQuery for cross-functional analytics",
+        "Partnered with stakeholders to define KPIs and deliver self-serve BI tools in Power BI / Tableau"
       ]
     },
     {
-      "title": "Technical Lead",
-      "company": "InnovateLabs",
+      "title": "Business Intelligence Analyst",
+      "company": "[Your Company]",
       "companyImage": "./index/experience/1/companyImage.jpg",
-      "dates": "Mar 2019 - Dec 2020",
-      "location": "New York, NY",
+      "dates": "Jun 2020 - Dec 2022",
+      "location": "Remote",
       "responsibilities": [
-        "Managed team of 8 developers across multiple projects",
-        "Established coding standards and best practices",
-        "Reduced technical debt by 40% through strategic refactoring",
-        "Implemented agile methodologies improving team productivity"
+        "Owned end-to-end reporting for sales, operations, and finance teams",
+        "Created and maintained a library of 30+ Power BI reports used daily by 200+ employees",
+        "Wrote complex SQL queries and stored procedures to support ad hoc analysis",
+        "Led migration from legacy Excel reporting to a centralized BI platform"
       ]
     }
   ],
   "hardSkills": [
     {
-      "skill": "JavaScript",
+      "skill": "SQL",
       "percentage": 95
     },
     {
-      "skill": "TypeScript",
+      "skill": "Python (pandas, dbt)",
+      "percentage": 85
+    },
+    {
+      "skill": "Power BI / Tableau",
       "percentage": 90
     },
     {
-      "skill": "React",
-      "percentage": 92
+      "skill": "Data Modeling",
+      "percentage": 88
+    },
+    {
+      "skill": "ETL / ELT Pipelines",
+      "percentage": 82
     }
   ],
   "softSkills": [
     {
-      "skill": "Leadership",
-      "icon": "👑"
-    },
-    {
-      "skill": "Communication",
+      "skill": "Stakeholder Communication",
       "icon": "🗣️"
     },
     {
       "skill": "Problem Solving",
       "icon": "🧩"
+    },
+    {
+      "skill": "Data Storytelling",
+      "icon": "📊"
+    },
+    {
+      "skill": "Team Leadership",
+      "icon": "👥"
     }
   ],
   "languages": [
     {
       "language": "English",
       "level": 10
-    },
-    {
-      "language": "Spanish",
-      "level": 8
-    },
-    {
-      "language": "French",
-      "level": 6
     }
   ],
   "tools": [
     {
-      "name": "Astro",
-      "category": "Development",
+      "name": "dbt",
+      "category": "Data Engineering",
       "image": "./index/tools/0/image.svg",
-      "link": "https://astro.build"
+      "link": "https://getdbt.com"
     },
     {
-      "name": "Visual Studio Code",
-      "category": "Development",
+      "name": "Power BI",
+      "category": "BI & Visualization",
       "image": "./index/tools/1/image.jpg",
-      "link": "https://code.visualstudio.com"
+      "link": "https://powerbi.microsoft.com"
     },
     {
-      "name": "Figma",
-      "category": "Design",
+      "name": "Snowflake",
+      "category": "Data Warehouse",
       "image": "./index/tools/2/image.jpg",
-      "link": "https://figma.com"
+      "link": "https://snowflake.com"
     },
     {
-      "name": "Adobe XD",
-      "category": "Design",
+      "name": "Tableau",
+      "category": "BI & Visualization",
       "image": "./index/tools/3/image.jpg",
-      "link": "https://adobe.com/products/xd"
+      "link": "https://tableau.com"
     },
     {
-      "name": "Webstorm",
-      "category": "Development",
+      "name": "Python",
+      "category": "Data Engineering",
       "image": "./index/tools/4/image.jpg",
-      "link": "https://jetbrains.com/webstorm"
+      "link": "https://python.org"
     },
     {
-      "name": "Docker",
-      "category": "DevOps",
+      "name": "GitHub",
+      "category": "Version Control",
       "image": "./index/tools/5/image.jpg",
-      "link": "https://docker.com"
+      "link": "https://github.com"
     }
   ]
 }

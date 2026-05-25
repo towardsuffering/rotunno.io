@@ -13,16 +13,20 @@ import { type navItem } from "../types/configDataTypes";
 // note: 1 level of dropdown is supported
 const navConfig: navItem[] = [
   {
-    text: "Our Story",
+    text: "Home",
     link: "/",
   },
   {
-    text: "Services",
-    link: "/services",
+    text: "About",
+    link: "/about",
   },
   {
-    text: "FAQ",
-    link: "/faq",
+    text: "Projects",
+    link: "/projects",
+  },
+  {
+    text: "Resume",
+    link: "/resume",
   },
 
   // mega menu
@@ -124,7 +128,7 @@ const navConfig: navItem[] = [
   // },
 
   {
-    text: "Insights",
+    text: "Blog",
     link: "/blog",
   },
 ];

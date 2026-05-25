@@ -2,49 +2,28 @@ import { type FaqItem } from "../types/configDataTypes";
 
 export const faqData: FaqItem[] = [
   {
-    question: "Where can I find WaterLimon Dewds?",
-    answer: `You can find us at two regular markets:
-
-St. Augustine Farmers Market — every Sunday, 10 AM to 2 PM at the Classic Car Museum of St. Augustine.
-
-Wednesday Pier Farmers Market — every Wednesday at St. Augustine Beach Pier Park, 350 A1A Beach Blvd, St. Augustine, FL 32080.
-
-We also travel throughout Northeast Florida for trade shows, private events, and community gatherings. Follow us on social media or use the contact form for our full schedule.`,
+    question: "What kind of roles are you targeting?",
+    answer: `I'm focused on Data Analytics Engineer and BI Leader roles — positions where I can own the full pipeline from raw data to executive-level insight. I'm especially interested in companies investing in a modern data stack (dbt, Snowflake/BigQuery, Looker/Power BI).`,
   },
   {
-    question: "What's in the Ancient City Splash?",
-    answer: `Watermelon, lime, ice, and a dash of salt. That's it — nothing more, nothing less.
-    Simple ingredients done right. Made fresh on-site at every event.`,
+    question: "What industries have you worked in?",
+    answer: `I've built analytics solutions across [your industries — e.g., retail, CPG, SaaS, finance]. I'm comfortable ramping quickly into a new vertical — data modeling and stakeholder communication patterns transfer across domains.`,
   },
   {
-    question: "What do you sell?",
-    answer: `The Ancient City Splash — our signature drink in six variations: the Classic, the Large, the Mint Edition, the Tajin Twist, the Ginger Kick, and the Jalapeno Heat.
-    Everything is made fresh on-site. You'll watch it happen.`,
+    question: "What does your technical stack look like?",
+    answer: `Core: SQL, Python (pandas, SQLAlchemy), dbt. Warehouses: Snowflake, BigQuery, Redshift. BI: Power BI, Tableau, Looker. Orchestration: Airflow, dbt Cloud. Git-based version control for all data work.`,
   },
   {
-    question: "Is it actually healthy or is that just marketing?",
-    answer: `Totally real — but that's not why we're selling it. Our pitch has never been "drink this because it's good for you."
-    Our pitch is: taste this. The rest takes care of itself.`,
+    question: "Are you open to remote, hybrid, or on-site?",
+    answer: `I'm based in St. Augustine, FL and am open to remote-first roles. For the right opportunity I'm also open to hybrid arrangements within Northeast Florida.`,
   },
   {
-    question: "Can you vendor at my private event?",
-    answer: `Absolutely. We're available for private parties, corporate events, weddings, and community gatherings throughout Florida.
-    Fill out the contact form with your event date and details and we'll follow up quickly.`,
+    question: "Can you lead or mentor a data team?",
+    answer: `Yes — I've led small analytics and BI teams, defined data governance standards, and mentored analysts growing into engineering roles. Building a healthy data culture is as important to me as building clean pipelines.`,
   },
   {
-    question: "Is the drink made fresh at each event?",
-    answer: `Yes, every time. We make it on-site — you'll watch it happen. No pre-made batches, no shortcuts.
-    If it's not fresh, it doesn't get served.`,
-  },
-  {
-    question: "Do you sell in retail stores?",
-    answer: `Not yet — right now you can only find us at markets and events. But that's changing.
-    We have plans to bottle and distribute the Ancient City Splash and eventually open a retail location. Stay tuned.`,
-  },
-  {
-    question: "How do I stay updated on your schedule?",
-    answer: `Follow us on social media or drop your info in the contact form.
-    We announce our upcoming markets and trade shows in advance so you know where to find us across Florida.`,
+    question: "How do I get in touch?",
+    answer: `Use the contact form on this site or email me directly at chrisrotunno@icloud.com. I typically respond within one business day.`,
   },
 ];
 
