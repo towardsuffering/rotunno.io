@@ -13,9 +13,21 @@ const t = useTranslations(currLocale);
       <p class="description mx-auto mt-4 mb-8 max-w-xl">Got a pipeline that's held together with duct tape and prayers? A dashboard nobody trusts? A warehouse migration that keeps getting deprioritized? That's exactly where I come in. Tell me what's broken — or what you're trying to build.</p>
     </div>
 
-    <div class="mx-auto max-w-2xl rounded-xl border p-8 text-left shadow-md" data-reveal="rise" data-reveal-delay="0.2">
-      <h3 class="font-heading mb-6 text-2xl font-semibold">Drop Me a Line</h3>
-      <ContactForm />
+    <div class="mx-auto grid max-w-4xl gap-6 md:grid-cols-2 items-start">
+      <div class="rounded-xl border p-8 text-left shadow-md" data-reveal="rise" data-reveal-delay="0.2">
+        <h3 class="font-heading mb-6 text-2xl font-semibold">Drop Me a Line</h3>
+        <ContactForm />
+      </div>
+
+      <div class="rounded-xl border p-8 text-center shadow-md flex flex-col items-center justify-center gap-4" data-reveal="rise" data-reveal-delay="0.35">
+        <h3 class="font-heading text-2xl font-semibold">Support My Work</h3>
+        <p class="text-muted-foreground text-sm">If my content, tools, or code have helped you — consider buying me a coffee.</p>
+        <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+        <stripe-buy-button
+          buy-button-id="buy_btn_1TbMCNKf3i8bH4sDF2dcukJP"
+          publishable-key="pk_live_51QqPjYKf3i8bH4sDSbhHSoTfe77T8kdWEZnNWmw86Nl1Xkp1BSJMEBwig0tGrXDAiD6yf4DnCXXnBwafi7VsrIOM00PkkbOpqV"
+        ></stripe-buy-button>
+      </div>
     </div>
   </div>
 </section>
