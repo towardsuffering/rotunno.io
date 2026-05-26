@@ -118,11 +118,18 @@
     fill="#34d399" letter-spacing="-0.5"
     filter="url(#glowStrong)">To Action.</text>
 
-  <!-- Tech stack -->
-  <text x="1155" y="466" text-anchor="end"
+  <!-- Open to work -->
+  <text x="1155" y="452" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="14" font-weight="400"
-    fill="white" opacity="0.38" letter-spacing="2">SQL &#xB7; Python &#xB7; Spark &#xB7; AWS &#xB7; Tableau &#xB7; Docker</text>
+    font-size="16" font-weight="700"
+    fill="#34d399" letter-spacing="1"
+    filter="url(#glow)">&#x25CF; OPEN TO WORK &#xB7; Remote &#xB7; Hybrid &#xB7; Open to Relocate Worldwide</text>
+
+  <!-- Tech stack -->
+  <text x="1155" y="477" text-anchor="end"
+    font-family="Arial,Helvetica,sans-serif"
+    font-size="12" font-weight="400"
+    fill="white" opacity="0.28" letter-spacing="2">SQL &#xB7; Python &#xB7; Spark &#xB7; AWS &#xB7; Tableau &#xB7; Docker</text>
 
   <!-- URL -->
   <text x="1155" y="522" text-anchor="end"
