@@ -58,7 +58,7 @@
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
   --animate-marquee: marquee 70s linear infinite;
-  --animate-marquee-testimonials: marquee-testimonials 60s linear infinite;
+  --animate-marquee-testimonials: marquee-testimonials 30s linear infinite;
   --animate-marquee-gallery: marquee-gallery 100s linear infinite;
 
   @keyframes accordion-down {
@@ -104,6 +104,13 @@
     to {
       transform: translateX(calc(-100% - 2.5rem));
     }
+  }
+}
+
+/* Speed up marquee on mobile viewports */
+@media (max-width: 768px) {
+  :root {
+    --animate-marquee-testimonials: marquee-testimonials 18s linear infinite;
   }
 }
 
