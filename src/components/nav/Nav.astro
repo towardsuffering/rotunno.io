@@ -82,15 +82,12 @@ const { navStyle = "default", transparentNav = false } = Astro.props as Props;
 
           <ThemeToggle class="mr-3 -ml-4 hidden md:block" />
 
-          <Button
-            variant="primary"
-            class="my-auto hidden px-4 py-2 md:flex"
-            href="https://buy.stripe.com/fZe3fwb7ug2w9Yk4gi"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Support My Work
-          </Button>
+          <div class="my-auto hidden md:flex items-center">
+            <stripe-buy-button
+              buy-button-id="buy_btn_1TbMCNKf3i8bH4sDF2dcukJP"
+              publishable-key="pk_live_51QqPjYKf3i8bH4sDSbhHSoTfe77T8kdWEZnNWmw86Nl1Xkp1BSJMEBwig0tGrXDAiD6yf4DnCXXnBwafi7VsrIOM00PkkbOpqV"
+            ></stripe-buy-button>
+          </div>
 
           {locales.length > 1 && <LanguageSelect class="ml-4 hidden md:block" />}
 
