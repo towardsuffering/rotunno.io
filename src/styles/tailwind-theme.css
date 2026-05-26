@@ -107,13 +107,6 @@
   }
 }
 
-/* Speed up marquee on mobile viewports */
-@media (max-width: 768px) {
-  :root {
-    --animate-marquee-testimonials: marquee-testimonials 18s linear infinite;
-  }
-}
-
 /* "inline" option is necessary here https://github.com/tailwindlabs/tailwindcss/discussions/15122#discussioncomment-11356322 */
 @theme inline {
   /* starwind utilities setup */

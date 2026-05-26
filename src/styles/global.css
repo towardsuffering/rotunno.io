@@ -200,6 +200,13 @@
   }
 }
 
+/* ── Marquee speed override for mobile ── */
+@media (max-width: 768px) {
+  :root {
+    --animate-marquee-testimonials: marquee-testimonials 18s linear infinite;
+  }
+}
+
 /* ── Custom scroll reveal animations ── */
 .use-animations [data-reveal] {
   opacity: 0;
