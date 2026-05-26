@@ -2,7 +2,7 @@
 <html>
 <head><title>Form Detection Stub</title></head>
 <body>
-  <!-- Netlify form detection stub for SSR builds -->
+  <!-- Netlify form detection stub — fields must match ContactFormTwoCol.astro exactly -->
   <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
     <input type="hidden" name="form-name" value="contact" />
     <input name="bot-field" />
@@ -10,10 +10,9 @@
     <input name="email" type="email" />
     <input name="phone" type="tel" />
     <select name="reason">
-      <option value="private-event">Private Event Booking</option>
-      <option value="corporate-event">Corporate Event</option>
-      <option value="farmers-market">Farmers Market</option>
-      <option value="trade-show">Trade Show</option>
+      <option value="full-time">Full-Time Role</option>
+      <option value="contract">Contract / Consulting</option>
+      <option value="collaboration">Collaboration / Partnership</option>
       <option value="general">General Question</option>
     </select>
     <textarea name="message"></textarea>
