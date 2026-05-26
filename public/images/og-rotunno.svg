@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0a0f1e"/>
+      <stop offset="50%"  stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#0c1f3a"/>
+    </linearGradient>
+    <linearGradient id="emeraldLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#34d399" stop-opacity="0"/>
+      <stop offset="40%"  stop-color="#34d399" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0.3"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowStrong">
+      <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Dot grid (left panel) -->
+  <g fill="#38bdf8" opacity="0.06">
+    <circle cx="40"  cy="40"  r="1.5"/><circle cx="100" cy="40"  r="1.5"/><circle cx="160" cy="40"  r="1.5"/><circle cx="220" cy="40"  r="1.5"/><circle cx="280" cy="40"  r="1.5"/><circle cx="340" cy="40"  r="1.5"/><circle cx="400" cy="40"  r="1.5"/><circle cx="460" cy="40"  r="1.5"/><circle cx="520" cy="40"  r="1.5"/>
+    <circle cx="40"  cy="110" r="1.5"/><circle cx="100" cy="110" r="1.5"/><circle cx="160" cy="110" r="1.5"/><circle cx="220" cy="110" r="1.5"/><circle cx="280" cy="110" r="1.5"/><circle cx="340" cy="110" r="1.5"/><circle cx="400" cy="110" r="1.5"/><circle cx="460" cy="110" r="1.5"/><circle cx="520" cy="110" r="1.5"/>
+    <circle cx="40"  cy="180" r="1.5"/><circle cx="100" cy="180" r="1.5"/><circle cx="160" cy="180" r="1.5"/><circle cx="220" cy="180" r="1.5"/><circle cx="280" cy="180" r="1.5"/><circle cx="340" cy="180" r="1.5"/><circle cx="400" cy="180" r="1.5"/><circle cx="460" cy="180" r="1.5"/><circle cx="520" cy="180" r="1.5"/>
+    <circle cx="40"  cy="250" r="1.5"/><circle cx="100" cy="250" r="1.5"/><circle cx="160" cy="250" r="1.5"/><circle cx="220" cy="250" r="1.5"/><circle cx="280" cy="250" r="1.5"/><circle cx="340" cy="250" r="1.5"/><circle cx="400" cy="250" r="1.5"/><circle cx="460" cy="250" r="1.5"/><circle cx="520" cy="250" r="1.5"/>
+    <circle cx="40"  cy="320" r="1.5"/><circle cx="100" cy="320" r="1.5"/><circle cx="160" cy="320" r="1.5"/><circle cx="220" cy="320" r="1.5"/><circle cx="280" cy="320" r="1.5"/><circle cx="340" cy="320" r="1.5"/><circle cx="400" cy="320" r="1.5"/><circle cx="460" cy="320" r="1.5"/><circle cx="520" cy="320" r="1.5"/>
+    <circle cx="40"  cy="390" r="1.5"/><circle cx="100" cy="390" r="1.5"/><circle cx="160" cy="390" r="1.5"/><circle cx="220" cy="390" r="1.5"/><circle cx="280" cy="390" r="1.5"/><circle cx="340" cy="390" r="1.5"/><circle cx="400" cy="390" r="1.5"/><circle cx="460" cy="390" r="1.5"/><circle cx="520" cy="390" r="1.5"/>
+    <circle cx="40"  cy="460" r="1.5"/><circle cx="100" cy="460" r="1.5"/><circle cx="160" cy="460" r="1.5"/><circle cx="220" cy="460" r="1.5"/><circle cx="280" cy="460" r="1.5"/><circle cx="340" cy="460" r="1.5"/><circle cx="400" cy="460" r="1.5"/><circle cx="460" cy="460" r="1.5"/><circle cx="520" cy="460" r="1.5"/>
+    <circle cx="40"  cy="530" r="1.5"/><circle cx="100" cy="530" r="1.5"/><circle cx="160" cy="530" r="1.5"/><circle cx="220" cy="530" r="1.5"/><circle cx="280" cy="530" r="1.5"/><circle cx="340" cy="530" r="1.5"/><circle cx="400" cy="530" r="1.5"/><circle cx="460" cy="530" r="1.5"/><circle cx="520" cy="530" r="1.5"/>
+  </g>
+
+  <!-- Pipeline flow -->
+  <rect x="40"  y="60" width="100" height="42" rx="7" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.6"/>
+  <text x="90" y="86" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#38bdf8" opacity="0.8" font-weight="600">RAW DATA</text>
+  <line x1="142" y1="81" x2="162" y2="81" stroke="#38bdf8" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="162,76 172,81 162,86" fill="#38bdf8" opacity="0.5"/>
+
+  <rect x="174" y="60" width="88" height="42" rx="7" fill="#34d399" fill-opacity="0.12" stroke="#34d399" stroke-width="1.5"/>
+  <text x="218" y="86" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#34d399" font-weight="700">ETL / ELT</text>
+  <line x1="264" y1="81" x2="284" y2="81" stroke="#38bdf8" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="284,76 294,81 284,86" fill="#38bdf8" opacity="0.5"/>
+
+  <rect x="296" y="60" width="104" height="42" rx="7" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.6"/>
+  <text x="348" y="86" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#38bdf8" opacity="0.8" font-weight="600">WAREHOUSE</text>
+  <line x1="402" y1="81" x2="422" y2="81" stroke="#38bdf8" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="422,76 432,81 422,86" fill="#38bdf8" opacity="0.5"/>
+
+  <rect x="434" y="52" width="106" height="58" rx="7" fill="#34d399" fill-opacity="0.18" stroke="#34d399" stroke-width="2" filter="url(#glow)"/>
+  <text x="487" y="84" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#34d399" font-weight="800">INSIGHT</text>
+  <text x="487" y="102" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#34d399" opacity="0.7">Decision-Ready</text>
+
+  <!-- KPI Cards -->
+  <rect x="40"  y="168" width="152" height="100" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="116" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="900" fill="#34d399" filter="url(#glow)">80%</text>
+  <text x="116" y="244" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="white" opacity="0.5" letter-spacing="1">COST REDUCTION</text>
+  <text x="116" y="258" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" opacity="0.3">API ingestion pipeline</text>
+
+  <rect x="204" y="168" width="152" height="100" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="280" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="900" fill="#38bdf8" filter="url(#glow)">99%</text>
+  <text x="280" y="244" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="white" opacity="0.5" letter-spacing="1">SYSTEM UPTIME</text>
+  <text x="280" y="258" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" opacity="0.3">24/7 infrastructure</text>
+
+  <rect x="368" y="168" width="152" height="100" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="444" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="44" font-weight="900" fill="#34d399" filter="url(#glow)">30%</text>
+  <text x="444" y="244" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="white" opacity="0.5" letter-spacing="1">EFFICIENCY GAIN</text>
+  <text x="444" y="258" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" opacity="0.3">Pipeline optimisation</text>
+
+  <!-- Divider -->
+  <line x1="575" y1="30" x2="575" y2="600" stroke="#34d399" stroke-width="1.5" opacity="0.2"/>
+  <circle cx="575" cy="30"  r="3" fill="#34d399" opacity="0.35"/>
+  <circle cx="575" cy="600" r="3" fill="#34d399" opacity="0.35"/>
+
+  <!-- RIGHT: focused text block — name · title · tagline · status · URL -->
+  <text x="1155" y="205" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="44" font-weight="900" fill="white" letter-spacing="-1">Christopher A. Rotunno</text>
+  <text x="1155" y="246" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="600" fill="#38bdf8" letter-spacing="0.3">Data Analytics Engineer &amp; BI Leader</text>
+  <line x1="615" y1="270" x2="1155" y2="270" stroke="url(#emeraldLine)" stroke-width="1.5"/>
+  <text x="1155" y="342" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="46" font-weight="800" fill="white" letter-spacing="-0.5">Putting Insights</text>
+  <text x="1155" y="398" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="46" font-weight="800" fill="#34d399" letter-spacing="-0.5" filter="url(#glowStrong)">To Action.</text>
+  <text x="1155" y="450" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#34d399" letter-spacing="0.5" filter="url(#glow)">&#x25CF; OPEN TO WORK &#xB7; Remote &#xB7; Hybrid &#xB7; Open to Relocate Worldwide</text>
+  <text x="1155" y="508" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" fill="#34d399" letter-spacing="3" filter="url(#glow)">ROTUNNO.IO</text>
+
+</svg>
