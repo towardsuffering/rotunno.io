@@ -7,7 +7,7 @@ export const faqData: FaqItem[] = [
   },
   {
     question: "What industries have you worked in?",
-    answer: `I've built analytics solutions across [your industries — e.g., retail, CPG, SaaS, finance]. I'm comfortable ramping quickly into a new vertical — data modeling and stakeholder communication patterns transfer across domains.`,
+    answer: `I've built analytics solutions across retail, CPG, SaaS, and finance. I'm comfortable ramping quickly into a new vertical — data modeling and stakeholder communication patterns transfer across domains.`,
   },
   {
     question: "What does your technical stack look like?",
