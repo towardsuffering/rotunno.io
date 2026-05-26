@@ -1,26 +1,30 @@
 ---
-title: "E-commerce Dashboard"
-description: "A modern dashboard for managing online stores with real-time analytics, inventory management, and order processing capabilities."
+title: "Custom API Ingestion Pipeline"
+description: "Cut third-party financial data costs by 80% by replacing a vendor dependency with a purpose-built Python ingestion layer — designed, built, and shipped with a team of four."
 image: "../e-commerce-dashboard/stellar.jpg"
-technologies: ["Astro", "TypeScript", "TailwindCSS", "Node.js"]
-demoUrl: "https://stellar.cosmicthemes.com/"
-githubUrl: "https://github.com/Boston343"
-completionDate: 2024-01-15
+technologies: ["Python", "SQL", "REST APIs", "PostgreSQL", "Docker"]
+completionDate: 2024-06-01
 keyFeatures:
   [
-    "Real-time sales analytics",
-    "Inventory management system",
-    "Order processing workflow",
-    "Customer relationship management",
-    "Automated reporting",
+    "Replaced a costly third-party data vendor with direct API integrations",
+    "80% reduction in monthly financial data costs",
+    "ORM-based pipeline with schema validation and automated retry logic",
+    "Built and mentored a 4-person engineering team through the full delivery cycle",
+    "Modular design supporting multiple data source adapters",
   ]
 order: 4
 ---
 
 ## Project Overview
 
-This dashboard provides a comprehensive solution for e-commerce businesses to manage their operations efficiently. Built with modern technologies and best practices in mind, it offers a seamless experience for store owners and administrators.
+Root Labs was spending the majority of its data budget on a third-party financial data vendor. The API was reliable but expensive, and the contract terms limited how the data could be used internally. The goal: build a replacement pipeline that gave us direct ownership of the data, at a fraction of the cost.
 
 ## Technical Implementation
 
-The dashboard is built using React and TypeScript, ensuring type safety and maintainable code. TailwindCSS provides a utility-first approach to styling, making the UI consistent and responsive across all devices.
+The solution was a Python-based ingestion layer built on top of direct API integrations with the underlying data providers. Each source was wrapped in a standardized adapter pattern, normalizing payloads into a consistent schema before loading into PostgreSQL via SQLAlchemy ORM.
+
+Error handling was a first-class concern: exponential backoff on rate limits, dead-letter queues for failed records, and Slack alerting for anomalies above a configurable threshold. The full stack ran in Docker, making local development and deployment consistent.
+
+## Team & Outcome
+
+This was a team project — I led a group of four engineers from initial design through production deployment. The 80% cost reduction came primarily from eliminating the vendor markup on raw API data, with secondary savings from reduced data volume through smarter filtering at ingestion time.

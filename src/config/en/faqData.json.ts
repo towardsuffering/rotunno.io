@@ -3,7 +3,7 @@ import { type FaqItem } from "../types/configDataTypes";
 export const faqData: FaqItem[] = [
   {
     question: "What kind of roles are you targeting?",
-    answer: `I'm focused on Data Analytics Engineer and BI Leader roles — positions where I can own the full pipeline from raw data to executive-level insight. I'm especially interested in companies investing in a modern data stack (dbt, Snowflake/BigQuery, Looker/Power BI).`,
+    answer: `I'm focused on Data Analytics Engineer and BI Leader roles — positions where I can own the full pipeline from raw data to executive-level insight. I'm especially interested in companies investing in a modern data stack (Python, BigQuery/Redshift, Tableau/Plotly).`,
   },
   {
     question: "What industries have you worked in?",
@@ -11,7 +11,7 @@ export const faqData: FaqItem[] = [
   },
   {
     question: "What does your technical stack look like?",
-    answer: `Core: SQL, Python (pandas, SQLAlchemy), dbt. Warehouses: Snowflake, BigQuery, Redshift. BI: Power BI, Tableau, Looker. Orchestration: Airflow, dbt Cloud. Git-based version control for all data work.`,
+    answer: `Core: SQL, Python (pandas, SQLAlchemy), Spark. Warehouses: BigQuery, Redshift. BI: Tableau, Plotly, Google Data Studio, Excel. Orchestration: Airflow. Cloud: AWS, Azure, GCP. Git-based version control for all data work.`,
   },
   {
     question: "Are you open to remote, hybrid, or on-site?",

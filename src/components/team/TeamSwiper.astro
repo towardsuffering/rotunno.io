@@ -12,39 +12,39 @@ import Badge from "../badge/Badge.astro";
     <div class="grid gap-8 md:grid-cols-2 md:gap-16 items-center" id="team-trigger">
 
       <!-- Col 1: text -->
-      <div class="flex flex-col gap-4" data-reveal="blur-left">
+      <div class="flex flex-col gap-4" data-mos="fade-right" data-mos-anchor="#team-trigger">
         <Badge>About Me</Badge>
-        <h3 class="text-foreground h2">Chris Rotunno</h3>
+        <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
         <p class="text-primary-accent font-heading font-semibold md:text-lg">
-          Analytics Engineer & BI Leader based in <span class="bg-primary-400/30 text-primary-accent rounded px-1">St. Augustine, FL</span> — turning raw data into the dashboards, pipelines, and decisions that move businesses forward.
+          Analytics engineer & BI leader — building the systems that turn fragmented data into decisions people actually act on.
         </p>
         <p class="text-muted-foreground md:text-base">
-          I've spent my career at the intersection of data engineering and business intelligence — building the infrastructure that makes analytics possible and the visualizations that make it useful. I work across the full stack: warehouse design, transformation layers in dbt, pipeline orchestration, and executive-level dashboards in Power BI and Tableau.
+          I've come to believe that people don't underperform because they lack ability. More often, the system around them wasn't built for their success. That's what drives the work — infrastructure that gives people the visibility they need to do their best.
         </p>
         <p class="text-muted-foreground md:text-base">
-          I'm equally comfortable writing complex SQL, leading a BI team, and presenting findings to a C-suite. My goal on every project is the same: make data easy to trust and hard to ignore.
+          I'm collaborative by default and self-aware about where I add the most value: the technical layer between raw data and real decisions. I work best alongside people who challenge the thinking, not just the code — and who care as much about whether something gets used as whether it gets built.
         </p>
         <div class="flex flex-wrap gap-3 mt-2">
-          {["SQL", "Python", "dbt", "Power BI", "Snowflake", "Tableau", "Airflow"].map(tag => (
+          {["SQL", "NoSQL", "Python", "Tableau", "AWS", "Docker", "Spark", "Scikit-Learn"].map(tag => (
             <span class="bg-muted border rounded-full px-3 py-1 text-sm font-medium">{tag}</span>
           ))}
         </div>
       </div>
 
       <!-- Col 2: photo -->
-      <div class="flex flex-col items-start text-left" data-reveal="flip-up">
+      <div class="flex flex-col items-start text-left" data-mos="fade-left" data-mos-anchor="#team-trigger" data-mos-delay=".15">
         <div class="founder-card w-full aspect-[7/8] overflow-hidden rounded-xl shadow-md mb-4">
           <Image
             src={chris}
-            alt="Portrait of Chris Rotunno"
+            alt="Portrait of Christopher A. Rotunno"
             width={400}
             densities={[1.5, 2]}
             class="h-full w-full object-cover founder-photo"
           />
         </div>
-        <span class="text-primary-accent text-lg font-semibold">Christopher Rotunno</span>
+        <span class="text-primary-accent text-lg font-semibold">Christopher A. Rotunno</span>
         <p class="text-muted-foreground mt-1 text-sm font-semibold">Data Analytics Engineer & BI Leader</p>
-        <p class="mt-2 text-sm">Open to remote roles and hybrid positions in Northeast Florida.</p>
+        <p class="mt-2 text-sm">Remote or hybrid preferred — open to relocating anywhere in the US for the right deal.</p>
       </div>
 
     </div>

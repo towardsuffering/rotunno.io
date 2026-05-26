@@ -1,30 +1,30 @@
 ---
-title: "Executive Revenue Dashboard"
-description: "End-to-end Power BI dashboard suite replacing 40+ Excel reports for a multi-division company — adopted by 200+ users within 60 days."
+title: "Python SQL ORM Data Pipeline"
+description: "Led a 4-person engineering team building a Python SQLAlchemy pipeline that automated financial data ingestion, validation, and storage — delivering clean, queryable data at scale."
 image: "../ai-content-platform/galaxy.jpg"
-technologies: ["Power BI", "SQL", "Snowflake", "dbt", "Python"]
-completionDate: 2024-03-10
+technologies: ["Python", "SQLAlchemy", "SQL", "PostgreSQL", "RESTful APIs"]
+completionDate: 2025-01-01
 keyFeatures:
   [
-    "Real-time revenue tracking by division, product, and channel",
-    "Automated variance analysis vs. plan and prior year",
-    "Row-level security for division-level access control",
-    "Drill-through from summary KPIs to transaction detail",
-    "Scheduled refresh with Snowflake direct query mode",
+    "ORM-based ingestion layer with schema validation at every stage",
+    "Automated retry logic and dead-letter handling for failed records",
+    "Led 4-developer team from design through production deployment",
+    "Modular adapter pattern supporting multiple financial data sources",
+    "Full test coverage on transformation and validation logic",
   ]
 order: 1
 ---
 
 ## Project Overview
 
-A finance and sales leadership team was running monthly business reviews from 40+ separate Excel files built by individual analysts. The process took 3 days to assemble and was frequently inconsistent between regions. I designed and shipped a unified Power BI suite that consolidated all reporting into a single, governed, refreshable source of truth.
+Root Labs needed a robust internal data pipeline that could ingest financial data from multiple sources, validate it against a known schema, and store it in a queryable format — without relying on costly third-party vendors. I led a team of four engineers to design and build this system from scratch.
 
 ## Technical Implementation
 
-Source data from three ERP systems was landed in Snowflake via Fivetran. I built a dimensional model in dbt — dim_customer, dim_product, dim_date, fct_revenue — with full test coverage and documentation. The Power BI dataset connected directly to Snowflake in DirectQuery mode for near-real-time refresh.
+The pipeline was built in Python using SQLAlchemy as the ORM layer, connecting to a PostgreSQL database. Each data source was wrapped in a standardized adapter that normalized incoming payloads before they hit the validation layer. Validation checked for schema conformance, value ranges, and referential integrity — failed records were routed to a dead-letter queue for review rather than silently dropped.
 
-Key engineering decisions: incremental materialization on the fact table to keep query cost low at scale; row-level security implemented at the warehouse level and mirrored in Power BI; a centralized metrics layer in dbt for consistent revenue definitions across all reports.
+The architecture was designed to be modular from day one: adding a new data source meant implementing one adapter class, not touching the core pipeline. This made it straightforward to onboard new providers as the business grew.
 
-## Outcome
+## Team & Outcome
 
-Reporting cycle dropped from 3 days to 4 hours. Dashboard adopted by 200+ users within 60 days of launch. Finance team reduced ad-hoc analyst requests by an estimated 40%.
+I owned the architecture and led the team through design, implementation, and deployment. The pipeline became the backbone of Root Labs' internal data infrastructure — reliable, testable, and maintainable by the full team.

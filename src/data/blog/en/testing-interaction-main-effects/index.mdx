@@ -1,0 +1,191 @@
+---
+title: "Testing for Interaction and Main Effects in Statistical Analysis"
+description: Main effects tell you what each variable does in isolation. Interaction effects tell you whether the combination matters. Here's how to test for both using Python's statsmodels.
+draft: false
+authors:
+  - main-author
+pubDate: 2023-07-21
+categories:
+  - data-science
+  - data-analysis
+tags:
+  - statistics
+  - interaction-effects
+  - main-effects
+  - anova
+  - statsmodels
+  - python
+  - regression
+---
+
+Most introductory statistics courses stop at main effects: does variable A predict the outcome? Does variable B? But in practice, the most interesting and actionable questions are often about combinations — does the effect of A change depending on the level of B?
+
+That's what interaction testing answers.
+
+---
+
+## Main Effects vs. Interaction Effects
+
+**Main effects** describe the independent contribution of each predictor to the outcome, averaged across all levels of the other predictors.
+
+**Interaction effects** describe whether the relationship between one predictor and the outcome *changes* depending on the value of another predictor.
+
+An example: in a study of exercise and diet on weight loss, a main effect analysis tells you that both exercise and diet help. An interaction effect analysis asks: is the combination of exercise *and* diet more effective than the sum of their individual contributions?
+
+If yes, there's a positive interaction. If the combination is less than additive, there's a negative interaction.
+
+---
+
+## Setting Up in Python
+
+We'll use `statsmodels` for ANOVA-style interaction testing, which gives us F-statistics and p-values for both main effects and interactions.
+
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+from statsmodels.stats.anova import anova_lm
+
+# Generate a sample dataset
+np.random.seed(42)
+n = 200
+
+df = pd.DataFrame({
+    'treatment': np.random.choice(['A', 'B'], n),
+    'age_group': np.random.choice(['young', 'middle', 'senior'], n),
+    'outcome': np.random.normal(50, 10, n)
+})
+
+# Add a real interaction effect: treatment A has larger effect for young group
+df.loc[(df['treatment'] == 'A') & (df['age_group'] == 'young'), 'outcome'] += 8
+df.loc[(df['treatment'] == 'A') & (df['age_group'] == 'senior'), 'outcome'] -= 4
+```
+
+---
+
+## Testing Main Effects with OLS
+
+```python
+# Model with main effects only
+model_main = smf.ols('outcome ~ C(treatment) + C(age_group)', data=df).fit()
+print(model_main.summary())
+```
+
+The `C()` notation tells statsmodels to treat variables as categorical (creating dummy variables automatically).
+
+---
+
+## Testing for Interaction
+
+```python
+# Model with main effects AND interaction term
+model_interaction = smf.ols(
+    'outcome ~ C(treatment) * C(age_group)', 
+    data=df
+).fit()
+
+print(model_interaction.summary())
+```
+
+The `*` operator in the formula expands to include both main effects AND their interaction: `C(treatment) + C(age_group) + C(treatment):C(age_group)`.
+
+---
+
+## ANOVA Table for Significance Testing
+
+To get clean Type II ANOVA results (which properly account for the hierarchical structure of the model):
+
+```python
+from statsmodels.stats.anova import anova_lm
+
+anova_results = anova_lm(model_interaction, typ=2)
+print(anova_results)
+```
+
+Output format:
+```
+                             sum_sq    df          F        PR(>F)
+C(treatment)               850.24     1      8.93      0.003
+C(age_group)               240.18     2      1.26      0.285
+C(treatment):C(age_group)  1240.55    2      6.52      0.002
+Residual                   18472.30  194
+```
+
+Reading the results:
+- **`C(treatment)`** — significant main effect (p = 0.003), treatment matters
+- **`C(age_group)`** — not significant (p = 0.285), age group alone doesn't predict outcome
+- **`C(treatment):C(age_group)`** — significant interaction (p = 0.002), the effect of treatment depends on age group
+
+---
+
+## Model Comparison: With and Without Interaction
+
+```python
+# Compare nested models
+anova_comparison = anova_lm(model_main, model_interaction)
+print(anova_comparison)
+```
+
+This likelihood ratio test directly compares whether adding the interaction term significantly improves model fit. A significant p-value (typically < 0.05) means the interaction is worth keeping.
+
+---
+
+## Visualizing the Interaction
+
+Statistics are easier to trust when the pattern is visible:
+
+```python
+import matplotlib.pyplot as plt
+
+group_means = df.groupby(['treatment', 'age_group'])['outcome'].mean().reset_index()
+
+fig, ax = plt.subplots(figsize=(8, 5))
+for treatment in ['A', 'B']:
+    subset = group_means[group_means['treatment'] == treatment]
+    ax.plot(subset['age_group'], subset['outcome'], 
+            marker='o', label=f'Treatment {treatment}', linewidth=2)
+
+ax.set_xlabel('Age Group')
+ax.set_ylabel('Mean Outcome')
+ax.set_title('Interaction Plot: Treatment × Age Group')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+If the lines are roughly parallel, the interaction is weak. If they cross or diverge significantly, the interaction is present — and the visualization often makes the nature of it immediately interpretable.
+
+---
+
+## Interpreting Results in Practice
+
+When you find a significant interaction:
+
+1. **Don't interpret main effects in isolation.** The "effect of treatment" is not a single number — it depends on the level of age group.
+
+2. **Use simple effects analysis.** Break the analysis down by level: "What is the effect of treatment among young patients?" and "What is the effect of treatment among senior patients?"
+
+3. **Report the effect size, not just significance.** An interaction can be statistically significant but too small to matter practically.
+
+---
+
+## Using Real Public Data
+
+The same approach applies directly to public datasets. For example, using the `palmerpenguins` dataset to test whether the relationship between bill length and body mass differs by species:
+
+```python
+# pip install palmerpenguins
+from palmerpenguins import load_penguins
+
+penguins = load_penguins().dropna()
+
+model = smf.ols(
+    'body_mass_g ~ bill_length_mm * C(species)',
+    data=penguins
+).fit()
+
+print(anova_lm(model, typ=2))
+```
+
+Here you'd be asking: does the slope of bill length vs. body mass differ across species? The interaction term answers that directly.

@@ -11,13 +11,13 @@ export const testimonialData: TestimonialItem[] = [
     avatar: Img1,
     name: "Marcus T.",
     title: "VP of Analytics",
-    testimonial: `Chris built our entire dbt layer from scratch — clean models, thorough tests, real documentation. Within two months our analysts stopped going to engineering for data questions. That's the standard he sets.`,
+    testimonial: `Chris rebuilt our entire transformation layer from scratch — clean SQL models, thorough testing, real documentation. Within two months our analysts stopped going to engineering for data questions. That's the standard he sets.`,
   },
   {
     avatar: Img2,
     name: "Jordan R.",
     title: "Director of Finance",
-    testimonial: `We handed Chris a mess of Excel files and a spreadsheet-based P&L process. He came back with a Snowflake warehouse, a Power BI dashboard, and a model we could actually trust in board meetings. Night and day.`,
+    testimonial: `We handed Chris a mess of Excel files and a spreadsheet-based P&L process. He came back with a proper data warehouse, a Tableau dashboard, and a model we could actually trust in board meetings. Night and day.`,
   },
   {
     avatar: Img3,

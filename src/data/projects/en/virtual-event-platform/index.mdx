@@ -1,17 +1,18 @@
 ---
 title: "Data Warehouse Migration"
-description: "Led migration from a legacy on-premise SQL Server warehouse to Snowflake with a full dbt transformation layer — 18 months of technical debt cleared in 12 weeks."
+description: "Led migration from a legacy on-premise SQL Server warehouse to BigQuery with a Python-based transformation layer — 18 months of technical debt cleared in 12 weeks."
 image: "../virtual-event-platform/atlas.jpg"
-technologies: ["Snowflake", "dbt", "Python", "Airflow", "Fivetran"]
+technologies: ["BigQuery", "Python", "Airflow", "Fivetran", "SQL"]
 completionDate: 2024-02-01
 keyFeatures:
   [
-    "Full migration from SQL Server to Snowflake with zero downtime",
-    "dbt model layer replacing 300+ stored procedures",
-    "Automated data quality testing with dbt tests and alerts",
+    "Full migration from SQL Server to BigQuery with zero downtime",
+    "Python transformation layer replacing 300+ stored procedures",
+    "Automated data quality testing with custom Python test suite",
     "Airflow DAG orchestration replacing SSIS packages",
-    "Complete documentation in dbt schema YAML",
+    "Complete model documentation and data dictionary",
   ]
+draft: true
 order: 2
 ---
 
@@ -19,13 +20,13 @@ order: 2
 
 A mid-size company was running their analytics on an aging on-premise SQL Server warehouse — 300+ stored procedures, no version control, no documentation, minimal testing. Queries that should have run in seconds took minutes. The data team spent 60% of their time on incident response rather than new work.
 
-I scoped, planned, and led the migration to Snowflake with a modern dbt transformation layer over 12 weeks.
+I scoped, planned, and led the migration to BigQuery with a modern Python transformation layer over 12 weeks.
 
 ## Technical Implementation
 
-Phase 1: Fivetran connectors for all source systems, landing raw data into Snowflake staging schemas. Phase 2: dbt modeling — staging, intermediate, and mart layers built iteratively, validated against the legacy stored procedure outputs row by row. Phase 3: Airflow DAGs replacing SSIS packages for orchestration, with alerting on failed runs.
+Phase 1: Fivetran connectors for all source systems, landing raw data into BigQuery staging datasets. Phase 2: Python transformation modeling — staging, intermediate, and mart layers built iteratively, validated against the legacy stored procedure outputs row by row. Phase 3: Airflow DAGs replacing SSIS packages for orchestration, with alerting on failed runs.
 
-The most technically challenging component was the incremental logic. Several legacy procedures had implicit state that was never documented. I reverse-engineered the behavior, documented the intent, and rebuilt it as transparent, tested dbt incremental models.
+The most technically challenging component was the incremental logic. Several legacy procedures had implicit state that was never documented. I reverse-engineered the behavior, documented the intent, and rebuilt it as transparent, tested Python incremental models with clear audit trails.
 
 ## Outcome
 

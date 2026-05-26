@@ -1,0 +1,153 @@
+---
+title: "Regression vs. Classification: Understanding the Difference in Machine Learning"
+description: Regression predicts a number. Classification predicts a category. The difference sounds simple, but it shapes everything — which algorithms to use, how to evaluate results, and what your model actually outputs.
+draft: false
+authors:
+  - main-author
+pubDate: 2023-07-21
+categories:
+  - machine-learning
+  - data-science
+tags:
+  - regression
+  - classification
+  - supervised-learning
+  - scikit-learn
+  - python
+  - machine-learning
+---
+
+When you're new to machine learning, the number of algorithms available is overwhelming. But most supervised learning problems fall into one of two categories — regression or classification — and identifying which one you're dealing with narrows the field considerably.
+
+Getting this wrong is a surprisingly common mistake, and it leads to mismatched algorithms, inappropriate evaluation metrics, and conclusions that don't hold up.
+
+---
+
+## The Core Distinction
+
+**Regression** predicts a continuous numerical output.
+- What will this house sell for?
+- What will the temperature be tomorrow?
+- How many units will we sell next quarter?
+
+**Classification** assigns an input to one of a discrete set of categories.
+- Is this email spam or not?
+- Which of these three diseases is most likely given these symptoms?
+- Will this customer churn in the next 30 days?
+
+The output type — continuous vs. categorical — is the defining difference. Everything else (algorithm choice, loss function, evaluation metric) follows from it.
+
+---
+
+## Regression in Practice
+
+### Simple Example: House Price Prediction
+
+```python
+from sklearn.linear_model import LinearRegression
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+
+# Load dataset
+housing = fetch_california_housing()
+X, y = housing.data, housing.target
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+
+# Evaluate
+y_pred = lr.predict(X_test)
+print(f"RMSE: {np.sqrt(mean_squared_error(y_test, y_pred)):.4f}")
+print(f"R²:   {r2_score(y_test, y_pred):.4f}")
+```
+
+### Regression Evaluation Metrics
+
+| Metric | What It Measures |
+|--------|-----------------|
+| **MSE** | Mean Squared Error — average squared difference from actual values |
+| **RMSE** | Root MSE — same units as the target variable, easier to interpret |
+| **MAE** | Mean Absolute Error — less sensitive to outliers than MSE |
+| **R²** | Proportion of variance explained — 1.0 is perfect, 0 is no better than predicting the mean |
+
+---
+
+## Classification in Practice
+
+### Simple Example: Iris Species Classification
+
+```python
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+clf = LogisticRegression(max_iter=200, random_state=42)
+clf.fit(X_train, y_train)
+
+y_pred = clf.predict(X_test)
+print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+print(classification_report(y_test, y_pred, target_names=load_iris().target_names))
+```
+
+### Classification Evaluation Metrics
+
+| Metric | What It Measures |
+|--------|-----------------|
+| **Accuracy** | % of correct predictions — misleading when classes are imbalanced |
+| **Precision** | Of all positive predictions, how many were correct? |
+| **Recall** | Of all actual positives, how many did we catch? |
+| **F1-Score** | Harmonic mean of precision and recall — good when both matter |
+| **AUC-ROC** | Model's ability to distinguish between classes across thresholds |
+
+---
+
+## When It Gets Blurry
+
+The line between regression and classification blurs in a few cases worth understanding:
+
+**Binary classification with probability outputs:** Logistic Regression outputs a probability (0.0 to 1.0), which is a continuous number. You convert it to a classification by applying a threshold (usually 0.5). You can also use the probability directly as a risk score — which is technically regression output used for classification decisions.
+
+**Ordinal targets:** If your categories have a meaningful order (low/medium/high customer value), you can treat this as regression (predicting 1/2/3) or as classification. Ordinal regression methods exist for this specific case.
+
+**Regression for ranking:** Predicting a continuous score, then ranking by that score, is a common way to solve recommendation problems that look superficially like classification.
+
+---
+
+## Algorithm Comparison
+
+| Algorithm | Regression | Classification |
+|-----------|-----------|----------------|
+| Linear/Logistic Regression | ✓ | ✓ |
+| Decision Tree | ✓ | ✓ |
+| Random Forest | ✓ | ✓ |
+| SVM | ✓ | ✓ |
+| Gradient Boosting | ✓ | ✓ |
+| k-Nearest Neighbors | ✓ | ✓ |
+| Neural Networks | ✓ | ✓ |
+
+Most algorithms in Scikit-Learn support both tasks through separate implementations (e.g., `RandomForestRegressor` vs. `RandomForestClassifier`). The underlying split criteria and output layers differ, but the interface is consistent.
+
+---
+
+## Choosing the Right One
+
+Ask one question first: **what does success look like in business terms?**
+
+If someone would describe a good outcome as "we got the number right" or "the estimate was close" → **regression**.
+
+If someone would describe a good outcome as "we correctly identified the right group" or "we caught the fraud" → **classification**.
+
+The mathematical formulation follows from the business question. Start there, not from the algorithm catalog.

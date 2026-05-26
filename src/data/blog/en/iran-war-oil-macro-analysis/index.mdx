@@ -1,0 +1,119 @@
+---
+title: "The Iran War Put Oil Back in the Headlines. I Wanted to Test Where Oil Actually Shows Up in the Economy."
+description: Instead of assuming oil explains everything, I used FRED data to test where it's actually statistically significant — across inflation, unemployment, payrolls, industrial production, and GDP. The results were more nuanced than the headlines suggest.
+draft: false
+authors:
+  - main-author
+pubDate: 2026-03-20
+categories:
+  - data-analysis
+  - data-science
+tags:
+  - oil
+  - macroeconomics
+  - fred
+  - python
+  - statistics
+  - regression
+  - inflation
+---
+
+Every time oil makes headlines, the same narrative runs: oil prices up → inflation up → economy at risk. It's not wrong, but it's incomplete. I wanted to test it properly — not assume it.
+
+Using Federal Reserve Economic Data (FRED), I built a structured analysis to determine *where* oil prices are statistically significant in the U.S. macroeconomy, how large those effects are, and critically, whether they're conditional on broader economic context.
+
+---
+
+## The Framework
+
+Three oil-linked variables formed the independent side of the analysis:
+
+- **WTI Crude Oil Spot Price**
+- **U.S. Regular Gasoline Retail Prices**
+- **U.S. Diesel Retail Prices**
+
+These were tested against six macroeconomic targets:
+
+| Target | Series |
+|--------|--------|
+| Headline inflation | CPI — All Items |
+| Core inflation | CPI — Less Food & Energy |
+| Unemployment | Civilian Unemployment Rate |
+| Payroll growth | Nonfarm Payrolls MoM |
+| Industrial production | Industrial Production Index growth |
+| Real GDP | Real GDP (quarterly) |
+
+The analysis ran three layers of models for each target:
+
+1. **Baseline** — lagged economic indicators only, no oil variables
+2. **Main effects** — oil variables added directly
+3. **Interaction models** — oil variables interacted with federal funds rate, NFCI (financial conditions), and consumer sentiment
+
+---
+
+## What the Data Says
+
+### Where Oil Has Strong Direct Effects
+
+The headline inflation result was the least surprising — and the most statistically emphatic:
+
+- **Headline CPI:** p-value ~6.5e-26
+- **Core CPI:** p-value ~2.5e-11
+- **Industrial production:** p-value ~1.6e-08
+- **Payroll growth:** p-value ~5.7e-07
+
+These aren't marginal findings. Oil is deeply embedded in headline inflation by construction (energy is a CPI component), but the core inflation result is more interesting — it says oil price movements pass through into non-energy prices with statistical reliability, likely through transportation and input cost channels.
+
+The industrial production result makes intuitive sense: manufacturing and industrial activity are energy-intensive, and oil price volatility affects operating costs and production decisions in measurable ways.
+
+### Where Oil Is Surprisingly Weak
+
+The unemployment result was the most counterintuitive finding:
+
+- **Unemployment rate:** p-value ~0.108
+
+Oil doesn't directly predict unemployment with conventional statistical significance. This doesn't mean oil shocks can't cause job losses — they clearly can, in specific sectors. But the aggregate unemployment rate is buffered enough by other dynamics (labor market adjustment speed, sectoral composition, policy response) that the direct oil-to-unemployment signal is weak in the data.
+
+This is an important corrective to the narrative that rising oil prices mechanically spike unemployment. The transmission is slower, more indirect, and more conditional than a simple regression captures.
+
+### The Conditional Story
+
+All six targets showed significant interaction effects — meaning **oil's role depends on surrounding conditions**. Specifically:
+
+- **Federal funds rate as a moderator:** High-rate environments amplify oil's inflationary pass-through (monetary policy has less room to absorb the shock, so more of it lands in prices)
+- **Financial conditions (NFCI):** Tight financial conditions interact with oil shocks to produce larger real economy effects — when credit is already stressed, an energy cost shock hits harder
+- **Consumer sentiment:** Low sentiment amplifies oil's negative demand effects; high sentiment buffers them
+
+The interaction models produced meaningfully better forecasts for inflation specifically:
+
+| Target | Baseline RMSE | Interaction Model RMSE | Improvement |
+|--------|--------------|----------------------|-------------|
+| Headline CPI | 0.383 | 0.239 | ~38% |
+| Core CPI | 0.271 | 0.218 | ~20% |
+| Unemployment | 0.412 | 0.389 | ~6% |
+
+The inflation improvement is substantial. The unemployment improvement is minimal — consistent with the weak direct effect finding.
+
+---
+
+## What This Means Right Now
+
+The current oil move is happening in a specific macroeconomic context:
+
+- The Fed is not in an aggressively easing stance
+- Financial conditions have tightened with the geopolitical uncertainty
+- Consumer sentiment has been under pressure
+
+According to the interaction model findings, this is roughly the worst-case configuration for oil's inflationary pass-through. High rates + tighter financial conditions + softer sentiment all push toward amplified inflation effects rather than buffered ones.
+
+It also means the unemployment transmission — already weak in the direct model — is the channel most likely to show up last, if at all. What the current moment more closely resembles is the inflationary-oil-shock scenario rather than the stagflationary one, at least in the immediate term.
+
+---
+
+## The Methodological Point
+
+The broader takeaway here isn't specific to oil. The pattern — "variable X matters, but how much depends on Y and Z" — shows up constantly in macroeconomic data. Main effects models understate complexity. Interaction models, tested properly, reveal that most economic relationships are conditional rather than universal.
+
+Oil doesn't uniformly cause inflation. Oil causes inflation *more* when rates are high, financial conditions are tight, and sentiment is already stressed. That's a fundamentally different statement — and a more useful one for anyone trying to forecast what happens next.
+
+The data is available. FRED makes it free. The models aren't complicated. The analysis is worth doing before reaching for the narrative.

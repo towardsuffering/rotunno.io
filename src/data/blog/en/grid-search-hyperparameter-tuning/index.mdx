@@ -1,0 +1,182 @@
+---
+title: "How to Use Grid Search for Hyperparameter Tuning"
+description: Grid Search exhaustively evaluates every combination in a parameter grid using cross-validation. Here's how it works, when to use it, and a complete implementation with Scikit-Learn.
+draft: false
+authors:
+  - main-author
+pubDate: 2025-02-07
+categories:
+  - machine-learning
+  - programming
+tags:
+  - hyperparameter-tuning
+  - grid-search
+  - scikit-learn
+  - python
+  - cross-validation
+  - machine-learning
+---
+
+A well-chosen model with poorly tuned hyperparameters routinely underperforms a simpler model with sensible ones. Hyperparameter tuning isn't optional polish — it's a meaningful part of the modeling process.
+
+Grid Search is the most systematic approach: define a grid of values for each hyperparameter, evaluate every combination using cross-validation, and return the best one. It's computationally expensive but guarantees you've checked every combination in the space you defined.
+
+---
+
+## What Grid Search Does
+
+1. You define a parameter grid — a dictionary mapping parameter names to lists of values to try
+2. `GridSearchCV` creates every possible combination of those values
+3. For each combination, it runs k-fold cross-validation on your training data
+4. It returns the combination with the best average cross-validation score
+
+The key advantage: if your best model is somewhere in the grid, Grid Search will find it. The key disadvantage: the search space grows exponentially with the number of parameters and values.
+
+---
+
+## Basic Implementation
+
+```python
+from sklearn.svm import SVC
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import accuracy_score
+
+# Load and split data
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Define parameter grid
+param_grid = {
+    'C': [0.1, 1, 10, 100],
+    'gamma': [0.001, 0.01, 0.1, 1],
+    'kernel': ['rbf', 'linear']
+}
+
+# Run Grid Search with 5-fold cross-validation
+grid_search = GridSearchCV(
+    estimator=SVC(),
+    param_grid=param_grid,
+    cv=5,
+    scoring='accuracy',
+    n_jobs=-1,       # Use all available cores
+    verbose=1
+)
+
+grid_search.fit(X_train, y_train)
+
+print(f"Best parameters: {grid_search.best_params_}")
+print(f"Best CV score:   {grid_search.best_score_:.4f}")
+print(f"Test accuracy:   {accuracy_score(y_test, grid_search.predict(X_test)):.4f}")
+```
+
+The `n_jobs=-1` flag parallelizes the search across all available CPU cores — essential for anything larger than a toy grid.
+
+---
+
+## Inspecting Results
+
+`GridSearchCV` stores all results in `cv_results_`, which you can convert to a DataFrame for analysis:
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+results = pd.DataFrame(grid_search.cv_results_)
+
+# Plot mean test score vs. C for rbf kernel
+rbf_results = results[results['param_kernel'] == 'rbf']
+plt.figure(figsize=(8, 4))
+for gamma in [0.001, 0.01, 0.1, 1]:
+    subset = rbf_results[rbf_results['param_gamma'] == gamma]
+    plt.plot(subset['param_C'].astype(float), 
+             subset['mean_test_score'], 
+             label=f'gamma={gamma}', marker='o')
+
+plt.xscale('log')
+plt.xlabel('C')
+plt.ylabel('Mean CV Accuracy')
+plt.title('Grid Search Results — RBF Kernel')
+plt.legend()
+plt.tight_layout()
+plt.show()
+```
+
+Visualizing the results helps you understand the sensitivity of performance to each parameter — and whether you need to expand the grid in a particular direction.
+
+---
+
+## Using Best Params Directly
+
+```python
+best_model = grid_search.best_estimator_
+# Already trained on full training set with best params
+y_pred = best_model.predict(X_test)
+```
+
+`GridSearchCV` automatically retrains on the full training set using the best parameters found — you don't need to refit manually.
+
+---
+
+## Grid Search Within a Pipeline
+
+Always use Grid Search inside a Pipeline when you have preprocessing steps. This prevents data leakage during cross-validation:
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svm', SVC())
+])
+
+param_grid = {
+    'svm__C': [0.1, 1, 10],
+    'svm__gamma': [0.01, 0.1, 1],
+    'svm__kernel': ['rbf', 'linear']
+}
+
+grid_search = GridSearchCV(pipe, param_grid, cv=5, n_jobs=-1)
+grid_search.fit(X_train, y_train)
+```
+
+Note the `svm__` prefix on parameter names — this is the Pipeline's syntax for targeting a specific step's parameters.
+
+---
+
+## When Grid Search Is the Right Choice
+
+**Use Grid Search when:**
+- Your parameter grid is small (< ~100 combinations)
+- Computational budget allows exhaustive evaluation
+- You want guaranteed coverage of the defined space
+
+**Consider Randomized Search when:**
+- You have many parameters or large value ranges
+- Some parameters matter much more than others (Randomized Search is often better at finding good sparse solutions)
+- Time is limited
+
+---
+
+## Practical Tip: Start Coarse, Then Narrow
+
+Don't try to grid search a high-resolution space on the first pass:
+
+```python
+# Pass 1: Coarse grid
+coarse_grid = {
+    'C': [0.01, 0.1, 1, 10, 100],
+    'gamma': [0.001, 0.01, 0.1, 1, 10]
+}
+
+# Pass 2: Fine grid around best region found in pass 1
+fine_grid = {
+    'C': [0.5, 1, 2, 5],
+    'gamma': [0.005, 0.01, 0.05]
+}
+```
+
+Two-pass grid search gives you more precision at lower compute cost than a single large grid.

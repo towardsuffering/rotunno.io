@@ -1,0 +1,230 @@
+---
+title: "R Analysis: Sequences, Simulations, and Random Numbers"
+description: A practical guide to generating sequences, running simulations, and working with random numbers in R — covering seq(), sample(), runif(), and when each tool is the right one.
+draft: false
+authors:
+  - main-author
+pubDate: 2024-09-18
+categories:
+  - programming
+  - data-analysis
+tags:
+  - R
+  - simulation
+  - statistics
+  - random-numbers
+  - data-science
+---
+
+A lot of what data science is actually doing, beneath the model fitting and the dashboard building, is generating controlled variation and measuring what happens. Simulations. Sampling. Randomized sequences. R has a tight, well-designed toolkit for this, and understanding it deeply pays off in everything from bootstrap resampling to Monte Carlo analysis.
+
+This post covers three core functions — `seq()`, `sample()`, and `runif()` — with practical examples for each.
+
+---
+
+## `seq()`: Generating Sequences
+
+`seq()` creates regular sequences. Simple in concept, but the flexibility is worth knowing.
+
+### Basic usage:
+
+```r
+# From 1 to 10, step of 1
+seq(1, 10)
+# [1]  1  2  3  4  5  6  7  8  9 10
+
+# Step by 2
+seq(1, 10, by = 2)
+# [1] 1 3 5 7 9
+
+# Generate exactly 5 evenly-spaced values between 0 and 1
+seq(0, 1, length.out = 5)
+# [1] 0.00 0.25 0.50 0.75 1.00
+```
+
+### Why `length.out` matters:
+
+When you need a specific number of values in a range — for plotting, for grid search in model tuning, for interpolation — `length.out` is cleaner than calculating step sizes manually.
+
+```r
+# Generate 100 evenly-spaced x values for a smooth curve
+x <- seq(-3, 3, length.out = 100)
+y <- dnorm(x)  # Normal distribution density
+plot(x, y, type = "l", main = "Standard Normal Distribution")
+```
+
+### Practical use — time series axis labels:
+
+```r
+# Monthly labels for 2023
+months_2023 <- seq(as.Date("2023-01-01"), as.Date("2023-12-01"), by = "month")
+format(months_2023, "%b %Y")
+```
+
+---
+
+## `sample()`: Drawing from a Population
+
+`sample()` draws values from a vector, either with or without replacement. This is your go-to for simulating draws, creating train/test splits, and bootstrapping.
+
+### Basic sampling:
+
+```r
+# Draw 5 values from 1:20 without replacement (default)
+sample(1:20, 5)
+# [1]  7 14  3 11 19  (varies each run)
+
+# With replacement (can draw the same value twice)
+sample(1:6, 10, replace = TRUE)
+# [1] 3 1 6 6 2 4 3 5 1 2  (simulating 10 dice rolls)
+```
+
+### Setting a seed for reproducibility:
+
+Any time you're using randomness in analysis you intend to share or reproduce, set a seed:
+
+```r
+set.seed(42)
+sample(1:100, 10)
+# [1] 92 29 83 64 52 74 13 10 35 79  (same every time with seed 42)
+```
+
+This is not optional in production analytics. Reproducible randomness is a contract with your future self and anyone who reviews your work.
+
+### Train/test split:
+
+```r
+set.seed(123)
+n <- nrow(iris)
+train_idx <- sample(1:n, size = floor(0.8 * n), replace = FALSE)
+
+train <- iris[train_idx, ]
+test  <- iris[-train_idx, ]
+
+nrow(train)  # 120
+nrow(test)   # 30
+```
+
+### Bootstrap resampling:
+
+```r
+set.seed(99)
+x <- c(23, 45, 12, 67, 34, 56, 89, 11, 43, 78)
+
+# 1000 bootstrap means
+boot_means <- replicate(1000, mean(sample(x, length(x), replace = TRUE)))
+
+hist(boot_means, breaks = 30, main = "Bootstrap Distribution of Mean",
+     xlab = "Mean", col = "#a8d8ea")
+abline(v = mean(x), col = "red", lwd = 2, lty = 2)
+```
+
+The distribution of bootstrap means gives you a non-parametric confidence interval without assuming normality.
+
+---
+
+## `runif()`: Uniform Random Numbers
+
+`runif()` generates values drawn from a uniform distribution — every value in the range is equally likely.
+
+```r
+# 10 values between 0 and 1
+runif(10)
+# [1] 0.2875775 0.7883051 0.4089769 ...
+
+# 5 values between 10 and 20
+runif(5, min = 10, max = 20)
+# [1] 14.23 18.76 11.02 16.44 19.87
+```
+
+### Simulating continuous data:
+
+When you need to generate synthetic data with a known range but no assumed distribution shape, `runif()` is the right tool:
+
+```r
+set.seed(7)
+n <- 500
+price <- runif(n, min = 5.99, max = 24.99)
+quantity <- round(runif(n, min = 1, max = 50))
+revenue <- price * quantity
+
+summary(revenue)
+```
+
+### Monte Carlo integration:
+
+One of the cleanest demonstrations of `runif()` is estimating pi through simulation:
+
+```r
+set.seed(2024)
+n <- 1000000
+
+x <- runif(n, -1, 1)
+y <- runif(n, -1, 1)
+
+inside <- (x^2 + y^2) <= 1
+pi_estimate <- 4 * mean(inside)
+
+cat("Estimated pi:", pi_estimate, "\n")
+# Estimated pi: 3.14159  (approximately)
+```
+
+The logic: randomly scatter points in a 2x2 square. Count how many fall inside the inscribed circle. The ratio converges to pi/4 as n grows. This is Monte Carlo in its purest form — using randomness to approximate a deterministic answer.
+
+---
+
+## When to Use Each
+
+| Function | Use When |
+|----------|----------|
+| `seq()` | You need a deterministic, evenly-spaced sequence |
+| `sample()` | You're drawing from a discrete set (splitting data, bootstrapping, simulating dice/cards) |
+| `runif()` | You need continuous random values with no distributional assumption |
+
+For other distributions:
+- `rnorm(n, mean, sd)` — normal distribution
+- `rbinom(n, size, prob)` — binomial (coin flips, binary outcomes)
+- `rpois(n, lambda)` — Poisson (count data)
+- `rexp(n, rate)` — exponential (time-to-event)
+
+---
+
+## Putting It Together: A Simple Simulation
+
+Combining all three: simulate a retail pricing experiment across 1,000 hypothetical transactions.
+
+```r
+set.seed(42)
+n <- 1000
+
+# Price varies uniformly across a range
+price_points <- seq(9.99, 29.99, by = 5)
+prices <- sample(price_points, n, replace = TRUE)
+
+# Conversion rate decreases as price increases (simplified model)
+base_conversion <- 0.40
+price_sensitivity <- 0.01
+conversion_prob <- base_conversion - price_sensitivity * (prices - min(price_points))
+conversion_prob <- pmax(pmin(conversion_prob, 1), 0)  # clamp 0-1
+
+# Simulate purchase decisions
+purchased <- runif(n) < conversion_prob
+
+# Revenue per transaction
+revenue <- ifelse(purchased, prices, 0)
+
+# Results by price point
+aggregate(cbind(purchased, revenue) ~ prices, 
+          data = data.frame(prices, purchased, revenue),
+          FUN = mean)
+```
+
+This kind of simulation — before you run an actual A/B test — helps you estimate required sample sizes and expected effect sizes. It's cheap to run and expensive to skip.
+
+---
+
+## The Underlying Principle
+
+Random number generation in R is **pseudo-random**: deterministic under the hood, but statistically indistinguishable from true randomness for most purposes. `set.seed()` resets the internal state of the random number generator, so identical seeds produce identical sequences.
+
+Understanding this matters when you're building reproducible pipelines. Randomness that can't be reproduced isn't an analysis — it's a lottery.

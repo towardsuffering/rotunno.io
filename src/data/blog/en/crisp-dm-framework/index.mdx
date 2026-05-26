@@ -1,0 +1,111 @@
+---
+title: "The CRISP-DM Framework: A Structured Approach to Business Analytics"
+description: CRISP-DM is the closest thing data analytics has to a universal playbook. Here's what the six phases actually mean in practice — and why I keep coming back to it.
+draft: false
+authors:
+  - main-author
+pubDate: 2025-03-11
+categories:
+  - data-science
+  - business
+tags:
+  - crisp-dm
+  - methodology
+  - business-analytics
+  - machine-learning
+  - data-science
+---
+
+Most data projects fail not because of bad models — they fail because nobody agreed on what "success" meant before the first query ran. CRISP-DM exists to prevent exactly that.
+
+Developed in the late 1990s by a consortium including IBM, Daimler AG, and NCR Corporation, the Cross-Industry Standard Process for Data Mining (CRISP-DM) emerged at a moment when data projects were proliferating faster than anyone's ability to manage them. The methodology gave teams a shared language and a repeatable structure — and it's held up remarkably well over 25 years.
+
+---
+
+## The Six Phases
+
+### 1. Business Understanding
+
+This is the phase most people rush past, and it's the one that kills projects when skipped. Before touching data, you need to be able to answer:
+
+- What problem are we actually trying to solve?
+- What does a successful outcome look like, and how will we measure it?
+- What are the constraints — time, resources, regulatory, technical?
+
+The output here isn't a model. It's a problem statement and success criteria that everyone involved can agree on.
+
+### 2. Data Understanding
+
+Once the problem is defined, you figure out what data you actually have access to. This means:
+
+- Identifying relevant data sources
+- Running initial exploratory analysis to understand distributions, ranges, and relationships
+- Assessing data quality — missing values, inconsistencies, outliers
+
+This phase often surfaces a brutal reality: the data you need either doesn't exist, isn't tracked consistently, or lives in six different systems with no reliable join key. Better to know this in week one than week eight.
+
+### 3. Data Preparation
+
+The unglamorous phase that consumes the majority of project time. This is where you:
+
+- Handle missing values (impute, drop, flag)
+- Encode categorical variables
+- Engineer new features from existing ones
+- Normalize or scale where needed
+- Create the final modeling dataset
+
+The quality of your preparation determines the ceiling on your model's performance. No algorithm fixes bad feature engineering.
+
+### 4. Modeling
+
+Here's where most people think the "real work" starts. In practice, it's often the shortest phase. You:
+
+- Select candidate modeling techniques
+- Split data into training and validation sets
+- Train models and tune hyperparameters
+- Compare approaches against your defined success metrics
+
+The temptation here is to try every model available. Resist it. A well-tuned logistic regression that the business understands and trusts often outperforms a complex ensemble that no one knows how to interpret.
+
+### 5. Evaluation
+
+The model looks good on your validation set — but does it actually answer the business question from Phase 1? Evaluation means stepping back and checking:
+
+- Does the model perform against the metrics that matter to stakeholders?
+- Are there failure modes that are unacceptable in production?
+- Have we revisited the original business objectives and confirmed alignment?
+
+This is the checkpoint before you invest in deployment.
+
+### 6. Deployment
+
+A model that never makes it to production delivered zero value. Deployment includes:
+
+- Integrating the model into existing workflows or systems
+- Documenting the methodology for maintenance teams
+- Setting up monitoring so you know when the model starts drifting
+- Planning for retraining as underlying data patterns shift
+
+Deployment isn't the end — it's the handoff to an ongoing operational process.
+
+---
+
+## Why It's Iterative
+
+The framework is explicitly circular. Findings from modeling often send you back to data preparation. Evaluation sometimes surfaces gaps that require rethinking the business problem entirely. That's not failure — that's the process working as designed.
+
+In practice, I've found the biggest value isn't in following all six phases perfectly. It's in using the framework as a forcing function for conversations that would otherwise never happen — particularly the ones about what success actually means.
+
+---
+
+## Where CRISP-DM Falls Short
+
+It's a process framework, not a technical one. It tells you *what* phases to complete but not *how* to execute them. It also predates modern MLOps, so deployment and monitoring get lighter treatment than they deserve given how complex productionizing models has become.
+
+For modern teams, CRISP-DM works best as a communication scaffold — a shared vocabulary that aligns data scientists, business stakeholders, and engineers before anyone writes a single line of code.
+
+---
+
+## Bottom Line
+
+If you're running data projects without a structured methodology, you're building on sand. CRISP-DM isn't perfect, but it's the most battle-tested framework available for keeping analytics work grounded in actual business outcomes. Pick it up, adapt it to your context, and stop shipping models nobody asked for.

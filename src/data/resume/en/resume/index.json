@@ -1,135 +1,75 @@
 {
   "diplomas": [
     {
-      "title": "Bachelor of Science — [Your Degree Here]",
-      "school": "[Your University]",
-      "year": 2000
-    }
-  ],
-  "certifications": [
-    {
-      "title": "Google Data Analytics Professional Certificate",
+      "title": "Master of Science — Business Analytics",
+      "school": "University of Colorado Boulder",
       "year": 2023
     },
     {
-      "title": "Microsoft Power BI Data Analyst (PL-300)",
-      "year": 2024
-    },
-    {
-      "title": "dbt Analytics Engineer Certification",
+      "title": "Master of Business Administration — Music Business",
+      "school": "Middle Tennessee State University",
       "year": 2024
     }
   ],
+  "certifications": [],
   "experience": [
     {
-      "title": "Data Analytics Engineer",
-      "company": "[Your Company]",
+      "title": "Founder & Data Engineer",
+      "company": "Root Labs",
       "companyImage": "./index/experience/0/companyImage.jpg",
-      "dates": "Jan 2023 - Present",
+      "dates": "Feb 2023 – Sep 2025",
       "location": "St. Augustine, FL",
       "responsibilities": [
-        "Built and maintained dbt data models powering executive dashboards",
-        "Reduced reporting cycle time by 60% by automating ETL pipelines in Python",
-        "Designed dimensional data warehouse on Snowflake/BigQuery for cross-functional analytics",
-        "Partnered with stakeholders to define KPIs and deliver self-serve BI tools in Power BI / Tableau"
+        "Architected a custom API ingestion pipeline that reduced third-party financial data costs by 80%",
+        "Built and led a team of 4 developers to construct a SQL ORM-based data pipeline in Python through the full build cycle",
+        "Organized 10+ technical meetups with 100+ attendees to cultivate local talent pipelines"
       ]
     },
     {
-      "title": "Business Intelligence Analyst",
-      "company": "[Your Company]",
+      "title": "Data Analyst",
+      "company": "AE Global Solutions Inc. (Socrates Platform)",
       "companyImage": "./index/experience/1/companyImage.jpg",
-      "dates": "Jun 2020 - Dec 2022",
-      "location": "Remote",
+      "dates": "Feb 2018 – Nov 2021",
+      "location": "St. Petersburg, FL",
       "responsibilities": [
-        "Owned end-to-end reporting for sales, operations, and finance teams",
-        "Created and maintained a library of 30+ Power BI reports used daily by 200+ employees",
-        "Wrote complex SQL queries and stored procedures to support ad hoc analysis",
-        "Led migration from legacy Excel reporting to a centralized BI platform"
+        "Maintained 99% system uptime across 24/7 data center operations for critical financial data infrastructure",
+        "Processed and validated 200GB+ of daily financial data, improving pipeline efficiency by 30% at 99% accuracy",
+        "Expanded data product offerings by 120% through partnerships with external providers including S&P and Reuters"
       ]
     }
   ],
   "hardSkills": [
-    {
-      "skill": "SQL",
-      "percentage": 95
-    },
-    {
-      "skill": "Python (pandas, dbt)",
-      "percentage": 85
-    },
-    {
-      "skill": "Power BI / Tableau",
-      "percentage": 90
-    },
-    {
-      "skill": "Data Modeling",
-      "percentage": 88
-    },
-    {
-      "skill": "ETL / ELT Pipelines",
-      "percentage": 82
-    }
+    { "skill": "SQL",                     "percentage": 95 },
+    { "skill": "Python",                  "percentage": 90 },
+    { "skill": "ETL / Data Pipelines",    "percentage": 88 },
+    { "skill": "Data Modeling",           "percentage": 85 },
+    { "skill": "Tableau",                 "percentage": 82 }
   ],
   "softSkills": [
-    {
-      "skill": "Stakeholder Communication",
-      "icon": "🗣️"
-    },
-    {
-      "skill": "Problem Solving",
-      "icon": "🧩"
-    },
-    {
-      "skill": "Data Storytelling",
-      "icon": "📊"
-    },
-    {
-      "skill": "Team Leadership",
-      "icon": "👥"
-    }
+    { "skill": "Stakeholder Communication", "icon": "🗣️" },
+    { "skill": "Problem Solving",           "icon": "🧩" },
+    { "skill": "Data Storytelling",         "icon": "📊" },
+    { "skill": "Team Leadership",           "icon": "👥" }
   ],
   "languages": [
-    {
-      "language": "English",
-      "level": 10
-    }
+    { "language": "English", "level": 10 },
+    { "language": "Spanish", "level": 4 }
   ],
   "tools": [
-    {
-      "name": "dbt",
-      "category": "Data Engineering",
-      "image": "./index/tools/0/image.svg",
-      "link": "https://getdbt.com"
-    },
-    {
-      "name": "Power BI",
-      "category": "BI & Visualization",
-      "image": "./index/tools/1/image.jpg",
-      "link": "https://powerbi.microsoft.com"
-    },
-    {
-      "name": "Snowflake",
-      "category": "Data Warehouse",
-      "image": "./index/tools/2/image.jpg",
-      "link": "https://snowflake.com"
-    },
-    {
-      "name": "Tableau",
-      "category": "BI & Visualization",
-      "image": "./index/tools/3/image.jpg",
-      "link": "https://tableau.com"
-    },
-    {
-      "name": "Python",
-      "category": "Data Engineering",
-      "image": "./index/tools/4/image.jpg",
-      "link": "https://python.org"
-    },
-    {
-      "name": "GitHub",
-      "category": "Version Control",
-      "image": "./index/tools/5/image.jpg",
-      "link": "https://github.com"
-    }
+    { "name": "Python",  "category": "Data Engineering",   "image": "./index/tools/0/image.svg", "link": "https://python.org" },
+    { "name": "Tableau", "category": "BI & Visualization", "image": "./index/tools/1/image.svg", "link": "https://tableau.com" },
+    { "name": "AWS",     "category": "Cloud",              "image": "./index/tools/2/image.svg", "link": "https://aws.amazon.com" },
+    { "name": "Docker",  "category": "Infrastructure",     "image": "./index/tools/3/image.svg", "link": "https://docker.com" },
+    { "name": "Spark",   "category": "Data Engineering",   "image": "./index/tools/4/image.svg", "link": "https://spark.apache.org" },
+    { "name": "GitHub",       "category": "Version Control",    "image": "./index/tools/5/image.svg",  "link": "https://github.com" },
+    { "name": "SQL",          "category": "Data Engineering",   "image": "./index/tools/6/image.svg",  "link": "https://en.wikipedia.org/wiki/SQL" },
+    { "name": "Astro",        "category": "Web Development",    "image": "./index/tools/7/image.svg",  "link": "https://astro.build" },
+    { "name": "Node.js",      "category": "Web Development",    "image": "./index/tools/8/image.svg",  "link": "https://nodejs.org" },
+    { "name": "JavaScript",   "category": "Web Development",    "image": "./index/tools/9/image.svg",  "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    { "name": "MongoDB",      "category": "Data Engineering",   "image": "./index/tools/10/image.svg", "link": "https://mongodb.com" },
+    { "name": "GCP",          "category": "Cloud",              "image": "./index/tools/11/image.svg", "link": "https://cloud.google.com" },
+    { "name": "Azure",        "category": "Cloud",              "image": "./index/tools/12/image.svg", "link": "https://azure.microsoft.com" },
+    { "name": "Excel",        "category": "BI & Visualization", "image": "./index/tools/13/image.svg", "link": "https://microsoft.com/excel" },
+    { "name": "Claude Code",  "category": "AI & Tooling",       "image": "./index/tools/14/image.svg", "link": "https://claude.ai/code" }
   ]
 }

@@ -1,18 +1,33 @@
 ---
 /**
- * * Testimonials section marquee
- * JS allows the animation to pause while you hover over it
- * Adjust the speed of the marquee by changing the "marquee" animation duration in the tailwind.config.cjs file
+ * Company strip — organizations Chris has worked with.
+ * Each entry can optionally include a logo image path.
+ * Neutral framing: does NOT imply all are analytics clients.
  */
 
-import Badge from "@/components/badge/Badge.astro";
-import { getLocaleFromUrl } from "@/js/localeUtils";
-import { getTranslatedData } from "@/js/translationUtils";
+const companies = [
+  { name: "Wells Fargo",       logo: "/images/companies/wellsfargo.svg",  url: "https://www.wellsfargo.com" },
+  { name: "Intrinio",          logo: "/images/companies/intrinio.svg",     url: "https://intrinio.com" },
+  { name: "Socrates Platform", logo: "/images/companies/socrates.svg",     url: "https://standard.socratesplatform.com/MKC/Content/IntroPlatform/WhatIsSocrates.htm" },
+  { name: "Trader Joe's",      logo: "/images/companies/traderjoes.svg",   url: "https://www.traderjoes.com" },
+  { name: "Walgreens",         logo: "/images/companies/walgreens.svg",    url: "https://www.walgreens.com" },
+  { name: "Kroger",            logo: "/images/companies/kroger.svg",       url: "https://www.kroger.com" },
+  { name: "Velvet Taco",       logo: "/images/companies/velvettaco.svg",   url: "https://www.velvettaco.com" },
+  { name: "Chipotle",          logo: "/images/companies/chipotle.svg",     url: "https://www.chipotle.com" },
+  { name: "Renuity",           logo: "/images/companies/renuity.svg",      url: "https://renuityhome.com" },
+];
 
-import TestimonialCard from "./TestimonialItemCard.astro";
-
-const currLocale = getLocaleFromUrl(Astro.url);
-const testimonialData = getTranslatedData("testimonialData", currLocale);
+const styles: Record<string, string> = {
+  "Wells Fargo":       "font-bold tracking-tight text-xl",
+  "Intrinio":          "font-bold tracking-widest text-base uppercase",
+  "Socrates Platform": "font-semibold italic text-lg",
+  "Trader Joe's":      "font-black text-xl",
+  "Walgreens":         "font-bold text-xl tracking-tight",
+  "Kroger":            "font-bold text-xl tracking-wide",
+  "Velvet Taco":       "font-semibold text-lg tracking-wider",
+  "Chipotle":          "font-black text-xl tracking-tight",
+  "Renuity":           "font-bold text-lg tracking-widest uppercase",
+};
 ---
 
 <section
@@ -20,74 +35,125 @@ const testimonialData = getTranslatedData("testimonialData", currLocale);
   class="mx-auto max-w-[2000px] overflow-x-hidden px-4 py-16 md:py-20"
 >
   <div class="mb-10 flex flex-col justify-center text-center" data-reveal="pop">
-    <Badge>Satisfied Customers</Badge>
-    <h2 class="h2 mt-4">What Peeps Are Saying</h2>
+    <p class="text-muted-foreground mb-3 text-sm font-semibold uppercase tracking-widest">Across industries. Across disciplines.</p>
+    <h2 class="h2">The names say it better than I can.</h2>
   </div>
 
   <div class="relative -mt-2">
-    <!-- left fade-out -->
-    <div
-      class="from-background absolute top-0 -left-px z-20 h-full w-[10%] bg-gradient-to-r from-10% to-transparent"
-    >
-    </div>
-    <!-- right fade-out -->
-    <div
-      class="to-background absolute top-0 -right-px z-20 h-full w-[10%] bg-gradient-to-r from-transparent to-90%"
-    >
-    </div>
+    <div class="from-background absolute top-0 -left-px z-20 h-full w-[10%] bg-gradient-to-r from-10% to-transparent"></div>
+    <div class="to-background absolute top-0 -right-px z-20 h-full w-[10%] bg-gradient-to-r from-transparent to-90%"></div>
 
     <div class="relative h-full overflow-x-hidden py-4">
-      <div class="testimonial-marquee flex gap-6">
-        <div
-          class="animate-marquee-testimonials flex min-w-full shrink-0 items-start justify-around gap-6"
-        >
-          {
-            testimonialData.map((testimonial, idx) => (
-              <div class="w-[clamp(17rem,40vw,23rem)]">
-                <TestimonialCard {...testimonial} />
-              </div>
-            ))
-          }
-        </div>
-        <div
-          aria-hidden="true"
-          class="animate-marquee-testimonials flex min-w-full shrink-0 items-start justify-around gap-6"
-        >
-          {
-            testimonialData.map((testimonial, idx) => (
-              <div class="w-[clamp(17rem,40vw,23rem)]">
-                <TestimonialCard {...testimonial} />
-              </div>
-            ))
-          }
-        </div>
+      <div class="company-marquee flex gap-8 items-center">
+
+        {[0, 1].map((i) => (
+          <div
+            class="animate-marquee-testimonials flex min-w-full shrink-0 items-center justify-around gap-10"
+            aria-hidden={i === 1 ? "true" : undefined}
+          >
+            {companies.map(({ name, logo, url }) =>
+              logo ? (
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="logo-link shrink-0"
+                  aria-label={`Visit ${name}`}
+                  title={name}
+                >
+                  <img
+                    src={logo}
+                    alt={name}
+                    class:list={["logo-img", { "logo-invert": name === "Socrates Platform" }]}
+                    loading="lazy"
+                  />
+                </a>
+              ) : (
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={`logo-chip ${styles[name]} shrink-0`}
+                  aria-label={`Visit ${name}`}
+                >
+                  {name}
+                </a>
+              )
+            )}
+          </div>
+        ))}
+
       </div>
     </div>
   </div>
 </section>
 
 <script>
-  const setupTestimonialMarquee = () => {
-    const testimonialMarquee = document.querySelector(".testimonial-marquee");
-
-    // add the clauss "pause" when the mouse enters the marquee
-    testimonialMarquee?.addEventListener("mouseover", () => {
-      testimonialMarquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
+  const setupMarquee = () => {
+    const marquee = document.querySelector(".company-marquee");
+    marquee?.addEventListener("mouseover", () => {
+      marquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
         el.classList.add("pause");
       });
     });
-
-    // remove the class "pause" when the mouse leaves the marquee
-    testimonialMarquee?.addEventListener("mouseout", () => {
-      testimonialMarquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
+    marquee?.addEventListener("mouseout", () => {
+      marquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
         el.classList.remove("pause");
       });
     });
   };
 
-  // runs on initial page load
-  setupTestimonialMarquee();
-
-  // runs on view transitions navigation
-  document.addEventListener("astro:after-swap", setupTestimonialMarquee);
+  setupMarquee();
+  document.addEventListener("astro:after-swap", setupMarquee);
 </script>
+
+<style>
+  .logo-link {
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.8;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .logo-link:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  .logo-chip {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-muted-foreground);
+    opacity: 0.7;
+    transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-heading, sans-serif);
+    white-space: nowrap;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  }
+  .logo-chip:hover {
+    opacity: 1;
+    color: var(--color-primary-accent);
+    transform: translateY(-2px);
+  }
+  .logo-img {
+    filter: none;
+    border-radius: 4px;
+    height: 36px;
+    width: auto;
+    max-width: 160px;
+    object-fit: contain;
+  }
+
+  /* Socrates logo has white fills — invert to black in light mode */
+  :global(html:not(.dark)) .logo-invert {
+    filter: invert(1);
+  }
+  /* In dark mode, show white as-is */
+  :global(html.dark) .logo-invert {
+    filter: none;
+  }
+</style>

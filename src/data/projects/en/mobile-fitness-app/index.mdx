@@ -1,17 +1,18 @@
 ---
 title: "Marketing Attribution Pipeline"
-description: "Multi-touch attribution model in Python and dbt that connected ad spend to closed revenue — replacing a last-touch model that was misallocating $400K/year in budget."
+description: "Multi-touch attribution model in Python that connected ad spend to closed revenue — replacing a last-touch model that was misallocating $400K/year in budget."
 image: "../mobile-fitness-app/nova.jpg"
-technologies: ["Python", "dbt", "BigQuery", "Airflow", "Looker"]
+technologies: ["Python", "BigQuery", "Airflow", "Tableau", "Airbyte"]
 completionDate: 2024-02-20
 keyFeatures:
   [
     "Multi-touch attribution across 6 acquisition channels",
     "Custom Python attribution logic with configurable decay weights",
     "Daily Airflow pipeline with data quality checks at each step",
-    "Looker dashboards for CMO and channel leads",
+    "Tableau dashboards for CMO and channel leads",
     "A/B comparison view: last-touch vs. multi-touch attribution",
   ]
+draft: true
 order: 3
 ---
 
@@ -23,7 +24,7 @@ I built a multi-touch attribution pipeline from scratch, connecting raw ad event
 
 ## Technical Implementation
 
-Source data: Google Ads, Meta, LinkedIn, HubSpot, and Salesforce — all landed in BigQuery via Airbyte. I built a Python script implementing a time-decay attribution model with configurable channel weights, wrapped in a dbt Python model for auditability. The attribution output fed into a Looker dashboard with a side-by-side comparison view showing last-touch vs. multi-touch attribution by channel, campaign, and time period.
+Source data: Google Ads, Meta, LinkedIn, and HubSpot — all landed in BigQuery via Airbyte. I built a Python script implementing a time-decay attribution model with configurable channel weights, with full audit logging for traceability. The attribution output fed into a Tableau dashboard with a side-by-side comparison view showing last-touch vs. multi-touch attribution by channel, campaign, and time period.
 
 The hardest problem was identity resolution — matching ad impressions and clicks to CRM contacts across platforms with different identifiers. I built a deterministic matching layer using email hash + device fingerprint, with a probabilistic fallback.
 

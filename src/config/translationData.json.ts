@@ -53,7 +53,7 @@ export const dataTranslations = {
 export const textTranslations = {
   en: {
     hero_text: "Data that drives decisions.",
-    hero_description: `Analytics engineer and BI leader who turns raw data into clear, actionable insight. SQL, Python, dbt, Power BI — end to end.`,
+    hero_description: `Analytics engineer and BI leader who turns raw data into clear, actionable insight. SQL, Python, Tableau, Spark — end to end.`,
 
     // blog
     back_to_all_posts: "Back to all posts",

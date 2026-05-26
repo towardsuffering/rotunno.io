@@ -1,0 +1,155 @@
+---
+title: "Lasso vs Ridge Regression: A Practical Comparison"
+description: Both Lasso and Ridge add a penalty to linear models to prevent overfitting — but they behave very differently. Here's when to use each and how to implement both.
+draft: false
+authors:
+  - main-author
+pubDate: 2025-02-08
+categories:
+  - machine-learning
+  - data-science
+tags:
+  - lasso
+  - ridge
+  - regularization
+  - linear-regression
+  - scikit-learn
+  - python
+---
+
+Overfitting is one of the most common failure modes in linear modeling. You train on your dataset and achieve great results — then apply the model to new data and watch the performance collapse. Regularization is the standard fix, and Lasso and Ridge are the two techniques you'll encounter most.
+
+They solve the same problem through different mechanisms, and the choice between them matters.
+
+---
+
+## The Core Idea: Penalizing Complexity
+
+Ordinary least squares (OLS) minimizes prediction error with no constraint on how large the coefficients can grow. On datasets with many features, this often leads to large, unstable coefficients that fit noise in the training data rather than real signal.
+
+Both Lasso and Ridge add a **penalty term** to the loss function that constrains coefficient magnitude — but they define that penalty differently.
+
+---
+
+## Ridge Regression (L2 Regularization)
+
+Ridge adds the **sum of squared coefficients** as the penalty:
+
+```
+Loss = MSE + α * Σ βᵢ²
+```
+
+The parameter `α` (alpha) controls how strongly to penalize large coefficients. As alpha increases, coefficients are pushed toward zero — but never fully to zero. All features stay in the model; they just shrink proportionally.
+
+This makes Ridge effective when you expect most features to contribute something meaningful to the prediction, and you want to distribute the effect of correlated features rather than arbitrarily selecting among them.
+
+---
+
+## Lasso Regression (L1 Regularization)
+
+Lasso replaces the squared penalty with the **sum of absolute values**:
+
+```
+Loss = MSE + α * Σ |βᵢ|
+```
+
+This seemingly small change has a major practical consequence: Lasso can drive coefficients exactly to zero, effectively performing **feature selection**. Features that don't contribute to prediction get eliminated from the model entirely.
+
+This makes Lasso the better choice when you believe only a subset of features are actually relevant, and you want the model to identify them automatically.
+
+---
+
+## Practical Comparison
+
+```python
+from sklearn.linear_model import Ridge, Lasso
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+import numpy as np
+
+# Load dataset
+X, y = load_diabetes(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+alpha = 1.0
+
+# Ridge
+ridge = Ridge(alpha=alpha)
+ridge.fit(X_train, y_train)
+ridge_mse = mean_squared_error(y_test, ridge.predict(X_test))
+
+# Lasso
+lasso = Lasso(alpha=alpha)
+lasso.fit(X_train, y_train)
+lasso_mse = mean_squared_error(y_test, lasso.predict(X_test))
+
+print(f"Ridge MSE: {ridge_mse:.2f}")
+print(f"Lasso MSE: {lasso_mse:.2f}")
+
+# Compare which coefficients Lasso zeroed out
+print(f"\nRidge non-zero coefficients: {np.sum(ridge.coef_ != 0)}")
+print(f"Lasso non-zero coefficients: {np.sum(lasso.coef_ != 0)}")
+```
+
+On the diabetes dataset, you'll typically see Lasso eliminate several features while Ridge keeps all ten active — with comparable MSE depending on the alpha value chosen.
+
+---
+
+## Key Differences
+
+| Aspect | Lasso (L1) | Ridge (L2) |
+|--------|-----------|-----------|
+| Penalty | Sum of absolute values | Sum of squared values |
+| Feature selection | Yes — zeroes out irrelevant features | No — shrinks all features |
+| Correlated features | Arbitrarily selects one | Distributes weight evenly |
+| Interpretability | Sparser, easier to explain | All features present |
+| Best for | Few relevant features among many | Many features, all contributing |
+
+---
+
+## Choosing Alpha
+
+Alpha is the most important hyperparameter for both methods. Too low and you get minimal regularization (essentially OLS). Too high and you over-penalize, introducing underfitting.
+
+Use cross-validation to find the optimal value:
+
+```python
+from sklearn.linear_model import RidgeCV, LassoCV
+
+ridge_cv = RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0, 100.0], cv=5)
+ridge_cv.fit(X_train, y_train)
+print(f"Best alpha (Ridge): {ridge_cv.alpha_}")
+
+lasso_cv = LassoCV(alphas=[0.001, 0.01, 0.1, 1.0], cv=5)
+lasso_cv.fit(X_train, y_train)
+print(f"Best alpha (Lasso): {lasso_cv.alpha_}")
+```
+
+Scikit-Learn's `RidgeCV` and `LassoCV` handle this automatically, fitting the regularization path efficiently across your specified alpha range.
+
+---
+
+## Elastic Net: When You Want Both
+
+If you're unsure whether Lasso or Ridge is the better fit, Elastic Net combines both penalties:
+
+```python
+from sklearn.linear_model import ElasticNet
+
+en = ElasticNet(alpha=1.0, l1_ratio=0.5)  # 50% L1, 50% L2
+en.fit(X_train, y_train)
+```
+
+The `l1_ratio` parameter controls the mix — 1.0 is pure Lasso, 0.0 is pure Ridge. Elastic Net is particularly useful when you have many correlated features and want sparse solutions without the instability Lasso can exhibit in that scenario.
+
+---
+
+## Decision Rule
+
+- **Expecting sparse signal among many features?** → Lasso
+- **Expecting most features to contribute?** → Ridge  
+- **Correlated features with unknown sparsity?** → Elastic Net
+- **Not sure?** → Cross-validate all three and let the data decide

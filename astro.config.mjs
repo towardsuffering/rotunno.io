@@ -9,7 +9,7 @@ import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://chrisrotunno.dev",
+  site: "https://rotunno.io",
   // i18n configuration must match src/config/translations.json.ts
   i18n: {
     defaultLocale: "en",

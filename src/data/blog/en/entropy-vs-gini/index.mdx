@@ -1,0 +1,135 @@
+---
+title: "Entropy vs. Gini Impurity: Choosing the Right Split Criterion for Decision Trees"
+description: Both entropy and Gini impurity measure how mixed a node is in a decision tree — but they differ in computation, behavior, and when each makes sense to use.
+draft: false
+authors:
+  - main-author
+pubDate: 2025-02-08
+categories:
+  - machine-learning
+  - data-science
+tags:
+  - decision-trees
+  - entropy
+  - gini-impurity
+  - scikit-learn
+  - python
+  - machine-learning
+---
+
+When building a decision tree, the algorithm needs a way to evaluate every possible split at every node and choose the best one. Two measures dominate this process: **entropy** and **Gini impurity**. They're asking the same question — "how mixed is this group?" — but answering it differently.
+
+Understanding the difference helps you make deliberate choices rather than just accepting the library default.
+
+---
+
+## What They're Measuring
+
+Both metrics quantify **impurity** — how much a node contains a mix of different classes. A pure node (all one class) has impurity of 0. A maximally mixed node has the highest possible impurity.
+
+### Entropy
+
+Entropy comes from information theory. It measures the expected amount of information needed to describe the class of a randomly drawn element from the set.
+
+For a node with classes and their probabilities p₁, p₂, ..., pₙ:
+
+```
+Entropy = -Σ pᵢ * log₂(pᵢ)
+```
+
+For binary classification:
+- All one class → Entropy = 0
+- 50/50 split → Entropy = 1 (maximum disorder)
+
+In Python:
+```python
+import numpy as np
+
+def entropy(y):
+    classes, counts = np.unique(y, return_counts=True)
+    probs = counts / len(y)
+    return -np.sum(probs * np.log2(probs + 1e-10))
+```
+
+### Gini Impurity
+
+Gini impurity measures the probability that a randomly selected element would be misclassified if it were labeled according to the distribution of labels in the node:
+
+```
+Gini = 1 - Σ pᵢ²
+```
+
+For binary classification:
+- All one class → Gini = 0
+- 50/50 split → Gini = 0.5 (maximum impurity)
+
+In Python:
+```python
+def gini(y):
+    classes, counts = np.unique(y, return_counts=True)
+    probs = counts / len(y)
+    return 1 - np.sum(probs ** 2)
+```
+
+---
+
+## Side-by-Side Comparison
+
+| Aspect | Entropy | Gini Impurity |
+|--------|---------|---------------|
+| Formula | -Σ p log₂(p) | 1 - Σ p² |
+| Max value (binary) | 1.0 | 0.5 |
+| Computation | Logarithmic — slower | Polynomial — faster |
+| Algorithm | ID3, C4.5 | CART (Scikit-Learn default) |
+| Behavior | Slightly penalizes unequal splits more | More uniform across split distributions |
+
+---
+
+## Using Each in Scikit-Learn
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Gini (default)
+clf_gini = DecisionTreeClassifier(criterion='gini', random_state=42)
+clf_gini.fit(X_train, y_train)
+
+# Entropy
+clf_entropy = DecisionTreeClassifier(criterion='entropy', random_state=42)
+clf_entropy.fit(X_train, y_train)
+
+print(f"Gini accuracy:   {accuracy_score(y_test, clf_gini.predict(X_test)):.4f}")
+print(f"Entropy accuracy: {accuracy_score(y_test, clf_entropy.predict(X_test)):.4f}")
+```
+
+On most real-world datasets, the accuracy difference between the two is negligible — typically less than 1%. The choice matters more for interpretability and computational context than for raw predictive performance.
+
+---
+
+## When to Use Each
+
+**Use entropy when:**
+- You're working in an information-theoretic context where the log-based measure aligns with your framework
+- Dataset size is manageable and computation speed isn't the bottleneck
+- You want slightly stronger penalization of highly unequal splits
+
+**Use Gini when:**
+- Working with large datasets where the computational cost of log operations adds up
+- You want the CART algorithm's default behavior (which is what most implementations use)
+- Speed matters more than marginal differences in split quality
+
+In practice, start with Gini (it's the default in Scikit-Learn's `DecisionTreeClassifier` and `RandomForestClassifier`), and only switch to entropy if you have a specific reason.
+
+---
+
+## The Bigger Picture
+
+The split criterion is one of the less impactful hyperparameters in decision tree models. Max depth, min samples per leaf, and ensemble size (for Random Forests) typically have much larger effects on performance.
+
+Don't spend too long optimizing the criterion. Get the tree structure right first — proper depth control to prevent overfitting matters far more than whether you're using log₂ or squared probabilities to evaluate splits.

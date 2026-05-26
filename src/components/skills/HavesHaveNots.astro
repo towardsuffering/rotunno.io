@@ -1,0 +1,146 @@
+---
+const haves = [
+  "SQL & NoSQL",
+  "Python",
+  "Tableau",
+  "Plotly & Chart Studio",
+  "Google Data Studio",
+  "Excel",
+  "Apache Spark",
+  "Docker, AWS, Azure & GCP",
+  "JavaScript / TypeScript",
+  "Jira & Atlassian Confluence",
+  "Zoho One",
+  "Ruby on Rails",
+  "ASP.NET",
+];
+
+const haveNots = [
+  "Salesforce",
+  "Snowflake",
+  "ServiceNow",
+  "Databricks",
+  "dbt (Data Build Tool)",
+  "Power BI",
+  "Looker",
+  "Professional Certifications",
+];
+---
+
+<section class="py-16 md:py-20 px-4">
+  <div class="site-container">
+
+    <div class="mb-10 text-center" id="haves-trigger">
+      <p class="text-muted-foreground mb-3 text-sm font-semibold uppercase tracking-widest"
+        data-mos="fade-up"
+        data-mos-anchor="#haves-trigger">
+        No spin. Just facts.
+      </p>
+      <h2 class="h2"
+        data-mos="fade-up"
+        data-mos-anchor="#haves-trigger"
+        data-mos-delay=".1">
+        Haves &amp; Have&nbsp;Nots
+      </h2>
+      <p class="text-muted-foreground mt-3 max-w-xl mx-auto"
+        data-mos="fade-up"
+        data-mos-anchor="#haves-trigger"
+        data-mos-delay=".2">
+        I'd rather tell you upfront than waste both our time.
+      </p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
+
+      <!-- Haves -->
+      <div
+        class="haves-card rounded-2xl border p-6 md:p-8"
+        data-mos="fade-right"
+        data-mos-anchor="#haves-trigger"
+        data-mos-delay=".15"
+      >
+        <div class="flex items-center gap-2 mb-5">
+          <span class="have-badge have-badge--yes">Have</span>
+          <span class="text-muted-foreground text-sm">Tools &amp; tech I've used in production</span>
+        </div>
+        <ul class="space-y-3">
+          {haves.map((item) => (
+            <li class="flex items-center gap-3">
+              <span class="check-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="8" fill="#34d399" fill-opacity="0.15"/>
+                  <path d="M4.5 8.5l2.5 2.5 4.5-5" stroke="#34d399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="text-foreground text-sm font-medium">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Have Nots -->
+      <div
+        class="havenots-card rounded-2xl border p-6 md:p-8"
+        data-mos="fade-left"
+        data-mos-anchor="#haves-trigger"
+        data-mos-delay=".25"
+      >
+        <div class="flex items-center gap-2 mb-5">
+          <span class="have-badge have-badge--no">Haven't Used</span>
+          <span class="text-muted-foreground text-sm">Yet. Honest gaps.</span>
+        </div>
+        <ul class="space-y-3">
+          {haveNots.map((item) => (
+            <li class="flex items-center gap-3">
+              <span class="x-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="8" fill="#f87171" fill-opacity="0.12"/>
+                  <path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="#f87171" stroke-width="1.75" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="text-foreground text-sm font-medium">{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <p class="text-muted-foreground text-xs mt-6 border-t pt-4 leading-relaxed">
+          Fast learner on record. Give me two weeks with any of these and we'll talk differently.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .haves-card {
+    background: color-mix(in srgb, #34d399 4%, var(--color-background));
+    border-color: color-mix(in srgb, #34d399 20%, transparent);
+  }
+  .havenots-card {
+    background: color-mix(in srgb, #f87171 4%, var(--color-background));
+    border-color: color-mix(in srgb, #f87171 20%, transparent);
+  }
+  .have-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .have-badge--yes {
+    background: color-mix(in srgb, #34d399 18%, transparent);
+    color: #34d399;
+  }
+  .have-badge--no {
+    background: color-mix(in srgb, #f87171 18%, transparent);
+    color: #f87171;
+  }
+  .check-icon,
+  .x-icon {
+    flex-shrink: 0;
+  }
+</style>

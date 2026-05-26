@@ -1,0 +1,172 @@
+---
+title: "Data Analysis in R: Uncovering Chipotle Order Trends"
+description: A hands-on walkthrough using real Chipotle order data — loading, aggregating, and visualizing purchase patterns with R and ggplot2.
+draft: false
+authors:
+  - main-author
+pubDate: 2024-08-26
+categories:
+  - data-analysis
+  - programming
+tags:
+  - R
+  - ggplot2
+  - data-analysis
+  - visualization
+  - exploratory-data-analysis
+---
+
+One of the fastest ways to make data analysis concrete is to work with data you already have intuitions about. Chipotle order data is perfect for this: you know what a burrito bowl is, you understand why Chicken is ordered more than Sofritas, and you can immediately sanity-check the results against your lived experience.
+
+Here's a practical walkthrough using a real Chipotle order dataset — focusing on the core R operations every analyst should have fluent.
+
+---
+
+## Setting Up
+
+Start with a clean workspace and load ggplot2 for visualization:
+
+```r
+# Clear workspace
+rm(list = ls())
+
+# Install ggplot2 if needed
+# install.packages("ggplot2")
+library(ggplot2)
+```
+
+---
+
+## Loading the Data
+
+The dataset contains individual order line items with columns for order ID, item quantity, item name, choice description, and item price.
+
+```r
+# Load from file
+orders <- read.csv("chipotle.csv", stringsAsFactors = FALSE)
+
+# First look
+head(orders)
+str(orders)
+```
+
+Sample output:
+```
+  order_id quantity                              item_name choice_description  item_price
+1        1        1               Chips and Fresh Tomato Salsa               NULL  $2.39 
+2        1        1                                   Izze          [Clementine]  $3.39 
+3        1        1                       Nantucket Nectar        [Apple]  $3.39 
+4        1        1  Chips and Tomatillo-Green Chili Salsa               NULL  $2.39 
+5        2        2                        Chicken Bowl   [Tomatillo-Red...]  $16.98
+6        3        1                        Chicken Bowl   [Fresh Tomato...]   $10.98
+```
+
+---
+
+## Aggregating by Item
+
+To find which items are ordered most frequently, sum quantities by item name:
+
+```r
+item_totals <- aggregate(quantity ~ item_name, data = orders, FUN = sum)
+
+# Sort descending
+item_totals <- item_totals[order(-item_totals$quantity), ]
+
+head(item_totals, 10)
+```
+
+```
+                      item_name quantity
+Chicken Bowl               761
+Chicken Burrito            591
+Chips and Guacamole        506
+Steak Burrito              386
+Canned Soft Drink          351
+Chips                      230
+Steak Bowl                 221
+Bottled Water              162
+Chips and Fresh Tomato...  130
+Chicken Salad Bowl         123
+```
+
+The Chicken Bowl's dominance isn't surprising — it's Chipotle's most customizable and calorie-flexible option. What's interesting is that Chips and Guacamole ranks third by volume, ahead of Steak Burrito. That's a meaningful data point for menu pricing strategy.
+
+---
+
+## Visualization with ggplot2
+
+A horizontal bar chart makes quantity comparisons easy to read:
+
+```r
+# Top 15 items
+top15 <- head(item_totals, 15)
+
+ggplot(top15, aes(x = reorder(item_name, quantity), y = quantity)) +
+  geom_bar(stat = "identity", fill = "#A8BF87") +
+  coord_flip() +
+  labs(
+    title = "Top 15 Chipotle Items by Quantity Ordered",
+    x = NULL,
+    y = "Total Units Ordered"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 9),
+    plot.title = element_text(face = "bold")
+  )
+```
+
+Key choices in this code:
+- `reorder()` sorts the bars by quantity rather than alphabetically
+- `coord_flip()` turns vertical bars horizontal — better for long item names
+- `theme_minimal()` removes unnecessary chart chrome
+
+---
+
+## Examining Raw Distributions
+
+Sometimes you want to look at the raw quantity values rather than aggregated totals:
+
+```r
+# Distribution of quantities per line item
+quantities <- sort(orders$quantity)
+summary(quantities)
+```
+
+```
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1.00    1.00    1.00    1.07    1.00   15.00 
+```
+
+Most orders are single items, but the max of 15 suggests bulk orders — likely catering or group orders. You'd want to handle these differently in an analysis focused on individual customer behavior.
+
+---
+
+## Cleaning Item Prices for Analysis
+
+The `item_price` column is stored as a string with a `$` prefix. To use it numerically:
+
+```r
+orders$price_clean <- as.numeric(gsub("\\$", "", orders$item_price))
+
+# Average price by item (top 10)
+avg_price <- aggregate(price_clean ~ item_name, data = orders, FUN = mean)
+avg_price <- avg_price[order(-avg_price$price_clean), ]
+head(avg_price, 10)
+```
+
+This kind of cleaning step — stripping formatting characters to get to usable numeric data — comes up constantly in real-world datasets.
+
+---
+
+## What to Explore Next
+
+This dataset has more depth than a single walkthrough covers:
+
+- **Co-occurrence analysis:** Which items are most commonly ordered together in the same order?
+- **Price sensitivity:** Do higher-priced items show lower order frequency, and by how much?
+- **Customization patterns:** The `choice_description` column contains rich free-text data about modifications — parsing it reveals preference patterns
+- **Order size distribution:** Are there identifiable customer segments by order value?
+
+Each of these leads somewhere different. That's what makes exploratory data analysis useful — the early summary statistics point you toward the questions worth pursuing, rather than forcing you to decide upfront which questions matter.

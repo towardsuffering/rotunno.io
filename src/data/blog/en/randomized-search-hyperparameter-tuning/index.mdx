@@ -1,0 +1,183 @@
+---
+title: "How to Use Randomized Search for Hyperparameter Tuning"
+description: When your parameter space is too large for Grid Search, Randomized Search samples combinations efficiently. Here's how it works and when it outperforms the exhaustive alternative.
+draft: false
+authors:
+  - main-author
+pubDate: 2025-02-07
+categories:
+  - machine-learning
+  - programming
+tags:
+  - hyperparameter-tuning
+  - randomized-search
+  - scikit-learn
+  - python
+  - cross-validation
+  - machine-learning
+---
+
+Grid Search is thorough but expensive. When your parameter space has dozens of combinations or continuous value ranges, exhaustive evaluation becomes impractical. Randomized Search is the answer — it samples the space rather than covering it completely, and in practice often finds equally good solutions at a fraction of the compute cost.
+
+---
+
+## The Core Idea
+
+Instead of evaluating every combination in a grid, `RandomizedSearchCV`:
+
+1. Samples a fixed number of parameter combinations (`n_iter`) from the specified distributions
+2. Evaluates each via cross-validation
+3. Returns the best combination found
+
+This means you control the budget directly with `n_iter`. Set it to 50 and you evaluate exactly 50 combinations, regardless of how large the search space is.
+
+---
+
+## Grid Search vs. Randomized Search
+
+The distinction is important. Grid Search evaluates **all** combinations in a discrete grid. Randomized Search samples from **distributions** (not just discrete lists) over a specified number of iterations.
+
+This has a practical implication: Randomized Search can explore **continuous parameter ranges** that Grid Search cannot efficiently cover:
+
+```python
+from scipy.stats import uniform, randint
+
+# Grid Search: discrete values only
+param_grid = {'C': [0.1, 1, 10, 100]}
+
+# Randomized Search: continuous distributions
+param_dist = {'C': uniform(0.01, 100)}  # samples any value in [0.01, 100.01]
+```
+
+Research has shown that for most hyperparameter optimization problems, a relatively small number of the parameters account for most of the variance in performance. Randomized Search is better at finding good values for those few important parameters than an exhaustive grid that allocates equal attention to unimportant ones.
+
+---
+
+## Full Implementation
+
+```python
+from sklearn.svm import SVC
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from sklearn.metrics import accuracy_score
+from scipy.stats import uniform, randint
+import numpy as np
+
+# Load and split
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Define parameter distributions
+param_dist = {
+    'C': uniform(0.01, 100),          # Continuous: uniform between 0.01 and 100.01
+    'gamma': uniform(0.001, 1),       # Continuous: uniform between 0.001 and 1.001
+    'kernel': ['rbf', 'linear', 'poly']
+}
+
+# Run Randomized Search
+random_search = RandomizedSearchCV(
+    estimator=SVC(),
+    param_distributions=param_dist,
+    n_iter=50,          # Evaluate 50 random combinations
+    cv=5,               # 5-fold cross-validation
+    scoring='accuracy',
+    n_jobs=-1,          # Parallel processing
+    random_state=42,    # Reproducible sampling
+    verbose=1
+)
+
+random_search.fit(X_train, y_train)
+
+print(f"Best parameters: {random_search.best_params_}")
+print(f"Best CV score:   {random_search.best_score_:.4f}")
+print(f"Test accuracy:   {accuracy_score(y_test, random_search.predict(X_test)):.4f}")
+```
+
+---
+
+## Useful Distributions from `scipy.stats`
+
+```python
+from scipy.stats import uniform, randint, loguniform
+
+# Uniform: values between loc and loc+scale
+uniform(0, 1)          # [0, 1]
+uniform(0.1, 9.9)      # [0.1, 10.0]
+
+# Log-uniform: good for C and alpha (spans orders of magnitude)
+loguniform(1e-4, 1e2)  # [0.0001, 100] on log scale
+
+# Random integers
+randint(1, 20)         # Integers from 1 to 19 inclusive
+
+# For Random Forest / Gradient Boosting
+param_dist_rf = {
+    'n_estimators': randint(50, 500),
+    'max_depth': randint(3, 20),
+    'min_samples_split': randint(2, 20),
+    'max_features': uniform(0.1, 0.9)
+}
+```
+
+Using `loguniform` for scale parameters like `C`, `alpha`, or `learning_rate` is particularly important — these parameters matter most on a log scale, and linear sampling wastes most of its budget on large values.
+
+---
+
+## Comparing Results
+
+```python
+import pandas as pd
+
+results = pd.DataFrame(random_search.cv_results_)
+results_sorted = results.sort_values('mean_test_score', ascending=False)
+
+print(results_sorted[['param_C', 'param_gamma', 'param_kernel', 
+                        'mean_test_score', 'std_test_score']].head(10))
+```
+
+Looking at the top 10 results shows you whether the search converged (similar scores across the top) or whether there's still variance to exploit with more iterations.
+
+---
+
+## How Many Iterations?
+
+There's no universal answer, but some guidelines:
+
+- **50–100 iterations** is often sufficient for 2–4 parameters
+- **100–200 iterations** for larger spaces with more parameters
+- If the top results are clustered with similar scores, you've likely found a good region — you don't need more iterations
+- If results are highly variable, consider running more iterations or narrowing the distributions
+
+---
+
+## When to Use Each
+
+| Situation | Recommendation |
+|-----------|---------------|
+| Small, discrete parameter space | Grid Search |
+| Continuous parameters | Randomized Search |
+| Many parameters, limited compute | Randomized Search |
+| Need guaranteed coverage | Grid Search |
+| Deep learning (e.g., learning rate, batch size) | Randomized or Bayesian |
+
+For most practical ML work, Randomized Search is the better starting point. It scales, it handles continuous spaces gracefully, and the performance difference from exhaustive search is rarely meaningful when you're running 50+ iterations.
+
+---
+
+## After Finding a Good Region
+
+Randomized Search works best as a first pass to identify promising regions of the parameter space. Once you've found a good neighborhood, you can narrow down with a targeted Grid Search:
+
+```python
+# Suppose Randomized Search found C ≈ 8.3, gamma ≈ 0.05
+fine_grid = {
+    'C': [6, 8, 10, 12],
+    'gamma': [0.03, 0.05, 0.07, 0.1],
+    'kernel': ['rbf']
+}
+# Run GridSearchCV on this narrow grid
+```
+
+This two-stage approach combines the exploration strength of Randomized Search with the precision of Grid Search.

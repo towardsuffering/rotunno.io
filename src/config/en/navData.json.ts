@@ -13,16 +13,8 @@ import { type navItem } from "../types/configDataTypes";
 // note: 1 level of dropdown is supported
 const navConfig: navItem[] = [
   {
-    text: "Home",
+    text: "Hire Me",
     link: "/",
-  },
-  {
-    text: "About",
-    link: "/about",
-  },
-  {
-    text: "Projects",
-    link: "/projects",
   },
   {
     text: "Resume",
