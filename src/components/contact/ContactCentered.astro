@@ -13,12 +13,14 @@ const t = useTranslations(currLocale);
       <p class="description mx-auto mt-4 mb-8 max-w-xl">Got a pipeline that's held together with duct tape and prayers? A dashboard nobody trusts? A warehouse migration that keeps getting deprioritized? That's exactly where I come in. Tell me what's broken — or what you're trying to build.</p>
     </div>
 
-    <div class="mx-auto grid max-w-4xl gap-6 md:grid-cols-2 items-start">
+    <div class="mx-auto grid max-w-6xl gap-6 md:grid-cols-3 items-start">
+      <!-- Column 1: Contact form -->
       <div class="rounded-xl border p-8 text-left shadow-md" data-reveal="rise" data-reveal-delay="0.2">
         <h3 class="font-heading mb-6 text-2xl font-semibold">Drop Me a Line</h3>
         <ContactForm />
       </div>
 
+      <!-- Column 2: Stripe support -->
       <div class="rounded-xl border p-8 text-center shadow-md flex flex-col items-center justify-center gap-4" data-reveal="rise" data-reveal-delay="0.35">
         <h3 class="font-heading text-2xl font-semibold">Support My Work</h3>
         <p class="text-muted-foreground text-sm">If my content, tools, or code have helped you — consider paying it forward.</p>
@@ -27,11 +29,16 @@ const t = useTranslations(currLocale);
           buy-button-id="buy_btn_1TbMCNKf3i8bH4sDF2dcukJP"
           publishable-key="pk_live_51QqPjYKf3i8bH4sDSbhHSoTfe77T8kdWEZnNWmw86Nl1Xkp1BSJMEBwig0tGrXDAiD6yf4DnCXXnBwafi7VsrIOM00PkkbOpqV"
         ></stripe-buy-button>
+      </div>
 
-        <div class="w-full mt-2">
-          <div class="calendly-inline-widget w-full" data-url="https://calendly.com/chrisrotunno-_my2/30min" style="min-width:320px;height:700px;"></div>
-          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      <!-- Column 3: Calendly -->
+      <div class="rounded-xl border shadow-md overflow-hidden" data-reveal="rise" data-reveal-delay="0.5">
+        <div class="px-8 pt-8 pb-4 text-center">
+          <h3 class="font-heading text-2xl font-semibold">Book a Call</h3>
+          <p class="text-muted-foreground text-sm mt-2">Pick a time that works for you.</p>
         </div>
+        <div class="calendly-inline-widget w-full" data-url="https://calendly.com/chrisrotunno-_my2/30min" style="min-width:320px;height:700px;"></div>
+        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
       </div>
     </div>
   </div>
