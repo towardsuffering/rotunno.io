@@ -1,17 +1,30 @@
-[dev]
-  command = "pnpm dev"
-  framework = "astro"
-
 [build]
-  command = "pnpm build"
+  command = "pnpm run build"
   publish = "dist"
-  functions = "netlify/functions/"
+
+[[redirects]]
+  from   = "http://rotunno.io/*"
+  to     = "https://rotunno.io/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "http://www.rotunno.io/*"
+  to     = "https://rotunno.io/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "https://www.rotunno.io/*"
+  to     = "https://rotunno.io/:splat"
+  status = 301
+  force  = true
 
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Cross-Origin-Opener-Policy = "same-origin"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Frame-Options            = "SAMEORIGIN"
+    X-Content-Type-Options     = "nosniff"
+    Referrer-Policy            = "strict-origin-when-cross-origin"
+    Permissions-Policy         = "camera=(), microphone=(), geolocation=()"
