@@ -18,7 +18,7 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-rotunno.jpg",
+    src: "/images/og-rotunno-v2.jpg",
     alt: "Christopher A. Rotunno — Data Analytics Engineer & BI Leader",
   },
 };
