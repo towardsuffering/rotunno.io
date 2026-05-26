@@ -73,18 +73,8 @@
   <text x="444" y="238" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="white" opacity="0.5" letter-spacing="1">EFFICIENCY GAIN</text>
   <text x="444" y="254" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" opacity="0.3">Pipeline optimisation</text>
 
-  <!-- Trend line (lower left) -->
-  <polyline points="40,570 100,542 160,556 220,516 280,496 340,470 400,448 460,426 520,406 540,394" fill="none" stroke="#34d399" stroke-width="2" opacity="0.22" stroke-linecap="round" stroke-linejoin="round"/>
-  <g fill="#34d399" opacity="0.38">
-    <circle cx="40"  cy="570" r="3"/>
-    <circle cx="160" cy="556" r="3"/>
-    <circle cx="280" cy="496" r="3"/>
-    <circle cx="400" cy="448" r="3"/>
-    <circle cx="520" cy="406" r="4"/>
-  </g>
-  <text x="40" y="598" font-family="Arial,sans-serif" font-size="9" fill="white" opacity="0.18" letter-spacing="1">PERFORMANCE OVER TIME</text>
 
-  <!-- Vertical divider -->
+<!-- Vertical divider -->
   <line x1="575" y1="30" x2="575" y2="600" stroke="#34d399" stroke-width="1.5" opacity="0.18"/>
   <circle cx="575" cy="30"  r="3" fill="#34d399" opacity="0.32"/>
   <circle cx="575" cy="600" r="3" fill="#34d399" opacity="0.32"/>
