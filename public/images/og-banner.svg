@@ -82,50 +82,50 @@
   <!-- ── RIGHT: MAIN TEXT BLOCK ── -->
 
   <!-- Name -->
-  <text x="1155" y="178" text-anchor="end"
+  <text x="1170" y="195" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="52" font-weight="900"
+    font-size="44" font-weight="900"
     fill="white" letter-spacing="-1">Christopher A. Rotunno</text>
 
   <!-- Title -->
-  <text x="1155" y="222" text-anchor="end"
+  <text x="1170" y="233" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="25" font-weight="600"
+    font-size="22" font-weight="600"
     fill="#38bdf8" letter-spacing="0.3">Data Analytics Engineer &amp; BI Leader</text>
 
   <!-- Emerald rule -->
-  <line x1="608" y1="248" x2="1155" y2="248" stroke="url(#emeraldLine)" stroke-width="1.5"/>
+  <line x1="700" y1="258" x2="1170" y2="258" stroke="url(#emeraldLine)" stroke-width="1.5"/>
 
   <!-- Tagline -->
-  <text x="1155" y="326" text-anchor="end"
+  <text x="1170" y="328" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="52" font-weight="800"
+    font-size="46" font-weight="800"
     fill="white" letter-spacing="-0.5">Putting Insights</text>
 
-  <text x="1155" y="390" text-anchor="end"
+  <text x="1170" y="383" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="52" font-weight="800"
+    font-size="46" font-weight="800"
     fill="#34d399" letter-spacing="-0.5"
     filter="url(#glowStrong)">To Action.</text>
 
   <!-- Open to work -->
-  <text x="1155" y="452" text-anchor="end"
+  <text x="1170" y="438" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="16" font-weight="700"
-    fill="#34d399" letter-spacing="1"
+    font-size="13" font-weight="700"
+    fill="#34d399" letter-spacing="0.5"
     filter="url(#glow)">&#x25CF; OPEN TO WORK &#xB7; Remote &#xB7; Hybrid &#xB7; Open to Relocate Worldwide</text>
 
   <!-- Tech stack -->
-  <text x="1155" y="477" text-anchor="end"
+  <text x="1170" y="460" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="12" font-weight="400"
-    fill="white" opacity="0.28" letter-spacing="2">SQL &#xB7; Python &#xB7; Spark &#xB7; AWS &#xB7; Tableau &#xB7; Docker</text>
+    font-size="11" font-weight="400"
+    fill="white" opacity="0.28" letter-spacing="1.5">SQL &#xB7; Python &#xB7; Spark &#xB7; AWS &#xB7; Tableau &#xB7; Docker</text>
 
   <!-- URL -->
-  <text x="1155" y="522" text-anchor="end"
+  <text x="1170" y="505" text-anchor="end"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="20" font-weight="700"
-    fill="#34d399" letter-spacing="4"
+    font-size="18" font-weight="700"
+    fill="#34d399" letter-spacing="3"
     filter="url(#glow)">ROTUNNO.IO</text>
 
 </svg>
