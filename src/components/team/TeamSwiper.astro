@@ -1,67 +1,102 @@
 ---
-import { Image } from "astro:assets";
 import chris from "@images/chris.jpg";
+import { Image } from "astro:assets";
 
 import Badge from "../badge/Badge.astro";
 ---
 
 <section id="team-swiper" class="py-12 lg:py-16">
   <div class="site-container">
-
     <!-- Two-column grid: text | photo -->
-    <div class="grid gap-8 md:grid-cols-2 md:gap-16 items-center" id="team-trigger">
-
+    <div class="grid items-center gap-8 md:grid-cols-2 md:gap-16" id="team-trigger">
       <!-- Col 1: text -->
       <div class="flex flex-col gap-4" data-mos="fade-right" data-mos-anchor="#team-trigger">
         <Badge>About Me</Badge>
         <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
         <p class="text-primary-accent font-heading font-semibold md:text-lg">
-          Analytics engineer & BI leader — building the systems that turn fragmented data into decisions people actually act on.
+          Analytics engineer & BI leader — building the systems that turn fragmented data into
+          decisions people actually act on.
         </p>
         <p class="text-muted-foreground md:text-base">
-          I've come to believe that people don't underperform because they lack ability. More often, the system around them wasn't built for their success. That's what drives the work — infrastructure that gives people the visibility they need to do their best.
+          Five years in data analytics. Five in retail. Five in restaurants. A year in home
+          improvement sales — different rooms, same pattern: people don't underperform because they
+          lack ability. More often, the system around them wasn't built for their success. That's
+          what drives the work — infrastructure that gives people the visibility they need to do
+          their best.
         </p>
         <p class="text-muted-foreground md:text-base">
-          I'm collaborative by default and self-aware about where I add the most value: the technical layer between raw data and real decisions. I work best alongside people who challenge the thinking, not just the code — and who care as much about whether something gets used as whether it gets built.
+          I'm collaborative by default and self-aware about where I add the most value: the
+          technical layer between raw data and real decisions. Across $50M+ in sales driven and
+          100K+ customers served, the throughline has stayed the same — I work best alongside people
+          who challenge the thinking, not just the code, and who care as much about whether
+          something gets used as whether it gets built.
         </p>
-        <div class="flex flex-wrap gap-3 mt-2">
-          {["SQL", "NoSQL", "Python", "Tableau", "AWS", "Docker", "Spark", "Scikit-Learn"].map(tag => (
-            <span class="bg-muted border rounded-full px-3 py-1 text-sm font-medium">{tag}</span>
-          ))}
+        <div class="flex flex-wrap gap-2">
+          {
+            ["Analytics", "Retail", "Food Service", "Home Improvement"].map((tag) => (
+              <span class="border-primary-accent/30 text-primary-accent bg-primary-accent/10 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide uppercase">
+                {tag}
+              </span>
+            ))
+          }
+        </div>
+        <div class="mt-2 flex flex-wrap gap-3">
+          {
+            ["SQL", "NoSQL", "Python", "Tableau", "AWS", "Docker", "Spark", "Scikit-Learn"].map(
+              (tag) => (
+                <span class="bg-muted rounded-full border px-3 py-1 text-sm font-medium">
+                  {tag}
+                </span>
+              ),
+            )
+          }
         </div>
       </div>
 
       <!-- Col 2: photo -->
-      <div class="flex flex-col items-start text-left" data-mos="fade-left" data-mos-anchor="#team-trigger" data-mos-delay=".15">
-        <div class="founder-card w-full aspect-[7/8] overflow-hidden rounded-xl shadow-md mb-4">
+      <div
+        class="flex flex-col items-start text-left"
+        data-mos="fade-left"
+        data-mos-anchor="#team-trigger"
+        data-mos-delay=".15"
+      >
+        <div class="founder-card mb-4 aspect-[7/8] w-full overflow-hidden rounded-xl shadow-md">
           <Image
             src={chris}
             alt="Portrait of Christopher A. Rotunno"
             width={400}
             densities={[1.5, 2]}
-            class="h-full w-full object-cover founder-photo"
+            class="founder-photo h-full w-full object-cover"
           />
         </div>
         <span class="text-primary-accent text-lg font-semibold">Christopher A. Rotunno</span>
-        <p class="text-muted-foreground mt-1 text-sm font-semibold">Data Analytics Engineer & BI Leader</p>
-        <p class="mt-2 text-sm">Remote or hybrid preferred — open to relocating anywhere in the US for the right role: one with compensation, benefits, and balance that match the work I put in.</p>
+        <p class="text-muted-foreground mt-1 text-sm font-semibold">
+          Data Analytics Engineer & BI Leader
+        </p>
+        <p class="mt-2 text-sm">
+          Remote or hybrid preferred — open to relocating anywhere in the US for the right role: one
+          with compensation and benefits strong enough to meet my financial obligations, and the
+          balance to sustain the work I put in.
+        </p>
       </div>
-
     </div>
-
   </div>
 </section>
 
 <style>
   .founder-card {
-    transition: box-shadow 0.4s ease, transform 0.4s ease;
+    transition:
+      box-shadow 0.4s ease,
+      transform 0.4s ease;
   }
   .founder-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
   }
   .founder-photo {
-    transition: transform 0.6s ease, filter 0.4s ease;
+    transition:
+      transform 0.6s ease,
+      filter 0.4s ease;
   }
   .founder-card:hover .founder-photo {
     transform: scale(1.04);

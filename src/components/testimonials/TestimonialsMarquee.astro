@@ -4,29 +4,18 @@
  * Each entry can optionally include a logo image path.
  * Neutral framing: does NOT imply all are analytics clients.
  */
-
-const companies = [
-  { name: "Wells Fargo",       logo: "/images/companies/wellsfargo.svg",  url: "https://www.wellsfargo.com" },
-  { name: "Intrinio",          logo: "/images/companies/intrinio.svg",     url: "https://intrinio.com" },
-  { name: "Socrates Platform", logo: "/images/companies/socrates.svg",     url: "https://standard.socratesplatform.com/MKC/Content/IntroPlatform/WhatIsSocrates.htm" },
-  { name: "Trader Joe's",      logo: "/images/companies/traderjoes.svg",   url: "https://www.traderjoes.com" },
-  { name: "Walgreens",         logo: "/images/companies/walgreens.svg",    url: "https://www.walgreens.com" },
-  { name: "Kroger",            logo: "/images/companies/kroger.svg",       url: "https://www.kroger.com" },
-  { name: "Velvet Taco",       logo: "/images/companies/velvettaco.svg",   url: "https://www.velvettaco.com" },
-  { name: "Chipotle",          logo: "/images/companies/chipotle.svg",     url: "https://www.chipotle.com" },
-  { name: "Renuity",           logo: "/images/companies/renuity.svg",      url: "https://renuityhome.com" },
-];
+import { companies } from "@/data/companies";
 
 const styles: Record<string, string> = {
-  "Wells Fargo":       "font-bold tracking-tight text-xl",
-  "Intrinio":          "font-bold tracking-widest text-base uppercase",
+  "Wells Fargo": "font-bold tracking-tight text-xl",
+  Intrinio: "font-bold tracking-widest text-base uppercase",
   "Socrates Platform": "font-semibold italic text-lg",
-  "Trader Joe's":      "font-black text-xl",
-  "Walgreens":         "font-bold text-xl tracking-tight",
-  "Kroger":            "font-bold text-xl tracking-wide",
-  "Velvet Taco":       "font-semibold text-lg tracking-wider",
-  "Chipotle":          "font-black text-xl tracking-tight",
-  "Renuity":           "font-bold text-lg tracking-widest uppercase",
+  "Trader Joe's": "font-black text-xl",
+  Walgreens: "font-bold text-xl tracking-tight",
+  Kroger: "font-bold text-xl tracking-wide",
+  "Velvet Taco": "font-semibold text-lg tracking-wider",
+  Chipotle: "font-black text-xl tracking-tight",
+  Renuity: "font-bold text-lg tracking-widest uppercase",
 };
 ---
 
@@ -35,54 +24,64 @@ const styles: Record<string, string> = {
   class="mx-auto max-w-[2000px] overflow-x-hidden px-4 py-16 md:py-20"
 >
   <div class="mb-10 flex flex-col justify-center text-center" data-reveal="pop">
-    <p class="text-muted-foreground mb-3 text-sm font-semibold uppercase tracking-widest">Across industries. Across disciplines.</p>
+    <p class="text-muted-foreground mb-3 text-sm font-semibold tracking-widest uppercase">
+      Across industries. Across disciplines.
+    </p>
     <h2 class="h2">The names say it better than I can.</h2>
   </div>
 
   <div class="relative -mt-2">
-    <div class="from-background absolute top-0 -left-px z-20 h-full w-[10%] bg-gradient-to-r from-10% to-transparent"></div>
-    <div class="to-background absolute top-0 -right-px z-20 h-full w-[10%] bg-gradient-to-r from-transparent to-90%"></div>
+    <div
+      class="from-background absolute top-0 -left-px z-20 h-full w-[10%] bg-gradient-to-r from-10% to-transparent"
+    >
+    </div>
+    <div
+      class="to-background absolute top-0 -right-px z-20 h-full w-[10%] bg-gradient-to-r from-transparent to-90%"
+    >
+    </div>
 
     <div class="relative h-full overflow-x-hidden py-4">
-      <div class="company-marquee flex gap-8 items-center">
-
-        {[0, 1].map((i) => (
-          <div
-            class="animate-marquee-testimonials flex min-w-full shrink-0 items-center justify-around gap-10"
-            aria-hidden={i === 1 ? "true" : undefined}
-          >
-            {companies.map(({ name, logo, url }) =>
-              logo ? (
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="logo-link shrink-0"
-                  aria-label={`Visit ${name}`}
-                  title={name}
-                >
-                  <img
-                    src={logo}
-                    alt={name}
-                    class:list={["logo-img", { "logo-invert": name === "Socrates Platform" }]}
-                    loading="lazy"
-                  />
-                </a>
-              ) : (
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class={`logo-chip ${styles[name]} shrink-0`}
-                  aria-label={`Visit ${name}`}
-                >
-                  {name}
-                </a>
-              )
-            )}
-          </div>
-        ))}
-
+      <div class="company-marquee flex items-center gap-8">
+        {
+          [0, 1].map((i) => (
+            <div
+              class="animate-marquee-testimonials flex min-w-full shrink-0 items-center justify-around gap-10"
+              aria-hidden={i === 1 ? "true" : undefined}
+            >
+              {companies.map(({ name, logo, url }) =>
+                logo ? (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="logo-link career-jump-link shrink-0"
+                    data-org={name}
+                    aria-label={`See my time at ${name}`}
+                    title={name}
+                  >
+                    <img
+                      src={logo}
+                      alt={name}
+                      class:list={["logo-img", { "logo-invert": name === "Socrates Platform" }]}
+                      loading="lazy"
+                    />
+                  </a>
+                ) : (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={`logo-chip career-jump-link ${styles[name]} shrink-0`}
+                    data-org={name}
+                    aria-label={`See my time at ${name}`}
+                  >
+                    {name}
+                  </a>
+                ),
+              )}
+            </div>
+          ))
+        }
       </div>
     </div>
   </div>
@@ -101,6 +100,19 @@ const styles: Record<string, string> = {
         el.classList.remove("pause");
       });
     });
+
+    // prefer jumping to the matching point on the career timeline below;
+    // fall back to the normal outbound link if that company isn't on it
+    marquee?.querySelectorAll<HTMLAnchorElement>(".career-jump-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const org = link.dataset.org;
+        const jump = (window as unknown as { __careerPathJump?: (q: string) => boolean })
+          .__careerPathJump;
+        if (org && jump?.(org)) {
+          e.preventDefault();
+        }
+      });
+    });
   };
 
   setupMarquee();
@@ -112,7 +124,9 @@ const styles: Record<string, string> = {
     display: inline-flex;
     align-items: center;
     opacity: 0.8;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
     cursor: pointer;
     text-decoration: none;
   }
@@ -125,7 +139,10 @@ const styles: Record<string, string> = {
     align-items: center;
     color: var(--color-muted-foreground);
     opacity: 0.7;
-    transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    transition:
+      opacity 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
     cursor: pointer;
     text-decoration: none;
     font-family: var(--font-heading, sans-serif);

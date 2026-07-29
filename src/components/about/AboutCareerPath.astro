@@ -1,0 +1,934 @@
+---
+/**
+ * An interactive, non-linear career timeline. The line's slope at each
+ * leg is driven by real up/down/flat outcomes (promotions, terminations,
+ * resignations); clicking a point visually zooms the artwork in on that
+ * point (via an SVG transform, not a viewBox tween) and reveals what
+ * actually caused the change in a panel below.
+ */
+import { Icon } from "astro-icon/components";
+
+import { companies, findCompany } from "@/data/companies";
+
+// fallback text styling for any company without a logo file
+const companyChipStyles: Record<string, string> = {
+  "Wells Fargo": "font-bold tracking-tight text-xl",
+  Intrinio: "font-bold tracking-widest text-base uppercase",
+  "Socrates Platform": "font-semibold italic text-lg",
+  "Trader Joe's": "font-black text-xl",
+  Walgreens: "font-bold text-xl tracking-tight",
+  Kroger: "font-bold text-xl tracking-wide",
+  "Velvet Taco": "font-semibold text-lg tracking-wider",
+  Chipotle: "font-black text-xl tracking-tight",
+  Renuity: "font-bold text-lg tracking-widest uppercase",
+};
+
+type Direction = "up" | "down" | "flat" | undefined;
+
+interface Moment {
+  year: string;
+  org: string;
+  title: string;
+  location?: string;
+  desc: string;
+  trigger: string;
+  /** trajectory of the move OUT of this role, into the next one */
+  direction: Direction;
+  /** how big that move was, 0-1, relative to a full up/down swing (default 1) */
+  magnitude?: number;
+}
+
+const moments: Moment[] = [
+  {
+    year: "2014",
+    org: "Wells Fargo",
+    title: "Teller",
+    location: "Boulder, CO",
+    desc: "Processed transactions — deposits, withdrawals, day-to-day branch work.",
+    trigger: "Promoted to Lead Teller",
+    direction: "flat",
+  },
+  {
+    year: "2016",
+    org: "Wells Fargo",
+    title: "Lead Teller",
+    location: "Boulder, CO",
+    desc: "Established merchant partnerships.",
+    trigger: "Promoted to Leadership Development Program",
+    direction: "flat",
+  },
+  {
+    year: "2016",
+    org: "Wells Fargo",
+    title: "Consumer Lending Intern",
+    location: "Chandler, AZ",
+    desc: "Leadership development training.",
+    trigger: "Not selected for employment",
+    direction: "down",
+  },
+  {
+    year: "2017",
+    org: "CU Boulder",
+    title: "Undergrad",
+    desc: "Completed my degree in Operations and Information Management.",
+    trigger: "Graduated",
+    direction: "up",
+  },
+  {
+    year: "2017",
+    org: "Intrinio",
+    title: "Data Quality Analyst",
+    location: "Saint Petersburg, FL",
+    desc: "NLP on XBRL tags — standardized financial statement line-item error corrections.",
+    trigger: "Terminated for performance",
+    direction: "up",
+  },
+  {
+    year: "2021",
+    org: "Socrates",
+    title: "Data Analyst",
+    location: "Saint Petersburg, FL",
+    desc: "Managed server systems for global market analysis.",
+    trigger: "Role outsourced to a data warehouse facility",
+    direction: "down",
+  },
+  {
+    year: "2021",
+    org: "Trader Joe's",
+    title: "Crew",
+    location: "Nashville, TN",
+    desc: "Stocked shelves and made the store look pretty.",
+    trigger: "Seasonal position ended",
+    direction: "flat",
+  },
+  {
+    year: "2021",
+    org: "Walgreens",
+    title: "Shift Lead",
+    location: "Nashville, TN",
+    desc: "First leadership position in retail.",
+    trigger: "Resigned",
+    direction: "down",
+  },
+  {
+    year: "2022",
+    org: "Velvet Taco",
+    title: "Heart of House",
+    desc: "Fulfilled orders at the fry station.",
+    trigger: "Resigned",
+    direction: "flat",
+  },
+  {
+    year: "2022",
+    org: "Kroger",
+    title: "Cashier",
+    location: "Nashville, TN",
+    desc: "Created an exceptional customer experience.",
+    trigger: "Promoted to Assistant Department Manager",
+    direction: "up",
+    magnitude: 1.3,
+  },
+  {
+    year: "2022",
+    org: "Kroger",
+    title: "Assistant Department Manager",
+    location: "Nashville, TN",
+    desc: "Supervised front-end operations to deliver an exceptional customer experience.",
+    trigger: "Resigned",
+    direction: "down",
+    magnitude: 0.2,
+  },
+  {
+    year: "2022",
+    org: "Kroger",
+    title: "E-commerce Pickup Specialist",
+    location: "Nashville, TN",
+    desc: "Fulfilled online orders with precision and speed, maintaining safety.",
+    trigger: "Resigned",
+    direction: "down",
+  },
+  {
+    year: "2022",
+    org: "Root Labs",
+    title: "Owner / Operator",
+    location: "Nashville, TN",
+    desc: "Built a catalog of stored procedures processing market information.",
+    trigger: "Promoted self",
+    direction: "up",
+  },
+  {
+    year: "2023",
+    org: "CU Boulder",
+    title: "MS, Business Analytics",
+    desc: "Graduate coursework in business analytics.",
+    trigger: "Graduated",
+    direction: "flat",
+  },
+  {
+    year: "2024",
+    org: "MTSU",
+    title: "MBA, Music Business",
+    desc: "Graduate coursework in music business.",
+    trigger: "Graduated",
+    direction: "flat",
+  },
+  {
+    year: "2025",
+    org: "Chipotle",
+    title: "Service Leader",
+    desc: "Prepared fresh food.",
+    trigger: "Resigned",
+    direction: "up",
+    magnitude: 0.5,
+  },
+  {
+    year: "2025",
+    org: "Renuity",
+    title: "Retail Brand Ambassador",
+    desc: "Generated entry-point sales leads for windows in a B2C retail environment (BJ's).",
+    trigger: "Resigned",
+    direction: "down",
+  },
+  {
+    year: "2026",
+    org: "ARS / Rescue Rooter",
+    title: "HD Store Sales Associate",
+    desc: "Generated entry-point sales leads for air conditioning in a B2C retail environment (Home Depot).",
+    trigger: "Current job",
+    direction: undefined,
+  },
+];
+
+const DIR_COLOR: Record<"up" | "down" | "flat", string> = {
+  up: "#34d399",
+  down: "#f87171",
+  flat: "#94a3b8",
+};
+const DIR_ICON: Record<"up" | "down" | "flat", string> = {
+  up: "tabler/trending-up",
+  down: "tabler/trending-down",
+  flat: "tabler/minus",
+};
+const DIR_LABEL: Record<"up" | "down" | "flat", string> = {
+  up: "Upward move",
+  down: "Setback",
+  flat: "Lateral move",
+};
+
+type Point = { x: number; y: number };
+
+const LEG = 145;
+const ANGLE_UP = -46;
+const ANGLE_DOWN = 46;
+const FLAT_JITTER = 7;
+const JITTER = 9;
+const GAP = 9;
+
+let x = 0;
+let y = 0;
+const nodes: Point[] = [{ x, y }];
+
+interface Leg {
+  a: Point;
+  mid: Point;
+  b: Point;
+  color: string;
+}
+const legs: Leg[] = [];
+
+for (let i = 0; i < moments.length - 1; i++) {
+  const dir = moments[i].direction ?? "flat";
+  const magnitude = moments[i].magnitude ?? 1;
+  let angleDeg: number;
+  if (dir === "up") angleDeg = ANGLE_UP * magnitude;
+  else if (dir === "down") angleDeg = ANGLE_DOWN * magnitude;
+  else {
+    angleDeg = i % 2 === 0 ? -FLAT_JITTER : FLAT_JITTER;
+  }
+  const rad = (angleDeg * Math.PI) / 180;
+  const next: Point = { x: x + LEG * Math.cos(rad), y: y + LEG * Math.sin(rad) };
+
+  const midRaw: Point = { x: (x + next.x) / 2, y: (y + next.y) / 2 };
+  const perpRad = rad + Math.PI / 2;
+  const sign = i % 2 === 0 ? 1 : -1;
+  const mid: Point = {
+    x: midRaw.x + Math.cos(perpRad) * JITTER * sign,
+    y: midRaw.y + Math.sin(perpRad) * JITTER * sign,
+  };
+
+  legs.push({ a: { x, y }, mid, b: next, color: DIR_COLOR[dir] });
+  nodes.push(next);
+  x = next.x;
+  y = next.y;
+}
+
+function shrinkToward(from: Point, toward: Point, amount: number): Point {
+  const dx = toward.x - from.x;
+  const dy = toward.y - from.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const t = Math.min(amount, len) / len;
+  return { x: from.x + dx * t, y: from.y + dy * t };
+}
+
+const legPaths = legs.map((leg, i) => {
+  const segStart = i === 0 ? leg.a : shrinkToward(leg.a, leg.mid, GAP);
+  const segEnd = shrinkToward(leg.b, leg.mid, GAP);
+  return `M ${segStart.x.toFixed(1)} ${segStart.y.toFixed(1)} L ${leg.mid.x.toFixed(1)} ${leg.mid.y.toFixed(1)} L ${segEnd.x.toFixed(1)} ${segEnd.y.toFixed(1)}`;
+});
+
+// small lightning-bolt "crack" glyph marking where each change landed
+const CRACK = "M -3,-15 L 5,-3 L -2,-1 L 4,15 L -6,1 L 1,-1 Z";
+
+// faint straight guide showing where "the plan" would have gone had it never broken
+const planEnd: Point = { x: nodes[nodes.length - 1].x, y: nodes[0].y };
+
+// short trailing stub past the last node — still being written.
+// Angled up regardless of the incoming leg: the story isn't over, and the
+// next chapter is anticipated to be a reversal upward, not a continuation down.
+const trailAngleRad = (ANGLE_UP * 0.65 * Math.PI) / 180;
+const trailEnd: Point = {
+  x: x + Math.cos(trailAngleRad) * 60,
+  y: y + Math.sin(trailAngleRad) * 60,
+};
+
+const allPts: Point[] = [...nodes, ...legs.map((l) => l.mid), trailEnd, planEnd];
+const PAD = 55;
+const minX = Math.min(...allPts.map((p) => p.x)) - PAD;
+const maxX = Math.max(...allPts.map((p) => p.x)) + PAD;
+const minY = Math.min(...allPts.map((p) => p.y)) - PAD;
+const maxY = Math.max(...allPts.map((p) => p.y)) + PAD;
+const vbW = maxX - minX;
+const vbH = maxY - minY;
+const viewBox = `${minX.toFixed(1)} ${minY.toFixed(1)} ${vbW.toFixed(1)} ${vbH.toFixed(1)}`;
+
+const pct = (p: Point) => ({
+  left: (((p.x - minX) / vbW) * 100).toFixed(2),
+  top: (((p.y - minY) / vbH) * 100).toFixed(2),
+});
+---
+
+<section id="career-path-section" class="px-4 py-16 md:py-20">
+  <div class="site-container">
+    <div class="mb-10 flex flex-col justify-center text-center md:mb-14" data-mos="fade-up">
+      <h2 class="h2">A career full of ups and downs.</h2>
+      <p class="description mx-auto mt-3 max-w-xl">
+        Every bend has a story. Click a logo — or any point — to hear it.
+      </p>
+    </div>
+
+    <div class="relative mx-auto -mt-2 mb-10 max-w-5xl md:mb-14">
+      <div
+        class="from-background absolute top-0 -left-px z-20 h-full w-[10%] bg-gradient-to-r from-10% to-transparent"
+      >
+      </div>
+      <div
+        class="to-background absolute top-0 -right-px z-20 h-full w-[10%] bg-gradient-to-r from-transparent to-90%"
+      >
+      </div>
+
+      <div class="relative h-full overflow-x-hidden py-4">
+        <div class="company-marquee flex items-center gap-8">
+          {
+            [0, 1].map((i) => (
+              <div
+                class="animate-marquee-testimonials flex min-w-full shrink-0 items-center justify-around gap-10"
+                aria-hidden={i === 1 ? "true" : undefined}
+              >
+                {companies.map(({ name, logo, url }) =>
+                  logo ? (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="logo-link career-jump-link shrink-0"
+                      data-org={name}
+                      aria-label={`See my time at ${name}`}
+                      title={name}
+                    >
+                      <img
+                        src={logo}
+                        alt={name}
+                        class:list={["logo-img", { "logo-invert": name === "Socrates Platform" }]}
+                        loading="lazy"
+                      />
+                    </a>
+                  ) : (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={`logo-chip career-jump-link ${companyChipStyles[name]} shrink-0`}
+                      data-org={name}
+                      aria-label={`See my time at ${name}`}
+                    >
+                      {name}
+                    </a>
+                  ),
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="career-path-wrapper"
+      class="relative mx-auto w-full max-w-5xl overflow-hidden rounded-2xl border"
+      style={`aspect-ratio: ${vbW.toFixed(1)} / ${vbH.toFixed(1)}`}
+      data-mos="fade-up"
+      data-mos-delay=".1"
+    >
+      <svg
+        viewBox={viewBox}
+        class="career-path-svg h-full w-full"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Interactive illustration of a career path, drawn as a line that breaks and changes direction at each career-defining moment."
+      >
+        <g id="career-path-artwork">
+          <path
+            d={`M ${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)} L ${planEnd.x.toFixed(1)} ${planEnd.y.toFixed(1)}`}
+            class="plan-path"></path>
+
+          {
+            legPaths.map((d, i) => (
+              <path
+                d={d}
+                class="leg-path"
+                data-leg-index={i}
+                style={`stroke: ${legs[i].color}; transition-delay: ${0.1 + i * 0.06}s`}
+              />
+            ))
+          }
+
+          <path
+            d={`M ${x.toFixed(1)} ${y.toFixed(1)} L ${trailEnd.x.toFixed(1)} ${trailEnd.y.toFixed(1)}`}
+            class="trail-path"
+            style={`transition-delay: ${0.1 + legPaths.length * 0.06}s`}></path>
+
+          {
+            nodes.map((n, i) =>
+              i === 0 ? (
+                <circle cx={n.x} cy={n.y} r="7" class="node-dot node-start" data-node-index={i} />
+              ) : i === nodes.length - 1 ? (
+                <circle cx={n.x} cy={n.y} r="7" class="node-dot node-now" data-node-index={i} />
+              ) : (
+                <circle
+                  cx={n.x}
+                  cy={n.y}
+                  r="7"
+                  class="node-dot"
+                  data-node-index={i}
+                  style={`fill: ${legs[i - 1].color}`}
+                />
+              ),
+            )
+          }
+
+          {
+            nodes
+              .slice(1)
+              .map((n, i) => (
+                <path
+                  d={CRACK}
+                  class="crack-glyph"
+                  data-node-index={i + 1}
+                  transform={`translate(${n.x.toFixed(1)} ${n.y.toFixed(1)}) rotate(${((Math.atan2(legs[i].b.y - legs[i].a.y, legs[i].b.x - legs[i].a.x) * 180) / Math.PI).toFixed(1)})`}
+                  style={`fill: ${legs[i].color}; transition-delay: ${0.25 + i * 0.06}s`}
+                />
+              ))
+          }
+        </g>
+      </svg>
+
+      {
+        nodes.map((n, i) => {
+          const p = pct(n);
+          const m = moments[i];
+          return (
+            <button
+              type="button"
+              class="career-node-hit"
+              style={`left: ${p.left}%; top: ${p.top}%`}
+              data-index={i}
+              data-vx={n.x.toFixed(1)}
+              data-vy={n.y.toFixed(1)}
+              data-org={m.org}
+              aria-pressed="false"
+              aria-label={`${m.year} — ${m.org}, ${m.title}. Click to see what happened.`}
+            />
+          );
+        })
+      }
+
+      {
+        nodes.map((n, i) => {
+          const p = pct(n);
+          const company = findCompany(moments[i].org);
+          if (!company) return null;
+          return (
+            <a
+              href={company.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="career-node-logo"
+              style={`left: ${p.left}%; top: ${p.top}%`}
+              data-index={i}
+              aria-label={`Visit ${company.name}`}
+              tabindex="-1"
+            >
+              <img
+                src={company.logo}
+                alt={company.name}
+                class:list={[
+                  "career-node-logo-img",
+                  { "logo-invert": company.name === "Socrates Platform" },
+                ]}
+              />
+            </a>
+          );
+        })
+      }
+    </div>
+
+    <div id="career-path-detail" class="mx-auto mt-6 max-w-2xl">
+      <div class="career-detail career-detail--empty is-visible" data-index="none">
+        <Icon name="tabler/point" class="text-muted-foreground mx-auto mb-2 size-5" />
+        <p class="text-muted-foreground text-center text-sm">
+          Click any point on the line above to see what happened.
+        </p>
+      </div>
+
+      {
+        moments.map((m, i) => (
+          <div class="career-detail" data-index={i}>
+            <div class="mb-3 flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <span class="career-detail-year">{m.year}</span>
+                {m.direction && (
+                  <span
+                    class="career-dir-badge"
+                    style={`color: ${DIR_COLOR[m.direction]}; background: color-mix(in srgb, ${DIR_COLOR[m.direction]} 16%, transparent)`}
+                  >
+                    <Icon name={DIR_ICON[m.direction]} class="size-3.5" />
+                    {DIR_LABEL[m.direction]}
+                  </span>
+                )}
+              </div>
+              <button type="button" class="career-detail-close" aria-label="Close detail">
+                <Icon name="tabler/x" class="size-4" />
+              </button>
+            </div>
+            <h3 class="h3">
+              {m.org} — {m.title}
+            </h3>
+            {m.location && <p class="text-muted-foreground mt-0.5 text-sm">{m.location}</p>}
+            <p class="text-muted-foreground mt-3 text-sm md:text-base">{m.desc}</p>
+            <p class="career-detail-trigger">
+              <span class="career-detail-trigger-label">What changed:</span> {m.trigger}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .logo-link {
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.8;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .logo-link:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  .logo-chip {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-muted-foreground);
+    opacity: 0.7;
+    transition:
+      opacity 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-heading, sans-serif);
+    white-space: nowrap;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  }
+  .logo-chip:hover {
+    opacity: 1;
+    color: var(--color-primary-accent);
+    transform: translateY(-2px);
+  }
+  .logo-img {
+    filter: none;
+    border-radius: 4px;
+    height: 36px;
+    width: auto;
+    max-width: 160px;
+    object-fit: contain;
+  }
+
+  /* Socrates logo has white fills — invert to black in light mode */
+  :global(html:not(.dark)) .logo-invert {
+    filter: invert(1);
+  }
+  /* In dark mode, show white as-is */
+  :global(html.dark) .logo-invert {
+    filter: none;
+  }
+
+  .career-path-svg {
+    overflow: visible;
+  }
+
+  #career-path-artwork {
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .leg-path,
+  .trail-path {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    transition:
+      opacity 0.4s ease,
+      stroke-dashoffset 0.9s ease-out;
+  }
+  .leg-path {
+    stroke-dasharray: var(--len, 0);
+    stroke-dashoffset: var(--len, 0);
+  }
+  .career-path-svg.drawn .leg-path {
+    stroke-dashoffset: 0;
+  }
+
+  .trail-path {
+    stroke: var(--color-primary-accent);
+    stroke-dasharray: 2 10;
+    opacity: 0.5;
+  }
+
+  .plan-path {
+    fill: none;
+    stroke: var(--color-muted-foreground);
+    stroke-width: 2;
+    stroke-dasharray: 1 10;
+    stroke-linecap: round;
+    opacity: 0.3;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .node-dot {
+    stroke-width: 3;
+    stroke: var(--color-background);
+    transition:
+      opacity 0.3s ease,
+      r 0.3s ease;
+  }
+  .node-start {
+    fill: #94a3b8;
+  }
+  .node-now {
+    fill: var(--color-primary-accent);
+  }
+
+  .crack-glyph {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .career-path-svg.drawn .crack-glyph {
+    opacity: 1;
+  }
+
+  [data-leg-index].is-dimmed,
+  [data-node-index].is-dimmed,
+  .crack-glyph.is-dimmed {
+    opacity: 0.12 !important;
+  }
+  .node-dot.is-active {
+    r: 11;
+  }
+
+  .career-node-hit {
+    position: absolute;
+    width: 2.25rem;
+    height: 2.25rem;
+    transform: translate(-50%, -50%);
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+  .career-node-hit:focus-visible {
+    outline: 2px solid var(--color-primary-accent);
+    outline-offset: 2px;
+    background: color-mix(in srgb, var(--color-primary-accent) 15%, transparent);
+  }
+
+  .career-node-logo {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.25);
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.4);
+    transition:
+      opacity 0.35s ease,
+      transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .career-node-logo.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .career-node-logo:hover {
+    border-color: color-mix(in srgb, var(--color-primary-accent) 45%, transparent);
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  .career-node-logo-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  :global(html:not(.dark)) .career-node-logo-img.logo-invert {
+    filter: invert(1);
+  }
+  :global(html.dark) .career-node-logo-img.logo-invert {
+    filter: none;
+  }
+
+  #career-path-detail {
+    position: relative;
+    min-height: 5.5rem;
+  }
+  .career-detail {
+    display: none;
+    border-radius: 1rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    padding: 1.25rem 1.5rem;
+  }
+  .career-detail.is-visible {
+    display: block;
+    animation: career-detail-in 0.35s ease;
+  }
+  .career-detail--empty {
+    border-style: dashed;
+    padding: 1.5rem;
+  }
+  @keyframes career-detail-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .career-detail-year {
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--color-primary-accent);
+  }
+  .career-dir-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .career-detail-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    color: var(--color-muted-foreground);
+    background: var(--color-muted);
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
+  }
+  .career-detail-close:hover {
+    color: var(--color-foreground);
+    background: color-mix(in srgb, var(--color-primary-accent) 18%, var(--color-muted));
+  }
+  .career-detail-trigger {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed var(--color-border);
+    font-size: 0.9rem;
+    color: var(--color-foreground);
+  }
+  .career-detail-trigger-label {
+    font-weight: 700;
+    color: var(--color-muted-foreground);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    margin-right: 0.35rem;
+  }
+</style>
+
+<script>
+  function initCareerPath() {
+    const wrapper = document.querySelector<HTMLElement>("#career-path-wrapper");
+    const svg = wrapper?.querySelector<SVGSVGElement>(".career-path-svg");
+    const artwork = wrapper?.querySelector<SVGGElement>("#career-path-artwork");
+    if (!wrapper || !svg || !artwork || wrapper.dataset.pathInit === "true") return;
+    wrapper.dataset.pathInit = "true";
+
+    svg.querySelectorAll<SVGPathElement>(".leg-path").forEach((path) => {
+      path.style.setProperty("--len", `${path.getTotalLength()}`);
+    });
+
+    const drawObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            svg.classList.add("drawn");
+            drawObserver.disconnect();
+          }
+        });
+      },
+      { threshold: 0.35 },
+    );
+    drawObserver.observe(svg);
+
+    const buttons = Array.from(wrapper.querySelectorAll<HTMLButtonElement>(".career-node-hit"));
+    const logos = Array.from(wrapper.querySelectorAll<HTMLAnchorElement>(".career-node-logo"));
+    const detailWrapper = document.querySelector<HTMLElement>("#career-path-detail");
+    const details = Array.from(
+      detailWrapper?.querySelectorAll<HTMLElement>(".career-detail") ?? [],
+    );
+    const emptyDetail = detailWrapper?.querySelector<HTMLElement>(
+      '.career-detail[data-index="none"]',
+    );
+    const SCALE = 5;
+    let activeIndex: number | null = null;
+
+    function setActive(index: number | null) {
+      activeIndex = index;
+
+      if (index === null) {
+        artwork!.setAttribute("transform", "translate(0 0) scale(1)");
+        wrapper!.classList.remove("is-zoomed");
+      } else {
+        const btn = buttons[index];
+        const vx = parseFloat(btn.dataset.vx || "0");
+        const vy = parseFloat(btn.dataset.vy || "0");
+        const tx = vx * (1 - SCALE);
+        const ty = vy * (1 - SCALE);
+        artwork!.setAttribute("transform", `translate(${tx} ${ty}) scale(${SCALE})`);
+        wrapper!.classList.add("is-zoomed");
+      }
+
+      buttons.forEach((b, i) => {
+        b.classList.toggle("is-active", i === index);
+        b.setAttribute("aria-pressed", i === index ? "true" : "false");
+      });
+
+      logos.forEach((l) => {
+        const isActive = l.dataset.index === String(index);
+        l.classList.toggle("is-active", isActive);
+        l.tabIndex = isActive ? 0 : -1;
+      });
+
+      svg!.querySelectorAll<SVGElement>("[data-node-index]").forEach((el) => {
+        const i = parseInt(el.dataset.nodeIndex || "-1", 10);
+        el.classList.toggle("is-active", index !== null && i === index);
+        el.classList.toggle("is-dimmed", index !== null && i !== index);
+      });
+      svg!.querySelectorAll<SVGElement>("[data-leg-index]").forEach((el) => {
+        const i = parseInt(el.dataset.legIndex || "-1", 10);
+        const touches = i === index || i === (index ?? -2) - 1;
+        el.classList.toggle("is-dimmed", index !== null && !touches);
+      });
+
+      details.forEach((d) => d.classList.toggle("is-visible", d.dataset.index === String(index)));
+      emptyDetail?.classList.toggle("is-visible", index === null);
+    }
+
+    buttons.forEach((btn, i) => {
+      btn.addEventListener("click", () => setActive(activeIndex === i ? null : i));
+    });
+
+    function jumpToOrg(orgQuery: string): boolean {
+      const q = orgQuery.trim().toLowerCase();
+      const idx = buttons.findIndex((b) => {
+        const org = (b.dataset.org || "").toLowerCase();
+        return org.includes(q) || q.includes(org);
+      });
+      if (idx === -1) return false;
+      setActive(idx);
+      return true;
+    }
+
+    const marquee = document.querySelector<HTMLElement>(".company-marquee");
+    marquee?.addEventListener("mouseover", () => {
+      marquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
+        el.classList.add("pause");
+      });
+    });
+    marquee?.addEventListener("mouseout", () => {
+      marquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
+        el.classList.remove("pause");
+      });
+    });
+    marquee?.querySelectorAll<HTMLAnchorElement>(".career-jump-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const org = link.dataset.org;
+        if (org && jumpToOrg(org)) {
+          e.preventDefault();
+        }
+      });
+    });
+
+    details.forEach((d) => {
+      d.querySelector(".career-detail-close")?.addEventListener("click", () => setActive(null));
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && activeIndex !== null) setActive(null);
+    });
+  }
+
+  initCareerPath();
+  document.addEventListener("astro:after-swap", initCareerPath);
+</script>

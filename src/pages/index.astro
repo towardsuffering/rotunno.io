@@ -1,13 +1,13 @@
 ---
 export const prerender = true;
+import AboutCareerPath from "@/components/about/AboutCareerPath.astro";
 import AboutNumbers from "@/components/about/AboutNumbers.astro";
 import ContactCentered from "@/components/contact/ContactCentered.astro";
 import FaqAccordionsSideImage from "@/components/faq/FaqAccordionsSideImage.astro";
 import HeroBackgroundImage from "@/components/hero/HeroBackgroundImage.astro";
-import HavesHaveNots from "@/components/skills/HavesHaveNots.astro";
 import ServicesCards from "@/components/services/ServicesCards.astro";
+import HavesHaveNots from "@/components/skills/HavesHaveNots.astro";
 import TeamSwiper from "@/components/team/TeamSwiper.astro";
-import TestimonialsMarquee from "@/components/testimonials/TestimonialsMarquee.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getTranslatedData } from "@/js/translationUtils";
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -19,7 +19,7 @@ const siteData = getTranslatedData("siteData", currLocale);
 <BaseLayout title={siteData.title} description={siteData.description} transparentNav={true}>
   <HeroBackgroundImage />
 
-  <TestimonialsMarquee />
+  <AboutCareerPath />
 
   <AboutNumbers />
   <TeamSwiper />
@@ -28,7 +28,7 @@ const siteData = getTranslatedData("siteData", currLocale);
 
   <ServicesCards />
 
-<FaqAccordionsSideImage />
+  <FaqAccordionsSideImage />
 
   <ContactCentered />
 </BaseLayout>
