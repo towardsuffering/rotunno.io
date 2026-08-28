@@ -1,0 +1,122 @@
+---
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 400 500"
+  class="h-full w-auto"
+  aria-hidden="true"
+>
+  <defs>
+    <linearGradient id="card-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a5f" />
+      <stop offset="100%" stop-color="#0f1f38" />
+    </linearGradient>
+    <filter id="card-shadow">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000" flood-opacity="0.45" />
+    </filter>
+    <filter id="glow-green">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#34d399" flood-opacity="0.7" />
+    </filter>
+  </defs>
+
+  <style>
+    .card-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+    .ne-highlight {
+      animation: ne-pulse 2.6s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    @keyframes ne-pulse {
+      0%, 100% { fill-opacity: 0.45; }
+      50%       { fill-opacity: 0.75; }
+    }
+    .dot-pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; r: 5; }
+      50%       { opacity: 0.6; r: 7; }
+    }
+    .kpi-fade { animation: fade-in 1s ease-out 0.9s both; }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+  <g class="card-float" filter="url(#card-shadow)">
+    <!-- Card -->
+    <rect x="30" y="60" width="340" height="390" rx="16" fill="url(#card-bg)" />
+    <rect x="30" y="60" width="340" height="390" rx="16" fill="none" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Header -->
+    <rect x="30" y="60" width="340" height="44" rx="16" fill="#162032" />
+    <rect x="30" y="88" width="340" height="16" fill="#162032" />
+    <path d="M 56,74 C 60,74 63,77 63,81 C 63,86 56,92 56,92 C 56,92 49,86 49,81 C 49,77 52,74 56,74 Z" fill="#34d399" />
+    <circle cx="56" cy="81" r="2.2" fill="#0f1f38" />
+    <text x="70" y="85" fill="#94a3b8" font-size="10" font-family="system-ui,sans-serif" font-weight="700" letter-spacing="1">SERVICE TERRITORY</text>
+
+    <!-- Map panel -->
+    <rect x="48" y="122" width="304" height="222" rx="8" fill="#0f1a2e" stroke="#1e3a5f" stroke-width="1" />
+
+    <!--
+      Real Florida outline, traced from US Census county boundary data
+      (via us-atlas/topojson, Mercator-projected + simplified), not
+      hand-drawn. The highlight is the actual merged boundary of the sales
+      territory: Jacksonville down through Palm Coast/Daytona to Lake
+      Mary/Sanford, west to Gainesville, and every county in between
+      (Nassau, Duval, Baker, Columbia, Union, Bradford, Clay, Putnam,
+      St. Johns, Flagler, Alachua, Marion, Volusia, Lake, Seminole). Both
+      paths and the pin share one local coordinate space (a 264x190 box)
+      translated into the map panel.
+    -->
+    <g transform="translate(68,138)">
+      <path
+        d="M88.772,0.13L89.052,0.104L101.656,0L105.017,8.278L105.297,8.772L117.902,9.422L120.423,9.552L125.558,9.838L127.612,9.968L134.428,10.383L137.882,10.591L144.511,11.007L146.658,11.162L150.206,11.422L161.877,12.201L164.585,12.383L167.852,12.616L168.879,12.694L174.201,13.084L178.496,19.306L179.15,6.588L182.324,5.47L194.275,8.824L194.275,14.848L195.955,22.619L200.25,40.081L203.144,47.376L212.761,66.303L218.176,76.129L216.029,81.158L220.23,93.796L223.498,102.706L226.673,111.34L229.754,119.901L229.847,138.802L228.727,148.809L222.004,168.119L224.805,166.783L225.272,167.08L218.923,171.182L209.493,171.849L203.705,173.503L198.289,157.126L193.621,153.777L187.833,152.362L183.818,138.528L176.162,129.59L178.216,125.713L174.108,125.763L172.707,125.162L170,120.603L163.091,107.642L165.331,100.134L169.533,94.504L162.904,89.091L161.223,98.57L157.676,93.72L157.395,84.633L158.236,84.633L158.889,84.633L162.157,76.917L162.437,69.183L160.01,60.305L158.889,55.728L149.459,51.504L143.017,40.209L127.985,27.685L125.745,27.349L118.929,31.401L104.831,38.203L95.868,39.875L91.666,32.484L75.887,22.127L65.43,18.814L54.973,18.581L51.799,19.073L36.207,21.791L40.222,17.078L34.153,0.104L45.45,0.052L55.347,0.104L57.868,0.182L65.617,0.209L70.846,0.209L74.86,0.235ZM184.658,189.263L194.275,182.278L199.503,186.264Z"
+        fill="#1e3a5f"
+        stroke="#38bdf8"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+        vector-effect="non-scaling-stroke"
+      />
+      <path
+        class="ne-highlight"
+        d="M200.25,40.081L203.144,47.376L212.761,66.303L206.599,66.328L206.132,71.602L193.901,70.787L195.022,66.481L188.673,67.017L188.673,79.457L180.924,79.508L181.017,61.301L171.68,61.276L165.892,58.772L169.253,45.631L162.717,43.268L162.624,35.319L158.983,32.252L159.076,20.083L161.877,12.201L164.585,12.383L167.852,12.616L168.879,12.694L174.201,13.084L178.496,19.306L179.15,6.588L182.324,5.47L194.275,8.824L194.275,14.848L195.955,22.619Z"
+        fill="#34d399"
+        fill-opacity="0.55"
+        stroke="#34d399"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+        vector-effect="non-scaling-stroke"
+      />
+    </g>
+
+    <!-- pin + label kept outside the translated group above so the
+         marker and text don't shift with future map adjustments -->
+    <circle cx="265.7" cy="171.2" r="5" fill="#34d399" class="dot-pulse" filter="url(#glow-green)" />
+    <text x="277" y="168" fill="#e2e8f0" font-size="10" font-family="system-ui,sans-serif" font-weight="700">Northeast FL</text>
+    <text x="277" y="180" fill="#64748b" font-size="8" font-family="system-ui,sans-serif">Home base</text>
+
+    <!-- KPI row -->
+    <g class="kpi-fade">
+      <rect x="48" y="364" width="88" height="56" rx="8" fill="#162032" stroke="#1e3a5f" stroke-width="1" />
+      <text x="92" y="387" text-anchor="middle" fill="#38bdf8" font-size="14" font-family="system-ui,sans-serif" font-weight="700">$50M+</text>
+      <text x="92" y="404" text-anchor="middle" fill="#64748b" font-size="9" font-family="system-ui,sans-serif">Sales Driven</text>
+
+      <rect x="156" y="364" width="88" height="56" rx="8" fill="#162032" stroke="#1e3a5f" stroke-width="1" />
+      <text x="200" y="387" text-anchor="middle" fill="#34d399" font-size="14" font-family="system-ui,sans-serif" font-weight="700">100K+</text>
+      <text x="200" y="404" text-anchor="middle" fill="#64748b" font-size="9" font-family="system-ui,sans-serif">Customers Served</text>
+
+      <rect x="264" y="364" width="88" height="56" rx="8" fill="#162032" stroke="#1e3a5f" stroke-width="1" />
+      <text x="308" y="387" text-anchor="middle" fill="#818cf8" font-size="14" font-family="system-ui,sans-serif" font-weight="700">80%</text>
+      <text x="308" y="404" text-anchor="middle" fill="#64748b" font-size="9" font-family="system-ui,sans-serif">Acquisition Cost Cut</text>
+    </g>
+  </g>
+</svg>

@@ -1,6 +1,6 @@
 ---
 import Button from "@/components/button/Button.astro";
-import DataDashboardSVG from "@/components/hero/DataDashboardSVG.astro";
+import FloridaMapSVG from "@/components/hero/FloridaMapSVG.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getLocalizedRoute, useTranslations } from "@/js/translationUtils";
 
@@ -29,15 +29,24 @@ const t = useTranslations(currLocale);
         data-mos="fade-right"
         class="leading-tighter font-heading mb-4 text-4xl font-semibold text-white md:text-5xl xl:text-6xl"
       >
-        Proven Impact.<br /><span style="color: #34d399;">Everywhere I've Worked.</span>
+        NE Florida's Chief<br /><span style="color: #34d399;">B2C Lead Generator.</span>
       </h1>
+      <p
+        data-mos-anchor="#hero-shapes-trigger"
+        data-mos="fade-right"
+        data-mos-delay=".15"
+        class="mb-4 text-lg font-semibold text-white/90 md:text-xl"
+        style="font-family: var(--font-heading, sans-serif);"
+      >
+        For Home Improvement Sales.
+      </p>
       <p
         data-mos-anchor="#hero-shapes-trigger"
         data-mos="fade-right"
         data-mos-delay=".2"
         class="mb-8 text-lg text-white/75 md:text-xl"
       >
-        $50M+ in sales driven. 100K+ customers served. 80% cut from data costs. Five years in
+        $50M+ in sales driven. 100K+ customers served. Data acquisition costs cut by 80%. Five years in
         analytics, five in retail, five in restaurants, a year in home improvement. Different
         rooms, same result: <span style="color: #34d399; font-weight: 600;"
           >I make things measurably better.</span
@@ -76,7 +85,7 @@ const t = useTranslations(currLocale);
     <div
       class="xs:h-[360px] mt-auto flex h-[300px] justify-end md:h-[500px] md:pt-20 lg:h-[600px] xl:h-[700px]"
     >
-      <DataDashboardSVG />
+      <FloridaMapSVG />
     </div>
   </div>
 </section>
