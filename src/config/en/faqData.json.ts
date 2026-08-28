@@ -3,27 +3,56 @@ import { type FaqItem } from "../types/configDataTypes";
 export const faqData: FaqItem[] = [
   {
     question: "What kind of roles are you targeting?",
-    answer: `I'm focused on Data Analytics Engineer and BI Leader roles — positions where I can own the full pipeline from raw data to executive-level insight. I'm especially interested in companies investing in a modern data stack (Python, BigQuery/Redshift, Tableau/Plotly).`,
+    answer: `Data Analytics Engineer and BI Leader roles that put me in a seat with visibility into the whole operation, not just one team's slice of it:
+<ul>
+<li>Analytical, business-strategy driven work: turning scattered, untrusted data into decisions people actually act on</li>
+<li>Enough scope to see how the entire company's operations connect, not a siloed dashboard for one department</li>
+<li>Ideally with a global, remote-first team</li>
+</ul>`,
   },
   {
     question: "What industries have you worked in?",
-    answer: `I've built analytics solutions across retail, CPG, SaaS, and finance. I'm comfortable ramping quickly into a new vertical — data modeling and stakeholder communication patterns transfer across domains.`,
+    answer: `Ten years across four industries. I've been on both sides of the dashboard:
+<ul>
+<li>Built analytics systems in financial services and retail</li>
+<li>Ran the floor in food service and home improvement</li>
+</ul>
+That means I don't just model how a business works. I've lived the parts a dashboard usually misses.`,
   },
   {
     question: "What does your technical stack look like?",
-    answer: `Core: SQL, Python (pandas, SQLAlchemy), Spark. Warehouses: BigQuery, Redshift. BI: Tableau, Plotly, Google Data Studio, Excel. Orchestration: Airflow. Cloud: AWS, Azure, GCP. Git-based version control for all data work.`,
+    answer: `<ul>
+<li>SQL, Python, and Spark for the engineering</li>
+<li>Tableau, Excel, and Google Data Studio for the reporting</li>
+<li>AWS, Azure, and GCP for wherever your data lives</li>
+</ul>
+In practice: you don't need three hires to get from raw data to a dashboard your VP trusts. One will do.`,
   },
   {
     question: "Are you open to remote, hybrid, or on-site?",
-    answer: `I'm based in St. Augustine, FL and am open to remote-first roles. For the right opportunity I'm also open to hybrid arrangements within Northeast Florida.`,
+    answer: `<ul>
+<li>Remote-first, ideally with a global, distributed team</li>
+<li>Open to hybrid, and open to relocating anywhere in the US for the right role</li>
+<li>Looking for compensation and benefits strong enough to make the move worth it for both of us</li>
+</ul>`,
   },
   {
     question: "Can you lead or mentor a data team?",
-    answer: `Yes — I've led small analytics and BI teams, defined data governance standards, and mentored analysts growing into engineering roles. Building a healthy data culture is as important to me as building clean pipelines.`,
+    answer: `Yes.
+<ul>
+<li>Built a team from scratch</li>
+<li>Cut a data vendor's cost by 80%</li>
+<li>Mentored analysts into engineering roles</li>
+</ul>
+If you need someone who can write the pipeline and grow the people running it, that's the role I want.`,
   },
   {
     question: "How do I get in touch?",
-    answer: `Use the contact form on this site or email me directly at chrisrotunno@icloud.com. I typically respond within one business day.`,
+    answer: `<ul>
+<li>Fastest path is the contact form below</li>
+<li>Or email me directly at chrisrotunno@icloud.com</li>
+<li>I respond within one business day</li>
+</ul>`,
   },
 ];
 

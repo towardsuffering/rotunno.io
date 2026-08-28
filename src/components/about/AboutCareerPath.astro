@@ -44,7 +44,7 @@ const moments: Moment[] = [
     org: "Wells Fargo",
     title: "Teller",
     location: "Boulder, CO",
-    desc: "Processed transactions — deposits, withdrawals, day-to-day branch work.",
+    desc: "Processed transactions: deposits, withdrawals, day-to-day branch work.",
     trigger: "Promoted to Lead Teller",
     direction: "flat",
   },
@@ -79,7 +79,7 @@ const moments: Moment[] = [
     org: "Intrinio",
     title: "Data Quality Analyst",
     location: "Saint Petersburg, FL",
-    desc: "NLP on XBRL tags — standardized financial statement line-item error corrections.",
+    desc: "NLP on XBRL tags: standardized financial statement line-item error corrections.",
     trigger: "Terminated for performance",
     direction: "up",
   },
@@ -310,9 +310,10 @@ const pct = (p: Point) => ({
 <section id="career-path-section" class="px-4 py-16 md:py-20">
   <div class="site-container">
     <div class="mb-10 flex flex-col justify-center text-center md:mb-14" data-mos="fade-up">
-      <h2 class="h2">A career full of ups and downs.</h2>
+      <h2 class="h2">Not a straight line, but it all connects.</h2>
       <p class="description mx-auto mt-3 max-w-xl">
-        Every bend has a story. Click a logo — or any point — to hear it.
+        Different companies, different roles, every one feeding the same throughline. Click a
+        logo, or any point, to hear it.
       </p>
     </div>
 
@@ -331,7 +332,7 @@ const pct = (p: Point) => ({
           {
             [0, 1].map((i) => (
               <div
-                class="animate-marquee-testimonials flex min-w-full shrink-0 items-center justify-around gap-10"
+                class="career-marquee-track flex min-w-full shrink-0 items-center justify-around gap-10"
                 aria-hidden={i === 1 ? "true" : undefined}
               >
                 {companies.map(({ name, logo, url }) =>
@@ -349,7 +350,7 @@ const pct = (p: Point) => ({
                         src={logo}
                         alt={name}
                         class:list={["logo-img", { "logo-invert": name === "Socrates Platform" }]}
-                        loading="lazy"
+                        loading="eager"
                       />
                     </a>
                   ) : (
@@ -456,7 +457,7 @@ const pct = (p: Point) => ({
               data-vy={n.y.toFixed(1)}
               data-org={m.org}
               aria-pressed="false"
-              aria-label={`${m.year} — ${m.org}, ${m.title}. Click to see what happened.`}
+              aria-label={`${m.year}: ${m.org}, ${m.title}. Click to see what happened.`}
             />
           );
         })
@@ -521,7 +522,7 @@ const pct = (p: Point) => ({
               </button>
             </div>
             <h3 class="h3">
-              {m.org} — {m.title}
+              {m.org}: {m.title}
             </h3>
             {m.location && <p class="text-muted-foreground mt-0.5 text-sm">{m.location}</p>}
             <p class="text-muted-foreground mt-3 text-sm md:text-base">{m.desc}</p>
@@ -536,6 +537,12 @@ const pct = (p: Point) => ({
 </section>
 
 <style>
+  /* fixed, standalone duration so this track ignores the global mobile
+     speed override meant for the (unrelated) testimonials marquee */
+  .career-marquee-track {
+    animation: marquee-testimonials 30s linear infinite;
+  }
+
   .logo-link {
     display: inline-flex;
     align-items: center;
@@ -901,16 +908,21 @@ const pct = (p: Point) => ({
     }
 
     const marquee = document.querySelector<HTMLElement>(".company-marquee");
-    marquee?.addEventListener("mouseover", () => {
-      marquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
-        el.classList.add("pause");
+    // only wire up hover-to-pause on devices that actually have hover;
+    // on touch, a tap fires "mouseover" with no matching "mouseout" until
+    // the user taps elsewhere, which left the marquee stuck mid-pause
+    if (marquee && window.matchMedia("(hover: hover)").matches) {
+      marquee.addEventListener("mouseover", () => {
+        marquee.querySelectorAll(".career-marquee-track").forEach((el) => {
+          el.classList.add("pause");
+        });
       });
-    });
-    marquee?.addEventListener("mouseout", () => {
-      marquee.querySelectorAll(".animate-marquee-testimonials").forEach((el) => {
-        el.classList.remove("pause");
+      marquee.addEventListener("mouseout", () => {
+        marquee.querySelectorAll(".career-marquee-track").forEach((el) => {
+          el.classList.remove("pause");
+        });
       });
-    });
+    }
     marquee?.querySelectorAll<HTMLAnchorElement>(".career-jump-link").forEach((link) => {
       link.addEventListener("click", (e) => {
         const org = link.dataset.org;

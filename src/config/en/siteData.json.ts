@@ -5,7 +5,7 @@ const siteData: SiteDataProps = {
   name: "Christopher A. Rotunno",
   // Your website's title and description (meta fields)
   title:
-    "Christopher A. Rotunno — Data Analytics Engineer & BI Leader",
+    "Christopher A. Rotunno | Data Analytics Engineer & BI Leader",
   description:
     "Data analytics engineer and BI leader with experience turning raw data into decisions. Portfolio of dashboards, data pipelines, and analytical projects. Based in St. Augustine, FL.",
 
@@ -19,7 +19,7 @@ const siteData: SiteDataProps = {
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
     src: "/images/og-social.jpg",
-    alt: "Christopher A. Rotunno — Data Analytics Engineer & BI Leader",
+    alt: "Christopher A. Rotunno | Data Analytics Engineer & BI Leader",
   },
 };
 
