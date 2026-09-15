@@ -10,46 +10,46 @@
   <rect width="1200" height="630" fill="url(#bg)"/>
 
   <!-- Florida map icon, NE service territory highlighted -->
-  <g transform="translate(241,225) scale(0.95)">
+  <g transform="translate(60,180) scale(1.425)">
     <path
       d="M88.772,0.13L89.052,0.104L101.656,0L105.017,8.278L105.297,8.772L117.902,9.422L120.423,9.552L125.558,9.838L127.612,9.968L134.428,10.383L137.882,10.591L144.511,11.007L146.658,11.162L150.206,11.422L161.877,12.201L164.585,12.383L167.852,12.616L168.879,12.694L174.201,13.084L178.496,19.306L179.15,6.588L182.324,5.47L194.275,8.824L194.275,14.848L195.955,22.619L200.25,40.081L203.144,47.376L212.761,66.303L218.176,76.129L216.029,81.158L220.23,93.796L223.498,102.706L226.673,111.34L229.754,119.901L229.847,138.802L228.727,148.809L222.004,168.119L224.805,166.783L225.272,167.08L218.923,171.182L209.493,171.849L203.705,173.503L198.289,157.126L193.621,153.777L187.833,152.362L183.818,138.528L176.162,129.59L178.216,125.713L174.108,125.763L172.707,125.162L170,120.603L163.091,107.642L165.331,100.134L169.533,94.504L162.904,89.091L161.223,98.57L157.676,93.72L157.395,84.633L158.236,84.633L158.889,84.633L162.157,76.917L162.437,69.183L160.01,60.305L158.889,55.728L149.459,51.504L143.017,40.209L127.985,27.685L125.745,27.349L118.929,31.401L104.831,38.203L95.868,39.875L91.666,32.484L75.887,22.127L65.43,18.814L54.973,18.581L51.799,19.073L36.207,21.791L40.222,17.078L34.153,0.104L45.45,0.052L55.347,0.104L57.868,0.182L65.617,0.209L70.846,0.209L74.86,0.235ZM184.658,189.263L194.275,182.278L199.503,186.264Z"
       fill="#16233d"
-      stroke="#3a4f6e"
-      stroke-width="1.4"
+      stroke="#ffffff"
+      stroke-width="2.5"
       stroke-linejoin="round"
     />
     <path
       d="M200.25,40.081L203.144,47.376L212.761,66.303L206.599,66.328L206.132,71.602L193.901,70.787L195.022,66.481L188.673,67.017L188.673,79.457L180.924,79.508L181.017,61.301L171.68,61.276L165.892,58.772L169.253,45.631L162.717,43.268L162.624,35.319L158.983,32.252L159.076,20.083L161.877,12.201L164.585,12.383L167.852,12.616L168.879,12.694L174.201,13.084L178.496,19.306L179.15,6.588L182.324,5.47L194.275,8.824L194.275,14.848L195.955,22.619Z"
       fill="#34d399"
       fill-opacity="0.9"
-      stroke="#34d399"
-      stroke-width="1.4"
+      stroke="#ffffff"
+      stroke-width="2.5"
       stroke-linejoin="round"
     />
   </g>
 
   <!-- Name -->
-  <text x="509" y="270" text-anchor="start"
+  <text x="463" y="248" text-anchor="start"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="38" font-weight="900"
+    font-size="57" font-weight="900"
     fill="white" letter-spacing="-0.5">Christopher A. Rotunno</text>
 
   <!-- Title -->
-  <text x="509" y="300" text-anchor="start"
+  <text x="463" y="293" text-anchor="start"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="19" font-weight="600"
+    font-size="29" font-weight="600"
     fill="#38bdf8">Data Analytics Engineer &amp; BI Leader</text>
 
   <!-- Region and sector -->
-  <text x="509" y="340" text-anchor="start"
+  <text x="463" y="353" text-anchor="start"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="19" font-weight="700"
+    font-size="29" font-weight="700"
     fill="#34d399">NE Florida &#183; Home Improvement Sales</text>
 
   <!-- Site -->
-  <text x="509" y="386" text-anchor="start"
+  <text x="463" y="422" text-anchor="start"
     font-family="Arial,Helvetica,sans-serif"
-    font-size="14" font-weight="700"
-    fill="#64748b" letter-spacing="4">ROTUNNO.IO</text>
+    font-size="21" font-weight="700"
+    fill="#64748b" letter-spacing="6">ROTUNNO.IO</text>
 
 </svg>
