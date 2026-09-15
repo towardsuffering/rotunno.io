@@ -38,7 +38,11 @@ const pillars = [
           <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
           <p class="text-lg font-heading font-semibold" style="color: #34d399;">
             <span class="rounded-md px-1.5 py-0.5" style="background: #34d399; color: #0f172a;"
-              >Aspiring Business Intelligence Leader</span
+              ><span class="typewriter" data-text="Aspiring Business Intelligence Leader"
+                ><span class="sr-only">Aspiring Business Intelligence Leader</span
+                ><span class="typewriter-visible" aria-hidden="true"></span
+                ><span class="typewriter-cursor" aria-hidden="true">|</span></span
+              ></span
             >, building toward systems that turn fragmented tidbits into confidence.
           </p>
 
@@ -171,4 +175,54 @@ const pillars = [
     transform: scale(1.04);
     filter: brightness(1.05) contrast(1.05);
   }
+
+  .typewriter-cursor {
+    animation: typewriter-blink 1s step-end infinite;
+  }
+  @keyframes typewriter-blink {
+    50% {
+      opacity: 0;
+    }
+  }
 </style>
+
+<script>
+  function initTypewriter() {
+    const els = document.querySelectorAll<HTMLElement>(".typewriter");
+    els.forEach((el) => {
+      if (el.dataset.twInit === "true") return;
+      el.dataset.twInit = "true";
+
+      const text = el.dataset.text || "";
+      const visibleEl = el.querySelector<HTMLElement>(".typewriter-visible");
+      if (!visibleEl) return;
+      const visible: HTMLElement = visibleEl;
+      let lastLen = -1;
+
+      // Ties the number of revealed characters to how far the badge has
+      // scrolled through a fixed band of the viewport, so it types in
+      // scrolling down and un-types scrolling back up, rather than just
+      // playing once on first appearance.
+      function update() {
+        const rect = el.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const startY = vh * 0.85;
+        const endY = vh * 0.35;
+        let progress = (startY - rect.top) / (startY - endY);
+        progress = Math.max(0, Math.min(1, progress));
+        const len = Math.round(progress * text.length);
+        if (len !== lastLen) {
+          visible.textContent = text.slice(0, len);
+          lastLen = len;
+        }
+      }
+
+      update();
+      window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("resize", update);
+    });
+  }
+
+  initTypewriter();
+  document.addEventListener("astro:after-swap", initTypewriter);
+</script>
