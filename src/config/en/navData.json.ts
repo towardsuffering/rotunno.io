@@ -16,10 +16,6 @@ const navConfig: navItem[] = [
     text: "Hire Me",
     link: "/",
   },
-  {
-    text: "Resume",
-    link: "/resume",
-  },
 
   // mega menu
   // {

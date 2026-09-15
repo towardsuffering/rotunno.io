@@ -6,30 +6,16 @@ const currLocale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(currLocale);
 ---
 
-<section id="contact" class="site-container scroll-mt-20 py-12">
+<section id="contact" class="site-container scroll-mt-20 py-8">
   <div class="mx-auto max-w-3xl">
     <div class="text-center" data-reveal="pop">
-      <h2 class="h1 mb-8">Let's Turn Tidbits into Confidence</h2>
+      <h2 class="h1 mb-6">Let's Turn Tidbits into Confidence</h2>
     </div>
 
-    <!-- Row 1: Form + Stripe side by side -->
-    <div class="mx-auto grid max-w-5xl gap-8 md:grid-cols-2 items-start">
-      <!-- Drop Me a Line -->
-      <div class="rounded-xl border p-8 text-left shadow-md" data-reveal="rise" data-reveal-delay="0.2">
-        <h3 class="font-heading mb-6 text-2xl font-semibold">Drop Me a Line</h3>
-        <ContactForm />
-      </div>
-
-      <!-- Support My Work -->
-      <div class="rounded-xl border p-8 text-center shadow-md flex flex-col items-center justify-center gap-5" data-reveal="rise" data-reveal-delay="0.35">
-        <h3 class="font-heading text-2xl font-semibold">Support My Work</h3>
-        <p class="text-muted-foreground text-sm max-w-xs">If my content, tools, or code have helped you, consider paying it forward.</p>
-        <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-        <stripe-pricing-table
-          pricing-table-id="prctbl_1TqZ3rKf3i8bH4sDAFXGCmD3"
-          publishable-key="pk_live_51QqPjYKf3i8bH4sDSbhHSoTfe77T8kdWEZnNWmw86Nl1Xkp1BSJMEBwig0tGrXDAiD6yf4DnCXXnBwafi7VsrIOM00PkkbOpqV"
-        ></stripe-pricing-table>
-      </div>
+    <!-- Drop Me a Line -->
+    <div class="rounded-xl border p-6 text-left shadow-md" data-reveal="rise" data-reveal-delay="0.2">
+      <h3 class="font-heading mb-4 text-2xl font-semibold">Drop Me a Line</h3>
+      <ContactForm />
     </div>
 
   </div>

@@ -1,8 +1,10 @@
 ---
+import { Icon } from "astro-icon/components";
+
 import Button from "@/components/button/Button.astro";
 import FloridaMapSVG from "@/components/hero/FloridaMapSVG.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
-import { getLocalizedRoute, useTranslations } from "@/js/translationUtils";
+import { useTranslations } from "@/js/translationUtils";
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(currLocale);
@@ -29,7 +31,7 @@ const t = useTranslations(currLocale);
         data-mos="fade-right"
         class="leading-tighter font-heading mb-4 text-4xl font-semibold text-white md:text-5xl xl:text-6xl"
       >
-        NE Florida's Chief<br /><span style="color: #34d399;">B2C Lead Generator.</span>
+        NE Florida's Leading<br /><span style="color: #34d399;">B2C Sales Generator.</span>
       </h1>
       <p
         data-mos-anchor="#hero-shapes-trigger"
@@ -38,7 +40,7 @@ const t = useTranslations(currLocale);
         class="mb-4 text-lg font-semibold text-white/90 md:text-xl"
         style="font-family: var(--font-heading, sans-serif);"
       >
-        For Home Improvement Sales.
+        For Home Improvement Sales. 🏠
       </p>
       <p
         data-mos-anchor="#hero-shapes-trigger"
@@ -53,30 +55,33 @@ const t = useTranslations(currLocale);
       <div class="flex flex-wrap gap-4">
         <Button
           type="button"
-          href={getLocalizedRoute(currLocale, `/blog`)}
+          href="/Rotunno_Resume.pdf"
+          download="Rotunno_Resume.pdf"
           variant="primary"
           class="md:text-lg"
-          aria-label="Read My Blog"
+          aria-label="Download CV"
           data-mos-anchor="#hero-shapes-trigger"
           data-mos="fade-right"
           data-mos-delay=".4"
         >
-          Read My Blog
+          <div class="flex items-center gap-2">
+            <span>Download CV</span>
+            <Icon name="tabler/download" aria-hidden="true" class="size-5" />
+          </div>
         </Button>
-        <Button
-          type="button"
+        <a
           href="https://calendly.com/chrisrotunno-_my2/30min"
           target="_blank"
           rel="noopener noreferrer"
-          variant="ghost"
-          class="border border-white/30 text-white hover:bg-white/10 md:text-lg"
           aria-label="Schedule a Call"
           data-mos-anchor="#hero-shapes-trigger"
           data-mos="fade-right"
           data-mos-delay=".55"
+          class="inline-flex items-center gap-2 px-4 py-2 text-white/70 transition-colors hover:text-white md:text-lg"
         >
-          Schedule a Call
-        </Button>
+          <Icon name="tabler/calendar" aria-hidden="true" class="size-5" />
+          <span>Schedule a Call</span>
+        </a>
       </div>
     </div>
 
