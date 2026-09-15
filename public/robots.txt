@@ -10,4 +10,4 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-Sitemap: https://rotunno.io/sitemap-index.xml
+Sitemap: https://rotunno.ai/sitemap-index.xml

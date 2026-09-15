@@ -4,19 +4,43 @@
 
 [[redirects]]
   from   = "http://rotunno.io/*"
-  to     = "https://rotunno.io/:splat"
+  to     = "https://rotunno.ai/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "https://rotunno.io/*"
+  to     = "https://rotunno.ai/:splat"
   status = 301
   force  = true
 
 [[redirects]]
   from   = "http://www.rotunno.io/*"
-  to     = "https://rotunno.io/:splat"
+  to     = "https://rotunno.ai/:splat"
   status = 301
   force  = true
 
 [[redirects]]
   from   = "https://www.rotunno.io/*"
-  to     = "https://rotunno.io/:splat"
+  to     = "https://rotunno.ai/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "http://rotunno.ai/*"
+  to     = "https://rotunno.ai/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "http://www.rotunno.ai/*"
+  to     = "https://rotunno.ai/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "https://www.rotunno.ai/*"
+  to     = "https://rotunno.ai/:splat"
   status = 301
   force  = true
 
