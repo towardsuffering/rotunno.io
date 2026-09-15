@@ -34,13 +34,27 @@ const { navStyle = "default", transparentNav = false } = Astro.props as Props;
 >
   <!-- Contact strip -->
   <div class="bg-background/80 border-b border-border/50">
-    <div class="site-container flex flex-wrap justify-center gap-x-6 gap-y-0.5 py-1 text-xs md:justify-end md:text-sm">
+    <div class="site-container flex flex-wrap items-center justify-center gap-x-6 gap-y-0.5 py-1 text-xs md:justify-end md:text-sm">
       <a href="tel:+17272212980" class="text-muted-foreground font-medium hover:text-primary-accent transition-colors">
         +1 (727) 221-2980
       </a>
       <a href="mailto:chrisrotunno@icloud.com" class="text-primary-accent font-medium hover:underline">
         chrisrotunno@icloud.com
       </a>
+      <div class="flex items-center gap-3">
+        <a href="https://www.linkedin.com/in/chris-rotunno/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-muted-foreground hover:text-primary-accent transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M8 11l0 5"/><path d="M8 8l0 .01"/><path d="M12 16l0 -5"/><path d="M16 16v-3a2 2 0 0 0 -4 0"/></svg>
+        </a>
+        <a href="https://www.instagram.com/chrisrotunno/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-muted-foreground hover:text-primary-accent transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5l0 .01"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@chris-rotunno" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-muted-foreground hover:text-primary-accent transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8a4 4 0 0 1 4 -4h12a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-12a4 4 0 0 1 -4 -4v-8z"/><path d="M10 9l5 3l-5 3z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/crotunno92" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-muted-foreground hover:text-primary-accent transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"/></svg>
+        </a>
+      </div>
     </div>
   </div>
   <div class="mx-auto flex w-full">
