@@ -70,49 +70,79 @@ const stats: StatItem[] = [
 <script>
   const CHARS = "0123456789";
 
-  function spinToValue(el: HTMLElement) {
-    const final = el.dataset.final!;
-    let frame = 0;
-    const totalFrames = 18;
-
-    function next() {
-      frame++;
-      const progress = frame / totalFrames;
-      const delay = 20 + Math.pow(progress, 2) * 140;
-
-      if (frame < totalFrames) {
-        el.textContent = final.replace(
-          /[0-9]/g,
-          () => CHARS[Math.floor(Math.random() * CHARS.length)],
-        );
-        setTimeout(next, delay);
-      } else {
-        el.textContent = final;
-      }
-    }
-    next();
-  }
-
+  // Numbers spin (random digits) for as long as the user is actively
+  // scrolling while this section is in view, then lock back in to the
+  // real value shortly after scrolling stops — rather than a one-shot
+  // reveal animation that only plays once.
   function initSpinNumbers() {
     const numbers = document.querySelectorAll<HTMLElement>(".stat-number");
+    const container = document.querySelector<HTMLElement>("#about-numbers-trigger");
+    if (!container || container.dataset.spinInit === "true") return;
+    container.dataset.spinInit = "true";
 
     numbers.forEach((el) => {
       el.dataset.final = el.textContent ?? "";
     });
 
+    let isVisible = false;
+    let spinInterval: ReturnType<typeof setInterval> | null = null;
+    let settleTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    function randomizeAll() {
+      numbers.forEach((el) => {
+        const final = el.dataset.final!;
+        el.textContent = final.replace(
+          /[0-9]/g,
+          () => CHARS[Math.floor(Math.random() * CHARS.length)],
+        );
+      });
+    }
+
+    function lockIn() {
+      numbers.forEach((el) => {
+        el.textContent = el.dataset.final!;
+      });
+    }
+
+    function stopSpin() {
+      if (spinInterval) {
+        clearInterval(spinInterval);
+        spinInterval = null;
+      }
+    }
+
+    function startSpin() {
+      if (spinInterval || !isVisible) return;
+      spinInterval = setInterval(randomizeAll, 60);
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => spinToValue(entry.target as HTMLElement), i * 150);
-            observer.unobserve(entry.target);
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (!isVisible) {
+            stopSpin();
+            lockIn();
           }
         });
       },
-      { threshold: 0.4 },
+      { threshold: 0.1 },
     );
+    observer.observe(container);
 
-    numbers.forEach((n) => observer.observe(n));
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (isVisible) startSpin();
+
+        if (settleTimeout) clearTimeout(settleTimeout);
+        settleTimeout = setTimeout(() => {
+          stopSpin();
+          lockIn();
+        }, 150);
+      },
+      { passive: true },
+    );
   }
 
   initSpinNumbers();
