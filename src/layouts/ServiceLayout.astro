@@ -2,8 +2,8 @@
 import type { CollectionEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
 
-import Contact from "@/components/contact/Contact.astro";
-import FaqAccordions from "@/components/faq/FaqAccordionsSideImage.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Props {
@@ -12,17 +12,22 @@ interface Props {
 
 const { service } = Astro.props as Props;
 const { data } = service;
+const currLocale = getLocaleFromUrl(Astro.url);
 ---
 
-<BaseLayout title={`${data.title} — Christopher A. Rotunno`} description={data.description}>
+<BaseLayout
+  title={`${data.title} — Christopher A. Rotunno`}
+  description={data.description}
+  fullHeight={false}
+>
   <section class="site-container mt-8 py-20 md:pt-32">
 
     <!-- Back link -->
     <a
-      href="/services"
+      href={getLocalizedRoute(currLocale, "/#services-cards")}
       class="text-primary-accent mb-8 inline-flex items-center gap-1 text-sm font-semibold hover:underline"
     >
-      ← All Capabilities
+      ← Back to Capabilities
     </a>
 
     <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
@@ -46,7 +51,4 @@ const { data } = service;
 
     </div>
   </section>
-
-  <Contact />
-  <FaqAccordions />
 </BaseLayout>

@@ -1,4 +1,7 @@
 ---
+import deeperQuestionImage from "@images/faq/deeper-question.jpg";
+import { Image } from "astro:assets";
+
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getTranslatedData } from "@/js/translationUtils";
 
@@ -12,7 +15,7 @@ const faqData = getTranslatedData("faqData", currLocale);
   <div class="site-container">
     <div class="grid gap-8 md:grid-cols-2 md:gap-16">
       <!-- Left Side - FAQ Content -->
-      <div class="flex h-full flex-col justify-between" data-reveal="blur-left">
+      <div class="flex h-full flex-col" data-reveal="blur-left">
         <div class="md:max-w-lg">
           <h2 class="text-foreground h2 mb-4">Frequently Asked Questions</h2>
           <p class="description mr-auto mb-8 max-w-sm">
@@ -38,16 +41,21 @@ const faqData = getTranslatedData("faqData", currLocale);
       </div>
 
       <!-- Right Side - branded panel -->
-      <div class="order-first flex md:order-last" data-reveal="swing">
+      <div class="order-first flex md:order-last" data-reveal="pop">
         <div
-          class="mb-auto aspect-3/4 h-auto w-full overflow-hidden rounded-2xl flex flex-col items-center justify-center gap-4 px-8 text-center"
-          style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #0f2d4a 100%);"
+          class="relative h-64 w-full overflow-hidden rounded-2xl md:h-full flex flex-col items-center justify-center gap-4 px-8 text-center"
         >
+          <Image
+            src={deeperQuestionImage}
+            alt=""
+            class="absolute inset-0 -z-10 h-full w-full object-cover"
+          />
+          <div class="absolute inset-0 -z-10 bg-black/50"></div>
           <p class="font-heading text-3xl font-semibold text-white leading-snug">
-            Got a question?<br />I'll give you a straight answer.
+            Looking for something deeper?
           </p>
           <p class="text-white/60 text-base max-w-xs">
-            No fluff. If I can't answer it, I'll say so.
+            Dig a little more, ask me!
           </p>
         </div>
       </div>

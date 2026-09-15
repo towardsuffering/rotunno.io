@@ -21,6 +21,8 @@ interface Props extends ComponentProps<typeof Nav> {
   authorsData?: CollectionEntry<"authors">[];
   postFrontmatter?: CollectionEntry<"blog">["data"];
   noindex?: boolean; // you need to opt-in to no indexing, as it hides the page from search engines
+  // set false on short pages so a sticky footer doesn't leave a large empty gap above it
+  fullHeight?: boolean;
 }
 
 const {
@@ -31,6 +33,7 @@ const {
   authorsData,
   postFrontmatter,
   noindex = false,
+  fullHeight = true,
   ...navProps
 } = Astro.props as Props;
 
@@ -56,7 +59,7 @@ const currLocale = getLocaleFromUrl(Astro.url);
       <CookieConsent />
 
       <Nav {...navProps} />
-      <main class="relative min-h-[100lvh] overflow-x-clip">
+      <main class:list={["relative overflow-x-clip", { "min-h-[100lvh]": fullHeight }]}>
         <slot />
       </main>
       <Footer />

@@ -13,19 +13,15 @@ interface StatItem {
 const stats: StatItem[] = [
   {
     value: "10+",
-    label: "Reputable Clients",
+    label: "Professional References",
   },
   {
     value: "100K+",
-    label: "Customers Served",
+    label: "Satisfied Customers",
   },
   {
-    value: "80%",
-    label: "Data Cost Reduction",
-  },
-  {
-    value: "200GB+",
-    label: "Daily Data Processed",
+    value: "25+",
+    label: "People Led",
   },
   {
     value: "$50M+",
@@ -43,7 +39,7 @@ const stats: StatItem[] = [
     <div class="site-container relative z-10">
       <div
         id="about-numbers-trigger"
-        class="lg:divide-base-200 grid grid-cols-2 gap-6 text-center sm:grid-cols-3 lg:grid-cols-5 lg:gap-0 lg:divide-x"
+        class="lg:divide-base-200 grid grid-cols-2 gap-6 text-center lg:grid-cols-4 lg:gap-0 lg:divide-x"
       >
         {
           stats.map((stat, index) => (

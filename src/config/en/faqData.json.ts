@@ -48,11 +48,7 @@ If you need someone who can write the pipeline and grow the people running it, t
   },
   {
     question: "How do I get in touch?",
-    answer: `<ul>
-<li>Fastest path is the contact form below</li>
-<li>Or email me directly at chrisrotunno@icloud.com</li>
-<li>I respond within one business day</li>
-</ul>`,
+    answer: `Call or text me at +1 (727) 221-2980.`,
   },
 ];
 

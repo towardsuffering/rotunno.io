@@ -1,0 +1,163 @@
+---
+import { companies } from "@/data/companies";
+
+// fallback text styling for any company without a logo file
+const companyChipStyles: Record<string, string> = {
+  "Wells Fargo": "font-bold tracking-tight text-xl",
+  Intrinio: "font-bold tracking-widest text-base uppercase",
+  "Socrates Platform": "font-semibold italic text-lg",
+  "Trader Joe's": "font-black text-xl",
+  Walgreens: "font-bold text-xl tracking-tight",
+  Kroger: "font-bold text-xl tracking-wide",
+  "Velvet Taco": "font-semibold text-lg tracking-wider",
+  Chipotle: "font-black text-xl tracking-tight",
+  Renuity: "font-bold text-lg tracking-widest uppercase",
+};
+---
+
+<section id="company-marquee-section" class="px-4 py-10 md:py-12">
+  <div class="site-container">
+    <div class="relative mx-auto max-w-5xl">
+      <div
+        class="from-background absolute top-0 -left-px z-20 h-full w-[10%] bg-gradient-to-r from-10% to-transparent"
+      >
+      </div>
+      <div
+        class="to-background absolute top-0 -right-px z-20 h-full w-[10%] bg-gradient-to-r from-transparent to-90%"
+      >
+      </div>
+
+      <div class="relative h-full overflow-x-hidden py-4">
+        <div class="company-marquee flex items-center gap-8">
+          {
+            [0, 1].map((i) => (
+              <div
+                class="company-marquee-track flex min-w-full shrink-0 items-center justify-around gap-10"
+                aria-hidden={i === 1 ? "true" : undefined}
+              >
+                {companies.map(({ name, logo, url }) =>
+                  logo ? (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="logo-link shrink-0"
+                      aria-label={`Visit ${name}`}
+                      title={name}
+                    >
+                      <img
+                        src={logo}
+                        alt={name}
+                        class:list={["logo-img", { "logo-invert": name === "Socrates Platform" }]}
+                        loading="eager"
+                      />
+                    </a>
+                  ) : (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={`logo-chip ${companyChipStyles[name]} shrink-0`}
+                      aria-label={`Visit ${name}`}
+                    >
+                      {name}
+                    </a>
+                  ),
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* fixed, standalone duration so this track ignores the global mobile
+     speed override meant for the (unrelated) testimonials marquee */
+  .company-marquee-track {
+    animation: marquee-testimonials 30s linear infinite;
+  }
+
+  .logo-link {
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.8;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .logo-link:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  .logo-chip {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-muted-foreground);
+    opacity: 0.7;
+    transition:
+      opacity 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-heading, sans-serif);
+    white-space: nowrap;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  }
+  .logo-chip:hover {
+    opacity: 1;
+    color: var(--color-primary-accent);
+    transform: translateY(-2px);
+  }
+  .logo-img {
+    filter: none;
+    border-radius: 4px;
+    height: 36px;
+    width: auto;
+    max-width: 160px;
+    object-fit: contain;
+  }
+
+  /* Socrates logo has white fills; invert to black in light mode */
+  :global(html:not(.dark)) .logo-invert {
+    filter: invert(1);
+  }
+  /* In dark mode, show white as-is */
+  :global(html.dark) .logo-invert {
+    filter: none;
+  }
+</style>
+
+<script>
+  function initCompanyMarquee() {
+    const marquee = document.querySelector<HTMLElement>(".company-marquee");
+    if (!marquee || marquee.dataset.marqueeInit === "true") return;
+    marquee.dataset.marqueeInit = "true";
+
+    // only wire up hover-to-pause on devices that actually have hover;
+    // on touch, a tap fires "mouseover" with no matching "mouseout" until
+    // the user taps elsewhere, which left the marquee stuck mid-pause
+    if (window.matchMedia("(hover: hover)").matches) {
+      marquee.addEventListener("mouseover", () => {
+        marquee.querySelectorAll(".company-marquee-track").forEach((el) => {
+          el.classList.add("pause");
+        });
+      });
+      marquee.addEventListener("mouseout", () => {
+        marquee.querySelectorAll(".company-marquee-track").forEach((el) => {
+          el.classList.remove("pause");
+        });
+      });
+    }
+  }
+
+  initCompanyMarquee();
+  document.addEventListener("astro:after-swap", initCompanyMarquee);
+</script>

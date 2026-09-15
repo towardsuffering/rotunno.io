@@ -9,91 +9,151 @@ const pillars = [
   {
     icon: "tabler/users",
     title: "People, not platforms",
-    desc: "A sharp read on behavior and psychology, the kind that generates leads and earns buy-in without a social following to lean on.",
+    bullets: ["Empower the team to do their best work", "Set the pace on performance", "Build, innovate, iterate relentlessly"],
   },
   {
     icon: "tabler/briefcase",
     title: "Organizational fluency",
-    desc: "I map the real chain of command fast: who decides, who influences, and where the structure itself is costing efficiency.",
+    bullets: ["Bring every stakeholder to the table early", "Catch scope creep before it spreads", "Solve the bottleneck before it stalls the team"],
   },
   {
     icon: "tabler/database",
     title: "Technical depth",
-    desc: "Well beyond Office: I've supported centralized, high-level operations at international bank scale.",
+    bullets: ["Go hands-on with SQL, Python, and cloud platforms", "Centralize systems at bank-grade scale", "Reach well beyond basic office tools"],
   },
 ];
 ---
 
-<section id="team-swiper" class="py-12 lg:py-16">
+<section id="team-swiper" class="px-4 py-12 lg:py-16">
   <div class="site-container">
-    <!-- Two-column grid: text | photo -->
-    <div class="grid items-center gap-8 md:grid-cols-2 md:gap-16" id="team-trigger">
-      <!-- Col 1: text -->
-      <div class="flex flex-col gap-4" data-mos="fade-right" data-mos-anchor="#team-trigger">
-        <Badge>About Me</Badge>
-        <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
-        <p class="text-primary-accent font-heading font-semibold md:text-lg">
-          Analytics engineer & BI leader, building the systems that turn fragmented data into
-          decisions people actually act on.
-        </p>
-        <ul class="mt-1 flex flex-col gap-3">
-          {
-            pillars.map((p) => (
-              <li class="flex items-start gap-3">
-                <span class="bg-primary-accent/10 text-primary-accent mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full">
-                  <Icon name={p.icon} class="size-4" />
-                </span>
-                <span>
-                  <span class="text-foreground font-semibold">{p.title}.</span>{" "}
-                  <span class="text-muted-foreground">{p.desc}</span>
-                </span>
-              </li>
-            ))
-          }
-        </ul>
-        <div class="flex flex-wrap gap-2">
-          {
-            ["Analytics", "Retail", "Food Service", "Home Improvement"].map((tag) => (
-              <span class="border-primary-accent/30 text-primary-accent bg-primary-accent/10 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide uppercase">
-                {tag}
-              </span>
-            ))
-          }
-        </div>
-      </div>
+    <div
+      class="about-card relative mx-auto max-w-4xl overflow-hidden rounded-3xl border p-6 shadow-md md:p-10"
+      id="team-trigger"
+    >
+      <!-- Two-column grid: text | photo -->
+      <div class="grid items-start gap-8 md:grid-cols-[1fr_auto] md:gap-8">
+        <!-- Col 1: text -->
+        <div class="flex flex-col gap-4" data-mos="fade-right" data-mos-anchor="#team-trigger">
+          <Badge>About Me</Badge>
+          <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
+          <p class="text-lg font-heading font-semibold" style="color: #34d399;">
+            <span class="rounded-md px-1.5 py-0.5" style="background: #34d399; color: #0f172a;"
+              >Aspiring Business Intelligence Leader</span
+            >, building toward systems that turn fragmented tidbits into confidence.
+          </p>
 
-      <!-- Col 2: photo -->
-      <div
-        class="flex flex-col items-start text-left"
-        data-mos="fade-left"
-        data-mos-anchor="#team-trigger"
-        data-mos-delay=".15"
-      >
-        <div class="founder-card mb-4 aspect-[7/8] w-full overflow-hidden rounded-xl shadow-md">
-          <Image
-            src={chris}
-            alt="Portrait of Christopher A. Rotunno"
-            width={400}
-            densities={[1.5, 2]}
-            class="founder-photo h-full w-full object-cover"
-          />
+          <ul class="pillar-list mt-1 flex flex-col divide-y overflow-hidden rounded-xl border">
+            {
+              pillars.map((p) => (
+                <li class="flex items-start gap-3 px-4 py-3">
+                  <span
+                    class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full"
+                    style="background: color-mix(in srgb, #34d399 15%, transparent); color: #34d399;"
+                  >
+                    <Icon name={p.icon} class="size-4" />
+                  </span>
+                  <span class="flex-1">
+                    <span class="text-foreground block font-semibold">{p.title}</span>
+                    <ul class="text-muted-foreground mt-1 flex flex-col gap-0.5 text-sm">
+                      {p.bullets.map((b) => (
+                        <li class="flex items-start gap-1.5">
+                          <span class="bullet-dot mt-2 size-1 shrink-0 rounded-full" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="flex flex-wrap gap-2">
+            {
+              ["Financial Services", "Retail", "Food Service", "Home Improvement"].map((tag) => (
+                <span class="border-primary-accent/30 text-primary-accent bg-primary-accent/10 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide uppercase">
+                  {tag}
+                </span>
+              ))
+            }
+          </div>
         </div>
-        <span class="text-primary-accent text-lg font-semibold">Christopher A. Rotunno</span>
-        <p class="text-muted-foreground mt-1 text-sm font-semibold">
-          Data Analytics Engineer & BI Leader
-        </p>
-        <p class="mt-2 text-sm">
-          Remote-first, ideally with a global team. Open to hybrid, or relocating anywhere in the
-          US for the right role: one with compensation and benefits strong enough to meet my
-          financial obligations, and the balance to sustain the work I put in.
-        </p>
+
+        <!-- Col 2: photo -->
+        <div
+          class="flex justify-center md:justify-start"
+          data-mos="fade-left"
+          data-mos-anchor="#team-trigger"
+          data-mos-delay=".15"
+        >
+          <div class="photo-frame relative w-[240px] max-w-full">
+            <div class="photo-backdrop absolute -inset-3 -z-10 rounded-2xl" aria-hidden="true">
+            </div>
+            <div class="founder-card aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-lg">
+              <Image
+                src={chris}
+                alt="Portrait of Christopher A. Rotunno"
+                width={360}
+                densities={[1.5, 2]}
+                class="founder-photo h-full w-full object-cover"
+              />
+            </div>
+
+            <div class="status-chip mt-4 flex items-center gap-2 rounded-full border px-4 py-2">
+              <span class="status-dot size-2 shrink-0 rounded-full"></span>
+              <span class="text-foreground text-xs font-medium">
+                Open to AI roles — remote or hybrid, global team preferred
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
+  .about-card {
+    background: color-mix(in srgb, #34d399 4%, var(--color-background));
+    border-color: color-mix(in srgb, #34d399 20%, transparent);
+  }
+
+  .status-chip {
+    background: color-mix(in srgb, #34d399 8%, var(--color-background));
+    border-color: color-mix(in srgb, #34d399 30%, transparent);
+  }
+  .status-dot {
+    background: #34d399;
+    box-shadow: 0 0 0 3px color-mix(in srgb, #34d399 25%, transparent);
+    animation: status-pulse 2s ease-in-out infinite;
+  }
+  @keyframes status-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .pillar-list {
+    border-color: color-mix(in srgb, #34d399 20%, transparent);
+  }
+  .pillar-list > li + li {
+    border-color: color-mix(in srgb, #34d399 15%, transparent);
+  }
+  .bullet-dot {
+    background: color-mix(in srgb, #34d399 60%, transparent);
+  }
+
+  .photo-backdrop {
+    background: color-mix(in srgb, #34d399 25%, transparent);
+    transform: rotate(-3deg);
+  }
+
   .founder-card {
+    border: 1px solid color-mix(in srgb, #34d399 30%, transparent);
     transition:
       box-shadow 0.4s ease,
       transform 0.4s ease;

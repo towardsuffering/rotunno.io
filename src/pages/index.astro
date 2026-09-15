@@ -1,12 +1,11 @@
 ---
 export const prerender = true;
-import AboutCareerPath from "@/components/about/AboutCareerPath.astro";
 import AboutNumbers from "@/components/about/AboutNumbers.astro";
+import CompanyMarquee from "@/components/about/CompanyMarquee.astro";
 import ContactCentered from "@/components/contact/ContactCentered.astro";
 import FaqAccordionsSideImage from "@/components/faq/FaqAccordionsSideImage.astro";
 import HeroBackgroundImage from "@/components/hero/HeroBackgroundImage.astro";
 import ServicesCards from "@/components/services/ServicesCards.astro";
-import HavesHaveNots from "@/components/skills/HavesHaveNots.astro";
 import TeamSwiper from "@/components/team/TeamSwiper.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getTranslatedData } from "@/js/translationUtils";
@@ -19,12 +18,9 @@ const siteData = getTranslatedData("siteData", currLocale);
 <BaseLayout title={siteData.title} description={siteData.description} transparentNav={true}>
   <HeroBackgroundImage />
 
-  <AboutCareerPath />
-
   <AboutNumbers />
+  <CompanyMarquee />
   <TeamSwiper />
-
-  <HavesHaveNots />
 
   <ServicesCards />
 

@@ -1,95 +1,134 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 
 import Button from "@/components/button/Button.astro";
-import { filterCollectionByLanguage, getLocaleFromUrl } from "@/js/localeUtils";
-import { getLocalizedRoute, useTranslations } from "@/js/translationUtils";
-
-import ServiceCard from "./ServiceCard.astro";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
 
 const currLocale = getLocaleFromUrl(Astro.url);
-const t = useTranslations(currLocale);
 
-const services = await getCollection("services", ({ data }) => {
-  return data.draft !== true;
-});
-
-const filteredServices = filterCollectionByLanguage(
-  services,
-  currLocale,
-) as CollectionEntry<"services">[];
-
-const orderedServices = filteredServices.sort((a, b) => {
-  if (a.data.order !== undefined && b.data.order !== undefined) return a.data.order - b.data.order;
-  if (a.data.order !== undefined) return -1;
-  if (b.data.order !== undefined) return 1;
-  return 0;
-});
-
-const additionalSkills = [
-  {
-    icon: "tabler/git-branch",
-    title: "Version-Controlled Data",
-    description: "All transformation and pipeline code lives in Git. Every change is peer-reviewable, rollbackable, and documented.",
-  },
-  {
-    icon: "tabler/clipboard",
-    title: "Data Quality & Testing",
-    description: "Python-based tests, Great Expectations, and custom assertion layers that catch data issues before they reach a dashboard.",
-  },
-  {
-    icon: "tabler/report-analytics",
-    title: "Executive Storytelling",
-    description: "The ability to translate complex analytical findings into clear narratives for C-suite audiences, without losing the nuance.",
-  },
+const pillars = [
   {
     icon: "tabler/users",
-    title: "Cross-Functional Partnership",
-    description: "Proven track record of working alongside product, finance, marketing, and engineering to define and ship data that drives decisions.",
+    title: "Empowering Others",
+    slug: "empowering-others",
+  },
+  {
+    icon: "tabler/briefcase",
+    title: "Finding Structure",
+    slug: "finding-structure",
+  },
+  {
+    icon: "tabler/database",
+    title: "Troubleshooting Systems",
+    slug: "troubleshooting-systems",
+  },
+  {
+    icon: "tabler/palette",
+    title: "Predicting Patterns",
+    slug: "predicting-patterns",
   },
 ];
 ---
 
 <section id="services-cards" class="my-12 py-12">
   <div class="site-container" id="services-cards-trigger">
-    <h2
-      class="h2 mx-auto max-w-3xl text-center"
-      data-reveal="pop"
-    >
-      Core Capabilities
-    </h2>
-    <div class="mt-12 flex justify-center">
-      {
-        orderedServices.map((service, idx) => (
-          <ServiceCard
-            service={service}
-            data-reveal="rise"
-            data-reveal-delay={idx * 0.15}
-          />
-        ))
-      }
-    </div>
+    <h2 class="h2 mx-auto max-w-3xl text-center" data-reveal="pop">Core Capabilities</h2>
 
-    <!-- Additional Skills -->
-    <div class="mt-20">
-      <h3 class="h2 mb-2 text-center" data-reveal="pop">Also in My Toolkit</h3>
-      <p class="description mb-10 text-center" data-reveal="pop" data-reveal-delay="0.1">Skills that make the difference between data that sits and data that ships.</p>
-      <div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-4">
-        {additionalSkills.map((item, idx) => (
-          <div class="flex" data-reveal="rise" data-reveal-delay={idx * 0.1}>
-            <div class="bg-muted flex w-full flex-col justify-between rounded-lg border border-dashed p-8 md:rounded-xl">
-              <div>
-                <div class="border-primary-accent relative mr-auto flex size-18 items-center justify-center rounded-full border-2">
-                  <Icon name={item.icon} class="text-primary-accent h-full w-full p-3" />
+    <div class="pillars-row relative mt-20">
+      <!-- entablature: the beam the four pillars hold up -->
+      <div class="pillar-beam absolute -top-5 right-0 left-0 hidden h-2 rounded-full lg:block">
+      </div>
+
+      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+        {
+          pillars.map((p, idx) => (
+            <div
+              class="pillar-column group flex flex-col items-center text-center"
+              data-reveal="rise"
+              data-reveal-delay={idx * 0.1}
+            >
+              <!-- capital: abacus (wide slab) over echinus (the curve down to the shaft) -->
+              <div class="flex w-full flex-col items-center">
+                <div class="pillar-abacus h-2 w-full rounded-sm" />
+                <div class="pillar-echinus h-1.5 w-[88%] rounded-b-full" />
+              </div>
+
+              <div class="pillar-shaft relative flex w-full flex-1 flex-col items-center px-6 py-8 transition-colors">
+                <div class="pillar-flute pillar-flute-l" aria-hidden="true" />
+                <div class="pillar-flute pillar-flute-r" aria-hidden="true" />
+                <div
+                  class="relative mb-4 flex size-14 shrink-0 items-center justify-center rounded-full"
+                  style="background: color-mix(in srgb, #34d399 15%, transparent); color: #34d399;"
+                >
+                  <Icon name={p.icon} class="size-7" />
                 </div>
-                <h3 class="font-heading mt-6 text-xl font-semibold">{item.title}</h3>
-                <p class="text-muted-foreground mt-3 text-base">{item.description}</p>
+                <h3 class="relative font-heading text-lg font-semibold">{p.title}</h3>
+                <Button
+                  variant="ghost"
+                  arrow="right"
+                  href={getLocalizedRoute(currLocale, `/capabilities/${p.slug}`)}
+                  class="relative mt-4 font-medium hover:bg-transparent"
+                >
+                  Learn More <span class="sr-only">about {p.title}</span>
+                </Button>
+              </div>
+
+              <!-- base: fillet (the curve up from the shaft) over plinth (wide slab) -->
+              <div class="flex w-full flex-col items-center">
+                <div class="pillar-fillet h-1.5 w-[88%] rounded-t-full" />
+                <div class="pillar-plinth h-2.5 w-full rounded-sm" />
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .pillar-beam {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, #34d399 45%, transparent) 12%,
+      color-mix(in srgb, #34d399 45%, transparent) 88%,
+      transparent
+    );
+  }
+
+  .pillar-abacus,
+  .pillar-plinth {
+    background: color-mix(in srgb, #34d399 28%, transparent);
+  }
+  .pillar-echinus,
+  .pillar-fillet {
+    background: color-mix(in srgb, #34d399 18%, transparent);
+  }
+
+  .pillar-shaft {
+    background: color-mix(in srgb, #34d399 3%, var(--color-background));
+    border-right: 1px solid color-mix(in srgb, #34d399 18%, transparent);
+    border-left: 1px solid color-mix(in srgb, #34d399 18%, transparent);
+  }
+  .pillar-column:hover .pillar-shaft {
+    background: color-mix(in srgb, #34d399 7%, var(--color-background));
+  }
+
+  /* faint fluting, tucked against the shaft edges so it reads as texture,
+     not clutter, behind the icon/text */
+  .pillar-flute {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: color-mix(in srgb, #34d399 12%, transparent);
+  }
+  .pillar-flute-l {
+    left: 14px;
+  }
+  .pillar-flute-r {
+    right: 14px;
+  }
+</style>

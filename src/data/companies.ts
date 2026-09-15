@@ -1,7 +1,7 @@
 /**
- * Organizations Chris has worked with — shared between the company strip
- * (TestimonialsMarquee) and the career timeline (AboutCareerPath) so the
- * two can cross-link without duplicating logo/url data.
+ * Organizations Chris has worked with, shared between the company strip
+ * (TestimonialsMarquee) and the company marquee (CompanyMarquee) so the
+ * two don't duplicate logo/url data.
  */
 export interface Company {
   name: string;
@@ -35,12 +35,9 @@ export const companies: Company[] = [
   },
   { name: "Chipotle", logo: "/images/companies/chipotle.svg", url: "https://www.chipotle.com" },
   { name: "Renuity", logo: "/images/companies/renuity.svg", url: "https://renuityhome.com" },
+  {
+    name: "ARS / Rescue Rooter",
+    logo: "/images/companies/arsrescuerooter.svg",
+    url: "https://www.ars.com",
+  },
 ];
-
-export function findCompany(org: string): Company | undefined {
-  const q = org.trim().toLowerCase();
-  return companies.find((c) => {
-    const name = c.name.toLowerCase();
-    return name.includes(q) || q.includes(name);
-  });
-}
