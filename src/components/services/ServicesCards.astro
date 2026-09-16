@@ -40,13 +40,14 @@ const pillars = [
       <div class="pillar-beam absolute -top-5 right-0 left-0 hidden h-2 rounded-full lg:block">
       </div>
 
-      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0" id="capabilities-list">
         {
           pillars.map((p, idx) => (
             <div
               class="pillar-column group flex flex-col items-center text-center"
               data-reveal="rise"
               data-reveal-delay={idx * 0.1}
+              data-capability-index={idx}
             >
               <!-- capital: abacus (wide slab) over echinus (the curve down to the shaft) -->
               <div class="flex w-full flex-col items-center">
@@ -108,9 +109,12 @@ const pillars = [
   }
 
   .pillar-shaft {
-    background: color-mix(in srgb, #34d399 3%, var(--color-background));
-    border-right: 1px solid color-mix(in srgb, #34d399 18%, transparent);
-    border-left: 1px solid color-mix(in srgb, #34d399 18%, transparent);
+    background: color-mix(in srgb, #34d399 calc(3% + var(--focus, 0) * 12%), var(--color-background));
+    border-right: 1px solid color-mix(in srgb, #34d399 calc(18% + var(--focus, 0) * 30%), transparent);
+    border-left: 1px solid color-mix(in srgb, #34d399 calc(18% + var(--focus, 0) * 30%), transparent);
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease;
   }
   .pillar-column:hover .pillar-shaft {
     background: color-mix(in srgb, #34d399 7%, var(--color-background));
@@ -131,4 +135,56 @@ const pillars = [
   .pillar-flute-r {
     right: 14px;
   }
+
+  /* Continuous, independent-per-card focus driven by scroll position:
+     each pillar brightens/lifts on its own as it nears a reference line,
+     rather than a single shared "active" card. */
+  .pillar-column {
+    --focus: 0;
+    transform: scale(calc(0.96 + var(--focus, 0) * 0.04)) translateY(calc((1 - var(--focus, 0)) * 6px));
+    transition: transform 0.15s ease;
+  }
+  .pillar-column h3 {
+    transition: color 0.15s ease;
+    color: color-mix(in srgb, #34d399 calc(var(--focus, 0) * 100%), var(--color-foreground));
+  }
 </style>
+
+<script>
+  // Each pillar gets its own continuous focus amount (0-1) based on how
+  // close its center is to a reference line, independent of the others —
+  // so it reads as fluid, per-card life rather than one shared spotlight.
+  function initCapabilitiesFocus() {
+    const list = document.querySelector<HTMLElement>("#capabilities-list");
+    const items = Array.from(list?.querySelectorAll<HTMLElement>("[data-capability-index]") ?? []);
+    if (!list || items.length === 0 || list.dataset.focusInit === "true") return;
+    list.dataset.focusInit = "true";
+
+    const falloff = 260; // px of distance over which focus fades from 1 to 0
+
+    const wave = 70; // px offset per card, so the focus peak sweeps left to right
+
+    function update() {
+      const baseReferenceY = window.innerHeight * 0.55;
+
+      items.forEach((item, i) => {
+        // Scrolling down moves mid from high to low; subtracting per-index
+        // offset makes the leftmost card (i=0) cross its target first,
+        // so the focus peak visibly sweeps left to right as you scroll.
+        const referenceY = baseReferenceY - i * wave;
+        const rect = item.getBoundingClientRect();
+        const mid = rect.top + rect.height / 2;
+        const distance = Math.abs(mid - referenceY);
+        const focus = Math.max(0, 1 - distance / falloff);
+        item.style.setProperty("--focus", focus.toFixed(3));
+      });
+    }
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+  }
+
+  initCapabilitiesFocus();
+  document.addEventListener("astro:after-swap", initCapabilitiesFocus);
+</script>

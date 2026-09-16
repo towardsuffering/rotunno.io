@@ -4,12 +4,48 @@ import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getLocalizedRoute, getTranslatedData, useTranslations } from "@/js/translationUtils";
 const currLocale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(currLocale);
+
+const heroPreText = "Let's Turn ";
+// Everything from "Fragmented" onward explodes into shards; nothing before it does.
+const heroShardText = "Fragmented Tidbits into Confidence!";
+
+// "Confidence" scales in from oversized down to normal instead of
+// scattering/rotating like the rest of the shards.
+const heroConfidenceStart = heroShardText.indexOf("Confidence");
+const heroConfidenceEnd = heroConfidenceStart + "Confidence".length;
+
+const heroShardChars = heroShardText.split("").map((ch, i) => {
+  const isConfidence = i >= heroConfidenceStart && i < heroConfidenceEnd;
+  const style = isConfidence
+    ? `--shard-scale:${(3 + ((i - heroConfidenceStart) % 3) * 0.4).toFixed(1)};`
+    : `--shard-x:${((i * 47) % 37) - 18}px;--shard-y:${((i * 83) % 37) - 18}px;--shard-rot:${((i * 61) % 101) - 50}deg;`;
+  return { ch, index: i, isSpace: ch === " ", isConfidence, style };
+});
 ---
 
 <section id="contact" class="site-container scroll-mt-20 py-8">
   <div class="mx-auto max-w-3xl">
     <div class="text-center" data-reveal="pop">
-      <h2 class="h1 mb-6">Let's Turn Tidbits into Confidence</h2>
+      <h2 class="h1 mb-6"
+        ><span class="tw-group-hero"
+          ><span class="tw-slice" data-text={heroPreText} data-role="pre"
+            ><span class="sr-only">{heroPreText}</span
+            ><span class="tw-slice-visible" aria-hidden="true"></span
+            ></span
+          ><span class="tw-shard-word" data-role="shard" data-length={heroShardText.length}
+            ><span class="sr-only">{heroShardText}</span
+            ><span aria-hidden="true"
+              >{heroShardChars.map((c) =>
+                c.isSpace ? (
+                  " "
+                ) : (
+                  <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
+                ),
+              )}</span
+            ></span
+          ></span
+        ></h2
+      >
     </div>
 
     <!-- Drop Me a Line -->
@@ -20,3 +56,90 @@ const t = useTranslations(currLocale);
 
   </div>
 </section>
+
+<style>
+  .tw-char {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(1px);
+    transform: translate(var(--shard-x, 0), var(--shard-y, 0)) rotate(var(--shard-rot, 0deg));
+    transition:
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 0.35s ease,
+      filter 0.35s ease;
+  }
+  .tw-char.is-revealed {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .tw-char.tw-scale {
+    transform: scale(var(--shard-scale, 3));
+    filter: none;
+    color: #f1f5f9;
+    text-shadow: 0 0 12px rgba(241, 245, 249, 0.8);
+  }
+  .tw-char.tw-scale.is-revealed {
+    transform: scale(1);
+  }
+</style>
+
+<script>
+  // Ties the number of revealed characters to how far this heading has
+  // scrolled through a fixed band of the viewport, so it types in
+  // scrolling down and un-types scrolling back up. Everything from
+  // "Fragmented" onward explodes into scattered/rotated letter shards
+  // that assemble into place, except "Confidence" which scales in from
+  // oversized to normal instead.
+  function initHeroTypewriter() {
+    const groups = document.querySelectorAll<HTMLElement>(".tw-group-hero");
+    groups.forEach((group) => {
+      if (group.dataset.twInit === "true") return;
+      group.dataset.twInit = "true";
+
+      const preEl = group.querySelector<HTMLElement>('[data-role="pre"]');
+      const shardEl = group.querySelector<HTMLElement>('[data-role="shard"]');
+      const preVisible = preEl?.querySelector<HTMLElement>(".tw-slice-visible");
+      if (!preEl || !shardEl || !preVisible) return;
+
+      const preVisibleEl: HTMLElement = preVisible;
+      const preText = preEl.dataset.text || "";
+      const shardLetters = Array.from(shardEl.querySelectorAll<HTMLElement>(".tw-char"));
+      const shardLen = parseInt(shardEl.dataset.length || "0", 10);
+      const total = preText.length + shardLen;
+      let lastRevealed = -1;
+
+      function update() {
+        const rect = group.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const startY = vh * 0.9;
+        const endY = vh * 0.15;
+        let progress = (startY - rect.top) / (startY - endY);
+        progress = Math.max(0, Math.min(1, progress));
+        const revealed = Math.round(progress * total);
+        if (revealed === lastRevealed) return;
+        lastRevealed = revealed;
+
+        let r = revealed;
+
+        const preCount = Math.max(0, Math.min(preText.length, r));
+        preVisibleEl.textContent = preText.slice(0, preCount);
+        r -= preText.length;
+
+        const shardCount = Math.max(0, Math.min(shardLen, r));
+        shardLetters.forEach((letter) => {
+          const idx = parseInt(letter.dataset.index || "0", 10);
+          letter.classList.toggle("is-revealed", idx < shardCount);
+        });
+      }
+
+      update();
+      window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("resize", update);
+    });
+  }
+
+  initHeroTypewriter();
+  document.addEventListener("astro:after-swap", initHeroTypewriter);
+</script>
