@@ -5,6 +5,28 @@ import { Image } from "astro:assets";
 
 import Badge from "../badge/Badge.astro";
 
+const badgeText = "Business Intelligence Leader";
+const preText = ", building toward systems that turn ";
+// Everything from "fragmented" onward explodes into shards; nothing before it does.
+const shardText = "fragmented tidbits into confidence.";
+
+// Deterministic scattered starting position for each character, so this
+// whole tail reads as shattered fragments that assemble into place as it
+// scrolls into view (and scatter back apart scrolling back out). Spaces are
+// kept as plain text (not spans) so word gaps and wrapping stay normal.
+// "confidence" gets its own treatment: it scales in from oversized down
+// to normal instead of scattering/rotating like the rest of the shards.
+const confidenceStart = shardText.indexOf("confidence");
+const confidenceEnd = confidenceStart + "confidence".length;
+
+const shardChars = shardText.split("").map((ch, i) => {
+  const isConfidence = i >= confidenceStart && i < confidenceEnd;
+  const style = isConfidence
+    ? `--shard-scale:${(3 + ((i - confidenceStart) % 3) * 0.4).toFixed(1)};`
+    : `--shard-x:${((i * 47) % 37) - 18}px;--shard-y:${((i * 83) % 37) - 18}px;--shard-rot:${((i * 61) % 101) - 50}deg;`;
+  return { ch, index: i, isSpace: ch === " ", isConfidence, style };
+});
+
 const pillars = [
   {
     icon: "tabler/users",
@@ -37,13 +59,30 @@ const pillars = [
           <Badge>About Me</Badge>
           <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
           <p class="text-lg font-heading font-semibold" style="color: #34d399;">
-            <span class="rounded-md px-1.5 py-0.5" style="background: #34d399; color: #0f172a;"
-              ><span class="typewriter" data-text="Business Intelligence Leader"
-                ><span class="sr-only">Business Intelligence Leader</span
-                ><span class="typewriter-visible" aria-hidden="true"></span
-                ><span class="typewriter-cursor" aria-hidden="true">|</span></span
+            <span class="typewriter-group"
+              ><span class="rounded-md px-1.5 py-0.5" style="background: #34d399; color: #0f172a;"
+                ><span class="tw-slice" data-text={badgeText} data-role="badge"
+                  ><span class="sr-only">{badgeText}</span
+                  ><span class="tw-slice-visible" aria-hidden="true"></span
+                  ></span
+                ></span
+              ><span class="tw-slice" data-text={preText} data-role="pre"
+                ><span class="sr-only">{preText}</span
+                ><span class="tw-slice-visible" aria-hidden="true"></span
+                ></span
+              ><span class="tw-shard-word" data-role="shard" data-length={shardText.length}
+                ><span class="sr-only">{shardText}</span
+                ><span aria-hidden="true"
+                  >{shardChars.map((c) =>
+                    c.isSpace ? (
+                      " "
+                    ) : (
+                      <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
+                    ),
+                  )}</span
+                ></span
               ></span
-            >, building toward systems that turn fragmented tidbits into confidence.
+            >
           </p>
 
           <ul class="pillar-list mt-1 flex flex-col divide-y overflow-hidden rounded-xl border">
@@ -104,9 +143,18 @@ const pillars = [
             </div>
 
             <div class="status-chip mt-4 flex items-center gap-2 rounded-full border px-4 py-2">
-              <span class="status-dot size-2 shrink-0 rounded-full"></span>
+              <span class="flex size-4 shrink-0 items-center justify-center">
+                <span class="status-dot size-2 rounded-full"></span>
+              </span>
               <span class="text-foreground text-xs font-medium">
                 Open to AI roles — remote or hybrid, global team preferred
+              </span>
+            </div>
+
+            <div class="status-chip mt-2 flex items-center gap-2 rounded-full border px-4 py-2">
+              <span class="flex size-4 shrink-0 items-center justify-center text-sm leading-none" aria-hidden="true">🎓</span>
+              <span class="text-foreground text-xs font-medium">
+                Prioritizing employers that offer student loan repayment benefits
               </span>
             </div>
           </div>
@@ -176,45 +224,90 @@ const pillars = [
     filter: brightness(1.05) contrast(1.05);
   }
 
-  .typewriter-cursor {
-    animation: typewriter-blink 1s step-end infinite;
+  .tw-char {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(1px);
+    transform: translate(var(--shard-x, 0), var(--shard-y, 0)) rotate(var(--shard-rot, 0deg));
+    transition:
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 0.35s ease,
+      filter 0.35s ease;
   }
-  @keyframes typewriter-blink {
-    50% {
-      opacity: 0;
-    }
+  .tw-char.is-revealed {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .tw-char.tw-scale {
+    transform: scale(var(--shard-scale, 3));
+    filter: none;
+    color: #f1f5f9;
+    text-shadow: 0 0 12px rgba(241, 245, 249, 0.8);
+  }
+  .tw-char.tw-scale.is-revealed {
+    transform: scale(1);
   }
 </style>
 
 <script>
+  // Ties the number of revealed characters across the whole sentence to
+  // how far it has scrolled through a fixed band of the viewport, so it
+  // types in scrolling down and un-types scrolling back up. The word
+  // "fragmented" is rendered letter-by-letter starting scattered and
+  // rotated (shards), snapping into place as its letters get revealed.
   function initTypewriter() {
-    const els = document.querySelectorAll<HTMLElement>(".typewriter");
-    els.forEach((el) => {
-      if (el.dataset.twInit === "true") return;
-      el.dataset.twInit = "true";
+    const groups = document.querySelectorAll<HTMLElement>(".typewriter-group");
+    groups.forEach((group) => {
+      if (group.dataset.twInit === "true") return;
+      group.dataset.twInit = "true";
 
-      const text = el.dataset.text || "";
-      const visibleEl = el.querySelector<HTMLElement>(".typewriter-visible");
-      if (!visibleEl) return;
-      const visible: HTMLElement = visibleEl;
-      let lastLen = -1;
+      const badgeEl = group.querySelector<HTMLElement>('[data-role="badge"]');
+      const preEl = group.querySelector<HTMLElement>('[data-role="pre"]');
+      const shardEl = group.querySelector<HTMLElement>('[data-role="shard"]');
+      const badgeVisible = badgeEl?.querySelector<HTMLElement>(".tw-slice-visible");
+      const preVisible = preEl?.querySelector<HTMLElement>(".tw-slice-visible");
+      if (!badgeEl || !preEl || !shardEl || !badgeVisible || !preVisible) {
+        return;
+      }
 
-      // Ties the number of revealed characters to how far the badge has
-      // scrolled through a fixed band of the viewport, so it types in
-      // scrolling down and un-types scrolling back up, rather than just
-      // playing once on first appearance.
+      const badgeVisibleEl: HTMLElement = badgeVisible;
+      const preVisibleEl: HTMLElement = preVisible;
+
+      const badgeText = badgeEl.dataset.text || "";
+      const preText = preEl.dataset.text || "";
+      const shardLetters = Array.from(shardEl.querySelectorAll<HTMLElement>(".tw-char"));
+      const shardLen = parseInt(shardEl.dataset.length || "0", 10);
+      const total = badgeText.length + preText.length + shardLen;
+      let lastRevealed = -1;
+
       function update() {
-        const rect = el.getBoundingClientRect();
+        const rect = group.getBoundingClientRect();
         const vh = window.innerHeight;
-        const startY = vh * 0.85;
-        const endY = vh * 0.35;
+        const startY = vh * 0.9;
+        const endY = vh * 0.15;
         let progress = (startY - rect.top) / (startY - endY);
         progress = Math.max(0, Math.min(1, progress));
-        const len = Math.round(progress * text.length);
-        if (len !== lastLen) {
-          visible.textContent = text.slice(0, len);
-          lastLen = len;
-        }
+        const revealed = Math.round(progress * total);
+        if (revealed === lastRevealed) return;
+        lastRevealed = revealed;
+
+        let r = revealed;
+
+        const badgeCount = Math.max(0, Math.min(badgeText.length, r));
+        badgeVisibleEl.textContent = badgeText.slice(0, badgeCount);
+        r -= badgeText.length;
+
+        const preCount = Math.max(0, Math.min(preText.length, r));
+        preVisibleEl.textContent = preText.slice(0, preCount);
+        r -= preText.length;
+
+        const shardCount = Math.max(0, Math.min(shardLen, r));
+        shardLetters.forEach((letter) => {
+          const idx = parseInt(letter.dataset.index || "0", 10);
+          letter.classList.toggle("is-revealed", idx < shardCount);
+        });
       }
 
       update();

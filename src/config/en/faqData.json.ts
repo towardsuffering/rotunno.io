@@ -37,6 +37,15 @@ In practice: you don't need three hires to get from raw data to a dashboard your
 </ul>`,
   },
   {
+    question: "What matters most to you in an offer?",
+    answer: `Student loan repayment benefits are near the top of the list.
+<ul>
+<li>It's one of the clearest signals a company invests in the people doing the work, not just the output</li>
+<li>Salary matters too, but a real SLR benefit can outweigh a marginally higher base elsewhere</li>
+</ul>
+If it's part of your package, put it on the table early.`,
+  },
+  {
     question: "Can you lead or mentor a data team?",
     answer: `Yes.
 <ul>
