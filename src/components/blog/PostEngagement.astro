@@ -137,7 +137,7 @@ const shares = [
 
     <ul class="mt-8 flex flex-col gap-6" data-comment-list></ul>
     <p class="text-muted-foreground mt-6 text-sm" data-empty hidden>No comments yet. Start the conversation.</p>
-    <p class="text-muted-foreground mt-6 text-sm" data-unavailable hidden>Comments and reactions are unavailable right now.</p>
+    <p class="text-muted-foreground mt-6 text-sm" data-unavailable hidden>Existing comments couldn't be loaded right now. You can still post one.</p>
   </div>
 </section>
 
@@ -548,6 +548,20 @@ const shares = [
     });
     drawLike();
 
+    const replyBtn = document.createElement("button");
+    replyBtn.type = "button";
+    replyBtn.className = "link-button";
+    replyBtn.textContent = "Reply";
+    replyBtn.addEventListener("click", () => {
+      const holder = row.parentElement!;
+      const existing = holder.querySelector(":scope > .reply-form");
+      if (existing) {
+        existing.remove();
+        return;
+      }
+      holder.insertBefore(replyForm(c, ctx), row.nextSibling);
+    });
+
     row.append(likeBtn, replyBtn);
     return row;
   }
@@ -653,7 +667,16 @@ const shares = [
       // API returns newest first; top-level stays newest first, replies read oldest first
       const top = comments.filter((c) => !c.parentId);
       const repliesOf = (id: string) => comments.filter((c) => c.parentId === id).reverse();
-      list.replaceChildren(...top.map((c) => renderComment(c, ctx, repliesOf(c.id))));
+      list.replaceChildren(
+        ...top.flatMap((c) => {
+          try {
+            return [renderComment(c, ctx, repliesOf(c.id))];
+          } catch (err) {
+            console.error("[engagement] skipped a comment", err);
+            return [];
+          }
+        }),
+      );
       total = comments.length;
       count.textContent = total ? `(${total})` : "";
       empty.hidden = total > 0;
@@ -665,9 +688,9 @@ const shares = [
         setCounts(d.reactions);
         setComments(d.comments);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("[engagement]", err);
         unavailable.hidden = false;
-        form.hidden = true;
       });
 
     root.querySelectorAll<HTMLButtonElement>("[data-reaction]").forEach((btn) => {
