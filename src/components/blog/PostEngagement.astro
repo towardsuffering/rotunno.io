@@ -11,7 +11,6 @@ interface Props {
 }
 
 const { slug, title } = Astro.props as Props;
-const PALETTE = "😀 😂 🤣 😊 😍 🤔 🙄 😬 😮 😢 😡 🤯 🥳 😎 🤓 🙌 👏 👍 👎 🙏 💪 👀 🔥 💯 ✅ ❌ 💡 📈 📉 💰 🏠 🌴 ☀️ 🌀 🗳️ 🇺🇸 ❤️ 💔 🎉 🤝".split(" ");
 const url = new URL(`/blog/${slug}/`, Astro.site ?? "https://rotunno.ai").href;
 const u = encodeURIComponent(url);
 const t = encodeURIComponent(title);
@@ -119,8 +118,8 @@ const shares = [
         <span class="text-muted-foreground text-xs">One GIF or image per comment, up to 2 MB.</span>
       </div>
 
-      <div class="panel mt-3 grid grid-cols-8 gap-1 sm:grid-cols-10" data-panel="emoji" hidden>
-        {PALETTE.map((e) => <button type="button" class="emoji-key" data-insert={e}>{e}</button>)}
+      <div class="panel emoji-panel mt-3" data-panel="emoji" hidden>
+        <p class="text-muted-foreground text-sm" data-emoji-loading>Loading emoji...</p>
       </div>
 
       <div class="panel mt-3" data-panel="gif" hidden>
@@ -308,13 +307,19 @@ const shares = [
     border-radius: 0.75rem;
     padding: 0.75rem;
   }
-  .emoji-key {
-    font-size: 1.25rem;
-    border-radius: 0.4rem;
-    padding: 0.2rem;
+  .emoji-panel {
+    padding: 0;
+    overflow: hidden;
   }
-  .emoji-key:hover {
-    background: var(--color-muted);
+  .emoji-panel :global(emoji-picker) {
+    width: 100%;
+    height: 22rem;
+    --border-size: 0;
+    --num-columns: 9;
+    --background: var(--color-background);
+    --input-border-color: var(--color-border);
+    --outline-color: var(--color-primary);
+    --indicator-color: var(--color-primary);
   }
   :global(.gif-choice) {
     border-radius: 0.5rem;
@@ -351,6 +356,7 @@ const shares = [
 
 <script>
   import DOMPurify from "dompurify";
+  import emojiDataUrl from "emoji-picker-element-data/en/emojibase/data.json?url";
 
   import { COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS } from "@/config/engagement";
   const API = "/api/engagement";
@@ -598,22 +604,40 @@ const shares = [
           form.querySelector(`[data-toggle="${p.dataset.panel}"]`)?.setAttribute("aria-expanded", String(open));
         });
         if (name === "gif") loadGifs("");
+        if (name === "emoji") loadPicker();
       });
     });
 
-    form.querySelectorAll<HTMLButtonElement>("[data-insert]").forEach((key) => {
-      key.addEventListener("click", () => {
-        if (editor) {
-          editor.chain().focus().insertContent(key.dataset.insert!).run();
-          return;
-        }
-        const { selectionStart: a, selectionEnd: b, value } = textarea;
-        const e = key.dataset.insert!;
-        textarea.value = value.slice(0, a) + e + value.slice(b);
-        textarea.focus();
-        textarea.selectionStart = textarea.selectionEnd = a + e.length;
-      });
-    });
+    const insertEmoji = (e: string) => {
+      if (editor) {
+        editor.chain().focus().insertContent(e).run();
+        return;
+      }
+      const { selectionStart: a, selectionEnd: b, value } = textarea;
+      textarea.value = value.slice(0, a) + e + value.slice(b);
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = a + e.length;
+    };
+    // full searchable emoji picker, loaded the first time the panel opens
+    let pickerLoaded = false;
+    async function loadPicker() {
+      if (pickerLoaded) return;
+      pickerLoaded = true;
+      const panel = form.querySelector<HTMLElement>('[data-panel="emoji"]')!;
+      try {
+        await import("emoji-picker-element");
+        const picker = document.createElement("emoji-picker") as HTMLElement & { dataSource: string };
+        picker.dataSource = emojiDataUrl;
+        picker.classList.add(document.documentElement.classList.contains("dark") ? "dark" : "light");
+        picker.addEventListener("emoji-click", (ev) => {
+          const unicode = (ev as CustomEvent<{ unicode?: string }>).detail.unicode;
+          if (unicode) insertEmoji(unicode);
+        });
+        panel.replaceChildren(picker);
+      } catch {
+        panel.querySelector("[data-emoji-loading]")!.textContent = "Emoji picker unavailable. You can still type emoji.";
+      }
+    }
 
     const gifResults = form.querySelector<HTMLElement>("[data-gif-results]")!;
     let gifTimer: number | undefined;
