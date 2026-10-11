@@ -81,6 +81,27 @@ const shares = [
           <input name="name" maxlength="40" required autocomplete="name" class="field" placeholder="e.g. Ray from Greenwich" />
         </label>
       </div>
+      <div class="mt-4 flex flex-col gap-1.5 text-sm font-medium">
+        <span id="comment-label">Comment</span>
+        <div class="editor-shell field hidden p-0" data-editor-shell>
+          <div class="editor-toolbar" role="toolbar" aria-label="Formatting">
+            <button type="button" data-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold"><b>B</b></button>
+            <button type="button" data-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic"><i>I</i></button>
+            <button type="button" data-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline"><u>U</u></button>
+            <button type="button" data-cmd="strike" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
+            <span class="sep"></span>
+            <button type="button" data-cmd="heading" title="Heading" aria-label="Heading">H</button>
+            <button type="button" data-cmd="bulletList" title="Bulleted list" aria-label="Bulleted list">• List</button>
+            <button type="button" data-cmd="orderedList" title="Numbered list" aria-label="Numbered list">1. List</button>
+            <button type="button" data-cmd="blockquote" title="Quote" aria-label="Quote">❝</button>
+            <button type="button" data-cmd="code" title="Inline code" aria-label="Inline code">&lt;/&gt;</button>
+            <button type="button" data-cmd="codeBlock" title="Code block" aria-label="Code block">{"{ }"}</button>
+            <button type="button" data-cmd="link" title="Link" aria-label="Link">🔗</button>
+            <span class="sep"></span>
+            <button type="button" data-cmd="undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+            <button type="button" data-cmd="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
+            <span class="text-muted-foreground ml-auto pr-2 text-[11px] font-normal tabular-nums" data-char-count></span>
+          </div>
           <div class="editor-body" data-editor aria-labelledby="comment-label"></div>
         </div>
         <textarea name="text" maxlength="1000" rows="4" class="field" data-text aria-labelledby="comment-label" placeholder="Share your perspective. Disagreement welcome, keep it civil."></textarea>
@@ -396,7 +417,7 @@ const shares = [
 <script>
   import DOMPurify from "dompurify";
 
-  import { COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS, REACTIONS } from "@/config/engagement";
+  import { COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS } from "@/config/engagement";
   const API = "/api/engagement";
 
   function timeAgo(iso: string) {
@@ -497,71 +518,37 @@ const shares = [
     try {
       mine = JSON.parse(localStorage.getItem(key) ?? "[]");
     } catch {}
-    const counts = { ...(c.reactions ?? {}) };
-    const chips = document.createElement("span");
-    chips.className = "flex flex-wrap gap-1";
-    const picker = document.createElement("span");
-    picker.className = "flex flex-wrap gap-1";
-    picker.hidden = true;
-
-    const drawChips = () => {
-      chips.replaceChildren(
-        ...REACTIONS.filter((e) => (counts[e] ?? 0) > 0).map((e) => chip(e, `${e} ${counts[e]}`)),
-      );
+    const LIKE = "👍";
+    let likes = c.reactions?.[LIKE] ?? 0;
+    const likeBtn = document.createElement("button");
+    likeBtn.type = "button";
+    likeBtn.className = "chip";
+    const drawLike = () => {
+      likeBtn.textContent = likes ? `👍 ${likes}` : "👍 Like";
+      likeBtn.setAttribute("aria-pressed", String(mine.includes(LIKE)));
+      likeBtn.setAttribute("aria-label", likes ? `${likes} likes` : "Like");
     };
-    const chip = (e: string, label: string) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "chip";
-      b.textContent = label;
-      b.setAttribute("aria-pressed", String(mine.includes(e)));
-      b.setAttribute("aria-label", `React ${e}`);
-      b.addEventListener("click", () => react(e));
-      return b;
-    };
-    const react = async (e: string) => {
-      picker.hidden = true;
-      if (mine.includes(e)) return;
-      mine.push(e);
+    likeBtn.addEventListener("click", async () => {
+      if (mine.includes(LIKE)) return; // one like per reader per comment
+      mine.push(LIKE);
       try {
         localStorage.setItem(key, JSON.stringify(mine));
       } catch {}
-      counts[e] = (counts[e] ?? 0) + 1;
-      drawChips();
+      likes += 1;
+      drawLike();
       const r = await fetch("/api/engagement", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ action: "react-comment", slug: ctx.slug, commentId: c.id, emoji: e }),
+        body: JSON.stringify({ action: "react-comment", slug: ctx.slug, commentId: c.id, emoji: LIKE }),
       }).catch(() => null);
       if (r?.ok) {
-        Object.assign(counts, (await r.json()).reactions);
-        drawChips();
+        likes = (await r.json()).reactions?.[LIKE] ?? likes;
+        drawLike();
       }
-    };
-    picker.append(...REACTIONS.map((e) => chip(e, e)));
-    drawChips();
-
-    const reactBtn = document.createElement("button");
-    reactBtn.type = "button";
-    reactBtn.className = "link-button";
-    reactBtn.textContent = "React";
-    reactBtn.addEventListener("click", () => (picker.hidden = !picker.hidden));
-
-    const replyBtn = document.createElement("button");
-    replyBtn.type = "button";
-    replyBtn.className = "link-button";
-    replyBtn.textContent = "Reply";
-    replyBtn.addEventListener("click", () => {
-      const holder = row.parentElement!;
-      const existing = holder.querySelector(":scope > .reply-form");
-      if (existing) {
-        existing.remove();
-        return;
-      }
-      holder.insertBefore(replyForm(c, ctx), row.nextSibling);
     });
+    drawLike();
 
-    row.append(chips, reactBtn, picker, replyBtn);
+    row.append(likeBtn, replyBtn);
     return row;
   }
 
