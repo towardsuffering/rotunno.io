@@ -113,13 +113,23 @@ import InterVariable from "@fontsource-variable/inter/files/inter-latin-wght-nor
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
 
-  // Default: deny analytics until user consents
-  gtag('consent', 'default', { analytics_storage: 'denied' });
-
-  // If user already accepted in a prior session, grant immediately
-  if (localStorage.getItem('cookie-consent') === 'accept') {
-    gtag('consent', 'update', { analytics_storage: 'granted' });
-  }
+  // Consent mode defaults by region. In the EEA, UK and Switzerland everything is denied
+  // until the visitor answers Google's consent message (AdSense Privacy & messaging),
+  // which updates these signals automatically. Elsewhere, no popup is shown.
+  gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'],
+    wait_for_update: 500,
+  });
+  gtag('consent', 'default', {
+    analytics_storage: 'granted',
+    ad_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted',
+  });
 
   function loadGA() {
     var s = document.createElement('script');
