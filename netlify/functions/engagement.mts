@@ -5,9 +5,10 @@
  *   GET    /api/engagement?gif=<query>         -> PG-rated GIF search results from GIPHY
  *   GET    /api/engagement?img=<key>           -> an uploaded comment image
  *   POST   /api/engagement  { action: "react", slug, emoji }
- *   POST   /api/engagement  { action: "comment", slug, name, emoji, text, website, gif?, image? }
+ *   POST   /api/engagement  { action: "comment", slug, name, text|html, website, gif?, image?, parentId? }
+ *   POST   /api/engagement  { action: "react-comment", slug, commentId, emoji }
  *   GET    /api/engagement?admin=1             -> every post's comments   (x-admin-token header)
- *   DELETE /api/engagement  { slug, id }       -> remove one comment      (x-admin-token header)
+ *   DELETE /api/engagement  { slug, id }       -> remove a comment and its replies (x-admin-token header)
  *
  * Comments publish instantly; spam is limited by a honeypot field, per-IP rate limits,
  * length and link limits. A comment can carry one GIF (GIPHY, PG rating) or one uploaded
@@ -31,6 +32,8 @@ type Comment = {
   createdAt: string;
   gif?: Media;
   image?: Media & { key: string };
+  parentId?: string; // replies are one level deep
+  reactions?: Record<string, number>;
 };
 
 const SLUG = /^[a-z0-9][a-z0-9-]{0,120}$/;
@@ -203,9 +206,9 @@ export default async (req: Request, context: Context) => {
     const { slug, id } = (await req.json().catch(() => ({}))) as { slug?: string; id?: string };
     if (!slug || !SLUG.test(slug) || !id) return json({ error: "Invalid request" }, 400);
     const all = await readComments(slug);
-    const target = all.find((c) => c.id === id);
-    if (target?.image) await images().delete(target.image.key);
-    await store().setJSON(`comments/${slug}`, all.filter((c) => c.id !== id));
+    const removed = all.filter((c) => c.id === id || c.parentId === id);
+    await Promise.all(removed.filter((c) => c.image).map((c) => images().delete(c.image!.key)));
+    await store().setJSON(`comments/${slug}`, all.filter((c) => !removed.includes(c)));
     return json({ ok: true });
   }
 
@@ -223,6 +226,19 @@ export default async (req: Request, context: Context) => {
     reactions[emoji] += 1;
     await store().setJSON(`reactions/${slug}`, reactions);
     return json({ reactions });
+  }
+
+  if (body.action === "react-comment") {
+    const emoji = String(body.emoji ?? "");
+    const commentId = String(body.commentId ?? "");
+    if (!(REACTIONS as readonly string[]).includes(emoji)) return json({ error: "Unknown reaction" }, 400);
+    if (await rateLimited(ip, "react", 40, 10 * 60 * 1000)) return json({ error: "Slow down a little" }, 429);
+    const comments = await readComments(slug);
+    const target = comments.find((c) => c.id === commentId);
+    if (!target) return json({ error: "Comment not found" }, 404);
+    target.reactions = { ...(target.reactions ?? {}), [emoji]: (target.reactions?.[emoji] ?? 0) + 1 };
+    await store().setJSON(`comments/${slug}`, comments);
+    return json({ reactions: target.reactions });
   }
 
   if (body.action === "comment") {
@@ -260,6 +276,14 @@ export default async (req: Request, context: Context) => {
       if (!type) return json({ error: "Use a JPG, PNG, WebP, or GIF image." }, 400);
     }
 
+    // replies attach to a top-level comment; replying to a reply joins the same thread
+    let parentId: string | undefined;
+    if (body.parentId) {
+      const parent = (await readComments(slug)).find((c) => c.id === String(body.parentId));
+      if (!parent) return json({ error: "The comment you replied to was removed." }, 404);
+      parentId = parent.parentId ?? parent.id;
+    }
+
     if (await rateLimited(ip, "comment", 5, 10 * 60 * 1000))
       return json({ error: "You're commenting quickly. Try again in a few minutes." }, 429);
 
@@ -275,7 +299,7 @@ export default async (req: Request, context: Context) => {
       };
     }
 
-    const comment: Comment = { id, name, emoji, text, ...(html ? { html } : {}), createdAt: new Date().toISOString(), ...(gif && !image ? { gif } : {}), ...(image ? { image } : {}) };
+    const comment: Comment = { id, name, emoji, text, ...(html ? { html } : {}), ...(parentId ? { parentId } : {}), createdAt: new Date().toISOString(), ...(gif && !image ? { gif } : {}), ...(image ? { image } : {}) };
     const comments = await readComments(slug);
     comments.push(comment);
     await store().setJSON(`comments/${slug}`, comments.slice(-500));

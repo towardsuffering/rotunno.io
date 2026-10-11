@@ -75,44 +75,12 @@ const shares = [
     </h3>
 
     <form class="comment-form mt-5 rounded-xl border p-5" data-comment-form novalidate>
-      <div class="grid gap-4 sm:grid-cols-[1fr_auto]">
+      <div class="grid gap-4">
         <label class="flex flex-col gap-1.5 text-sm font-medium">
           Your name
           <input name="name" maxlength="40" required autocomplete="name" class="field" placeholder="e.g. Ray from Greenwich" />
         </label>
-        <div class="flex flex-col gap-1.5 text-sm font-medium">
-          <span id="avatar-label">Your emoji</span>
-          <button type="button" class="avatar-button" data-toggle="emoji" aria-expanded="false" aria-labelledby="avatar-label" title="Pick the emoji shown next to your comment">
-            <span class="text-xl leading-none" data-avatar-preview>＋</span>
-            <span class="text-muted-foreground text-xs font-normal" data-avatar-hint>Optional</span>
-          </button>
-          <input type="hidden" name="emoji" value="" data-avatar-input />
-        </div>
       </div>
-      <div class="panel emoji-panel mt-3" data-panel="emoji" hidden>
-        <p class="text-muted-foreground text-sm" data-emoji-loading>Loading emoji...</p>
-      </div>
-      <div class="mt-4 flex flex-col gap-1.5 text-sm font-medium">
-        <span id="comment-label">Comment</span>
-        <div class="editor-shell field hidden p-0" data-editor-shell>
-          <div class="editor-toolbar" role="toolbar" aria-label="Formatting">
-            <button type="button" data-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold"><b>B</b></button>
-            <button type="button" data-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic"><i>I</i></button>
-            <button type="button" data-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline"><u>U</u></button>
-            <button type="button" data-cmd="strike" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
-            <span class="sep"></span>
-            <button type="button" data-cmd="heading" title="Heading" aria-label="Heading">H</button>
-            <button type="button" data-cmd="bulletList" title="Bulleted list" aria-label="Bulleted list">• List</button>
-            <button type="button" data-cmd="orderedList" title="Numbered list" aria-label="Numbered list">1. List</button>
-            <button type="button" data-cmd="blockquote" title="Quote" aria-label="Quote">❝</button>
-            <button type="button" data-cmd="code" title="Inline code" aria-label="Inline code">&lt;/&gt;</button>
-            <button type="button" data-cmd="codeBlock" title="Code block" aria-label="Code block">{"{ }"}</button>
-            <button type="button" data-cmd="link" title="Link" aria-label="Link">🔗</button>
-            <span class="sep"></span>
-            <button type="button" data-cmd="undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
-            <button type="button" data-cmd="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
-            <span class="text-muted-foreground ml-auto pr-2 text-[11px] font-normal tabular-nums" data-char-count></span>
-          </div>
           <div class="editor-body" data-editor aria-labelledby="comment-label"></div>
         </div>
         <textarea name="text" maxlength="1000" rows="4" class="field" data-text aria-labelledby="comment-label" placeholder="Share your perspective. Disagreement welcome, keep it civil."></textarea>
@@ -337,33 +305,6 @@ const shares = [
     border-radius: 0.75rem;
     padding: 0.75rem;
   }
-  .avatar-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    height: 2.6rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.6rem;
-    padding: 0 0.85rem;
-  }
-  .avatar-button:hover,
-  .avatar-button[aria-expanded="true"] {
-    border-color: var(--color-primary);
-  }
-  .emoji-panel {
-    padding: 0;
-    overflow: hidden;
-  }
-  .emoji-panel :global(emoji-picker) {
-    width: 100%;
-    height: 22rem;
-    --border-size: 0;
-    --num-columns: 9;
-    --background: var(--color-background);
-    --input-border-color: var(--color-border);
-    --outline-color: var(--color-primary);
-    --indicator-color: var(--color-primary);
-  }
   :global(.gif-choice) {
     border-radius: 0.5rem;
     overflow: hidden;
@@ -384,6 +325,61 @@ const shares = [
     border-radius: 0.75rem;
     border: 1px solid var(--color-border);
   }
+  :global(.comment__actions) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+  }
+  :global(.chip) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  :global(.chip:hover),
+  :global(.chip[aria-pressed="true"]) {
+    border-color: var(--color-primary);
+  }
+  :global(.chip[aria-pressed="true"]) {
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  }
+  :global(.link-button) {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-muted-foreground);
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.4rem;
+  }
+  :global(.link-button:hover) {
+    color: var(--color-foreground);
+    background: var(--color-muted);
+  }
+  :global(.comment__replies) {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  :global(.reply-form) {
+    margin-top: 0.75rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+  :global(.reply-form .field) {
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    background: var(--color-background);
+    padding: 0.5rem 0.65rem;
+    font-size: 0.9rem;
+  }
   :global(.comment__avatar) {
     display: inline-flex;
     flex-shrink: 0;
@@ -399,9 +395,8 @@ const shares = [
 
 <script>
   import DOMPurify from "dompurify";
-  import emojiDataUrl from "emoji-picker-element-data/en/emojibase/data.json?url";
 
-  import { COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS } from "@/config/engagement";
+  import { COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS, REACTIONS } from "@/config/engagement";
   const API = "/api/engagement";
 
   function timeAgo(iso: string) {
@@ -417,14 +412,27 @@ const shares = [
   }
 
   type Media = { url: string; width: number; height: number };
-  type Comment = { id: string; name: string; emoji: string; text: string; html?: string; createdAt: string; gif?: Media; image?: Media };
+  type Comment = {
+    id: string;
+    name: string;
+    emoji: string;
+    text: string;
+    html?: string;
+    createdAt: string;
+    gif?: Media;
+    image?: Media;
+    parentId?: string;
+    reactions?: Record<string, number>;
+  };
+  type Ctx = { slug: string; onReply: (parent: Comment, name: string, text: string) => Promise<Comment | string> };
 
-  function renderComment(c: Comment) {
+  function renderComment(c: Comment, ctx: Ctx, replies: Comment[] = []) {
     const li = document.createElement("li");
     li.className = "flex gap-3";
+    li.dataset.commentId = c.id;
     const avatar = document.createElement("span");
     avatar.className = "comment__avatar";
-    avatar.textContent = c.emoji || c.name.trim().charAt(0).toUpperCase() || "?";
+    avatar.textContent = c.name.trim().charAt(0).toUpperCase() || "?";
     const body = document.createElement("div");
     body.className = "min-w-0";
     const meta = document.createElement("div");
@@ -467,8 +475,147 @@ const shares = [
         body.append(via);
       }
     }
+    body.append(renderActions(c, ctx));
+    if (!c.parentId) {
+      const thread = document.createElement("ul");
+      thread.className = "comment__replies";
+      thread.dataset.thread = c.id;
+      thread.hidden = replies.length === 0;
+      thread.append(...replies.map((r) => renderComment(r, ctx)));
+      body.append(thread);
+    }
     li.append(avatar, body);
     return li;
+  }
+
+  // per-comment emoji reactions and an inline reply form
+  function renderActions(c: Comment, ctx: Ctx) {
+    const row = document.createElement("div");
+    row.className = "comment__actions";
+    const key = `reacted:c:${c.id}`;
+    let mine: string[] = [];
+    try {
+      mine = JSON.parse(localStorage.getItem(key) ?? "[]");
+    } catch {}
+    const counts = { ...(c.reactions ?? {}) };
+    const chips = document.createElement("span");
+    chips.className = "flex flex-wrap gap-1";
+    const picker = document.createElement("span");
+    picker.className = "flex flex-wrap gap-1";
+    picker.hidden = true;
+
+    const drawChips = () => {
+      chips.replaceChildren(
+        ...REACTIONS.filter((e) => (counts[e] ?? 0) > 0).map((e) => chip(e, `${e} ${counts[e]}`)),
+      );
+    };
+    const chip = (e: string, label: string) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = label;
+      b.setAttribute("aria-pressed", String(mine.includes(e)));
+      b.setAttribute("aria-label", `React ${e}`);
+      b.addEventListener("click", () => react(e));
+      return b;
+    };
+    const react = async (e: string) => {
+      picker.hidden = true;
+      if (mine.includes(e)) return;
+      mine.push(e);
+      try {
+        localStorage.setItem(key, JSON.stringify(mine));
+      } catch {}
+      counts[e] = (counts[e] ?? 0) + 1;
+      drawChips();
+      const r = await fetch("/api/engagement", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "react-comment", slug: ctx.slug, commentId: c.id, emoji: e }),
+      }).catch(() => null);
+      if (r?.ok) {
+        Object.assign(counts, (await r.json()).reactions);
+        drawChips();
+      }
+    };
+    picker.append(...REACTIONS.map((e) => chip(e, e)));
+    drawChips();
+
+    const reactBtn = document.createElement("button");
+    reactBtn.type = "button";
+    reactBtn.className = "link-button";
+    reactBtn.textContent = "React";
+    reactBtn.addEventListener("click", () => (picker.hidden = !picker.hidden));
+
+    const replyBtn = document.createElement("button");
+    replyBtn.type = "button";
+    replyBtn.className = "link-button";
+    replyBtn.textContent = "Reply";
+    replyBtn.addEventListener("click", () => {
+      const holder = row.parentElement!;
+      const existing = holder.querySelector(":scope > .reply-form");
+      if (existing) {
+        existing.remove();
+        return;
+      }
+      holder.insertBefore(replyForm(c, ctx), row.nextSibling);
+    });
+
+    row.append(chips, reactBtn, picker, replyBtn);
+    return row;
+  }
+
+  function replyForm(parent: Comment, ctx: Ctx) {
+    const f = document.createElement("form");
+    f.className = "reply-form";
+    const name = document.createElement("input");
+    name.className = "field";
+    name.maxLength = 40;
+    name.required = true;
+    name.placeholder = "Your name";
+    name.autocomplete = "name";
+    try {
+      name.value = localStorage.getItem("comment-name") ?? "";
+    } catch {}
+    const text = document.createElement("textarea");
+    text.className = "field";
+    text.rows = 3;
+    text.maxLength = 1000;
+    text.required = true;
+    text.placeholder = `Reply to ${parent.name}`;
+    const bar = document.createElement("div");
+    bar.className = "flex flex-wrap items-center gap-2";
+    const submit = document.createElement("button");
+    submit.type = "submit";
+    submit.className = "button button--primary min-w-0 px-4 py-1.5 text-sm";
+    submit.textContent = "Post reply";
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.className = "link-button";
+    cancel.textContent = "Cancel";
+    cancel.addEventListener("click", () => f.remove());
+    const status = document.createElement("span");
+    status.className = "text-muted-foreground text-sm";
+    status.setAttribute("role", "status");
+    bar.append(submit, cancel, status);
+    f.append(name, text, bar);
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      submit.disabled = true;
+      status.textContent = "Posting...";
+      const result = await ctx.onReply(parent, name.value, text.value);
+      submit.disabled = false;
+      if (typeof result === "string") {
+        status.textContent = result;
+        return;
+      }
+      try {
+        localStorage.setItem("comment-name", name.value);
+      } catch {}
+      f.remove();
+    });
+    setTimeout(() => text.focus(), 0);
+    return f;
   }
 
   function initEngagement() {
@@ -494,10 +641,35 @@ const shares = [
         b.setAttribute("aria-pressed", String(reacted.includes(b.dataset.reaction!)));
       });
     };
+    const ctx: Ctx = {
+      slug,
+      onReply: async (parent, replyName, replyText) => {
+        const r = await fetch(API, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ action: "comment", slug, parentId: parent.id, name: replyName, text: replyText }),
+        }).catch(() => null);
+        const d = r ? await r.json().catch(() => ({})) : {};
+        if (!r?.ok || !d.comment) return d.error ?? "Something went wrong. Please try again.";
+        const thread = list.querySelector<HTMLUListElement>(`[data-thread="${d.comment.parentId}"]`);
+        if (thread) {
+          thread.hidden = false;
+          thread.append(renderComment(d.comment, ctx));
+        }
+        total += 1;
+        count.textContent = `(${total})`;
+        return d.comment;
+      },
+    };
+    let total = 0;
     const setComments = (comments: Comment[]) => {
-      list.replaceChildren(...comments.map(renderComment));
-      count.textContent = comments.length ? `(${comments.length})` : "";
-      empty.hidden = comments.length > 0;
+      // API returns newest first; top-level stays newest first, replies read oldest first
+      const top = comments.filter((c) => !c.parentId);
+      const repliesOf = (id: string) => comments.filter((c) => c.parentId === id).reverse();
+      list.replaceChildren(...top.map((c) => renderComment(c, ctx, repliesOf(c.id))));
+      total = comments.length;
+      count.textContent = total ? `(${total})` : "";
+      empty.hidden = total > 0;
     };
 
     fetch(`${API}?slug=${encodeURIComponent(slug)}`)
@@ -647,41 +819,8 @@ const shares = [
           form.querySelector(`[data-toggle="${p.dataset.panel}"]`)?.setAttribute("aria-expanded", String(open));
         });
         if (name === "gif") loadGifs("");
-        if (name === "emoji") loadPicker();
       });
     });
-
-    const avatarInput = form.querySelector<HTMLInputElement>("[data-avatar-input]")!;
-    const avatarPreview = form.querySelector<HTMLElement>("[data-avatar-preview]")!;
-    const avatarHint = form.querySelector<HTMLElement>("[data-avatar-hint]")!;
-    const setAvatar = (e: string) => {
-      avatarInput.value = e;
-      avatarPreview.textContent = e || "＋";
-      avatarHint.textContent = e ? "Change" : "Optional";
-      const panel = form.querySelector<HTMLElement>('[data-panel="emoji"]')!;
-      panel.hidden = true;
-      form.querySelector('[data-toggle="emoji"]')?.setAttribute("aria-expanded", "false");
-    };
-    // full searchable emoji picker, loaded the first time the panel opens
-    let pickerLoaded = false;
-    async function loadPicker() {
-      if (pickerLoaded) return;
-      pickerLoaded = true;
-      const panel = form.querySelector<HTMLElement>('[data-panel="emoji"]')!;
-      try {
-        await import("emoji-picker-element");
-        const picker = document.createElement("emoji-picker") as HTMLElement & { dataSource: string };
-        picker.dataSource = emojiDataUrl;
-        picker.classList.add(document.documentElement.classList.contains("dark") ? "dark" : "light");
-        picker.addEventListener("emoji-click", (ev) => {
-          const unicode = (ev as CustomEvent<{ unicode?: string }>).detail.unicode;
-          if (unicode) setAvatar(unicode);
-        });
-        panel.replaceChildren(picker);
-      } catch {
-        panel.querySelector("[data-emoji-loading]")!.textContent = "Emoji picker unavailable. You can still type emoji.";
-      }
-    }
 
     const gifResults = form.querySelector<HTMLElement>("[data-gif-results]")!;
     let gifTimer: number | undefined;
@@ -785,9 +924,13 @@ const shares = [
       const d = r ? await r.json().catch(() => ({})) : {};
       button.disabled = false;
       if (r?.ok && d.comment) {
-        list.prepend(renderComment(d.comment));
+        list.prepend(renderComment(d.comment, ctx));
+        total += 1;
+        try {
+          localStorage.setItem("comment-name", String(data.name ?? ""));
+        } catch {}
         empty.hidden = true;
-        count.textContent = `(${list.children.length})`;
+        count.textContent = `(${total})`;
         (form.elements.namedItem("text") as HTMLTextAreaElement).value = "";
         editor?.commands.clearContent();
         clearMedia();

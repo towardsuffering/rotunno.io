@@ -130,30 +130,8 @@ const showBlogPointer = !Astro.url.pathname.startsWith("/blog");
           {locales.length > 1 && <LanguageSelect class="ml-4 hidden md:block" />}
 
           <!-- mobile nav menu, only load on small screens where it is visible -->
-          <div class="relative md:hidden">
+          <div class="md:hidden">
             <MobileNav />
-            {showBlogPointer && (
-              <span class="blog-pointer blog-pointer--mobile" aria-hidden="true">
-                <svg viewBox="0 0 80 64" fill="none">
-                  <path
-                    class="blog-pointer__line"
-                    d="M20 50 C 25 40, 32 46, 38 34 S 52 14, 58 8"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    class="blog-pointer__head"
-                    d="M47 10 L 59 7 L 58 19"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <span class="blog-pointer__note">blog's in here · drafted by me, written with Opus 5.5</span>
-              </span>
-            )}
           </div>
         </div>
       </header>
@@ -215,19 +193,6 @@ const showBlogPointer = !Astro.url.pathname.startsWith("/blog");
   }
   .navbar--scrolled .blog-pointer {
     opacity: 0;
-  }
-  /* mobile: points at the menu button, where the Blog link lives */
-  .blog-pointer--mobile {
-    right: 35%;
-    width: 56px;
-    height: 46px;
-  }
-  .blog-pointer--mobile .blog-pointer__note {
-    top: 36px;
-    font-size: 1.1rem;
-    white-space: normal;
-    width: 12.5rem;
-    text-align: right;
   }
   /* handwritten note at the arrow's tail */
   .blog-pointer__note {

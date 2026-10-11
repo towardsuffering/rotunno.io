@@ -37,8 +37,6 @@
     "astro-icon": "1.1.5",
     "astro-seo": "0.8.4",
     "dompurify": "^3.4.16",
-    "emoji-picker-element": "^1.29.1",
-    "emoji-picker-element-data": "^1.8.0",
     "motion": "12.23.25",
     "motion-on-scroll": "^1.0.0",
     "react": "19.2.0",
