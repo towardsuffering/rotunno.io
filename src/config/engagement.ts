@@ -3,7 +3,6 @@
  * and validated by the API (netlify/functions/engagement.mts). Edit here to change both.
  */
 export const REACTIONS = ["👍", "💡", "🔥", "🤔", "👏"] as const;
-export const AVATARS = ["🙂", "😎", "🤓", "🧐", "🦊", "🐢", "🌴", "📈", "☕", "🎧"] as const;
 
 /** Formatting allowed in comments. Used by the server sanitizer and the browser sanitizer. */
 export const COMMENT_TAGS = [

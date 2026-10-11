@@ -75,12 +75,22 @@ const shares = [
     </h3>
 
     <form class="comment-form mt-5 rounded-xl border p-5" data-comment-form novalidate>
-      <div class="grid gap-4">
+      <div class="grid gap-4 sm:grid-cols-[1fr_auto]">
         <label class="flex flex-col gap-1.5 text-sm font-medium">
           Your name
           <input name="name" maxlength="40" required autocomplete="name" class="field" placeholder="e.g. Maria from Tampa" />
         </label>
-
+        <div class="flex flex-col gap-1.5 text-sm font-medium">
+          <span id="avatar-label">Your emoji</span>
+          <button type="button" class="avatar-button" data-toggle="emoji" aria-expanded="false" aria-labelledby="avatar-label" title="Pick the emoji shown next to your comment">
+            <span class="text-xl leading-none" data-avatar-preview>＋</span>
+            <span class="text-muted-foreground text-xs font-normal" data-avatar-hint>Optional</span>
+          </button>
+          <input type="hidden" name="emoji" value="" data-avatar-input />
+        </div>
+      </div>
+      <div class="panel emoji-panel mt-3" data-panel="emoji" hidden>
+        <p class="text-muted-foreground text-sm" data-emoji-loading>Loading emoji...</p>
       </div>
       <div class="mt-4 flex flex-col gap-1.5 text-sm font-medium">
         <span id="comment-label">Comment</span>
@@ -109,17 +119,12 @@ const shares = [
       </div>
       <!-- media toolbar: emoji, GIF search, image upload -->
       <div class="mt-2 flex flex-wrap items-center gap-2">
-        <button type="button" class="tool" data-toggle="emoji" aria-expanded="false">😊 Emoji</button>
         <button type="button" class="tool" data-toggle="gif" aria-expanded="false">GIF</button>
         <label class="tool cursor-pointer">
           🖼️ Image
           <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="sr-only" data-file />
         </label>
         <span class="text-muted-foreground text-xs">One GIF or image per comment, up to 2 MB.</span>
-      </div>
-
-      <div class="panel emoji-panel mt-3" data-panel="emoji" hidden>
-        <p class="text-muted-foreground text-sm" data-emoji-loading>Loading emoji...</p>
       </div>
 
       <div class="panel mt-3" data-panel="gif" hidden>
@@ -306,6 +311,19 @@ const shares = [
     border: 1px solid var(--color-border);
     border-radius: 0.75rem;
     padding: 0.75rem;
+  }
+  .avatar-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 0 0.85rem;
+  }
+  .avatar-button:hover,
+  .avatar-button[aria-expanded="true"] {
+    border-color: var(--color-primary);
   }
   .emoji-panel {
     padding: 0;
@@ -608,15 +626,16 @@ const shares = [
       });
     });
 
-    const insertEmoji = (e: string) => {
-      if (editor) {
-        editor.chain().focus().insertContent(e).run();
-        return;
-      }
-      const { selectionStart: a, selectionEnd: b, value } = textarea;
-      textarea.value = value.slice(0, a) + e + value.slice(b);
-      textarea.focus();
-      textarea.selectionStart = textarea.selectionEnd = a + e.length;
+    const avatarInput = form.querySelector<HTMLInputElement>("[data-avatar-input]")!;
+    const avatarPreview = form.querySelector<HTMLElement>("[data-avatar-preview]")!;
+    const avatarHint = form.querySelector<HTMLElement>("[data-avatar-hint]")!;
+    const setAvatar = (e: string) => {
+      avatarInput.value = e;
+      avatarPreview.textContent = e || "＋";
+      avatarHint.textContent = e ? "Change" : "Optional";
+      const panel = form.querySelector<HTMLElement>('[data-panel="emoji"]')!;
+      panel.hidden = true;
+      form.querySelector('[data-toggle="emoji"]')?.setAttribute("aria-expanded", "false");
     };
     // full searchable emoji picker, loaded the first time the panel opens
     let pickerLoaded = false;
@@ -631,7 +650,7 @@ const shares = [
         picker.classList.add(document.documentElement.classList.contains("dark") ? "dark" : "light");
         picker.addEventListener("emoji-click", (ev) => {
           const unicode = (ev as CustomEvent<{ unicode?: string }>).detail.unicode;
-          if (unicode) insertEmoji(unicode);
+          if (unicode) setAvatar(unicode);
         });
         panel.replaceChildren(picker);
       } catch {

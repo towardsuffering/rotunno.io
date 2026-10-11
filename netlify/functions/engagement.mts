@@ -19,7 +19,7 @@ import type { Config, Context } from "@netlify/functions";
 
 import { FilterXSS } from "xss";
 
-import { AVATARS, COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS, REACTIONS } from "../../src/config/engagement";
+import { COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS, REACTIONS } from "../../src/config/engagement";
 
 type Media = { url: string; width: number; height: number };
 type Comment = {
@@ -34,6 +34,8 @@ type Comment = {
 };
 
 const SLUG = /^[a-z0-9][a-z0-9-]{0,120}$/;
+// one emoji (including skin tones, ZWJ sequences, and flags); no letters or plain text
+const EMOJI = /^(?=.*[\p{Extended_Pictographic}\p{Regional_Indicator}])[\p{Extended_Pictographic}\p{Emoji_Component}\u200D\uFE0F]{1,16}$/u;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -238,7 +240,8 @@ export default async (req: Request, context: Context) => {
     if (body.gif && !gif) return json({ error: "That GIF can't be used." }, 400);
     if (name.length < 1) return json({ error: "Please add your name." }, 400);
     if (text.length < 2 && !hasMedia) return json({ error: "Write a comment or add a GIF or image." }, 400);
-    if (emoji && !(AVATARS as readonly string[]).includes(emoji)) return json({ error: "Unknown emoji." }, 400);
+    const graphemes = [...new Intl.Segmenter("en", { granularity: "grapheme" }).segment(emoji)].length;
+    if (emoji && (!EMOJI.test(emoji) || graphemes !== 1)) return json({ error: "Pick a single emoji." }, 400);
     if (text.length > COMMENT_MAX_CHARS) return json({ error: `Comments are limited to ${COMMENT_MAX_CHARS} characters.` }, 400);
     const linkCount = Math.max((html.match(/<a\s/gi) ?? []).length, (text.match(/https?:\/\//gi) ?? []).length);
     if (linkCount > 2) return json({ error: "Too many links in one comment." }, 400);
