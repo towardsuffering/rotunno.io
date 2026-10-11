@@ -250,48 +250,73 @@ const shares = [
     outline: 2px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
     outline-offset: 1px;
   }
-  /* shared rich-text styles for the editor and published comments */
-  :global(.rich) :where(p + p, ul, ol, blockquote, pre, h3) {
+  /* shared rich-text styles for the editor and published comments. Fully :global because
+     these elements are created by the editor / DOMPurify, so they never carry Astro's scope attribute. */
+  :global(.rich p + p),
+  :global(.rich ul),
+  :global(.rich ol),
+  :global(.rich blockquote),
+  :global(.rich pre),
+  :global(.rich h3),
+  :global(.rich hr) {
     margin-top: 0.5rem;
   }
-  :global(.rich) ul {
+  :global(.rich ul) {
     list-style: disc;
-    padding-left: 1.25rem;
+    padding-left: 1.4rem;
   }
-  :global(.rich) ol {
+  :global(.rich ol) {
     list-style: decimal;
-    padding-left: 1.25rem;
+    padding-left: 1.4rem;
   }
-  :global(.rich) blockquote {
+  :global(.rich li) {
+    display: list-item;
+  }
+  :global(.rich li p) {
+    margin: 0;
+  }
+  :global(.rich blockquote) {
     border-left: 3px solid var(--color-primary);
     padding-left: 0.75rem;
     font-style: italic;
   }
-  :global(.rich) h3 {
-    font-weight: 600;
-    font-size: 1.05rem;
+  :global(.rich h3) {
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 1.35;
     color: var(--color-foreground);
   }
-  :global(.rich) a {
+  :global(.rich a) {
     color: var(--color-primary);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
-  :global(.rich) code {
+  :global(.rich code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     background: var(--color-muted);
-    border-radius: 0.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.3rem;
     padding: 0.05rem 0.3rem;
     font-size: 0.85em;
   }
-  :global(.rich) pre {
+  :global(.rich pre) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     background: var(--color-muted);
+    border: 1px solid var(--color-border);
     border-radius: 0.5rem;
     padding: 0.6rem 0.75rem;
     overflow-x: auto;
+    white-space: pre;
   }
-  :global(.rich) pre code {
+  :global(.rich pre code) {
     background: none;
+    border: 0;
     padding: 0;
+    font-size: 0.85rem;
+  }
+  :global(.rich hr) {
+    border: 0;
+    border-top: 1px solid var(--color-border);
   }
   .tool {
     display: inline-flex;
