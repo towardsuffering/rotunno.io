@@ -5,6 +5,7 @@ import { type CollectionEntry, getEntries } from "astro:content";
 
 import AdSlot from "@/components/ads/AdSlot.astro";
 import PostCover from "@/components/blog/PostCover.astro";
+import PostEngagement from "@/components/blog/PostEngagement.astro";
 import YouTubeEmbed from "@/components/blog/YouTubeEmbed.astro";
 import Button from "@/components/button/Button.astro";
 import Category from "@/components/category/Category.astro";
@@ -124,6 +125,8 @@ const authorsData = await getEntries(authors);
               </p>
             )
           }
+
+          <PostEngagement slug={post.id} title={title} />
 
           <AdSlot placement="post-end" />
         </div>

@@ -1,0 +1,752 @@
+---
+/**
+ * Bottom-of-post engagement: emoji reactions, share buttons, and reader comments
+ * (name + emoji avatar). Data comes from netlify/functions/engagement.mts.
+ */
+import { REACTIONS } from "@/config/engagement";
+
+interface Props {
+  slug: string;
+  title: string;
+}
+
+const { slug, title } = Astro.props as Props;
+const PALETTE = "😀 😂 🤣 😊 😍 🤔 🙄 😬 😮 😢 😡 🤯 🥳 😎 🤓 🙌 👏 👍 👎 🙏 💪 👀 🔥 💯 ✅ ❌ 💡 📈 📉 💰 🏠 🌴 ☀️ 🌀 🗳️ 🇺🇸 ❤️ 💔 🎉 🤝".split(" ");
+const url = new URL(`/blog/${slug}/`, Astro.site ?? "https://rotunno.ai").href;
+const u = encodeURIComponent(url);
+const t = encodeURIComponent(title);
+
+const shares = [
+  { label: "X", href: `https://twitter.com/intent/tweet?url=${u}&text=${t}`, icon: "M4 4l11.733 16h4.267l-11.733 -16z M4 20l6.768 -6.768 M13.232 10.768l6.768 -6.768" },
+  { label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}`, icon: "M8 11v5 M8 8v.01 M12 16v-5 M16 16v-3a2 2 0 0 0 -4 0 M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" },
+  { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${u}`, icon: "M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" },
+  { label: "Reddit", href: `https://www.reddit.com/submit?url=${u}&title=${t}`, icon: "M12 8c2.648 0 5.028 .826 6.675 2.14a2.5 2.5 0 0 1 2.326 4.36c0 3.59 -4.03 6.5 -9 6.5c-4.875 0 -8.845 -2.8 -9 -6.294l-1 -.206a2.5 2.5 0 0 1 2.326 -4.36c1.646 -1.313 4.026 -2.14 6.674 -2.14z M12 8l1 -5l6 1 M19 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0 M9 13v.5 M15 13v.5 M10 16.5c.62 .5 1.274 .5 2 .5s1.38 0 2 -.5" },
+  { label: "Email", href: `mailto:?subject=${t}&body=${u}`, icon: "M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z M3 7l9 6l9 -6" },
+];
+---
+
+<section class="engagement not-content mt-16 border-t pt-10" data-engagement data-slug={slug} data-url={url} data-title={title}>
+  <!-- Reactions -->
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div>
+      <h2 class="font-heading text-2xl font-semibold tracking-tight">Comments?</h2>
+      <p class="text-muted-foreground mt-1 text-sm">React, share it, or leave a comment below.</p>
+    </div>
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Reactions">
+      {
+        REACTIONS.map((e) => (
+          <button type="button" class="reaction" data-reaction={e} aria-pressed="false">
+            <span class="text-lg leading-none">{e}</span>
+            <span class="reaction__count text-sm tabular-nums" data-count>0</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Share -->
+  <div class="mt-6 flex flex-wrap items-center gap-2">
+    <span class="text-muted-foreground mr-1 text-xs font-semibold tracking-[0.18em] uppercase">Share</span>
+    {
+      shares.map((s) => (
+        <a class="share" href={s.href} target="_blank" rel="noopener" aria-label={`Share on ${s.label}`} title={s.label}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+            <path d={s.icon} />
+          </svg>
+        </a>
+      ))
+    }
+    <button type="button" class="share" data-copy aria-label="Copy link" title="Copy link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+        <path d="M9 15l6 -6 M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464 M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" />
+      </svg>
+    </button>
+    <button type="button" class="share hidden" data-native-share aria-label="Share" title="Share">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+        <path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0 M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0 M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0 M8.7 10.7l6.6 -3.4 M8.7 13.3l6.6 3.4" />
+      </svg>
+    </button>
+    <span class="text-primary text-xs font-medium opacity-0 transition-opacity" data-copied>Link copied</span>
+  </div>
+
+  <!-- Comments -->
+  <div class="mt-12">
+    <h3 class="font-heading text-xl font-semibold">
+      Write your thoughts? <span class="text-muted-foreground text-base font-normal" data-comment-count></span>
+    </h3>
+
+    <form class="comment-form mt-5 rounded-xl border p-5" data-comment-form novalidate>
+      <div class="grid gap-4">
+        <label class="flex flex-col gap-1.5 text-sm font-medium">
+          Your name
+          <input name="name" maxlength="40" required autocomplete="name" class="field" placeholder="e.g. Maria from Tampa" />
+        </label>
+
+      </div>
+      <div class="mt-4 flex flex-col gap-1.5 text-sm font-medium">
+        <span id="comment-label">Comment</span>
+        <div class="editor-shell field hidden p-0" data-editor-shell>
+          <div class="editor-toolbar" role="toolbar" aria-label="Formatting">
+            <button type="button" data-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold"><b>B</b></button>
+            <button type="button" data-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic"><i>I</i></button>
+            <button type="button" data-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline"><u>U</u></button>
+            <button type="button" data-cmd="strike" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
+            <span class="sep"></span>
+            <button type="button" data-cmd="heading" title="Heading" aria-label="Heading">H</button>
+            <button type="button" data-cmd="bulletList" title="Bulleted list" aria-label="Bulleted list">• List</button>
+            <button type="button" data-cmd="orderedList" title="Numbered list" aria-label="Numbered list">1. List</button>
+            <button type="button" data-cmd="blockquote" title="Quote" aria-label="Quote">❝</button>
+            <button type="button" data-cmd="code" title="Inline code" aria-label="Inline code">&lt;/&gt;</button>
+            <button type="button" data-cmd="codeBlock" title="Code block" aria-label="Code block">{"{ }"}</button>
+            <button type="button" data-cmd="link" title="Link" aria-label="Link">🔗</button>
+            <span class="sep"></span>
+            <button type="button" data-cmd="undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+            <button type="button" data-cmd="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
+            <span class="text-muted-foreground ml-auto pr-2 text-[11px] font-normal tabular-nums" data-char-count></span>
+          </div>
+          <div class="editor-body" data-editor aria-labelledby="comment-label"></div>
+        </div>
+        <textarea name="text" maxlength="1000" rows="4" class="field" data-text aria-labelledby="comment-label" placeholder="Share your perspective. Disagreement welcome, keep it civil."></textarea>
+      </div>
+      <!-- media toolbar: emoji, GIF search, image upload -->
+      <div class="mt-2 flex flex-wrap items-center gap-2">
+        <button type="button" class="tool" data-toggle="emoji" aria-expanded="false">😊 Emoji</button>
+        <button type="button" class="tool" data-toggle="gif" aria-expanded="false">GIF</button>
+        <label class="tool cursor-pointer">
+          🖼️ Image
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="sr-only" data-file />
+        </label>
+        <span class="text-muted-foreground text-xs">One GIF or image per comment, up to 2 MB.</span>
+      </div>
+
+      <div class="panel mt-3 grid grid-cols-8 gap-1 sm:grid-cols-10" data-panel="emoji" hidden>
+        {PALETTE.map((e) => <button type="button" class="emoji-key" data-insert={e}>{e}</button>)}
+      </div>
+
+      <div class="panel mt-3" data-panel="gif" hidden>
+        <input type="search" class="field w-full text-sm" placeholder="Search GIFs and memes" data-gif-query />
+        <div class="mt-3 grid max-h-72 grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4" data-gif-results></div>
+        <p class="text-muted-foreground mt-2 text-right text-[11px]">Powered by GIPHY</p>
+      </div>
+
+      <div class="mt-3 hidden items-start gap-3" data-media-preview>
+        <img alt="Selected media" class="max-h-40 rounded-lg border" data-media-img />
+        <button type="button" class="tool" data-media-remove>Remove</button>
+      </div>
+
+      <!-- honeypot: hidden from people, filled in by bots -->
+      <label class="sr-only" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <button type="submit" class="button button--primary px-5 py-2 text-sm">Post comment</button>
+        <span class="text-muted-foreground text-sm" data-form-status role="status"></span>
+      </div>
+    </form>
+
+    <ul class="mt-8 flex flex-col gap-6" data-comment-list></ul>
+    <p class="text-muted-foreground mt-6 text-sm" data-empty hidden>No comments yet. Start the conversation.</p>
+    <p class="text-muted-foreground mt-6 text-sm" data-unavailable hidden>Comments and reactions are unavailable right now.</p>
+  </div>
+</section>
+
+<style>
+  .reaction {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.4rem 0.8rem;
+    transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .reaction:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-primary);
+  }
+  .reaction[aria-pressed="true"] {
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  }
+  .reaction.pop span:first-child {
+    animation: pop 0.35s ease;
+  }
+  @keyframes pop {
+    50% {
+      transform: scale(1.4);
+    }
+  }
+  .share {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-muted-foreground);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .share:hover {
+    color: var(--color-foreground);
+    border-color: var(--color-primary);
+  }
+  .field {
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    background: var(--color-background);
+    padding: 0.6rem 0.75rem;
+    font-weight: 400;
+  }
+  .field:focus {
+    outline: 2px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
+    outline-offset: 1px;
+  }
+  .editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.15rem;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.35rem;
+  }
+  .editor-toolbar button {
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.45rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .editor-toolbar button:hover {
+    background: var(--color-muted);
+  }
+  .editor-toolbar button.is-active {
+    background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+    color: var(--color-foreground);
+  }
+  .editor-toolbar .sep {
+    width: 1px;
+    height: 1.25rem;
+    margin: 0 0.25rem;
+    background: var(--color-border);
+  }
+  .editor-body :global(.ProseMirror) {
+    min-height: 7rem;
+    padding: 0.75rem;
+    font-weight: 400;
+    outline: none;
+  }
+  .editor-body :global(.ProseMirror p.is-editor-empty:first-child::before) {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    color: var(--color-muted-foreground);
+  }
+  .editor-shell:focus-within {
+    outline: 2px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
+    outline-offset: 1px;
+  }
+  /* shared rich-text styles for the editor and published comments */
+  :global(.rich) :where(p + p, ul, ol, blockquote, pre, h3) {
+    margin-top: 0.5rem;
+  }
+  :global(.rich) ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  :global(.rich) ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+  :global(.rich) blockquote {
+    border-left: 3px solid var(--color-primary);
+    padding-left: 0.75rem;
+    font-style: italic;
+  }
+  :global(.rich) h3 {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--color-foreground);
+  }
+  :global(.rich) a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  :global(.rich) code {
+    background: var(--color-muted);
+    border-radius: 0.25rem;
+    padding: 0.05rem 0.3rem;
+    font-size: 0.85em;
+  }
+  :global(.rich) pre {
+    background: var(--color-muted);
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    overflow-x: auto;
+  }
+  :global(.rich) pre code {
+    background: none;
+    padding: 0;
+  }
+  .tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  .tool:hover,
+  .tool[aria-expanded="true"] {
+    border-color: var(--color-primary);
+  }
+  .panel {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+  }
+  .emoji-key {
+    font-size: 1.25rem;
+    border-radius: 0.4rem;
+    padding: 0.2rem;
+  }
+  .emoji-key:hover {
+    background: var(--color-muted);
+  }
+  :global(.gif-choice) {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 2px solid transparent;
+  }
+  :global(.gif-choice:hover) {
+    border-color: var(--color-primary);
+  }
+  :global(.gif-choice img) {
+    width: 100%;
+    height: 6rem;
+    object-fit: cover;
+  }
+  :global(.comment__media) {
+    margin-top: 0.6rem;
+    max-width: min(100%, 22rem);
+    max-height: 22rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+  }
+  :global(.comment__avatar) {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--color-muted);
+    font-size: 1.25rem;
+  }
+</style>
+
+<script>
+  import DOMPurify from "dompurify";
+
+  import { COMMENT_ATTRS, COMMENT_MAX_CHARS, COMMENT_TAGS } from "@/config/engagement";
+  const API = "/api/engagement";
+
+  function timeAgo(iso: string) {
+    const s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (s < 60) return "just now";
+    const steps: [number, string][] = [[60, "minute"], [24, "hour"], [30, "day"], [12, "month"], [Infinity, "year"]];
+    let v = s / 60;
+    for (const [size, unit] of steps) {
+      if (v < size) return `${Math.floor(v)} ${unit}${Math.floor(v) === 1 ? "" : "s"} ago`;
+      v /= size;
+    }
+    return "";
+  }
+
+  type Media = { url: string; width: number; height: number };
+  type Comment = { id: string; name: string; emoji: string; text: string; html?: string; createdAt: string; gif?: Media; image?: Media };
+
+  function renderComment(c: Comment) {
+    const li = document.createElement("li");
+    li.className = "flex gap-3";
+    const avatar = document.createElement("span");
+    avatar.className = "comment__avatar";
+    avatar.textContent = c.emoji || c.name.trim().charAt(0).toUpperCase() || "?";
+    const body = document.createElement("div");
+    body.className = "min-w-0";
+    const meta = document.createElement("div");
+    meta.className = "flex flex-wrap items-baseline gap-x-2 text-sm";
+    const name = document.createElement("span");
+    name.className = "text-foreground font-semibold";
+    name.textContent = c.name;
+    const when = document.createElement("time");
+    when.className = "text-muted-foreground text-xs";
+    when.dateTime = c.createdAt;
+    when.textContent = timeAgo(c.createdAt);
+    meta.append(name, when);
+    const text = document.createElement("div");
+    text.className = "rich text-muted-foreground mt-1 break-words";
+    if (c.html) {
+      // already sanitized on the server; sanitized again here with the same allowlist
+      text.innerHTML = DOMPurify.sanitize(c.html, { ALLOWED_TAGS: COMMENT_TAGS, ALLOWED_ATTR: COMMENT_ATTRS });
+    } else {
+      text.classList.add("whitespace-pre-line");
+      text.textContent = c.text;
+    }
+    body.append(meta);
+    if (c.text) body.append(text);
+    const media = c.gif ?? c.image;
+    if (media) {
+      const img = document.createElement("img");
+      img.className = "comment__media";
+      img.src = media.url;
+      img.alt = c.gif ? "GIF" : "Image shared by " + c.name;
+      img.loading = "lazy";
+      if (media.width && media.height) {
+        img.width = media.width;
+        img.height = media.height;
+      }
+      body.append(img);
+      if (c.gif) {
+        const via = document.createElement("p");
+        via.className = "text-muted-foreground mt-1 text-[11px]";
+        via.textContent = "via GIPHY";
+        body.append(via);
+      }
+    }
+    li.append(avatar, body);
+    return li;
+  }
+
+  function initEngagement() {
+    const root = document.querySelector<HTMLElement>("[data-engagement]");
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = "true";
+    const slug = root.dataset.slug!;
+    const list = root.querySelector<HTMLUListElement>("[data-comment-list]")!;
+    const count = root.querySelector<HTMLElement>("[data-comment-count]")!;
+    const empty = root.querySelector<HTMLElement>("[data-empty]")!;
+    const unavailable = root.querySelector<HTMLElement>("[data-unavailable]")!;
+    const form = root.querySelector<HTMLFormElement>("[data-comment-form]")!;
+    const status = root.querySelector<HTMLElement>("[data-form-status]")!;
+    const storageKey = `reacted:${slug}`;
+    let reacted: string[] = [];
+    try {
+      reacted = JSON.parse(localStorage.getItem(storageKey) ?? "[]");
+    } catch {}
+
+    const setCounts = (reactions: Record<string, number>) => {
+      root.querySelectorAll<HTMLButtonElement>("[data-reaction]").forEach((b) => {
+        b.querySelector("[data-count]")!.textContent = String(reactions[b.dataset.reaction!] ?? 0);
+        b.setAttribute("aria-pressed", String(reacted.includes(b.dataset.reaction!)));
+      });
+    };
+    const setComments = (comments: Comment[]) => {
+      list.replaceChildren(...comments.map(renderComment));
+      count.textContent = comments.length ? `(${comments.length})` : "";
+      empty.hidden = comments.length > 0;
+    };
+
+    fetch(`${API}?slug=${encodeURIComponent(slug)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => {
+        setCounts(d.reactions);
+        setComments(d.comments);
+      })
+      .catch(() => {
+        unavailable.hidden = false;
+        form.hidden = true;
+      });
+
+    root.querySelectorAll<HTMLButtonElement>("[data-reaction]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const emoji = btn.dataset.reaction!;
+        if (reacted.includes(emoji)) return; // one of each reaction per reader
+        reacted.push(emoji);
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(reacted));
+        } catch {}
+        const c = btn.querySelector("[data-count]")!;
+        c.textContent = String(Number(c.textContent) + 1);
+        btn.setAttribute("aria-pressed", "true");
+        btn.classList.remove("pop");
+        void btn.offsetWidth;
+        btn.classList.add("pop");
+        const r = await fetch(API, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ action: "react", slug, emoji }),
+        }).catch(() => null);
+        if (r?.ok) setCounts((await r.json()).reactions);
+      });
+    });
+
+    // ---- media: emoji inserter, GIF search, image upload ----
+    const textarea = form.querySelector<HTMLTextAreaElement>("[data-text]")!;
+
+    // rich-text editor, loaded on demand; the plain textarea stays as the fallback
+    let editor: import("@tiptap/core").Editor | null = null;
+    const shell = form.querySelector<HTMLElement>("[data-editor-shell]")!;
+    const charCount = form.querySelector<HTMLElement>("[data-char-count]")!;
+    const loadEditor = async () => {
+      try {
+        const [{ Editor }, { default: StarterKit }, { Placeholder, CharacterCount }] = await Promise.all([
+          import("@tiptap/core"),
+          import("@tiptap/starter-kit"),
+          import("@tiptap/extensions"),
+        ]);
+        editor = new Editor({
+          element: form.querySelector<HTMLElement>("[data-editor]")!,
+          extensions: [
+            StarterKit.configure({
+              heading: { levels: [3] },
+              link: {
+                openOnClick: false,
+                autolink: true,
+                protocols: ["http", "https", "mailto"],
+                HTMLAttributes: { rel: "nofollow ugc noopener", target: "_blank" },
+              },
+            }),
+            Placeholder.configure({ placeholder: "Share your perspective. Disagreement welcome, keep it civil." }),
+            CharacterCount.configure({ limit: COMMENT_MAX_CHARS }),
+          ],
+          editorProps: { attributes: { class: "rich", "aria-multiline": "true", role: "textbox" } },
+        });
+        const sync = () => {
+          if (!editor) return;
+          charCount.textContent = `${editor.storage.characterCount.characters()} / ${COMMENT_MAX_CHARS}`;
+          form.querySelectorAll<HTMLButtonElement>("[data-cmd]").forEach((b) => {
+            const cmd = b.dataset.cmd!;
+            const name = cmd === "heading" ? "heading" : cmd;
+            b.classList.toggle("is-active", !["undo", "redo"].includes(cmd) && editor!.isActive(name));
+          });
+        };
+        editor.on("transaction", sync);
+        sync();
+        form.querySelectorAll<HTMLButtonElement>("[data-cmd]").forEach((b) => {
+          b.addEventListener("click", () => {
+            if (!editor) return;
+            const c = editor.chain().focus();
+            switch (b.dataset.cmd) {
+              case "bold": c.toggleBold().run(); break;
+              case "italic": c.toggleItalic().run(); break;
+              case "underline": c.toggleUnderline().run(); break;
+              case "strike": c.toggleStrike().run(); break;
+              case "heading": c.toggleHeading({ level: 3 }).run(); break;
+              case "bulletList": c.toggleBulletList().run(); break;
+              case "orderedList": c.toggleOrderedList().run(); break;
+              case "blockquote": c.toggleBlockquote().run(); break;
+              case "code": c.toggleCode().run(); break;
+              case "codeBlock": c.toggleCodeBlock().run(); break;
+              case "undo": c.undo().run(); break;
+              case "redo": c.redo().run(); break;
+              case "link": {
+                const prev = editor.getAttributes("link").href ?? "";
+                const href = window.prompt("Link URL (leave empty to remove)", prev);
+                if (href === null) break;
+                if (!href.trim()) c.extendMarkRange("link").unsetLink().run();
+                else {
+                  const url = /^(https?:|mailto:)/i.test(href.trim()) ? href.trim() : `https://${href.trim()}`;
+                  c.extendMarkRange("link").setLink({ href: url }).run();
+                }
+                break;
+              }
+            }
+          });
+        });
+        shell.classList.remove("hidden");
+        textarea.classList.add("hidden");
+      } catch {
+        editor = null; // keep the plain textarea
+      }
+    };
+    // load the editor when the comment form comes near the screen
+    new IntersectionObserver((entries, obs) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        obs.disconnect();
+        loadEditor();
+      }
+    }, { rootMargin: "400px" }).observe(form);
+    const preview = form.querySelector<HTMLElement>("[data-media-preview]")!;
+    const previewImg = form.querySelector<HTMLImageElement>("[data-media-img]")!;
+    const fileInput = form.querySelector<HTMLInputElement>("[data-file]")!;
+    let attached: { gif?: Media; image?: { data: string; width: number; height: number } } = {};
+
+    const showPreview = (src: string | null) => {
+      preview.classList.toggle("hidden", !src);
+      preview.classList.toggle("flex", Boolean(src));
+      if (src) previewImg.src = src;
+      else previewImg.removeAttribute("src");
+    };
+    const clearMedia = () => {
+      attached = {};
+      fileInput.value = "";
+      showPreview(null);
+    };
+    form.querySelector("[data-media-remove]")!.addEventListener("click", clearMedia);
+
+    form.querySelectorAll<HTMLButtonElement>("[data-toggle]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const name = btn.dataset.toggle!;
+        form.querySelectorAll<HTMLElement>("[data-panel]").forEach((p) => {
+          const open = p.dataset.panel === name && p.hidden;
+          p.hidden = !open;
+          form.querySelector(`[data-toggle="${p.dataset.panel}"]`)?.setAttribute("aria-expanded", String(open));
+        });
+        if (name === "gif") loadGifs("");
+      });
+    });
+
+    form.querySelectorAll<HTMLButtonElement>("[data-insert]").forEach((key) => {
+      key.addEventListener("click", () => {
+        if (editor) {
+          editor.chain().focus().insertContent(key.dataset.insert!).run();
+          return;
+        }
+        const { selectionStart: a, selectionEnd: b, value } = textarea;
+        const e = key.dataset.insert!;
+        textarea.value = value.slice(0, a) + e + value.slice(b);
+        textarea.focus();
+        textarea.selectionStart = textarea.selectionEnd = a + e.length;
+      });
+    });
+
+    const gifResults = form.querySelector<HTMLElement>("[data-gif-results]")!;
+    let gifTimer: number | undefined;
+    let gifLoaded = false;
+    async function loadGifs(q: string) {
+      if (!q && gifLoaded) return;
+      gifLoaded = true;
+      gifResults.textContent = "Loading...";
+      const r = await fetch(`${API}?gif=${encodeURIComponent(q)}`).catch(() => null);
+      const d = r?.ok ? await r.json() : null;
+      if (!d?.results) {
+        gifResults.textContent = "GIF search isn't available right now.";
+        return;
+      }
+      gifResults.replaceChildren(
+        ...d.results.map((g: Media & { preview: string; title: string }) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "gif-choice";
+          const img = document.createElement("img");
+          img.src = g.preview;
+          img.alt = g.title || "GIF";
+          img.loading = "lazy";
+          b.append(img);
+          b.addEventListener("click", () => {
+            attached = { gif: { url: g.url, width: g.width, height: g.height } };
+            fileInput.value = "";
+            showPreview(g.url);
+            form.querySelector<HTMLElement>('[data-panel="gif"]')!.hidden = true;
+            form.querySelector('[data-toggle="gif"]')?.setAttribute("aria-expanded", "false");
+          });
+          return b;
+        }),
+      );
+      if (!d.results.length) gifResults.textContent = "No GIFs found.";
+    }
+    form.querySelector<HTMLInputElement>("[data-gif-query]")!.addEventListener("input", (e) => {
+      clearTimeout(gifTimer);
+      const q = (e.target as HTMLInputElement).value.trim();
+      gifTimer = window.setTimeout(() => {
+        gifLoaded = false;
+        loadGifs(q);
+      }, 350);
+    });
+
+    const toBase64 = (blob: Blob) =>
+      new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(",")[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      status.textContent = "";
+      try {
+        const bitmap = await createImageBitmap(file);
+        let blob: Blob = file;
+        let { width, height } = bitmap;
+        // animated GIFs are kept as-is; photos are resized and compressed in the browser
+        if (file.type !== "image/gif") {
+          const scale = Math.min(1, 1400 / Math.max(width, height));
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext("2d")!.drawImage(bitmap, 0, 0, width, height);
+          blob = await new Promise<Blob>((res) => canvas.toBlob((b) => res(b!), "image/jpeg", 0.85));
+        }
+        if (blob.size > 2 * 1024 * 1024) {
+          status.textContent = "That image is over 2 MB. Try a smaller one.";
+          fileInput.value = "";
+          return;
+        }
+        attached = { image: { data: await toBase64(blob), width, height } };
+        showPreview(URL.createObjectURL(blob));
+      } catch {
+        status.textContent = "That file couldn't be read as an image.";
+        fileInput.value = "";
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data: Record<string, unknown> = Object.fromEntries(new FormData(form));
+      if (editor) {
+        data.text = editor.getText();
+        data.html = editor.isEmpty ? "" : editor.getHTML();
+      }
+      const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+      button.disabled = true;
+      status.textContent = "Posting...";
+      const r = await fetch(API, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "comment", slug, ...data, ...attached }),
+      }).catch(() => null);
+      const d = r ? await r.json().catch(() => ({})) : {};
+      button.disabled = false;
+      if (r?.ok && d.comment) {
+        list.prepend(renderComment(d.comment));
+        empty.hidden = true;
+        count.textContent = `(${list.children.length})`;
+        (form.elements.namedItem("text") as HTMLTextAreaElement).value = "";
+        editor?.commands.clearContent();
+        clearMedia();
+        status.textContent = "Thanks, your comment is posted.";
+      } else {
+        status.textContent = d.error ?? "Something went wrong. Please try again.";
+      }
+    });
+
+    // share: copy link and the phone's native share sheet
+    const copied = root.querySelector<HTMLElement>("[data-copied]")!;
+    root.querySelector("[data-copy]")?.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(root.dataset.url!);
+        copied.style.opacity = "1";
+        setTimeout(() => (copied.style.opacity = "0"), 1800);
+      } catch {}
+    });
+    const native = root.querySelector<HTMLButtonElement>("[data-native-share]")!;
+    if (navigator.share) {
+      native.classList.remove("hidden");
+      native.addEventListener("click", () =>
+        navigator.share({ title: root.dataset.title, url: root.dataset.url }).catch(() => {}),
+      );
+    }
+  }
+
+  initEngagement();
+  document.addEventListener("astro:page-load", initEngagement);
+</script>
