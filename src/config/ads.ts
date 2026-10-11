@@ -15,8 +15,8 @@
 export type AdPlacement = "feed" | "post-top" | "in-article" | "sidebar" | "post-end";
 
 export const adsConfig = {
-  provider: "none" as "none" | "adsense",
-  client: "",
+  provider: "adsense" as "none" | "adsense",
+  client: "ca-pub-1815662567647883",
   slots: {
     feed: "",
     "post-top": "",
