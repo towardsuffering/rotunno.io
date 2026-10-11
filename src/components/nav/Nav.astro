@@ -1,4 +1,6 @@
 ---
+import "@fontsource/caveat/latin-600.css";
+
 import Button from "@/components/button/Button.astro";
 import LanguageSelect from "@/components/language-select/LanguageSelect.astro";
 import SiteLogo from "@/components/site-logo/SiteLogo.astro";
@@ -22,6 +24,9 @@ interface Props {
 }
 
 const { navStyle = "default", transparentNav = false } = Astro.props as Props;
+
+// the "look here" arrow under the Blog tab is pointless once you're on the blog
+const showBlogPointer = !Astro.url.pathname.startsWith("/blog");
 ---
 
 <div
@@ -84,9 +89,31 @@ const { navStyle = "default", transparentNav = false } = Astro.props as Props;
                   ) : "megaMenuColumns" in navItem ? (
                     <MegaMenuDropdownToggle {navItem} />
                   ) : (
-                    // normal nav link
-                    <li>
+                    // normal nav link; Blog gets a hand-drawn arrow pointing up at it
+                    <li class:list={[{ relative: navItem.link === "/blog" }]}>
                       <NavLink {navItem} />
+                      {navItem.link === "/blog" && showBlogPointer && (
+                        <span class="blog-pointer" aria-hidden="true">
+                          <svg viewBox="0 0 80 64" fill="none">
+                            <path
+                              class="blog-pointer__line"
+                              d="M20 50 C 25 40, 32 46, 38 34 S 52 14, 58 8"
+                              stroke="currentColor"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                            />
+                            <path
+                              class="blog-pointer__head"
+                              d="M47 10 L 59 7 L 58 19"
+                              stroke="currentColor"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                          <span class="blog-pointer__note">drafted by me, written with Opus 5.5</span>
+                        </span>
+                      )}
                     </li>
                   ),
                 )
@@ -142,6 +169,86 @@ const { navStyle = "default", transparentNav = false } = Astro.props as Props;
 
   .navbar--has-hero.navbar--initial :global(#mobile-nav__burger) {
     @apply text-white;
+  }
+
+  /* hand-drawn arrow under the Blog tab, pointing up at it */
+  .blog-pointer {
+    position: absolute;
+    top: calc(100% - 2px);
+    right: 55%;
+    width: 72px;
+    height: 58px;
+    pointer-events: none;
+    color: var(--color-primary-accent);
+    transition: opacity 0.3s ease;
+  }
+  .blog-pointer svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .navbar--has-hero.navbar--initial .blog-pointer {
+    color: #fff;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55));
+  }
+  .navbar--scrolled .blog-pointer {
+    opacity: 0;
+  }
+  /* handwritten note at the arrow's tail */
+  .blog-pointer__note {
+    position: absolute;
+    top: 46px;
+    right: calc(100% - 10px);
+    white-space: nowrap;
+    font-family: "Caveat", cursive;
+    font-weight: 600;
+    font-size: 1.35rem;
+    line-height: 1;
+    transform: rotate(-4deg);
+    transform-origin: right center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .blog-pointer__line {
+      stroke-dasharray: 90;
+      stroke-dashoffset: 90;
+      animation: pointer-draw 0.9s 0.6s ease-out forwards;
+    }
+    .blog-pointer__head {
+      stroke-dasharray: 30;
+      stroke-dashoffset: 30;
+      animation: pointer-draw 0.3s 1.4s ease-out forwards;
+    }
+    .blog-pointer svg {
+      animation: pointer-bob 2.4s 1.8s ease-in-out infinite;
+    }
+    .blog-pointer__note {
+      opacity: 0;
+      animation: note-in 0.5s 0.3s ease-out forwards;
+    }
+  }
+  @keyframes pointer-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes note-in {
+    from {
+      opacity: 0;
+      translate: -6px 4px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  @keyframes pointer-bob {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(3px, -4px);
+    }
   }
 </style>
 
