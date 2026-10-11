@@ -736,6 +736,9 @@ const shares = [
         editor.on("transaction", sync);
         sync();
         form.querySelectorAll<HTMLButtonElement>("[data-cmd]").forEach((b) => {
+          // keep focus (and the cursor) in the editor when a toolbar button is pressed,
+          // so typing right after clicking a button isn't lost
+          b.addEventListener("mousedown", (e) => e.preventDefault());
           b.addEventListener("click", () => {
             if (!editor) return;
             const c = editor.chain().focus();
