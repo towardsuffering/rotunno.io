@@ -1,0 +1,124 @@
+---
+export const prerender = true;
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const effective = "October 11, 2026";
+const email = "chrisrotunno@icloud.com";
+---
+
+<BaseLayout
+  title="Privacy Policy | Christopher A. Rotunno"
+  description="How rotunno.ai uses cookies, analytics, and advertising, and the choices you have."
+  fullHeight={false}
+>
+  <section class="site-container py-24 md:pt-36">
+    <div class="mx-auto max-w-3xl">
+      <p class="text-primary text-xs font-semibold tracking-[0.2em] uppercase">Legal</p>
+      <h1 class="h1 mt-3 tracking-tight">Privacy Policy</h1>
+      <p class="text-muted-foreground mt-3">Effective {effective}</p>
+
+      <div class="markdown-content mt-10">
+        <p>
+          This policy explains what information is collected when you visit <strong>rotunno.ai</strong> (the
+          "site"), operated by Christopher A. Rotunno, how it is used, and the choices you have. If you have
+          questions, contact <a href={`mailto:${email}`}>{email}</a>.
+        </p>
+
+        <h2>Information collected</h2>
+        <p>The site does not require an account and does not ask you for personal information. Information is collected in three ways:</p>
+        <ul>
+          <li>
+            <strong>Analytics.</strong> With your consent, the site uses Google Analytics 4 to understand how
+            visitors use it, such as which pages are viewed, how long visits last, the type of device and
+            browser, and approximate location derived from your IP address. Analytics storage is disabled by
+            default and is only enabled if you click <em>Accept</em> on the cookie banner.
+          </li>
+          <li>
+            <strong>Advertising.</strong> The site displays ads served by Google AdSense, described in the next
+            section.
+          </li>
+          <li>
+            <strong>Messages you send.</strong> If you email or call, your message and contact details are used
+            only to respond to you.
+          </li>
+        </ul>
+
+        <h2>Advertising and cookies</h2>
+        <p>
+          This site uses Google AdSense to display advertisements. Third-party vendors, including Google, use
+          cookies to serve ads based on your prior visits to this website and other websites. Google's use of
+          advertising cookies enables it and its partners to serve ads to you based on your visits to this site
+          and/or other sites on the internet.
+        </p>
+        <p>You can control personalized advertising:</p>
+        <ul>
+          <li>
+            Opt out of personalized advertising from Google at
+            <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ads Settings</a>.
+          </li>
+          <li>
+            Opt out of personalized advertising from many third-party vendors at
+            <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener">aboutads.info/choices</a>
+            (United States) or
+            <a href="https://www.youronlinechoices.eu" target="_blank" rel="noopener">youronlinechoices.eu</a>
+            (Europe).
+          </li>
+          <li>
+            Learn more about
+            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener"
+              >how Google uses information from sites that use its services</a
+            >.
+          </li>
+        </ul>
+        <p>
+          Visitors in the European Economic Area, the United Kingdom, and Switzerland are shown a consent message
+          before personalized ads are served, as required by law.
+        </p>
+
+        <h2>Embedded content</h2>
+        <p>
+          Some articles include YouTube videos. These use YouTube's privacy-enhanced mode and do not load until
+          you click play. Once you play a video, YouTube (Google) may collect information under
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.
+          Photographs credited to Wikimedia Commons are hosted on this site and do not send information to
+          Wikimedia.
+        </p>
+
+        <h2>Browser storage</h2>
+        <p>
+          The site stores two small settings in your browser's local storage: your cookie banner choice and your
+          light or dark theme preference. These stay on your device and are not sent to the site.
+        </p>
+
+        <h2>Your choices</h2>
+        <ul>
+          <li>Click <em>Decline</em> on the cookie banner to keep analytics disabled.</li>
+          <li>Use the advertising opt-out links above to limit personalized ads.</li>
+          <li>Block or delete cookies in your browser settings. Some features may not work as intended.</li>
+          <li>Clear your browser's site data to reset your cookie banner choice.</li>
+        </ul>
+
+        <h2>Data sharing</h2>
+        <p>
+          Information is not sold. Analytics and advertising data is processed by Google as described above.
+          Information may be disclosed if required by law.
+        </p>
+
+        <h2>Children's privacy</h2>
+        <p>
+          The site is not directed to children under 13 and does not knowingly collect personal information from
+          them.
+        </p>
+
+        <h2>Changes to this policy</h2>
+        <p>
+          This policy may be updated from time to time. The effective date at the top of this page shows when it
+          was last revised.
+        </p>
+
+        <h2>Contact</h2>
+        <p>Questions about this policy can be sent to <a href={`mailto:${email}`}>{email}</a>.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
