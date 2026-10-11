@@ -1,10 +1,18 @@
 ---
-title: "My Ghostbusters Philosophy in Business"
-description: What a team of underprepared scientists with a proton pack taught me about showing up ready, building systems before you need them, and why preparedness is a professional strategy.
+title: "The Ghostbusters Principle: Building Capability Before the Crisis"
+description: "Using the premise of Ghostbusters to explain preparedness investment, the preparedness paradox, and how proactive infrastructure applies to business and data work."
 draft: false
 authors:
   - main-author
 pubDate: 2024-01-29
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Kidfly182"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Firehouse,_Hook_and_Ladder_8.jpg"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+heroFocus: "50% 60%"
 categories:
   - leadership
   - professional-development
@@ -15,88 +23,129 @@ tags:
   - career
 ---
 
-I've been thinking about the Ghostbusters.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
-Not as a metaphor I forced — it came to me genuinely. I was in the middle of a project that had gone sideways in a familiar way: we had the skills to solve the problem, but not the infrastructure to do it fast enough to matter. By the time we'd built the scaffolding, the moment had passed.
+In *Ghostbusters* (1984), a team of scientists builds its equipment before anyone believes the threat is real. When the crisis arrives, the infrastructure already exists.
 
-That's a Ghostbusters problem.
+The film offers a useful frame for a common organizational problem: teams often have the skills to solve a problem but not the infrastructure to solve it quickly enough to matter. This article uses the film's premise to explain the concept of preparedness investment and how it applies to business and data work.
 
 ---
 
 ## What They Actually Got Right
 
-The premise of Ghostbusters is this: a supernatural threat emerges, and the people best equipped to handle it are a group of scientists who took themselves seriously enough to build the tools before anyone believed the threat was real.
+The premise of the film is that a supernatural threat emerges, and the people best equipped to handle it are scientists who took the possibility seriously enough to build tools in advance.
 
-They didn't wait for a confirmed haunting before building the containment unit. They built it while everyone thought they were eccentric. When Stay Puft showed up, the infrastructure existed.
+They built the containment unit before there was a confirmed case. When the crisis peaked, the capability was already in place.
 
-In business, the equivalent of "building the containment unit" is the work that doesn't show up on a roadmap because it doesn't have an immediate business case. It's the data infrastructure that nobody asked for, the documentation that seems unnecessary until there's turnover, the monitoring system that looks like overkill until 2 AM when it saves you.
+<Figure
+  src={fig4}
+  alt={"Seattle's Firehouse No"}
+  caption={"Seattle's Firehouse No. 10 in the early 1900s, wagons and gear ready. Fire departments build their response capability before it is needed."}
+  author={"Arthur Churchill Warner"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Firehouse_No_10_showing_horse_drawn_fire_wagons_and_equipment,_Seattle,_ca_1905_(WARNER_638).jpeg"}
+  license={"Public domain"}
+  layout="standard"
+/>
 
-Most organizations underinvest in this category because the ROI isn't legible until you need it — and by then, the moment has already passed.
+In business, the equivalent is work that rarely appears on a roadmap because it lacks an immediate business case: data infrastructure no one has requested yet, documentation that seems unnecessary until there is turnover, and monitoring that appears excessive until it catches a failure.
+
+Organizations frequently underinvest in this category because the return is hard to measure until the moment it is needed.
 
 ---
 
 ## The Preparedness Gap
 
-There's a consistent pattern I've seen across organizations and roles:
+<Figure
+  src={fig1}
+  alt={"A firefighter suiting up from the gear lockers"}
+  caption={"A firefighter suiting up from the gear lockers. Fire crews prepare their equipment before a call comes in."}
+  author={"City of Alexandria Fire Department"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:AFD_Gear,_Equipment_%26_Apparatus_-_53455921936.jpg"}
+  license={"CC0"}
+  licenseUrl={"http://creativecommons.org/publicdomain/zero/1.0/deed.en"}
+  layout="split"
+/>
 
-**The people who respond best to crises are the ones who built the infrastructure to respond before the crisis existed.**
+Fire departments, emergency medicine, and site reliability engineering all operate on the same principle:
 
-This seems obvious in hindsight. It's counterintuitive in the moment because preparedness spending looks like waste until it doesn't. The monitoring system that never fires an alert for six months looks like overengineering — until it fires at 2 AM and prevents an outage that would have cost $200,000.
+**Response capability is built before the event that requires it.**
 
-The Ghostbusters built a particle accelerator in their firehouse. Neighbors probably thought it was eccentric. It turned out to be exactly what was needed.
+This creates what risk researchers call the **preparedness paradox**: when preparation works, the problem it prevented is invisible, which makes the preparation look unnecessary in hindsight. A monitoring system that stays quiet for six months can look like over-engineering until it catches an outage that would have been costly.
+
+In the film, the team's equipment looked eccentric to everyone around them. Its value only became visible once it was used.
 
 ---
 
 ## What This Looks Like in Data Work
 
-In analytics and data engineering, the Ghostbusters philosophy shows up in specific, recognizable patterns:
+In analytics and data engineering, the same principle shows up in several established practices:
 
 **1. Build pipelines before the data is "ready"**
 
-Organizations often wait for their data to be "cleaned up" before building infrastructure around it. The data is never fully clean. The people who build pipelines against messy data, document the edge cases, and create systems that are robust to upstream changes are the ones who can actually answer questions when they're asked.
+Data is rarely fully clean. Teams that build pipelines against imperfect data, document edge cases, and design for upstream changes are typically able to answer questions faster when they are asked.
 
 **2. Monitor things that haven't broken yet**
 
-Most monitoring gets added after something goes wrong. The Ghostbusters approach is to instrument everything before you know which metric will matter. The cost of monitoring something that never fails is low. The cost of not monitoring something that does is high.
+Google's Site Reliability Engineering guidance recommends monitoring key service signals proactively rather than adding instrumentation after incidents. The cost of monitoring something that never fails is usually small relative to the cost of missing a failure.
 
 **3. Document decisions, not just code**
 
-When someone inevitably asks "why did we build it this way?", the answer should live somewhere accessible. Decision documentation — the reasoning behind architectural choices, the data quality issues that drove schema decisions, the business context behind metric definitions — is the institutional memory that prevents re-litigating the same decisions three times.
+Architecture decision records (ADRs) capture the reasoning behind design choices, data quality issues that shaped schemas, and the business context behind metric definitions. This institutional memory helps prevent the same decisions from being revisited repeatedly.
 
-**4. Invest in reusability before the second use case exists**
+**4. Design for reuse once a pattern is likely**
 
-The first time you build something, it's easy to build it for the specific case. The second time, you're often rebuilding from scratch because the first version wasn't designed for reuse. The Ghostbusters didn't build proton packs for one ghost — they built a general-purpose paranormal neutralization tool.
+Building for a single case is often the right first step. When a second use case is likely, designing for reuse avoids rebuilding from scratch. The film's proton packs were general-purpose tools rather than single-use devices.
 
 ---
 
 ## The Team Dimension
 
-One thing the Ghostbusters film gets right that a lot of business content gets wrong: **you can't prepare alone at scale**.
+<Figure
+  src={fig2}
+  alt={"A rescue crew briefing"}
+  caption={"A rescue crew briefing. Specialized teams rely on roles that are defined before the work starts."}
+  author={"U.S. Air Force photo by Tech. Sgt. Jessica Avallone"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:RAF_Alconbury-Molesworth_firefighters_team_up_with_UK_paramedics_for_joint_training_(9304280).jpg"}
+  license={"Public domain"}
+  layout="split"
+/>
 
-Venkman, Spengler, Stantz, and Zeddemore each had a different function. The preparedness infrastructure worked because it was distributed across the team, not concentrated in one person. When Egon was occupied, Ray could operate the equipment. When Ray needed backup, Venkman was there (occasionally helpful).
+The film also illustrates a point about teams: **preparedness depends on distributed capability**.
 
-In organizations, single points of failure in knowledge and capability are as dangerous as single points of failure in systems. Cross-training, documentation, and team-level ownership of critical capabilities are the organizational equivalents of making sure every Ghostbuster knows how to use the proton pack.
+Each of the four Ghostbusters had a different role, and the equipment worked because more than one person could operate it.
+
+In organizations, single points of failure in knowledge carry similar risk to single points of failure in systems. Cross-training, documentation, and shared ownership of critical capabilities are the organizational equivalents of making sure every team member can operate the equipment.
 
 ---
 
-## The Startup Graveyard Application
+## The Startup Application
 
-I've started a few things that didn't work. Three, to be specific. (It's in my resume stats now — "3 Failed Startups." I figure I've earned the right to count them.)
+Startups face this tradeoff acutely. Early teams often build their tools at the same time they are trying to use them, which can slow execution when speed matters most.
 
-Looking back, none of them failed because of a lack of skills or effort. They failed in part because we were building the tools at the same time we were supposed to be using them. We were trying to build the proton packs *and* catch the ghost *simultaneously*. That's not a strategy — it's improvisation that looks like a strategy.
+Startup failure is driven by many factors. Post-mortem surveys, such as those compiled by CB Insights, most often cite running out of cash and lack of market need. Operational readiness is one contributing factor among several, alongside timing, funding conditions, and product-market fit.
 
-The businesses that survive the early stage are usually the ones where the founders built infrastructure during a period of lower pressure that enabled faster execution when pressure arrived. Not always — sometimes it's timing and luck. But the pattern holds often enough to be worth paying attention to.
+<Figure
+  src={fig3}
+  alt={"A vacant storefront"}
+  caption={"A vacant storefront. Business closures usually have several causes, from funding and timing to market fit."}
+  author={"Donald Trung Quoc Don"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Vacant_storefront_with_broken_windows,_Liskwartier,_Rotterdam_(2023)_01.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="wide"
+/>
+
+The practical lesson is a matter of sequencing: infrastructure built during calmer periods tends to enable faster execution when pressure arrives.
 
 ---
 
 ## The Practical Takeaway
 
-I'm not arguing for over-engineering or premature optimization. The Ghostbusters didn't build a proton pack capable of handling a Class 12 Apocalypse Entity when they were starting out — they built something that worked for the scale of problem they could reasonably anticipate.
+The principle is not an argument for over-engineering or premature optimization. In the film, the team built for the scale of problem it could reasonably anticipate, not for every conceivable scenario.
 
-The question worth asking regularly: *what problem, if it happened tomorrow, would expose our lack of preparation?*
+A useful recurring question for any team: *which plausible problem, if it happened tomorrow, would expose a lack of preparation?*
 
-Then spend some fraction of current capacity on that problem, before it arrives.
-
-It might look like overkill to everyone around you. It tends to look like foresight in retrospect.
-
-Stay Puft is coming eventually. Be ready.
+Allocating a portion of current capacity to that problem before it arrives is the core of the approach. Like most preparedness work, it tends to look unnecessary beforehand and obvious afterward.

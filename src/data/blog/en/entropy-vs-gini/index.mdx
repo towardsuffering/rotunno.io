@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2025-02-08
+heroImage: ./cover.jpg
+heroCredit:
+  author: "ZarlokX"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Ch%C3%AAne,_colza,_Jura_(horizontal).jpg"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
 categories:
   - machine-learning
   - data-science
@@ -17,6 +24,10 @@ tags:
   - machine-learning
 ---
 
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+
 When building a decision tree, the algorithm needs a way to evaluate every possible split at every node and choose the best one. Two measures dominate this process: **entropy** and **Gini impurity**. They're asking the same question — "how mixed is this group?" — but answering it differently.
 
 Understanding the difference helps you make deliberate choices rather than just accepting the library default.
@@ -26,6 +37,17 @@ Understanding the difference helps you make deliberate choices rather than just 
 ## What They're Measuring
 
 Both metrics quantify **impurity** — how much a node contains a mix of different classes. A pure node (all one class) has impurity of 0. A maximally mixed node has the highest possible impurity.
+
+<Figure
+  src={fig1}
+  alt={"Claude Shannon, whose 1948 paper defined entropy as a measure of information."}
+  caption={"Claude Shannon, whose 1948 paper defined entropy as a measure of information."}
+  author={"Tekniska museet"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:C.E._Shannon._Tekniska_museet_43069.jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="standard"
+/>
 
 ### Entropy
 
@@ -85,6 +107,16 @@ def gini(y):
 
 ---
 
+<Figure
+  src={fig2}
+  alt={"The Gini coefficient by country"}
+  caption={"The Gini coefficient by country. The same idea of impurity Corrado Gini used for inequality also scores tree splits."}
+  author={"Wikimedia Commons contributors, data from UNDP"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Gini_Koeffizient_World_Human_Development_Report_2007-2008.png"}
+  license={"Public domain"}
+  layout="split"
+/>
+
 ## Using Each in Scikit-Learn
 
 ```python
@@ -118,6 +150,17 @@ On most real-world datasets, the accuracy difference between the two is negligib
 - You're working in an information-theoretic context where the log-based measure aligns with your framework
 - Dataset size is manageable and computation speed isn't the bottleneck
 - You want slightly stronger penalization of highly unequal splits
+
+<Figure
+  src={fig3}
+  alt={"A path through the forest"}
+  caption={"A path through the forest. In practice both criteria usually lead to very similar trees."}
+  author={"Alec MacKinnon"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Fork_in_the_forest_road_-_geograph.org.uk_-_7687024.jpg"}
+  license={"CC BY-SA 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/2.0"}
+  layout="wide"
+/>
 
 **Use Gini when:**
 - Working with large datasets where the computational cost of log operations adds up

@@ -1,0 +1,119 @@
+---
+import Button from "@/components/button/Button.astro";
+import PostCard from "@/components/post-card/PostCardMultiLink.astro";
+import { getAllPosts } from "@/js/blogUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+interface Props {
+  count?: number;
+}
+
+const { count = 3 } = Astro.props as Props;
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const posts = (await getAllPosts(currLocale)).slice(0, count);
+---
+
+<section id="latest-posts" class="my-12 py-12">
+  <div class="site-container">
+    <div class="border-border flex flex-col gap-6 border-b pb-8 md:flex-row md:items-end md:justify-between">
+      <div class="max-w-2xl">
+        <p class="text-primary text-xs font-semibold tracking-[0.2em] uppercase">Insights</p>
+        <h2 class="h2 mt-3" data-reveal="pop">Latest from the blog</h2>
+        <p class="text-muted-foreground mt-3 md:text-lg">
+          Data-driven analysis on markets, policy, and analytics. The method is always shown.
+        </p>
+      </div>
+      <Button href={getLocalizedRoute(currLocale, "/blog")} variant="secondary" arrow="right" class="shrink-0">
+        View all posts
+      </Button>
+    </div>
+
+    <div class="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((post, idx) => (
+          <PostCard post={post} showDescription={true} class="lp-card" style={`--i: ${idx}`} />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /*
+   * Scroll-linked entrance and exit using native scroll-driven animations (no JS).
+   * Cards only move while entering or leaving the viewport and are fully at rest in between,
+   * and because progress is tied to scroll position it plays forward and in reverse.
+   * Browsers without support (or with reduced motion) simply show the cards as they are.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .lp-card {
+        view-timeline-name: --lp-card;
+        view-timeline-axis: block;
+        /* leaving the top of the screen: settle back gently */
+        animation: lp-leave linear both;
+        animation-timeline: --lp-card;
+        animation-range: exit 25% exit 100%;
+      }
+
+      /* photo: curtain-style unmask from the bottom, staggered left to right via --i */
+      .lp-card :global(figure) {
+        animation: lp-unmask cubic-bezier(0.22, 0.8, 0.24, 1) both;
+        animation-timeline: --lp-card;
+        animation-range: entry calc(var(--i) * 8%) cover calc(32% + var(--i) * 6%);
+      }
+      /* image settles from a slight zoom while it is revealed */
+      .lp-card :global(figure img),
+      .lp-card :global(figure svg) {
+        animation: lp-settle cubic-bezier(0.22, 0.8, 0.24, 1) both;
+        animation-timeline: --lp-card;
+        animation-range: entry calc(var(--i) * 8%) cover calc(40% + var(--i) * 6%);
+      }
+      /* text block follows the photo */
+      .lp-card > :global(div) {
+        animation: lp-rise cubic-bezier(0.22, 0.8, 0.24, 1) both;
+        animation-timeline: --lp-card;
+        animation-range: entry calc(30% + var(--i) * 8%) cover calc(42% + var(--i) * 6%);
+      }
+    }
+  }
+
+  @keyframes lp-unmask {
+    from {
+      clip-path: inset(100% 0 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes lp-settle {
+    from {
+      scale: 1.18;
+    }
+    to {
+      scale: 1;
+    }
+  }
+  @keyframes lp-rise {
+    from {
+      opacity: 0;
+      translate: 0 28px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  @keyframes lp-leave {
+    from {
+      opacity: 1;
+      translate: 0 0;
+    }
+    to {
+      opacity: 0.35;
+      translate: 0 -24px;
+    }
+  }
+</style>

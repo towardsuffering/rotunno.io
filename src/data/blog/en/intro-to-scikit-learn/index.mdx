@@ -1,10 +1,17 @@
 ---
-title: "Introduction to Scikit-Learn: The Essential Machine Learning Library"
+title: "Introduction to Scikit-Learn: A Practical Overview of Python's Classical ML Library"
 description: Scikit-Learn is the workhorse of applied machine learning in Python. Here's what it does, why it's worth learning deeply, and a practical example to get you started.
 draft: false
 authors:
   - main-author
 pubDate: 2025-03-11
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Markus Spiske markusspiske"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Code_on_computer_monitor_(Unsplash).jpg"
+  license: "CC0"
+  licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
 categories:
   - machine-learning
   - programming
@@ -16,7 +23,12 @@ tags:
   - data-science
 ---
 
-If you're doing machine learning in Python, you're almost certainly using Scikit-Learn — whether you realize it or not. It's the standard library for classical ML: consistent API, excellent documentation, and deep integration with the rest of the Python data stack. Before you reach for a deep learning framework, you should know this one well.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
+
+Scikit-learn is one of the most widely used Python libraries for classical machine learning. It offers a consistent API, extensive documentation, and close integration with NumPy and pandas.
 
 ---
 
@@ -30,11 +42,33 @@ Scikit-Learn covers the core machine learning workflow end to end:
 - **Preprocessing** — scaling, encoding, imputation, feature extraction
 - **Pipelines** — composing preprocessing and modeling steps into reproducible workflows
 
+<Figure
+  src={fig4}
+  alt={"A vintage toolbox"}
+  caption={"A vintage toolbox. Scikit-learn provides a broad set of tools that share a consistent interface."}
+  author={"Ctsu"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Toolbox-vintage-werkzeugkiste-alt-01.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
+
 The unifying design principle is a consistent API: every estimator implements `fit()`, and every predictor implements `predict()`. Once you learn the pattern, switching between algorithms requires almost no additional learning curve.
 
 ---
 
 ## Where It Gets Used
+
+<Figure
+  src={fig1}
+  alt={"Developers at a hands-on workshop"}
+  caption={"Developers at a hands-on workshop. Scikit-learn is widely used for prototyping classical machine learning models."}
+  author={"Erik Moeller"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Multimedia_Workshop_2009_016.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="split"
+/>
 
 ### Healthcare
 Disease detection models — classifying tumor types from imaging features, predicting readmission risk from patient records — frequently use Scikit-Learn's Random Forest and Logistic Regression implementations. The interpretability of these models matters in clinical contexts where a black-box answer isn't acceptable.
@@ -50,6 +84,17 @@ Market forecasting, credit scoring, and fraud detection all have established Sci
 ## A Practical Example: Iris Classification
 
 Here's a minimal but complete example — loading a dataset, splitting it, training a model, and evaluating it:
+
+<Figure
+  src={fig2}
+  alt={"Irises in bloom"}
+  caption={"Irises in bloom. The classic example classifies species from four flower measurements."}
+  author={"Laitche"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Iris_ensata_Thunb.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="wide"
+/>
 
 ```python
 from sklearn.datasets import load_iris
@@ -112,6 +157,17 @@ For the vast majority of structured, tabular ML problems — which is most of wh
 
 ---
 
+<Figure
+  src={fig3}
+  alt={"A modern graphics card"}
+  caption={"A modern graphics card. Deep learning on GPUs is where you reach for PyTorch or TensorFlow instead."}
+  author={"PantheraLeo1359531"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Palit_GeForce_RTX_5090_Gamerock_20250530_HOF4166_RAW-Export.png"}
+  license={"CC BY 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/4.0"}
+  layout="standard"
+/>
+
 ## Where to Go Next
 
 Once you're comfortable with the basics:
@@ -121,4 +177,4 @@ Once you're comfortable with the basics:
 3. Dig into `feature_importances_` and SHAP values for model interpretability
 4. Study `cross_val_score` for more robust performance estimates than a single train/test split
 
-The Scikit-Learn documentation is among the best in the Python ecosystem — the user guide reads like a textbook on applied ML. Use it.
+The scikit-learn documentation includes an extensive user guide that covers both how to use each tool and the methods behind it, which makes it a useful reference while learning.

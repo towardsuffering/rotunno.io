@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2025-02-08
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Vyacheslav Argenberg"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Mountain_lake,_Mylgval_mountain_cirque,_Western_Caucasus.jpg"
+  license: "CC BY 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0"
 categories:
   - machine-learning
   - data-science
@@ -16,6 +23,11 @@ tags:
   - scikit-learn
   - python
 ---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
 Overfitting is one of the most common failure modes in linear modeling. You train on your dataset and achieve great results — then apply the model to new data and watch the performance collapse. Regularization is the standard fix, and Lasso and Ridge are the two techniques you'll encounter most.
 
@@ -29,6 +41,17 @@ Ordinary least squares (OLS) minimizes prediction error with no constraint on ho
 
 Both Lasso and Ridge add a **penalty term** to the loss function that constrains coefficient magnitude — but they define that penalty differently.
 
+<Figure
+  src={fig4}
+  alt={"Tangled overhead wiring"}
+  caption={"Tangled overhead wiring. An unregularized model with too many features can end up looking like this."}
+  author={"Jakub Hałun"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:20090510_Shanghai_Jiangxi_road_wires.jpg"}
+  license={"CC0"}
+  licenseUrl={"http://creativecommons.org/publicdomain/zero/1.0/deed.en"}
+  layout="standard"
+/>
+
 ---
 
 ## Ridge Regression (L2 Regularization)
@@ -41,11 +64,32 @@ Loss = MSE + α * Σ βᵢ²
 
 The parameter `α` (alpha) controls how strongly to penalize large coefficients. As alpha increases, coefficients are pushed toward zero — but never fully to zero. All features stay in the model; they just shrink proportionally.
 
+<Figure
+  src={fig1}
+  alt={"A rocky mountain ridge"}
+  caption={"A rocky mountain ridge. Ridge shrinks every coefficient but rarely to exactly zero."}
+  author={"Vyacheslav Argenberg"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Ergaki,_Peak_Molodezhnyy,_Sayan_Mountains,_Russia.jpg"}
+  license={"CC BY 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/4.0"}
+  layout="split"
+/>
+
 This makes Ridge effective when you expect most features to contribute something meaningful to the prediction, and you want to distribute the effect of correlated features rather than arbitrarily selecting among them.
 
 ---
 
 ## Lasso Regression (L1 Regularization)
+
+<Figure
+  src={fig2}
+  alt={"A rodeo roper"}
+  caption={"A rodeo roper. Lasso pulls some coefficients all the way to zero, selecting features as it goes."}
+  author={"Unknown author"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Cowboy_te_paard_vangt_koe_met_een_lasso_tijdens_een_rodeo_op_Wembley,_London_1924,_SFA002001499.jpg"}
+  license={"Public domain"}
+  layout="wide"
+/>
 
 Lasso replaces the squared penalty with the **sum of absolute values**:
 
@@ -133,6 +177,17 @@ Scikit-Learn's `RidgeCV` and `LassoCV` handle this automatically, fitting the re
 ---
 
 ## Elastic Net: When You Want Both
+
+<Figure
+  src={fig3}
+  alt={"Chinese fishing nets in Kochi"}
+  caption={"Chinese fishing nets in Kochi. Elastic Net combines both penalties into one net."}
+  author={"Hans A. Rosbach"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Kochi_chinese_fishing-net-20080215-01a.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="standard"
+/>
 
 If you're unsure whether Lasso or Ridge is the better fit, Elastic Net combines both penalties:
 

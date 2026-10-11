@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2024-09-18
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Ermell"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Iris_versicolor_-20200620-RM-100933.jpg"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
 categories:
   - data-analysis
   - programming
@@ -15,6 +22,10 @@ tags:
   - iris-dataset
   - data-science
 ---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
 
 The Iris dataset is one of the most used teaching datasets in data science — and for good reason. It's small enough to fully understand, structured enough to apply real techniques, and rich enough to surface genuine patterns. If you've never touched R before, it's the right place to start. If you have, it's a reliable benchmark for testing new methods.
 
@@ -34,6 +45,17 @@ Each observation has four measurements (in centimeters):
 - Sepal width
 - Petal length
 - Petal width
+
+<Figure
+  src={fig1}
+  alt={"Frank Yates, Ronald Fisher and William Cochran in 1952"}
+  caption={"Frank Yates, Ronald Fisher and William Cochran in 1952. Fisher published the Iris dataset in 1936."}
+  author={"Barry Eagel"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:F_Yates_RA_Fisher_WG_Cochran_1952_(PS).jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
 
 Load it in R with:
 
@@ -106,6 +128,17 @@ The mean and median are close in all three cases — which tells you the distrib
 
 ## What the Numbers Actually Say
 
+<Figure
+  src={fig2}
+  alt={"A wild iris in a meadow"}
+  caption={"A wild iris in a meadow. Setosa is the species that separates most cleanly by petal size."}
+  author={"Alexandria 'Alex' Wenninger"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Iris_setosa_303213599.jpg"}
+  license={"CC BY 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/4.0"}
+  layout="wide"
+/>
+
 Median sepal lengths:
 - **Setosa: 5.0 cm** — noticeably shorter
 - **Versicolor: 5.9 cm** — intermediate
@@ -133,6 +166,17 @@ Now the picture changes completely. Setosa's median petal length is **1.5 cm**. 
 ## Visualizing the Distributions
 
 Numbers are useful, but distributions tell the story better:
+
+<Figure
+  src={fig3}
+  alt={"A blue flag iris"}
+  caption={"A blue flag iris. Petal and sepal measurements on flowers like this one make up the dataset's four features."}
+  author={"James St. John"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Iris_virginica_(Virginia_iris)_(Newark,_Ohio,_USA)_15.jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="standard"
+/>
 
 ```r
 # Boxplot: Sepal length by species

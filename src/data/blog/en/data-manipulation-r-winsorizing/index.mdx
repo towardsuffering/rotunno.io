@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2024-08-25
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Exhibit made by Estes Objethos Atelier, photo by Rodrigo Tetsuo Argenton"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Tabuleiros_de_Galton_(antes_e_depois).jpg"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
 categories:
   - data-analysis
   - programming
@@ -17,6 +24,10 @@ tags:
   - data-cleaning
 ---
 
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+
 Real data is messy. Outliers, skewed distributions, and extreme values distort summary statistics and mislead models. Learning to identify and handle these programmatically is one of the most practical skills in any analyst's toolkit.
 
 This walkthrough covers four techniques that come up in virtually every data cleaning job: generating distributions for testing, computing summary stats, counting conditional values, and winsorizing.
@@ -26,6 +37,16 @@ This walkthrough covers four techniques that come up in virtually every data cle
 ## Step 1: Generate a Normal Distribution
 
 Start with reproducible synthetic data:
+
+<Figure
+  src={fig1}
+  alt={"Carl Friedrich Gauss, namesake of the Gaussian, or normal, distribution generated in this step."}
+  caption={"Carl Friedrich Gauss, namesake of the Gaussian, or normal, distribution generated in this step."}
+  author={"Christian Albrecht Jensen"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Carl_Friedrich_Gauss_1840_by_Jensen.jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
 
 ```r
 set.seed(42)
@@ -150,6 +171,17 @@ Both produce identical results. The vectorized method runs faster on large datas
 
 ---
 
+<Figure
+  src={fig2}
+  alt={"One red tulip among orange"}
+  caption={"One red tulip among orange. Winsorizing keeps the outlier but pulls it back toward the group."}
+  author={"Friedrich Haag"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:001_2015_04_19_Das_Gelb_der_Natur.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="split"
+/>
+
 ## Step 6: Compare Before and After
 
 ```r
@@ -183,6 +215,17 @@ The winsorized histogram shows spikes at ±1 — all the capped values piling up
 **Neither** approach is always right. The choice should be driven by whether the extreme values represent signal or noise in the context of your specific problem.
 
 ---
+
+<Figure
+  src={fig3}
+  alt={"A balance scale"}
+  caption={"A balance scale. Winsorizing versus removal is a trade-off between bias and lost information."}
+  author={"Nikodem Nijaki"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Balance_scale_IMGP9755.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="wide"
+/>
 
 ## The Bigger Picture
 

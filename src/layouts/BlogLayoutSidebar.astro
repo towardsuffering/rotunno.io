@@ -3,12 +3,15 @@ import type { MarkdownHeading } from "astro";
 import { Image } from "astro:assets";
 import { type CollectionEntry, getEntries } from "astro:content";
 
-import DataDashboardSVG from "@/components/hero/DataDashboardSVG.astro";
+import AdSlot from "@/components/ads/AdSlot.astro";
+import PostCover from "@/components/blog/PostCover.astro";
+import YouTubeEmbed from "@/components/blog/YouTubeEmbed.astro";
 import Button from "@/components/button/Button.astro";
 import Category from "@/components/category/Category.astro";
 import RelatedPosts from "@/components/related-posts/RelatedPosts.astro";
 import TableOfContents from "@/components/table-of-contents/TableOfContents.astro";
 import Tag from "@/components/tag/Tag.astro";
+import { getReadingTime } from "@/js/blogUtils";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { formatDate } from "@/js/textUtils";
 import { getLocalizedRoute } from "@/js/translationUtils";
@@ -22,8 +25,9 @@ interface Props {
 }
 
 const { post, headings } = Astro.props as Props;
-const { title, description, authors, pubDate, categories, tags, updatedDate, heroImage } =
+const { title, description, authors, pubDate, categories, tags, updatedDate, heroImage, youtubeId } =
   post.data;
+const readingTime = getReadingTime(post.body);
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(currLocale);
@@ -39,39 +43,63 @@ const authorsData = await getEntries(authors);
   postFrontmatter={post.data}
 >
   <article class="site-container mt-24 xl:px-16">
-    <!-- Blog post info -->
-    <div class="flex w-full flex-col justify-center text-center">
-      <div class="mx-auto flex w-full max-w-[800px] flex-col justify-center">
-        <div class="flex justify-center gap-4">
-          {categories.map((category) => <Category category={category} />)}
-        </div>
-
-        <h1 class="h1 mt-4">{title}</h1>
-
-        <p class="text-muted-foreground mt-4 md:text-lg">{description}</p>
+    <!-- Masthead: category, title, subtitle, byline -->
+    <header class="mx-auto w-full max-w-[860px] pt-8 text-center md:pt-14">
+      <div class="flex justify-center gap-3">
+        {categories.map((category) => <Category category={category} />)}
       </div>
 
-      <!-- blog post main image / SVG fallback -->
-      <div class="mt-12 overflow-hidden rounded-xl md:rounded-2xl"
-        style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f2d4a 100%);">
-        {heroImage ? (
-          <Image
-            src={heroImage}
-            alt={`Cover for ${title}`}
-            width={1250}
-            densities={[1.5, 2]}
-            quality="high"
-            class="max-h-[70vh] w-full rounded-xl object-cover md:rounded-2xl"
-            loading="eager"
-            format="webp"
-            transition:name={`post-image-${post.id}`}
-          />
+      <h1 class="h1 mt-6 tracking-tight text-balance">{title}</h1>
+
+      <p class="text-muted-foreground mx-auto mt-5 max-w-[720px] text-lg leading-relaxed text-pretty md:text-xl">
+        {description}
+      </p>
+
+      <div class="text-muted-foreground mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm">
+        {
+          authorsData.map((author) => (
+            <a href={author.data.authorLink} class="group flex items-center gap-2">
+              <span class="size-9 overflow-hidden rounded-full border">
+                <Image
+                  src={author.data.avatar}
+                  alt={author.data.name}
+                  loading="eager"
+                  width={100}
+                  class="h-full w-full object-cover"
+                />
+              </span>
+              <span class="text-foreground group-hover:text-primary font-medium transition-colors">
+                {author.data.name}
+              </span>
+            </a>
+          ))
+        }
+        <span aria-hidden="true">&middot;</span>
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate, currLocale)}</time>
+        <span aria-hidden="true">&middot;</span>
+        <span>{readingTime} min read</span>
+        {
+          updatedDate && (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <span>
+                {t("updated")} {formatDate(updatedDate, currLocale)}
+              </span>
+            </>
+          )
+        }
+      </div>
+    </header>
+
+    <!-- Video version of the post when available, otherwise the cover -->
+    <div class="mx-auto mt-10 w-full max-w-[1100px] md:mt-14">
+      {
+        youtubeId ? (
+          <YouTubeEmbed id={youtubeId} title={title} />
         ) : (
-          <div class="flex h-64 items-center justify-center md:h-80">
-            <DataDashboardSVG />
-          </div>
-        )}
-      </div>
+          <PostCover post={post} width={1400} eager framing="hero" showCredit class="rounded-xl border md:rounded-2xl" />
+        )
+      }
     </div>
 
     <!-- Content Section -->
@@ -79,55 +107,32 @@ const authorsData = await getEntries(authors);
       <div class="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8 xl:grid-cols-[1fr_400px] xl:gap-12">
         <!-- Main Content -->
         <div class="mr-auto w-full max-w-[864px]">
-          <!-- Article Meta -->
-          <div class="mb-8 flex items-center justify-between border-b pb-8">
-            <div class="flex items-center gap-4">
-              {
-                authorsData.map((author) => (
-                  <a href={author.data.authorLink} class="group flex items-center gap-3">
-                    <div class="size-12 overflow-hidden rounded-full border">
-                      <Image
-                        src={author.data.avatar}
-                        alt={author.data.name}
-                        loading="eager"
-                        width={100}
-                        class="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <span class="group-hover:text-primary block font-medium transition-colors">
-                        {author.data.name}
-                      </span>
-                      <time datetime={pubDate.toISOString()} class="text-sm opacity-70">
-                        {formatDate(pubDate, currLocale)}
-                      </time>
-                    </div>
-                  </a>
-                ))
-              }
-            </div>
-
-            {
-              updatedDate && (
-                <div class="text-muted-foreground text-sm">
-                  {t("updated")}: {formatDate(updatedDate, currLocale)}
-                </div>
-              )
-            }
-          </div>
-
           <!-- Article Content -->
           <div class="markdown-content">
             <slot />
           </div>
+
+          {
+            youtubeId && post.data.heroCredit && (
+              <p class="text-muted-foreground mt-10 text-xs">
+                Cover photo:{" "}
+                <a href={post.data.heroCredit.url} target="_blank" rel="noopener" class="underline underline-offset-2">
+                  {post.data.heroCredit.author}
+                </a>
+                {" / "}
+                {post.data.heroCredit.license} / {post.data.heroCredit.source}
+              </p>
+            )
+          }
+
+          <AdSlot placement="post-end" />
         </div>
         <!-- Sidebar -->
         <aside class="hidden lg:block">
-          <div class="sticky top-24 overflow-y-auto">
-            <div class="h-[calc(100vh-(var(--spacing)*_26))]">
-              <h3 class="h3 mb-4">Table of Contents</h3>
-              <TableOfContents headings={headings} />
-            </div>
+          <div class="sticky top-24 max-h-[calc(100vh-(var(--spacing)*_26))] overflow-y-auto">
+            <p class="text-muted-foreground mb-3 text-xs font-semibold tracking-[0.2em] uppercase">In this article</p>
+            <TableOfContents headings={headings} />
+            <AdSlot placement="sidebar" class="mt-8" />
           </div>
         </aside>
       </div>
@@ -147,7 +152,7 @@ const authorsData = await getEntries(authors);
         </Button>
       </div>
       <div class="mt-12">
-        <h3 class="h3 mb-4">{t("related_posts")}</h3>
+        <h3 class="h3 mb-6 border-t pt-10">{t("related_posts")}</h3>
         <div class="grid gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           <RelatedPosts post={post} />
         </div>

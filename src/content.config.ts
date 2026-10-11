@@ -22,6 +22,22 @@ const blogCollection = defineCollection({
         .optional()
         .transform((str) => (str ? new Date(str) : undefined)),
       heroImage: image().optional(),
+      // attribution for the hero image, shown as a linked caption
+      heroCredit: z
+        .object({
+          author: z.string(),
+          source: z.string(),
+          url: z.url(),
+          license: z.string(),
+          licenseUrl: z.string().optional(),
+        })
+        .optional(),
+      // CSS object-position for cropping the hero image, e.g. "50% 30%"
+      heroFocus: z.string().optional(),
+      // force an illustrated fallback theme (see src/js/coverScenes.ts) when there is no heroImage
+      coverTheme: z.string().optional(),
+      // YouTube video id (the part after "v=") for the video version, shown under the title
+      youtubeId: z.string().optional(),
       categories: z.array(z.string()),
       tags: z.array(z.string()),
       // mappingKey allows you to match entries across languages for SEO purposes

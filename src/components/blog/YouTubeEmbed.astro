@@ -1,0 +1,53 @@
+---
+/**
+ * Lightweight YouTube embed: shows the thumbnail and only loads the (privacy-enhanced)
+ * player when clicked, so posts stay fast and no YouTube cookies are set until then.
+ */
+interface Props {
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props as Props;
+---
+
+<div class="yt-embed bg-card relative aspect-video w-full overflow-hidden rounded-xl border md:rounded-2xl">
+  <button
+    type="button"
+    class="group absolute inset-0 h-full w-full cursor-pointer"
+    data-yt-id={id}
+    data-yt-title={title}
+    aria-label={`Play video: ${title}`}
+  >
+    <img
+      src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
+      alt=""
+      loading="eager"
+      class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+    />
+    <span class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></span>
+    <span class="absolute bottom-5 left-5 flex items-center gap-3 text-left text-white md:bottom-7 md:left-7">
+      <span
+        class="flex size-14 items-center justify-center rounded-full bg-white/95 text-black shadow-lg transition-transform group-hover:scale-110 md:size-16"
+      >
+        <svg viewBox="0 0 24 24" class="ml-1 size-6" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+      </span>
+      <span class="text-sm font-semibold tracking-wide uppercase md:text-base">Watch the video version</span>
+    </span>
+  </button>
+</div>
+
+<script>
+  // one delegated listener survives view-transition page swaps
+  document.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-yt-id]");
+    if (!btn) return;
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.ytId}?autoplay=1&rel=0&modestbranding=1`;
+    iframe.title = btn.dataset.ytTitle ?? "YouTube video";
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    iframe.allowFullscreen = true;
+    iframe.className = "absolute inset-0 h-full w-full";
+    btn.replaceWith(iframe);
+  });
+</script>

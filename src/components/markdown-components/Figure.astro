@@ -1,0 +1,193 @@
+---
+/**
+ * Sourced, credited image for use inside blog posts (auto-imported into MDX).
+ *
+ *   import harbor from "./fig-1.jpg";
+ *   <Figure src={harbor} alt="..." caption="..." author="..." sourceUrl="..." license="CC BY-SA 4.0" layout="wide" />
+ *
+ * layout:
+ *   wide     - full column width, cinematic 16:9 crop, for section openers
+ *   inset    - floats right beside the text on desktop (stacks on mobile)
+ *   inset-left - same, floated left
+ *   Only use the insets where a few paragraphs of prose follow, never right before code.
+ *   standard - full column width at the photo's natural shape
+ *   split / split-reverse - photo beside its caption as one block (safe next to code)
+ */
+import { Image } from "astro:assets";
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption: string;
+  author: string;
+  sourceUrl: string;
+  license: string;
+  licenseUrl?: string;
+  source?: string;
+  layout?: "wide" | "inset" | "inset-left" | "standard" | "split" | "split-reverse";
+  focus?: string; // CSS object-position for the wide crop
+}
+
+const {
+  src,
+  alt,
+  caption,
+  author,
+  sourceUrl,
+  license,
+  licenseUrl,
+  source = "Wikimedia Commons",
+  layout = "standard",
+  focus,
+} = Astro.props as Props;
+---
+
+<figure class:list={["not-content article-figure group", `article-figure--${layout}`]}>
+  <div class="frame">
+    <Image
+      src={src}
+      alt={alt}
+      width={layout.startsWith("inset") || layout.startsWith("split") ? 900 : 1400}
+      densities={[1.5, 2]}
+      quality={82}
+      format="webp"
+      loading="lazy"
+      style={focus ? `object-position: ${focus}` : undefined}
+    />
+  </div>
+  <figcaption>
+    <span class="caption">{caption}</span>
+    <span class="credit">
+      Photo: <a href={sourceUrl} target="_blank" rel="noopener">{author}</a>
+      {" / "}
+      {licenseUrl ? <a href={licenseUrl} target="_blank" rel="noopener license">{license}</a> : license}
+      {" / "}{source}
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .article-figure {
+    margin: 2.5rem 0;
+  }
+  .frame {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 0.875rem;
+    background: var(--color-muted);
+  }
+  .frame :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: scale 0.9s cubic-bezier(0.22, 0.8, 0.24, 1);
+  }
+  .article-figure:hover .frame :global(img) {
+    scale: 1.025;
+  }
+
+  /* wide: cinematic crop that opens a section */
+  .article-figure--wide .frame :global(img) {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  /* standard: the photo's natural shape, centered; tall photos shrink instead of being cropped,
+     and the caption wraps to the photo's width (table/table-caption trick) */
+  .article-figure--standard {
+    display: table;
+    margin-inline: auto;
+  }
+  .article-figure--standard figcaption {
+    display: table-caption;
+    caption-side: bottom;
+  }
+  .article-figure--standard .frame :global(img) {
+    width: auto;
+    max-width: 100%;
+    max-height: 70vh;
+  }
+
+  /* insets: sit beside the paragraph on larger screens, kept short so text wraps neatly */
+  @media (min-width: 768px) {
+    .article-figure--inset,
+    .article-figure--inset-left {
+      width: 42%;
+      margin-top: 0.35rem;
+      margin-bottom: 1rem;
+    }
+    .article-figure--inset {
+      float: right;
+      margin-left: 1.75rem;
+    }
+    .article-figure--inset-left {
+      float: left;
+      margin-right: 1.75rem;
+    }
+    /* natural shape (charts and documents stay whole), capped so tall photos don't run long */
+    .article-figure--inset .frame :global(img),
+    .article-figure--inset-left .frame :global(img) {
+      max-height: 460px;
+      object-fit: cover;
+    }
+  }
+
+  /* split: photo and caption side by side as a self-contained block */
+  @media (min-width: 768px) {
+    .article-figure--split,
+    .article-figure--split-reverse {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 1.5rem;
+      align-items: end;
+    }
+    .article-figure--split-reverse {
+      grid-template-columns: 2fr 3fr;
+    }
+    .article-figure--split-reverse .frame {
+      order: 2;
+    }
+    .article-figure--split .frame :global(img),
+    .article-figure--split-reverse .frame :global(img) {
+      max-height: 520px;
+      object-fit: cover;
+    }
+    .article-figure--split figcaption,
+    .article-figure--split-reverse figcaption {
+      margin-top: 0;
+      padding-bottom: 0.25rem;
+    }
+    .article-figure--split .caption,
+    .article-figure--split-reverse .caption {
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+  }
+
+  figcaption {
+    margin-top: 0.75rem;
+    padding-left: 0.875rem;
+    border-left: 2px solid var(--color-primary);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .caption {
+    color: var(--color-foreground);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    font-weight: 500;
+  }
+  .credit {
+    color: var(--color-muted-foreground);
+    font-size: 0.72rem;
+    letter-spacing: 0.01em;
+  }
+  .credit a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .credit a:hover {
+    color: var(--color-foreground);
+  }
+</style>

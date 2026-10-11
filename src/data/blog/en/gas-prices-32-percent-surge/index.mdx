@@ -1,10 +1,17 @@
 ---
 title: "Gas Prices Are Up 32% in a Month. Here's What the Market Data Suggests."
-description: National average gas prices hit $3.84/gallon — a 32% jump in one month. I ran a normalized comparison of Brent crude against major oil producers to understand what the market is actually pricing in.
+description: National average gas prices reached $3.84 a gallon, a 32% increase in one month. A normalized comparison of Brent crude and major oil producers shows what markets may be pricing in.
 draft: false
 authors:
   - main-author
 pubDate: 2026-03-19
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Micov"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:$4.06_Gas_Prices,_Lewiston,_Maine,_Cumberland_Farms.JPG"
+  license: "CC BY 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/3.0"
 categories:
   - data-analysis
   - business
@@ -17,40 +24,66 @@ tags:
   - fred
 ---
 
-The national average for regular gasoline is sitting at approximately **$3.84 per gallon** — up roughly 32% over the past month. That's not a gradual drift. That's a shock. And the proximate cause isn't hard to find: escalating geopolitical tension involving Iran, specifically strikes on its South Pars gas field — what Reuters described as hitting "the plumbing of the global energy system."
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
 
-The question worth asking isn't *what happened* — it's *what the market thinks happens next*.
+The national average for regular gasoline is approximately **$3.84 per gallon**, up roughly 32% over the past month. A move of that size in a single month is unusual. The immediate context is escalating geopolitical tension involving Iran, including strikes on its South Pars gas field, which Reuters described as hitting "the plumbing of the global energy system."
+
+Beyond what happened, market prices offer some information about what investors expect next.
 
 ---
 
 ## Commodity vs. Equity: A Revealing Divergence
 
-I pulled a normalized one-year comparison of Brent crude against the major publicly traded oil producers: Exxon Mobil, Chevron, Shell, BP, TotalEnergies, and Equinor.
+<Figure
+  src={fig1}
+  alt={"An offshore production platform"}
+  caption={"An offshore production platform. Producer equities price expected earnings, not just today's barrel."}
+  author={"Divulgação Petrobras / ABr"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Oil_platform_P-51_(Brazil).jpg"}
+  license={"CC BY 3.0 br"}
+  licenseUrl={"https://creativecommons.org/licenses/by/3.0/br/deed.en"}
+  layout="standard"
+/>
 
-The pattern is telling. Earlier in the year, **oil company stocks outperformed the commodity itself** — a typical setup when markets expect producers to capture the upside of rising prices through improved earnings and margins.
+This analysis uses a normalized one-year comparison of Brent crude against the major publicly traded oil producers: Exxon Mobil, Chevron, Shell, BP, TotalEnergies, and Equinor.
+
+Earlier in the year, **oil company stocks outperformed the commodity itself**, a pattern often seen when markets expect producers to benefit from rising prices through higher earnings and margins.
 
 That relationship has recently flipped. **Brent crude has climbed faster than producer equities** over the past several weeks.
 
-This divergence matters. When the commodity outpaces the companies that extract and sell it, markets are no longer primarily betting on energy company earnings. They're **repricing the commodity shock itself** — which typically signals concern about actual supply disruption rather than just a favorable pricing environment for producers.
+Analysts commonly interpret this kind of divergence as markets **repricing the commodity risk itself**, which can reflect concern about physical supply disruption rather than expectations of higher producer profits.
 
-In a normal oil price run-up, you'd expect equity valuations to lead or match the commodity. When they lag, the market is telegraphing something closer to a supply fear premium than a profit opportunity.
+Other factors can also contribute, including refining margins, the possibility of windfall taxes, broader equity market moves, and producers' own exposure to the affected region. The divergence is one signal to weigh, not a definitive reading.
 
 ---
 
 ## Why This Is Different
 
-The distinction between a "good oil shock" and a "bad oil shock" matters for how the economy absorbs the move.
+Economists distinguish between **demand-driven** and **supply-driven** oil price increases, and the difference affects how the economy absorbs the move.
 
-A good shock — rising demand from strong economic growth — pulls oil prices up alongside everything else. Corporate earnings rise, employment holds, and the inflationary pressure is manageable.
+<Figure
+  src={fig2}
+  alt={"Distillation columns at a gas processing plant"}
+  caption={"Distillation columns at a gas processing plant. Strikes on gas infrastructure hit a different part of the energy system than oil."}
+  author={"User:Luigi Chiesa"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Colonne_distillazione.jpg"}
+  license={"CC BY 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/3.0"}
+  layout="split"
+/>
 
-A bad shock — supply disruption driven by geopolitical instability — hits costs first, before any demand signal justifies it. Higher oil prices cascade through:
+A demand-driven increase, from strong economic growth, tends to raise oil prices alongside earnings and employment, and its inflationary effects are usually easier to absorb.
 
-- **Gasoline** — the most visible pass-through for consumers
-- **Diesel** — the hidden lever that moves freight, agriculture, and manufacturing
-- **Transportation and logistics costs** — which embed into prices for nearly every physical good
-- **Inflation expectations** — which, once unanchored, become self-fulfilling
+A supply-driven increase, such as a disruption from geopolitical conflict, raises costs without a corresponding rise in demand. Higher oil prices then pass through:
 
-That last point is where the Federal Reserve gets complicated. The Fed has publicly acknowledged dual pressure: potential downward force on consumer spending and employment alongside renewed inflationary pressure from energy costs. Those pull in opposite directions for monetary policy, and the current situation doesn't give them a clean answer.
+- **Gasoline**: the most visible pass-through for consumers
+- **Diesel**: a key input for freight, agriculture, and manufacturing
+- **Transportation and logistics costs**: which feed into prices for most physical goods
+- **Inflation expectations**: which, if they rise persistently, can influence wage and price setting
+
+This is where the Federal Reserve's task becomes more difficult. Fed officials have noted two pressures at once: potential weakness in consumer spending and employment, and renewed inflationary pressure from energy costs. Those point in opposite directions for monetary policy.
 
 ---
 
@@ -58,14 +91,25 @@ That last point is where the Federal Reserve gets complicated. The Fed has publi
 
 Energy shocks don't transmit instantaneously. The refinery-to-pump lag is roughly 2–6 weeks for crude price moves to fully show up in retail gasoline. Diesel and heating oil run on similar or slightly longer timelines. Manufactured goods with petroleum inputs — plastics, chemicals, synthetic materials — can take months.
 
-Which means a 32% one-month move at the pump isn't the end state. It's the early read. The full inflationary pass-through from a supply shock of this magnitude takes a quarter or more to work through the data.
+As a result, a 32% one-month move at the pump is an early reading rather than the full effect. Historically, the broader inflationary pass-through from a supply shock of this size has taken a quarter or more to appear in the data.
 
-The market data right now suggests this is being priced as a structural supply disruption, not a transient spike. Commodity outpacing equity is a specific signal. It's worth taking seriously.
+The commodity-versus-equity divergence is consistent with markets pricing a more persistent supply disruption rather than a brief spike, though markets can and do revise those expectations quickly.
 
 ---
 
+<Figure
+  src={fig3}
+  alt={"A station canopy at night"}
+  caption={"A station canopy at night. Wholesale moves take weeks to fully reach the pump, which is why prices keep adjusting after the headline."}
+  author={"Daniel Case"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Longitudinal_view_of_Speedway_station_canopy_at_night,_Montgomery,_NY.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="wide"
+/>
+
 ## Bottom Line
 
-Gas prices up 32% in a month is the headline. The more important story is what Brent crude's outperformance of oil equities says about market expectations: this isn't a run-up in anticipation of strong energy company earnings. It's a repricing of supply risk.
+The 32% one-month increase in gas prices is the headline. Brent crude's outperformance of oil equities adds context: it is consistent with markets repricing supply risk rather than anticipating stronger producer earnings.
 
-If that read is correct, the downstream inflation effects are still incoming. The Fed, consumers, and every business with meaningful transportation or logistics exposure is watching the same data and drawing similar conclusions. What happens in the Strait of Hormuz over the next 30–60 days will determine whether this is a spike or a regime shift.
+If that interpretation holds, some downstream inflation effects may still be ahead. Developments around the Strait of Hormuz over the following 30 to 60 days are a key factor in whether the move proves temporary or persistent.

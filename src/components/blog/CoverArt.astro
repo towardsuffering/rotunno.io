@@ -1,0 +1,53 @@
+---
+/**
+ * Illustrated fallback cover, themed to the post's subject. Used when a post has no heroImage.
+ * Set `coverTheme` in frontmatter to override the detected subject.
+ */
+import { scenes } from "@/js/coverScenes";
+import { getCoverSpec } from "@/js/coverUtils";
+
+interface Props {
+  id: string;
+  subject: string; // slug + title + tags, used to detect the theme
+  theme?: string;
+  class?: string;
+}
+
+const { id, subject, theme: themeOverride, class: className } = Astro.props as Props;
+const { palette: p, theme, label, rand } = getCoverSpec(id, subject, themeOverride);
+
+// unique id prefix so multiple covers on one page don't share defs
+const uid = `cv-${id.replace(/[^a-z0-9]/gi, "")}`;
+const scene = scenes[theme]({ p, rand }).replaceAll('id="arrow"', `id="${uid}-arrow"`).replaceAll("url(#arrow)", `url(#${uid}-arrow)`);
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1600 900"
+  preserveAspectRatio="xMidYMid slice"
+  class={className}
+  role="img"
+  aria-label={`${label} illustration`}
+>
+  <defs>
+    <linearGradient id={`${uid}-bg`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color={p.bgFrom}></stop>
+      <stop offset="100%" stop-color={p.bgTo}></stop>
+    </linearGradient>
+    <pattern id={`${uid}-rule`} width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke={p.ink} stroke-opacity="0.05" stroke-width="1"></path>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill={`url(#${uid}-bg)`}></rect>
+  <rect width="1600" height="900" fill={`url(#${uid}-rule)`}></rect>
+  <g set:html={scene} />
+
+  <rect x="64" y="64" width="6" height="40" fill={p.accent}></rect>
+  <text x="86" y="96" fill={p.ink} font-family="Inter Variable, Inter, sans-serif" font-size="30" font-weight="600" letter-spacing="5">
+    {label.toUpperCase()}
+  </text>
+  <text x="1536" y="852" text-anchor="end" fill={p.ink} fill-opacity="0.55" font-family="Inter Variable, Inter, sans-serif" font-size="24" letter-spacing="3">
+    ROTUNNO.AI
+  </text>
+</svg>

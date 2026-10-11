@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2025-03-11
+heroImage: ./cover.jpg
+heroCredit:
+  author: "PiDatacenters"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Racks_Amravati_Data_Center.jpg"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
 categories:
   - data-science
   - business
@@ -16,7 +23,11 @@ tags:
   - data-science
 ---
 
-Most data projects fail not because of bad models — they fail because nobody agreed on what "success" meant before the first query ran. CRISP-DM exists to prevent exactly that.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+
+Industry surveys of analytics teams frequently cite unclear objectives and misaligned expectations, rather than model quality, as leading reasons projects fail to deliver value. CRISP-DM is designed to address that by making goals and success criteria explicit from the start.
 
 Developed in the late 1990s by a consortium including IBM, Daimler AG, and NCR Corporation, the Cross-Industry Standard Process for Data Mining (CRISP-DM) emerged at a moment when data projects were proliferating faster than anyone's ability to manage them. The methodology gave teams a shared language and a repeatable structure — and it's held up remarkably well over 25 years.
 
@@ -27,6 +38,17 @@ Developed in the late 1990s by a consortium including IBM, Daimler AG, and NCR C
 ### 1. Business Understanding
 
 This is the phase most people rush past, and it's the one that kills projects when skipped. Before touching data, you need to be able to answer:
+
+<Figure
+  src={fig1}
+  alt={"A wall of sticky notes"}
+  caption={"A wall of sticky notes. Business understanding, the first phase, usually looks this messy."}
+  author={"ProjectManhattan"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Sticky_Notes_2.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="standard"
+/>
 
 - What problem are we actually trying to solve?
 - What does a successful outcome look like, and how will we measure it?
@@ -92,11 +114,22 @@ Deployment isn't the end — it's the handoff to an ongoing operational process.
 
 ## Why It's Iterative
 
-The framework is explicitly circular. Findings from modeling often send you back to data preparation. Evaluation sometimes surfaces gaps that require rethinking the business problem entirely. That's not failure — that's the process working as designed.
+The framework is explicitly circular. Findings from modeling often lead back to data preparation, and evaluation can surface gaps that require revisiting the business problem. That iteration is an intended part of the process.
 
-In practice, I've found the biggest value isn't in following all six phases perfectly. It's in using the framework as a forcing function for conversations that would otherwise never happen — particularly the ones about what success actually means.
+In practice, many teams find that the framework's main value lies less in following all six phases precisely and more in prompting conversations that might otherwise be skipped, particularly about what success means and how results will be used.
 
 ---
+
+<Figure
+  src={fig2}
+  alt={"The spiral staircase in the Vatican Museums"}
+  caption={"The spiral staircase in the Vatican Museums. CRISP-DM loops back on itself, and each pass climbs higher."}
+  author={"Wilfredor"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Spiral_staircase_in_the_Vatican_Museums_from_bottom_02.jpg"}
+  license={"CC0"}
+  licenseUrl={"http://creativecommons.org/publicdomain/zero/1.0/deed.en"}
+  layout="split"
+/>
 
 ## Where CRISP-DM Falls Short
 
@@ -104,8 +137,18 @@ It's a process framework, not a technical one. It tells you *what* phases to com
 
 For modern teams, CRISP-DM works best as a communication scaffold — a shared vocabulary that aligns data scientists, business stakeholders, and engineers before anyone writes a single line of code.
 
+<Figure
+  src={fig3}
+  alt={"Developers at work"}
+  caption={"Developers at work. The framework says little about deployment and monitoring, where many projects stall."}
+  author={"SAMHSA from Rockville"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Developers_working_on_the_%E2%80%9CTalk._They_Hear_You.%E2%80%9D_mobile_app._(14442858918).jpg"}
+  license={"Public domain"}
+  layout="wide"
+/>
+
 ---
 
 ## Bottom Line
 
-If you're running data projects without a structured methodology, you're building on sand. CRISP-DM isn't perfect, but it's the most battle-tested framework available for keeping analytics work grounded in actual business outcomes. Pick it up, adapt it to your context, and stop shipping models nobody asked for.
+Structured methodologies help keep analytics work tied to business outcomes. CRISP-DM has limitations, but it remains one of the most widely used frameworks in practitioner surveys, alongside alternatives such as Microsoft's Team Data Science Process (TDSP) and agile-based approaches.

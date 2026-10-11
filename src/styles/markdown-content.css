@@ -89,6 +89,11 @@
   @apply text-inherit;
 }
 
+/* floated inset figures never crowd code, tables or new sections */
+.markdown-content :is(pre, table, h2, hr, .admonition):not(:where(.not-content *)) {
+  clear: both;
+}
+
 /* code block styling */
 .markdown-content pre:not(:where(.not-content *)) {
   @apply border-border my-6 rounded-md border px-4 py-3;

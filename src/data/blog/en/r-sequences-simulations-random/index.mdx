@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2024-09-18
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Dietmar Rabich"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:W%C3%BCrfel,_gemischt_--_2021_--_5577.jpg"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
 categories:
   - programming
   - data-analysis
@@ -15,6 +22,11 @@ tags:
   - random-numbers
   - data-science
 ---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
 A lot of what data science is actually doing, beneath the model fitting and the dashboard building, is generating controlled variation and measuring what happens. Simulations. Sampling. Randomized sequences. R has a tight, well-designed toolkit for this, and understanding it deeply pays off in everything from bootstrap resampling to Monte Carlo analysis.
 
@@ -123,9 +135,31 @@ The distribution of bootstrap means gives you a non-parametric confidence interv
 
 ---
 
+<Figure
+  src={fig1}
+  alt={"A lottery drum on parade in 1960s Budapest"}
+  caption={"A lottery drum on parade in 1960s Budapest. sample() draws from a population the same way."}
+  author={"Fortepan (ID 50274)"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Sz%C3%ADn%C3%A9szek-%C3%9Ajs%C3%A1g%C3%ADr%C3%B3k_Rangad%C3%B3_(SZ%C3%9AR)._Fortepan_50274.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="wide"
+/>
+
 ## `runif()`: Uniform Random Numbers
 
 `runif()` generates values drawn from a uniform distribution — every value in the range is equally likely.
+
+<Figure
+  src={fig2}
+  alt={"Raindrops on a puddle"}
+  caption={"Raindrops on a puddle. Uniform random numbers land anywhere in the range with equal chance."}
+  author={"Patrick.Nordmann"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Waterwaves_raindrops_on_water_surface.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
 
 ```r
 # 10 values between 0 and 1
@@ -187,11 +221,32 @@ For other distributions:
 - `rpois(n, lambda)` — Poisson (count data)
 - `rexp(n, rate)` — exponential (time-to-event)
 
+<Figure
+  src={fig4}
+  alt={"A Swiss Army knife"}
+  caption={"A Swiss Army knife. seq(), sample() and runif() are different blades for different jobs."}
+  author={"D-M Commons"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Wenger_EvoGrip_S17.JPG"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="split"
+/>
+
 ---
 
 ## Putting It Together: A Simple Simulation
 
 Combining all three: simulate a retail pricing experiment across 1,000 hypothetical transactions.
+
+<Figure
+  src={fig3}
+  alt={"Valentin de Boulogne's Soldiers Playing Cards and Dice (c"}
+  caption={"Valentin de Boulogne's Soldiers Playing Cards and Dice (c. 1620). Simulation lets you play the game thousands of times before betting."}
+  author={"Valentin de Boulogne"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Valentin_de_Boulogne_-_Soldiers_Playing_Cards_and_Dice_(The_Cheats).jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
 
 ```r
 set.seed(42)

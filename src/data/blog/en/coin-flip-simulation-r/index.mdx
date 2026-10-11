@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2024-08-26
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Anonimski"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Two_20kr_gold_coins.png"
+  license: "CC0"
+  licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
 categories:
   - data-analysis
   - programming
@@ -17,7 +24,11 @@ tags:
   - data-science
 ---
 
-The best way to learn data analysis fundamentals isn't to start with a complex dataset — it's to start with a problem simple enough that you can reason about the expected answer before running a single line of code. A coin flip is perfect.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+
+A useful way to learn data analysis fundamentals is to start with a problem simple enough that the expected answer can be reasoned out before running any code. A coin flip is one such problem.
 
 You know that a fair coin should land on heads roughly 50% of the time. That means when you run a simulation, you can immediately tell whether your code is working correctly by checking whether the results look plausible. That feedback loop is invaluable when you're learning.
 
@@ -45,6 +56,17 @@ coin_flips <- sample(c("Heads", "Tails"), size = n_flips, replace = TRUE)
 ```
 
 The `replace = TRUE` argument is essential — it means each flip is independent. Without it, you'd run out of coins to draw from after the first two flips.
+
+<Figure
+  src={fig1}
+  alt={"A roulette wheel"}
+  caption={"A roulette wheel. Every spin is independent, exactly like each simulated coin flip."}
+  author={"Ralf Roletschek"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:13-02-27-spielbank-wiesbaden-by-RalfR-093.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="wide"
+/>
 
 ---
 
@@ -86,6 +108,16 @@ Understanding indexing is foundational. The same syntax for accessing elements o
 ## Counting Outcomes
 
 Two approaches for counting how many times "Tails" appeared:
+
+<Figure
+  src={fig2}
+  alt={"Heads and tails of a U.S"}
+  caption={"Heads and tails of a U.S. cent. Counting outcomes is just tallying which face came up."}
+  author={"w:Nauticashades/Nauticashades"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:1944_Lincoln_Wheat_Cent.jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
 
 **Method 1: Logical comparison with `sum()`**
 
@@ -176,6 +208,16 @@ This demonstrates the central limit theorem visually — the distribution of tai
 ## What You Actually Learned
 
 The mechanics here — `sample()`, indexing, logical comparison, `seq()`, `replicate()` — apply to almost every data analysis task in R:
+
+<Figure
+  src={fig3}
+  alt={"Jacob Bernoulli, who proved the law of large numbers: with enough flips, the share of heads settles toward one half."}
+  caption={"Jacob Bernoulli, who proved the law of large numbers: with enough flips, the share of heads settles toward one half."}
+  author={"Niklaus Bernoulli (1662-1716)"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Jakob_Bernoulli.jpg"}
+  license={"Public domain"}
+  layout="split"
+/>
 
 - **Sampling** underlies bootstrapping, cross-validation, and Monte Carlo methods
 - **Logical indexing** is how you filter rows in a data frame

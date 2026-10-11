@@ -1,0 +1,81 @@
+---
+/**
+ * Post cover: the sourced heroImage when a post has one, otherwise an illustration of its subject.
+ *
+ * - framing="card": uniform 16:9 crop for grids
+ * - framing="hero": keeps the photo's natural shape, capped in height, cropped around heroFocus
+ * - showCredit: linked attribution caption (author, license, source) under the image
+ */
+import { Image } from "astro:assets";
+import { type CollectionEntry } from "astro:content";
+
+import CoverArt from "@/components/blog/CoverArt.astro";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  width?: number;
+  eager?: boolean;
+  framing?: "card" | "hero";
+  showCredit?: boolean;
+  class?: string;
+}
+
+const {
+  post,
+  width = 1000,
+  eager = false,
+  framing = "card",
+  showCredit = false,
+  class: className,
+} = Astro.props as Props;
+const { title, heroImage, heroCredit, heroFocus, coverTheme, tags } = post.data;
+const isHero = framing === "hero";
+const subject = `${post.id} ${title} ${tags.join(" ")}`;
+const creditText = heroCredit ? `Photo: ${heroCredit.author}, ${heroCredit.license}, via ${heroCredit.source}` : "";
+---
+
+<div>
+  <figure
+    class:list={["relative w-full overflow-hidden", !isHero || !heroImage ? "aspect-video" : "max-h-[72vh]", className]}
+    transition:name={`post-image-${post.id}`}
+  >
+    {
+      heroImage ? (
+        <Image
+          src={heroImage}
+          alt={`Cover photo for ${title}`}
+          title={creditText || undefined}
+          width={width}
+          densities={[1.5, 2]}
+          quality={85}
+          format="webp"
+          loading={eager ? "eager" : "lazy"}
+          class:list={["w-full object-cover", isHero ? "h-auto max-h-[72vh]" : "h-full"]}
+          style={heroFocus ? `object-position: ${heroFocus}` : undefined}
+        />
+      ) : (
+        <CoverArt id={post.id} subject={subject} theme={coverTheme} class="h-full w-full" />
+      )
+    }
+  </figure>
+  {
+    showCredit && heroImage && heroCredit && (
+      <p class="text-muted-foreground mt-3 text-right text-xs">
+        Photo:{" "}
+        <a href={heroCredit.url} target="_blank" rel="noopener" class="hover:text-foreground underline underline-offset-2">
+          {heroCredit.author}
+        </a>
+        {" / "}
+        {heroCredit.licenseUrl ? (
+          <a href={heroCredit.licenseUrl} target="_blank" rel="noopener license" class="hover:text-foreground underline underline-offset-2">
+            {heroCredit.license}
+          </a>
+        ) : (
+          heroCredit.license
+        )}
+        {" / "}
+        {heroCredit.source}
+      </p>
+    )
+  }
+</div>

@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2023-07-21
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Belikov Maxim"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Equipment_and_glassware.jpg"
+  license: "CC BY 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0"
 categories:
   - data-science
   - data-analysis
@@ -18,6 +25,10 @@ tags:
   - regression
 ---
 
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+
 Most introductory statistics courses stop at main effects: does variable A predict the outcome? Does variable B? But in practice, the most interesting and actionable questions are often about combinations — does the effect of A change depending on the level of B?
 
 That's what interaction testing answers.
@@ -25,6 +36,17 @@ That's what interaction testing answers.
 ---
 
 ## Main Effects vs. Interaction Effects
+
+<Figure
+  src={fig1}
+  alt={"Rothamsted Research in England, where Ronald Fisher developed modern experimental design."}
+  caption={"Rothamsted Research in England, where Ronald Fisher developed modern experimental design."}
+  author={"Yerpo"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Rothamsted_-_Centenary_building.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="inset"
+/>
 
 **Main effects** describe the independent contribution of each predictor to the outcome, averaged across all levels of the other predictors.
 
@@ -77,6 +99,17 @@ The `C()` notation tells statsmodels to treat variables as categorical (creating
 ---
 
 ## Testing for Interaction
+
+<Figure
+  src={fig2}
+  alt={"Wheat trial plots"}
+  caption={"Wheat trial plots. Agricultural field trials are where interaction effects were first studied formally."}
+  author={"Michael Trolove"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Cereal_trial_plot,_Cereals_2010_-_geograph.org.uk_-_1910647.jpg"}
+  license={"CC BY-SA 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/2.0"}
+  layout="standard"
+/>
 
 ```python
 # Model with main effects AND interaction term
@@ -161,6 +194,17 @@ If the lines are roughly parallel, the interaction is weak. If they cross or div
 ## Interpreting Results in Practice
 
 When you find a significant interaction:
+
+<Figure
+  src={fig3}
+  alt={"Tablets in bulk"}
+  caption={"Tablets in bulk. Drug interactions are a familiar real-world example of one factor changing another's effect."}
+  author={"Pöllö"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Tablets_pills_medicine_medical_waste.jpg"}
+  license={"CC BY 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/3.0"}
+  layout="wide"
+/>
 
 1. **Don't interpret main effects in isolation.** The "effect of treatment" is not a single number — it depends on the level of age group.
 

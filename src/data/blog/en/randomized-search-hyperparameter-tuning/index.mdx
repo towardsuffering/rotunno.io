@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2025-02-07
+heroImage: ./cover.jpg
+heroCredit:
+  author: "ESO/Yuri Beletsky"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Laser_Towards_Milky_Ways_Centre.jpg"
+  license: "CC BY 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0"
 categories:
   - machine-learning
   - programming
@@ -16,6 +23,11 @@ tags:
   - cross-validation
   - machine-learning
 ---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
 Grid Search is thorough but expensive. When your parameter space has dozens of combinations or continuous value ranges, exhaustive evaluation becomes impractical. Randomized Search is the answer — it samples the space rather than covering it completely, and in practice often finds equally good solutions at a fraction of the compute cost.
 
@@ -33,11 +45,32 @@ This means you control the budget directly with `n_iter`. Set it to 50 and you e
 
 ---
 
+<Figure
+  src={fig1}
+  alt={"Darts clustered near the bullseye"}
+  caption={"Darts clustered near the bullseye. Random sampling covers the space well enough to land close fast."}
+  author={"PeterPan23"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Darts_in_a_dartboard.jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
+
 ## Grid Search vs. Randomized Search
 
 The distinction is important. Grid Search evaluates **all** combinations in a discrete grid. Randomized Search samples from **distributions** (not just discrete lists) over a specified number of iterations.
 
 This has a practical implication: Randomized Search can explore **continuous parameter ranges** that Grid Search cannot efficiently cover:
+
+<Figure
+  src={fig4}
+  alt={"Pear leaves scattered across a lawn"}
+  caption={"Pear leaves scattered across a lawn. Random search spreads its samples like this instead of marching across a grid."}
+  author={"Downtowngal"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Pyrus_calleryana_leaves_scattered.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="split"
+/>
 
 ```python
 from scipy.stats import uniform, randint
@@ -123,6 +156,17 @@ param_dist_rf = {
 
 Using `loguniform` for scale parameters like `C`, `alpha`, or `learning_rate` is particularly important — these parameters matter most on a log scale, and linear sampling wastes most of its budget on large values.
 
+<Figure
+  src={fig2}
+  alt={"The Monte Carlo casino in Monaco, which lent its name to random-sampling methods."}
+  caption={"The Monte Carlo casino in Monaco, which lent its name to random-sampling methods."}
+  author={"Diego Delso"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Casino_de_Montecarlo,_M%C3%B3naco,_2016-06-23,_DD_06.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="wide"
+/>
+
 ---
 
 ## Comparing Results
@@ -149,6 +193,17 @@ There's no universal answer, but some guidelines:
 - **100–200 iterations** for larger spaces with more parameters
 - If the top results are clustered with similar scores, you've likely found a good region — you don't need more iterations
 - If results are highly variable, consider running more iterations or narrowing the distributions
+
+<Figure
+  src={fig3}
+  alt={"A metal detector sweeping a beach"}
+  caption={"A metal detector sweeping a beach. More passes find more, with diminishing returns."}
+  author={"Kyösti Viinamäki"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Metal_detector_on_the_beach.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
 
 ---
 

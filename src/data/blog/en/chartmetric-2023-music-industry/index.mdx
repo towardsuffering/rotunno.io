@@ -1,10 +1,17 @@
 ---
 title: "Chartmetric 2023 Trends: What the Data Says About the Music Industry"
-description: Over 1.3 million new artists, 17 million new tracks, and platforms that didn't exist a decade ago. Here's what Chartmetric's 2023 report reveals about where the industry is heading.
+description: Over 1.3 million new artists, 17 million new tracks, and platforms that didn't exist a decade ago. A summary of what Chartmetric's 2023 report shows about the state of the music industry.
 draft: false
 authors:
   - main-author
 pubDate: 2024-07-02
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Dayron Villaverde from Miami, USA"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Recording_studio_console_for_DAW_work_(2016-03-23_15.01.29_by_DayronV_@pixabay_1290087).jpg"
+  license: "CC0"
+  licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
 categories:
   - music-industry
   - business
@@ -16,19 +23,35 @@ tags:
   - trends
 ---
 
-The music industry is bigger, more fragmented, and harder to predict than it's ever been. Chartmetric's annual report is one of the few data-backed windows into what's actually happening — not what labels want you to believe is happening.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
-The 2023 numbers tell an interesting story.
+By most measures, the music industry is larger and more fragmented than at any point in its history. Chartmetric's annual report is one of the more detailed independent, data-based views of how it is changing.
+
+This article summarizes the main findings from its 2023 data.
 
 ---
 
-## Artist Growth: The Democratization Is Real
+## Artist Growth: Lower Barriers to Entry
 
-More than **1.3 million new artists** debuted on streaming platforms in 2023. That's not a typo. The infrastructure required to release music — recording, distribution, promotion — has collapsed in cost to the point where essentially anyone can participate.
+More than **1.3 million new artists** debuted on streaming platforms in 2023. The cost of recording, distributing, and promoting music has fallen to the point where nearly anyone can release it.
 
-This creates a statistical reality that's easy to miss: most of those 1.3 million artists will never be heard by more than a few hundred people. The median streaming count for new artists is effectively zero. But the long tail matters for a different reason — it's the pool from which the next generation of significant artists emerges, and the data pipeline for discovering them is increasingly algorithmic rather than human.
+The distribution of attention is highly skewed: most new artists reach very small audiences, and a small share account for most listening. The long tail still matters, because it is the pool from which future successful artists emerge, and discovery within it increasingly happens through algorithms as well as human curators.
 
-For anyone working in music analytics, this growth makes discovery infrastructure — playlists, algorithmic feeds, social virality — more strategically important than it's ever been.
+<Figure
+  src={fig1}
+  alt={"A vintage EMI microphone at Abbey Road Studios"}
+  caption={"A vintage EMI microphone at Abbey Road Studios. Cheaper recording tools mean far more artists can release music than ever before."}
+  author={"Khaki from Netherlands"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Showtime._-_Fox_Amoore_at_Abbey_Road_2014_(2014-01-23_10.17.57).jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="wide"
+/>
+
+For music analytics, this growth increases the importance of discovery channels such as playlists, algorithmic feeds, and social media.
 
 ---
 
@@ -36,53 +59,86 @@ For anyone working in music analytics, this growth makes discovery infrastructur
 
 Hip-hop and pop remain dominant by volume, but the growth story in 2023 belongs to:
 
-- **Latin music** — continued expansion beyond traditionally Latin markets, driven by global platform accessibility and cross-genre collaborations
-- **K-pop** — global fanbases with highly organized engagement patterns that gaming the streaming metrics in ways that challenge traditional chart methodology
-- **Afrobeats** — moving from regional phenomenon to genuine global commercial force, with multiple artists breaking into mainstream Western markets
+<Figure
+  src={fig4}
+  alt={"IVE performing at the 2023 World Scout Jamboree"}
+  caption={"IVE performing at the 2023 World Scout Jamboree. K-pop's global reach is one of the clearest signs of genre diversification."}
+  author={"Korea.net / Korean Culture and Information Service"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:IVE_(%EC%95%84%EC%9D%B4%EB%B8%8C)_performing_at_the_2023_World_Scout_Jamboree_K-POP_Super_Live_Concert.jpg"}
+  license={"CC BY-SA 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/2.0"}
+  layout="standard"
+/>
 
-The genre map isn't flattening — it's getting more textured. Niche genres like "Sad Girl Indie" and "Cutecore Rap" are gaining documented traction on streaming platforms, which means the market is fragmenting further into micro-audiences that require different targeting strategies than mass-market campaigns.
+- **Latin music**: continued expansion beyond traditionally Latin markets, supported by global platform access and cross-genre collaborations
+- **K-pop**: global fanbases with highly coordinated engagement, such as organized streaming campaigns, which has prompted debate about how charts should count streams
+- **Afrobeats**: growth from a regional genre into a global commercial category, with several artists reaching mainstream Western markets
+
+Rather than flattening, the genre landscape is becoming more detailed. Niche genres such as "Sad Girl Indie" and "Cutecore Rap" show measurable traction on streaming platforms, reflecting further fragmentation into smaller audiences that are reached differently than mass-market audiences.
 
 ---
 
 ## The Volume Problem: 17 Million Tracks
 
-Chartmetric tracked over **17 million new tracks** ingested in 2023. That's enough music that — as the report notes — a human listener couldn't get through a single year's uploads in a century of continuous listening.
+Chartmetric tracked over **17 million new tracks** ingested in 2023. As the report notes, a single listener could not get through one year of uploads in a century of continuous listening.
 
-For artists, this means the supply side of music has structurally changed. Scarcity is gone. Attention is the resource now.
+For artists, the supply of music is no longer the constraint; listener attention is.
 
 For data analysts and strategists working in the space, this volume creates both an opportunity and a challenge:
 
+<Figure
+  src={fig2}
+  alt={"Listening has moved to the phone, where 17 million new tracks a year compete for the same pair of ears."}
+  caption={"Listening has moved to the phone, where 17 million new tracks a year compete for the same pair of ears."}
+  author={"Shixart1985"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Woman_dances_at_home_while_listening_to_music_with_headphones.jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="split"
+/>
+
 - **Opportunity:** More behavioral data points per listener than ever before, enabling more precise audience modeling
-- **Challenge:** Signal-to-noise ratios in streaming data are increasingly poor; distinguishing genuine fan engagement from algorithmic surface area requires better feature engineering
+- **Challenge:** Separating engaged listening from passive or algorithm-driven plays is harder, which puts more weight on careful feature engineering
 
 ---
 
 ## Platform Landscape
 
-Spotify remains the central node in the streaming ecosystem by share of music discovery, but the ecosystem has diversified meaningfully:
+Spotify remains central to music streaming and discovery, but the ecosystem has diversified:
 
-- **YouTube** still drives substantial discovery, particularly for international audiences and older demographics
-- **TikTok** has emerged as perhaps the most powerful single catalyst for viral music moments — but with notoriously poor conversion to streaming longevity
-- **Radio** retains surprisingly significant reach, particularly in markets where mobile data costs create barriers to streaming adoption
+- **YouTube** drives substantial discovery, particularly for international audiences and older listeners
+- **TikTok** is a major source of viral music moments, though industry analyses find that short-form virality does not reliably translate into sustained streaming
+- **Radio** retains significant reach, particularly in markets where mobile data costs limit streaming adoption
 
-The multi-platform nature of the current landscape means that an artist's data footprint is genuinely distributed. Chartmetric's value is partly in aggregating these signals into a single analytics layer — which is the same problem data engineers face in virtually every industry where consumer behavior happens across multiple channels.
+As a result, an artist's data footprint is spread across platforms. Part of Chartmetric's role is aggregating these signals into one analytics layer, which mirrors the challenge data engineers face in any industry where consumer behavior spans multiple channels.
+
+<Figure
+  src={fig3}
+  alt={"A commuter train full of phones"}
+  caption={"A commuter train full of phones. Platforms compete for these minutes, which shapes how music is discovered."}
+  author={"Wilfredor"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:The_Face_of_Urban_Exhaustion-_End_of_Day_in_S%C3%A3o_Paulo%27s_Metro.jpg"}
+  license={"CC0"}
+  licenseUrl={"http://creativecommons.org/publicdomain/zero/1.0/deed.en"}
+  layout="standard"
+/>
 
 ---
 
 ## What This Means for Music Business Strategy
 
-A few conclusions worth drawing from the 2023 data:
+Several implications follow from the 2023 data:
 
-**Catalog depth matters more than ever.** With 17 million new tracks per year, a single hit provides minimal protection. Artists and labels with back catalogs generate more stable revenue through streaming's flat-rate-per-play model.
+**Catalog depth.** With 17 million new tracks a year, a single release rarely sustains revenue on its own. Catalog music, meaning older releases, accounts for a large and growing share of streaming consumption, which gives artists and labels with deep catalogs more stable income.
 
-**Emerging markets are the growth vector.** Latin, African, and Southeast Asian markets are where platform penetration is increasing fastest. Global audience reach through streaming infrastructure has broken down the geographic barriers that used to shape international expansion timelines.
+**Emerging markets.** Platform adoption is growing fastest in Latin America, Africa, and Southeast Asia. Streaming has lowered the geographic barriers that once shaped how artists expanded internationally.
 
-**TikTok virality and sustained streaming success are different skills.** Several 2023 viral hits showed the pattern: massive short-term spike, then rapid decline. Building for both requires deliberately different strategies — which is a data problem before it's a marketing problem.
+**Virality versus longevity.** Several 2023 viral hits followed a pattern of a sharp short-term spike followed by rapid decline. Sustained streaming success and short-form virality appear to depend on different factors, which makes measuring them separately important.
 
 ---
 
 ## The Analyst's Takeaway
 
-Chartmetric's data confirms something that's intuitive but easy to underestimate: the music industry is now a data industry. Distribution, discovery, audience development, and pricing are all increasingly data-driven decisions.
+Chartmetric's data illustrates how central data has become to the music industry. Distribution, discovery, audience development, and pricing decisions increasingly rely on it.
 
-The companies and artists who win over the next decade won't necessarily be the ones with the best music — they'll be the ones who build the best feedback loops between creative output and audience data.
+Creative quality remains the foundation, and data is increasingly used alongside it to understand how music finds and keeps an audience.

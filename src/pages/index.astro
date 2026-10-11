@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 import AboutNumbers from "@/components/about/AboutNumbers.astro";
+import LatestPosts from "@/components/blog/LatestPosts.astro";
 import CompanyMarquee from "@/components/about/CompanyMarquee.astro";
 import ContactCentered from "@/components/contact/ContactCentered.astro";
 import FaqAccordionsSideImage from "@/components/faq/FaqAccordionsSideImage.astro";
@@ -23,6 +24,8 @@ const siteData = getTranslatedData("siteData", currLocale);
   <TeamSwiper />
 
   <ServicesCards />
+
+  <LatestPosts />
 
   <FaqAccordionsSideImage />
 

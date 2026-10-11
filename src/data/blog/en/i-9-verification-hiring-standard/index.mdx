@@ -1,10 +1,17 @@
 ---
-title: "No I-9 Is a Red Flag for Employees, Not Just a Liability for Employers"
-description: Form I-9 completion is a federal requirement, not a formality, and enforcement is rising. Here's the case for why skipping it should cost an employer trust, with sources, and why any leader building an organization should treat it as a leading indicator, not paperwork.
+title: "Form I-9 Explained: The Requirement, the Penalties, and What It Signals at Onboarding"
+description: Form I-9 completion is a federal requirement for every U.S. hire, and enforcement has increased. This guide covers what the law requires, current penalty levels, recent enforcement trends, and how both employers and new hires can interpret the onboarding process.
 draft: false
 authors:
   - main-author
 pubDate: 2026-07-07
+heroImage: ./cover.jpg
+heroCredit:
+  author: "amtec_photos"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Woman_on_a_Job_Interview_-_38826218972.jpg"
+  license: "CC BY-SA 2.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0"
 categories:
   - career
   - professional-development
@@ -18,33 +25,71 @@ tags:
   - career-systems
 ---
 
-Every employer in the United States is legally required to complete Form I-9 for every person they hire, verifying identity and employment authorization. This isn't an HR best practice or a courtesy step. It's a federal mandate under Section 274A of the Immigration and Nationality Act, codified at 8 U.S.C. § 1324a(b), part of the Immigration Reform and Control Act of 1986.¹ ² It applies identically to a five person shop and a Fortune 500 company, and it is one of the few compliance obligations that produces an observable artifact on day one: either the form exists, correctly, or it doesn't.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
 
-I've spent the past decade building and evaluating operational systems across lending, retail, and restaurant environments, and more recently in data infrastructure. The habit that carries across all of it is the same: judge a system by its weakest verifiable checkpoint, because that checkpoint is usually a proxy for the discipline of everything upstream and downstream of it. I-9 completion is exactly that kind of checkpoint. It's cheap to observe, legally unambiguous, and it happens in the open. Which is precisely why it's worth examining what it means when an organization lets it slide.
+Every employer in the United States is legally required to complete Form I-9 for every person they hire, verifying identity and employment authorization. The requirement comes from Section 274A of the Immigration and Nationality Act, codified at 8 U.S.C. § 1324a(b), and was established by the Immigration Reform and Control Act of 1986.¹ ² It applies to a five-person business and a Fortune 500 company alike, and it is one of the few compliance obligations that produces an observable record on an employee's first days: the form is either completed correctly or it is not.
 
-## It's Not a Formality. It's Law, and the Exposure Is Compounding
+This guide covers what the law requires, the current penalty and enforcement landscape, and how the onboarding process can be read by both sides of the hiring relationship.
 
-Form I-9 non-completion isn't a gray area, and it isn't a line item HR can quietly absorb. Employers must review original identity and work authorization documents and complete Section 2 within three business days of an employee's start date, and retain the form for three years after hire or one year after termination, whichever is later.² Skipping it isn't equivalent to a missed timesheet. It's a documented statutory violation the moment the hire starts, whether or not anyone notices.
+## What the Law Requires
 
-The financial exposure compounds accordingly. As of the January 2025 inflation adjustment, paperwork violations carry civil penalties of $288 to $2,861 per form, and knowingly employing unauthorized workers carries penalties of $716 to $28,619 per worker, scaling with repeat offenses.³ ⁴ In early 2026, ICE also narrowed the list of "technical" errors eligible for a 10 day correction window, reclassifying more than a dozen error categories as substantive violations subject to immediate fines.⁵ That shift alone should register with any operator: the margin for quietly cleaning up a lapse later has gotten smaller, not larger.
+Employers must review original identity and work authorization documents and complete Section 2 of the form within three business days of an employee's start date. The completed form must be retained for three years after the date of hire or one year after employment ends, whichever is later.² A missing or incomplete form is a statutory violation from the employee's start date, whether or not it is ever inspected.
 
-Enforcement activity has followed the same trajectory. Notices of Inspection issued in 2025 ran substantially higher than in prior years, with federal field offices operating under quarterly worksite inspection quotas.⁶ Hospitality and food service sit alongside construction, agriculture, staffing, and manufacturing among the sectors that receive disproportionate audit attention.⁶ ⁷ For an organization operating in any of those sectors, treating I-9 completion as a background task rather than a controlled process is not a minor gap. It's unmanaged risk sitting in the one place regulators are most likely to look.
+<Figure
+  src={fig1}
+  alt={"A 1915 employment application filled out by Theodore Roosevelt"}
+  caption={"A 1915 employment application filled out by Theodore Roosevelt. Documenting who works for you is not a new idea."}
+  author={"Miscellaneous Items in High Demand, PPOC, Library of Congress"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Col._Roosevelt%27s_application_for_a_job_LCCN2013650868.jpg"}
+  license={"Public domain"}
+  layout="split"
+/>
 
-## Why a Missing I-9 Should Read as a Red Flag to the Employee, Not Just the Business
+## Penalties and Enforcement Trends
 
-I-9 completion is almost always framed as an employer's problem to manage: their liability, their fine, their audit exposure. That framing is incomplete. The employee sitting across the desk during onboarding is not a bystander to the process. They are the party left standing in whatever gap it leaves behind, and they are entitled to read the signal the same way a diligent employer would read it in a vendor or an acquisition target.
+As of the January 2025 inflation adjustment, paperwork violations carry civil penalties of $288 to $2,861 per form, and knowingly employing unauthorized workers carries penalties of $716 to $28,619 per worker, with higher amounts for repeat violations.³ ⁴ In early 2026, ICE narrowed the list of "technical" errors eligible for a 10-day correction window, reclassifying more than a dozen error categories as substantive violations subject to fines without a correction period.⁵ In practice, this reduces the opportunity to fix errors after the fact.
 
-Start with the paper trail. The same intake moment that produces the I-9 typically produces the W-4 and confirms proper worker classification, the documentation trail underlying accurate pay, tax withholding, and eligibility for wage and workers' compensation claims.⁸ These steps tend to move together because they happen in the same onboarding conversation, at the same desk, in the same ten minutes. That is not a guarantee that skipping one means the others were skipped too. But when the one step that is visible gets waved off, it is reasonable to ask what else got waved off in that same conversation, out of view.
+Enforcement activity has also increased. Notices of Inspection issued in 2025 ran substantially higher than in prior years, and reporting indicates that field offices operated under quarterly worksite inspection targets.⁶ Hospitality and food service are among the sectors that receive more frequent audit attention, along with construction, agriculture, staffing, and manufacturing.⁶ ⁷ For employers in these sectors, a documented I-9 process is a significant part of overall compliance risk management.
 
-That leads to the more durable point. I-9 completion is one of the only compliance obligations a new hire can observe directly, at onboarding, with a form and a document check. Nearly everything else an organization is required to get right, payroll accuracy, correct classification, wage and hour practices, happens entirely out of view of the person it affects most. This is a heuristic, not a proof, and it should be stated as one: a missing I-9 does not mechanically establish that pay is wrong or classification is off. But it is the one checkpoint available, and any operator worth the title weights the checkpoint they have rather than pretending it tells them nothing. Treating that single visible failure as noise, rather than signal, is itself a failure of judgment.
+## What the Onboarding Process Shows to New Hires
 
-## The Standard Worth Holding, on Either Side of the Desk
+I-9 compliance is usually discussed as an employer obligation. It is also one of the few compliance steps a new hire can observe directly, because it requires the employee to present documents and complete Section 1 in person.
 
-That standard is what's behind the argument above, not a new one introduced for the occasion. A missing I-9 is a foundation problem wearing the costume of a paperwork problem, and it should be judged the same way regardless of which side of the hiring table someone sits on.
+<Figure
+  src={fig2}
+  alt={"Passport visa pages"}
+  caption={"Passport visa pages. A U.S. passport is one of the documents that satisfies Form I-9 on its own."}
+  author={"Monocletophat123"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:US_passport_extra_pages.jpg"}
+  license={"CC0"}
+  licenseUrl={"http://creativecommons.org/publicdomain/zero/1.0/deed.en"}
+  layout="wide"
+/>
 
-For an employee evaluating an employer, that means treating a skipped I-9 as real information, not disqualifying by itself, but weighty enough that trust gets rebuilt on a longer timeline, unless the compensation and stability on offer are strong enough to justify taking the rest on faith.
+The same onboarding session typically covers the W-4 and the employee's classification, which underlie accurate pay, tax withholding, and eligibility for wage and workers' compensation claims.⁸ Most other compliance obligations, such as payroll accuracy and wage-and-hour practices, happen out of the employee's view.
 
-For anyone building or running an organization, the standard is sharper still: if the one compliance step a new hire can actually watch does not happen cleanly, that is not a detail to fix later. It is the first data point in a system, and the leaders worth following are the ones who treat it that way from day one, not after an audit forces the issue.
+Some operations and compliance professionals use a general auditing principle here: a visible control is often a useful proxy for the discipline of related, less visible processes. Applied to onboarding, a skipped or incomplete I-9 can be a reason to ask questions about how other paperwork is being handled. This is a heuristic rather than evidence. A missing form does not establish that pay or classification is wrong, and organizations can be strong in some areas while having gaps in others.
+
+## Interpreting It From Either Side of the Desk
+
+<Figure
+  src={fig3}
+  alt={"A handshake across the desk"}
+  caption={"A handshake across the desk. Proper paperwork protects both sides of that agreement."}
+  author={"perzon seo"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Business_man_and_woman_handshake_in_work_office.jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="standard"
+/>
+
+For **employers**, the practical takeaway from the enforcement data is that I-9 completion benefits from being a controlled, documented process with a clear owner, a three-day completion check, and periodic internal audits, rather than an informal step.
+
+For **new hires**, an incomplete I-9 process is one piece of information among many. Reasonable next steps include asking HR when the form will be completed, keeping copies of any documents provided, and reviewing early pay stubs for accurate withholding.
+
+In both cases, the form is a small, visible part of the larger set of records that govern employment, and it is one of the easiest of those records to verify.
 
 ---
 

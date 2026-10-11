@@ -5,6 +5,12 @@ draft: false
 authors:
   - main-author
 pubDate: 2025-02-08
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Francis Godolphin Osbourne Stuart"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:RMS_Titanic_3_(cropped).jpg"
+  license: "Public domain"
 categories:
   - machine-learning
   - data-science
@@ -18,13 +24,28 @@ tags:
   - scikit-learn
 ---
 
-The Titanic dataset has launched more data science careers than probably any other benchmark. It's not because predicting 19th-century shipwreck survival is professionally useful — it's because the problem has just the right amount of complexity to teach real skills: messy data, meaningful features, and a binary classification target that everyone intuitively understands.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
+
+The Titanic dataset is one of the most widely used introductory benchmarks in data science. Its value is not that predicting survival in the 1912 shipwreck is professionally useful, but that the problem has the right amount of complexity for learning: missing values, categorical features, a clear binary target, and enough data to train real models.
 
 This is a full walkthrough from raw data to submission-ready predictions.
 
 ---
 
 ## The Dataset
+
+<Figure
+  src={fig1}
+  alt={"A Titanic lifeboat photographed from the Carpathia"}
+  caption={"A Titanic lifeboat photographed from the Carpathia. Who reached the boats is exactly what the dataset records."}
+  author={"J.W. Barker (Carpathia passenger) credited in The Sphere (London, 4 May 1912), p. 91. Carpathia was the ship that received the Titanic's dis"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Titanic-lifeboat-colorized.jpg"}
+  license={"Public domain"}
+  layout="wide"
+/>
 
 The training set has **891 passengers**. The test set has **417**. Each passenger record includes:
 
@@ -77,6 +98,16 @@ df = pd.get_dummies(df, columns=['Sex', 'Embarked'], drop_first=True)
 ### Extract Titles from Names
 
 Passenger names contain titles (Mr, Mrs, Miss, Master, Dr, etc.) that encode gender, age, and social status — all predictive of survival outcomes:
+
+<Figure
+  src={fig2}
+  alt={"The first-class grand staircase of the Olympic, Titanic's sister ship"}
+  caption={"The first-class grand staircase of the Olympic, Titanic's sister ship. Passenger class turned out to be one of the strongest predictors."}
+  author={"William H. Rau"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Grand_Staircase_aboard_the_RMS_Olympic_(William_H._Rau_1911).jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
 
 ```python
 df['Title'] = df['Name'].str.extract(r' ([A-Za-z]+)\.', expand=False)
@@ -160,6 +191,17 @@ Logistic Regression typically achieves 78–82% accuracy on this dataset — com
 
 ## What the Results Tell Us
 
+<Figure
+  src={fig4}
+  alt={"The Titanic Memorial in Washington, D.C"}
+  caption={"The Titanic Memorial in Washington, D.C. The model's features map onto real decisions made that night."}
+  author={"APK"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Titanic_Memorial_(Washington,_D.C.).jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="split"
+/>
+
 The model confirms what historical records suggest:
 
 - **Sex was the dominant factor.** Women survived at roughly 74% vs. 19% for men.
@@ -170,6 +212,16 @@ The model confirms what historical records suggest:
 ---
 
 ## Why This Problem Still Matters
+
+<Figure
+  src={fig3}
+  alt={"The bow of the wreck, photographed by NOAA"}
+  caption={"The bow of the wreck, photographed by NOAA. Behind every row in the dataset is a person."}
+  author={"NOAA / Institute for Exploration / University of Rhode Island"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Titanic_wreck_bow.jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
 
 The Titanic dataset teaches the skills that transfer everywhere:
 - Handling missing data without introducing leakage

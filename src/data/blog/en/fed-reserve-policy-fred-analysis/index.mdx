@@ -1,10 +1,16 @@
 ---
 title: "Interpreting Federal Reserve Policy Through the Eras: A FRED Data Analysis"
-description: A data-driven look at how U.S. monetary policy has evolved across Fed chairmanships — from Volcker's inflation shock therapy to Powell's pandemic-era pivots — using FRED economic data.
+description: A data-driven look at how U.S. monetary policy has evolved across Fed chairmanships, from Volcker's disinflation to Powell's pandemic-era policy, using FRED economic data.
 draft: false
 authors:
   - main-author
 pubDate: 2024-09-20
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Federalreserve"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Eccles_Building_(26088200676).jpg"
+  license: "Public domain"
 categories:
   - finance
   - data-analysis
@@ -16,63 +22,78 @@ tags:
   - monetary-policy
 ---
 
-The Federal Reserve doesn't act in a vacuum. Every rate decision is a response — to inflation, unemployment, geopolitical shock, or financial contagion. But when you zoom out across decades of data, something more interesting emerges: distinct *eras* shaped by the personalities, philosophies, and circumstances of each Fed chair.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
 
-Using the [FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/) database, I analyzed the Federal Funds Rate across five chairmanships to surface the signal beneath the noise.
+Federal Reserve decisions respond to conditions: inflation, unemployment, geopolitical shocks, and financial stress. Viewed across decades of data, those responses also form distinct *eras*, shaped by the economic circumstances and policy frameworks of each Fed chair's tenure.
+
+Using the [FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/) database, this analysis examines the federal funds rate across five chairmanships.
 
 ---
 
 ## The Chairs and Their Contexts
 
-### Paul Volcker (1979–1987): The Shock Therapist
+### Paul Volcker (1979–1987): Disinflation
 
-Volcker inherited an economy in crisis. Inflation had reached **14.8%** by 1980. His remedy was blunt and deliberate: drive the Fed Funds Rate to nearly **20%** in 1981, even as unemployment climbed above 10%.
+Volcker took office with inflation rising sharply; it peaked at **14.8%** in 1980. The Fed raised the federal funds rate to nearly **20%** in 1981, and unemployment rose above 10% during the 1981–82 recession.
 
-It worked. By 1983, inflation had collapsed to under 3%. Volcker's legacy is the proof of concept that central bank credibility — maintained through painful discipline — is worth the short-term cost.
+Inflation fell to under 4% by 1983. Many economists cite the episode as evidence of the value of central bank credibility, while others emphasize the high cost of the back-to-back recessions of 1980 and 1981–82.
 
-> **Key FRED signal:** A sharp inverted V in the Funds Rate from 1979–1983, followed by a gradual descent. Unemployment and inflation moved in opposite directions, validating the Phillips Curve tradeoff in real time.
+> **Key FRED signal:** A sharp inverted V in the Funds Rate from 1979–1983, followed by a gradual descent. Unemployment and inflation moved in opposite directions, consistent with a short-run Phillips curve tradeoff.
 
 ---
 
-### Alan Greenspan (1987–2006): The Maestro Era
+### Alan Greenspan (1987–2006): The Long Expansion
 
-Greenspan presided over the longest peacetime economic expansion in U.S. history. His style was calibrated and data-dependent — incremental adjustments rather than shocks.
+Greenspan's tenure included what was then the longest economic expansion in U.S. history, during the 1990s. His approach generally favored incremental adjustments.
 
-The **1994 rate cycle** is a masterclass: the Fed raised rates seven times in 12 months to cool an overheating economy, then reversed course. GDP growth stayed intact. Critics later argued that Greenspan's long period of low rates after the dot-com bust (2001–2004) helped inflate the housing bubble he'd later be blamed for.
+<Figure
+  src={fig1}
+  alt={"Paul Volcker, Fed Chair 1979 to 1987, whose rate hikes broke the inflation of the 1970s."}
+  caption={"Paul Volcker, Fed Chair 1979 to 1987, whose rate hikes broke the inflation of the 1970s."}
+  author={"Edmond J. Safra Center for Ethics"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Paul_Volcker_4.2.12_(7042221707).jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="wide"
+/>
+
+The **1994–95 rate cycle** is often cited as an example of a soft landing: the Fed raised rates seven times in about a year, then eased, and the expansion continued. Critics later argued that the extended period of low rates after the dot-com bust (2001–2004) contributed to the housing bubble; Greenspan and others disputed how large that role was.
 
 > **Key FRED signal:** Smooth, oscillating rate cycles correlating closely with GDP growth — a "soft landing" template repeated across the 1990s.
 
 ---
 
-### Ben Bernanke (2006–2014): Crisis Manager
+### Ben Bernanke (2006–2014): The Financial Crisis
 
-Bernanke, a scholar of the Great Depression, was uniquely equipped for what came next. When the 2008 financial crisis hit, he cut rates to near-zero and pioneered **quantitative easing (QE)** — large-scale asset purchases designed to inject liquidity when conventional tools hit the zero lower bound.
+Bernanke's academic research had focused on the Great Depression. During the 2008 financial crisis, the Fed cut rates to near zero and launched large-scale **quantitative easing (QE)**, purchasing assets to support financial conditions once the policy rate reached the zero lower bound. The Bank of Japan had used a form of QE earlier, in the 2000s.
 
 The Fed's balance sheet grew from ~$900 billion in 2008 to over **$4.5 trillion** by 2015.
 
-> **Key FRED signal:** The Funds Rate drops to 0–0.25% in December 2008 and stays there for seven years. This was unprecedented in modern Fed history and redefined what "accommodation" looks like.
+> **Key FRED signal:** The Funds Rate drops to 0–0.25% in December 2008 and stays there for seven years. This was unprecedented in modern Fed history and changed what monetary accommodation looked like.
 
 ---
 
-### Janet Yellen (2014–2018): The Normalization Architect
+### Janet Yellen (2014–2018): Normalization
 
-Yellen's tenure was defined by one question: *when is the right time to raise rates?* She navigated a delicate exit from zero-rate policy, executing the first hike in December 2015 — nine years after the last one.
+Yellen's tenure centered on the question of *when to raise rates* after years at zero. The first hike came in December 2015, about nine years after the previous one.
 
-Her approach was characteristically transparent and incremental: communicate extensively, move slowly, watch the labor market closely. Under Yellen, unemployment fell below **4%** without triggering meaningful inflation, challenging traditional models.
+The Fed under Yellen emphasized gradual moves and extensive communication. Unemployment fell to about **4.1%** by the end of her term while inflation stayed below the 2% target, which led many economists to revisit estimates of how low unemployment could go without raising inflation.
 
-> **Key FRED signal:** Gradual staircase pattern in the Funds Rate from 2015–2018, paired with historically low unemployment and below-target inflation — a combination economists call "a soft landing."
+> **Key FRED signal:** A gradual staircase pattern in the funds rate from 2015 to 2018, alongside low unemployment and below-target inflation.
 
 ---
 
-### Jerome Powell (2018–present): Volatility Navigator
+### Jerome Powell (from 2018): Pandemic and Inflation
 
-Powell has presided over more rate volatility than any chair in decades. His tenure includes:
+Powell's tenure has included some of the largest rate swings in decades:
 
-- **2018–2019:** Hiking cycle followed by a sudden pivot as markets tumbled
-- **2020:** Emergency cuts to near-zero in response to COVID-19, along with massive QE expansion
-- **2022–2023:** The most aggressive tightening cycle since Volcker — **525 basis points** in 16 months — to combat 9.1% inflation
+- **2018–2019:** A hiking cycle, followed by three cuts in 2019 amid slowing growth and market stress
+- **2020:** Emergency cuts to near zero in response to COVID-19, along with a large expansion of QE
+- **2022–2023:** The fastest tightening cycle since the early 1980s, **525 basis points** in about 16 months, after inflation reached 9.1%
 
-The speed of the 2022–2023 hikes raised fears of a hard landing. Instead, the economy absorbed the increases with surprising resilience — unemployment remained near historic lows, and inflation retreated toward the 2% target.
+Many forecasters expected the 2022–2023 hikes to cause a recession. Through 2024, unemployment remained low and inflation declined toward the 2% target, though economists continue to debate how much credit belongs to monetary policy versus easing supply constraints.
 
 > **Key FRED signal:** A near-vertical spike in the Funds Rate from 0.25% in March 2022 to 5.5% by July 2023. The trajectory resembles Volcker's, but the underlying economy looks nothing like 1981.
 
@@ -80,15 +101,25 @@ The speed of the 2022–2023 hikes raised fears of a hard landing. Instead, the 
 
 ## What the Data Actually Shows
 
+<Figure
+  src={fig2}
+  alt={"A Federal Open Market Committee meeting"}
+  caption={"A Federal Open Market Committee meeting. Each era's rate path reflects the data the committee had in front of it."}
+  author={"Federalreserve"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Federal_Open_Market_Committee_(FOMC)_in_Washington_DC_April_26-27,_2016.jpg"}
+  license={"Public domain"}
+  layout="inset"
+/>
+
 Pulling the effective Federal Funds Rate from FRED and overlaying CPI, unemployment, and GDP data reveals a few durable patterns:
 
-1. **Rate cycles are asymmetric.** Cuts tend to be faster and deeper than hikes. The Fed responds more urgently to downturns than to overheating.
+1. **Rate cycles are asymmetric.** In this period, cuts were generally faster and deeper than hikes, reflecting quicker responses to downturns than to overheating.
 
-2. **Each era resets the baseline.** Each subsequent chair inherited a lower neutral rate than the last — until Powell broke the trend.
+2. **The baseline shifted over time.** Estimates of the neutral interest rate declined over several decades. Whether that trend reversed after 2022 is an open question among economists.
 
-3. **The zero lower bound changed the game.** Once you've hit 0%, conventional tools are exhausted. Every chair post-2008 has had to think about QE as a primary tool, not a last resort.
+3. **The zero lower bound changed the toolkit.** Once the policy rate reaches zero, conventional tools are limited, and since 2008 asset purchases have become a standard part of the Fed's options.
 
-4. **Inflation expectations matter more than inflation itself.** Volcker's lesson wasn't just "raise rates" — it was "break the expectation that inflation will persist." That psychological dimension shows up in FRED's TIPS spread data.
+4. **Inflation expectations play a central role.** A key lesson often drawn from the Volcker era is the importance of keeping inflation expectations anchored. Market-based expectations can be tracked in FRED through breakeven inflation rates derived from TIPS.
 
 ---
 
@@ -114,15 +145,25 @@ fedfunds = fred.get_series('FEDFUNDS', observation_start='1975-01-01')
 cpi = fred.get_series('CPIAUCSL', observation_start='1975-01-01')
 ```
 
-From there, plotting rate cycles against inflation and unemployment tells a clearer story than any Fed press release.
+From there, plotting rate cycles against inflation and unemployment provides useful historical context alongside the Fed's own statements and projections.
 
 ---
 
+<Figure
+  src={fig3}
+  alt={"A 1918 statement from the Federal Reserve Bank of St"}
+  caption={"A 1918 statement from the Federal Reserve Bank of St. Louis. The same bank now publishes FRED, the data source used here."}
+  author={"Wells, Rolla, 1856-1944"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Statement_of_Third_Liberty_Loan_Subscriptions_to_the_Federal_Reserve_Bank_of_St._Louis,_blank_form,_May_28,_1918_-_DPLA_-_960f9db36a45184f3c7bc003be07dfff_(page_5).jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
+
 ## The Takeaway
 
-Monetary policy looks clean in hindsight. In the moment, every Fed chair was navigating imperfect data, political pressure, and competing economic theories. What FRED lets you do is strip away the narrative and see what actually happened — rate levels, timing, duration, and consequence.
+Monetary policy can look straightforward in hindsight. In real time, each Fed chair worked with imperfect data, political pressure, and competing economic theories. FRED data makes it possible to examine the record directly: rate levels, timing, duration, and outcomes.
 
-The patterns are there. The eras are distinct. And understanding them is increasingly relevant as markets attempt to decode what "higher for longer" actually means for the next cycle.
+The eras are distinct, and understanding them provides useful context for interpreting future policy cycles.
 
 ---
 

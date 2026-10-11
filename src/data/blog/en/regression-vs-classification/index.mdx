@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2023-07-21
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Ralf Roletschek"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:13-11-02-olb-by-RalfR-03.jpg"
+  license: "CC BY 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/3.0"
 categories:
   - machine-learning
   - data-science
@@ -16,6 +23,11 @@ tags:
   - python
   - machine-learning
 ---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
 When you're new to machine learning, the number of algorithms available is overwhelming. But most supervised learning problems fall into one of two categories — regression or classification — and identifying which one you're dealing with narrows the field considerably.
 
@@ -79,6 +91,17 @@ print(f"R²:   {r2_score(y_test, y_pred):.4f}")
 
 ---
 
+<Figure
+  src={fig1}
+  alt={"A row of houses"}
+  caption={"A row of houses. Predicting a sale price is the classic regression problem."}
+  author={"Dillan Payne"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Suburban_Housing_in_Newcastle,_Ontario,_September_12_2026_(02).jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
+
 ## Classification in Practice
 
 ### Simple Example: Iris Species Classification
@@ -93,6 +116,17 @@ X, y = load_iris(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
+
+<Figure
+  src={fig2}
+  alt={"A high-speed letter sorting machine"}
+  caption={"A high-speed letter sorting machine. Routing each envelope to a bin is classification in physical form."}
+  author={"Mike Peel"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:BLW_High_Speed_Sorting_Machine..jpg"}
+  license={"CC BY-SA 2.0 uk"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/2.0/uk/deed.en"}
+  layout="wide"
+/>
 
 clf = LogisticRegression(max_iter=200, random_state=42)
 clf.fit(X_train, y_train)
@@ -117,6 +151,17 @@ print(classification_report(y_test, y_pred, target_names=load_iris().target_name
 ## When It Gets Blurry
 
 The line between regression and classification blurs in a few cases worth understanding:
+
+<Figure
+  src={fig3}
+  alt={"A weather radar station in Taiwan"}
+  caption={"A weather radar station in Taiwan. A 70% chance of rain is a probability that becomes a yes or no decision."}
+  author={"CEphoto, Uwe Aranas"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Kenting_Taiwan_Kenting-Weather-Radar-Station-02.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="inset"
+/>
 
 **Binary classification with probability outputs:** Logistic Regression outputs a probability (0.0 to 1.0), which is a continuous number. You convert it to a classification by applying a threshold (usually 0.5). You can also use the probability directly as a risk score — which is technically regression output used for classification decisions.
 
@@ -145,6 +190,17 @@ Most algorithms in Scikit-Learn support both tasks through separate implementati
 ## Choosing the Right One
 
 Ask one question first: **what does success look like in business terms?**
+
+<Figure
+  src={fig4}
+  alt={"A trail signpost"}
+  caption={"A trail signpost. The right choice depends on whether the answer is a quantity or a category."}
+  author={"Fonamcjimmyjimmy"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Lenzie_Moss_Signpost_Bea%27s_Path.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
 
 If someone would describe a good outcome as "we got the number right" or "the estimate was close" → **regression**.
 

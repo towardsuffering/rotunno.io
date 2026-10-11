@@ -1,10 +1,18 @@
 ---
 title: "Kroger's Data Strategy Decoded: A Deep Dive into Retail Analytics"
-description: How Kroger turned grocery data into a competitive moat — from the SSOT-MVOTs framework to Kroger Precision Marketing, 84.51°, and smart shelving technology.
+description: How Kroger built its retail data operation, from the SSOT-MVOTs framework to 84.51°, Kroger Precision Marketing, and digital shelf technology, along with the questions those practices raise.
 draft: false
 authors:
   - main-author
 pubDate: 2024-09-10
+updatedDate: 2026-10-11
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Harrison Keely"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:The_exterior_of_a_Kroger_Marketplace_store_in_Athens,_Georgia_05.jpg"
+  license: "CC BY 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0"
 categories:
   - retail
   - data-strategy
@@ -16,94 +24,170 @@ tags:
   - business-intelligence
 ---
 
-Kroger operates more than 2,700 stores. It processes millions of transactions every day. And for most of its history, that data sat largely unused — a byproduct of selling groceries, not a strategic asset.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
+import fig5 from "./fig-5.jpg";
+import fig6 from "./fig-6.jpg";
 
-That changed. Today, Kroger's data operation is one of the most sophisticated in retail, generating revenue from the insights it produces and reshaping how the company competes against Amazon, Walmart, and a growing wave of discount grocers.
+Kroger operates more than 2,700 stores and processes millions of transactions every day. For much of its history, that transaction data was used mainly for day-to-day operations rather than as a strategic asset.
 
-Here's how they built it.
+Over the past two decades, Kroger has built one of the most extensive data operations in U.S. grocery retail. It now generates revenue from data products and plays a role in how the company competes with Amazon, Walmart, and discount grocers.
+
+This article explains how that operation is structured, and the questions it raises.
 
 ---
 
 ## The Foundation: One Source of Truth
 
-Before Kroger could do anything sophisticated with data, it had to solve a fundamental problem: its data lived in silos. Store systems, loyalty programs, supply chain platforms, and e-commerce each had their own databases — and they didn't talk to each other.
+A common first challenge for large retailers is data stored in silos. Store systems, loyalty programs, supply chain platforms, and e-commerce each tend to have separate databases that are difficult to reconcile.
 
 Kroger's answer was the **Single Source of Truth (SSOT)** model, paired with what the company calls **Multiple Views of Truth (MVOTs)**.
 
 The concept is straightforward but operationally difficult:
 
-- **SSOT**: One canonical dataset that all teams agree on — the authoritative record of what happened.
+<Figure
+  src={fig1}
+  alt={"A supermarket checkout zone"}
+  caption={"A supermarket checkout zone. Every scan here feeds the transaction data that powers the strategy."}
+  author={"Touam"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Nouvelle_baisse_de_prix_sur_12_000_produits.jpg"}
+  license={"CC BY 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/4.0"}
+  layout="standard"
+/>
+
+- **SSOT**: One canonical dataset that all teams agree on, serving as the authoritative record of what happened.
 - **MVOTs**: Downstream views of that data, tailored to specific functions (supply chain needs different aggregations than marketing, which needs different aggregations than finance).
 
-This architecture matters because disagreements about data — "your number says X, my number says Y" — are one of the most expensive and morale-destroying problems in large organizations. SSOT eliminates the argument. MVOTs ensure every team gets the data in the shape they need.
+This architecture addresses a common and costly problem in large organizations: teams reporting different numbers for the same metric. An SSOT is designed to reduce those disputes, while MVOTs give each team data in the shape it needs.
 
 ---
 
 ## 84.51°: The Data Subsidiary You've Never Heard Of
 
-In 2015, Kroger acquired the majority stake in **84.51°** — a data science and analytics firm named after the longitude of Cincinnati, Kroger's headquarters.
+<Figure
+  src={fig4}
+  alt={"Cincinnati at night, Kroger's home city"}
+  caption={"Cincinnati at night, Kroger's home city. The name 84.51° comes from the city's longitude."}
+  author={"Jason Zhang"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Cincinnati_night_skyline_from_Covington,_January_2019_(2).jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="inset"
+/>
 
-84.51° is Kroger's analytics engine. It employs data scientists, behavioral economists, and engineers whose entire job is extracting value from Kroger's customer data. Their core products include:
+In 2015, Kroger acquired a majority stake in **84.51°**, a data science and analytics firm named after the longitude of Cincinnati, Kroger's headquarters.
+
+84.51° is Kroger's analytics subsidiary. It employs data scientists, behavioral economists, and engineers who analyze Kroger's customer data. Its core products include:
 
 - **Customer 360 profiles**: Unified views of individual shopper behavior across in-store, digital, and loyalty interactions
 - **Predictive modeling**: Churn prediction, basket expansion, promotion response modeling
-- **Supplier insights**: Kroger sells aggregated, anonymized shopper data back to CPG brands as a research product — a business model that generates hundreds of millions in revenue annually
+- **Supplier insights**: Aggregated shopper insights sold to consumer packaged goods (CPG) brands as a research product, a business that industry reporting estimates generates substantial annual revenue
 
-84.51° turns Kroger's transaction data into a recurring revenue stream. That's a meaningful shift: the data isn't just a cost center or an operational tool — it's a product.
+This model treats transaction data as a product rather than only an operational tool.
 
 ---
 
 ## Kroger Precision Marketing: The Retail Media Angle
 
-Retail media — where brands pay to advertise within a retailer's owned channels — has exploded as third-party cookies have declined and Amazon proved the model works.
+Retail media, in which brands pay to advertise within a retailer's own channels, has grown quickly as third-party cookies have declined and Amazon demonstrated the model at scale.
 
-Kroger's version is **Kroger Precision Marketing (KPM)**, built on 84.51°'s customer data. The pitch to CPG brands is compelling:
+Kroger's version is **Kroger Precision Marketing (KPM)**, built on 84.51°'s customer data. Its value proposition to consumer brands, paraphrased, is that Kroger can identify which of its tens of millions of loyalty households buy a given product category, how often, and at what price points, target ads to them, and measure whether the ads were followed by purchases.
 
-> *We know which of our 60 million loyalty customers actually buy your product category, how frequently, at what price points, and what they buy alongside it. We can target them precisely — and close the loop on whether the ad drove a purchase.*
+That **closed-loop measurement** is the main difference from much of traditional digital advertising, because ad exposure can be linked to actual in-store purchases. It has limits: it observes only purchases made with a loyalty account at Kroger banners, not purchases elsewhere.
 
-That closed-loop attribution is the key differentiator. Unlike traditional digital advertising, KPM can prove that a Kraft Heinz ad shown to a Kroger loyalty customer resulted in an in-store purchase. That's deterministic attribution, not probabilistic inference.
-
-This business model is worth paying attention to. As of 2023, retail media is projected to exceed **$60 billion** in U.S. ad spend annually — and grocers with loyalty data are uniquely positioned to capture it.
+Industry forecasts, such as eMarketer's, project U.S. retail media ad spending to surpass **$60 billion** annually in the mid-2020s. Grocers with large loyalty programs are among the companies positioned to participate.
 
 ---
+
+<Figure
+  src={fig2}
+  alt={"Packed grocery shelves"}
+  caption={"Packed grocery shelves. Retail media sells brands targeted placement in front of these shoppers."}
+  author={"Friedrich Haag"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Gewuerze_003_2024_08_07.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
 
 ## Smart Shelves and Edge Analytics
 
-Beyond the customer data layer, Kroger has invested in **KroGO** and **EDGE (Enhanced Display for Grocery Environment)** shelf technology — digital price tags and sensors embedded in physical shelving.
+Beyond the customer data layer, Kroger has deployed **EDGE (Enhanced Display for Grocery Environment)** shelf technology: digital price displays installed in physical shelving.
 
-The operational benefits are straightforward: eliminate manual price tag changes, reduce errors, enable dynamic pricing. The data benefits are subtler and more interesting:
+The operational benefits include fewer manual price changes and fewer pricing errors. The data applications are less visible:
+
+<Figure
+  src={fig3}
+  alt={"An electronic shelf label"}
+  caption={"An electronic shelf label. Digital tags let prices and information update from central systems in seconds."}
+  author={"The RedBurn"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Coca_Cola_regular_bottle_price_and_Nutri-Score.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="split"
+/>
 
 - Shelf sensors can detect stock levels and trigger replenishment automatically
 - Digital displays can be updated centrally across all stores in real time
-- Eventually, these systems create a feedback loop between in-store behavior and inventory decisions
+- Over time, these systems can create a feedback loop between in-store behavior and inventory decisions
 
-When shelf-level data feeds back into the SSOT, Kroger gains a view of the physical store that was previously impossible: which items are moved, in what order, and how quickly — correlated against digital behavior from the same customer.
+Digital shelves have also drawn scrutiny. In 2024, U.S. senators asked Kroger whether the displays could enable surge pricing or personalized pricing; Kroger stated that it does not use them for that purpose.
 
 ---
 
-## What Kroger Gets Right (and What Others Miss)
+## Key Elements of the Strategy
 
-Most retailers collect data. Very few have built the organizational structure to act on it consistently. What Kroger has done differently:
+<Figure
+  src={fig5}
+  alt={"A retail loyalty card"}
+  caption={"A retail loyalty card. Loyalty cards link purchases across visits to a household account."}
+  author={"WrS.tm.pl"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Karta_nieistniej%C4%85cego_ju%C5%BC_programu_lojalno%C5%9Bciowego_sieci_Orange_(wcze%C5%9Bniej_Idea)_%E2%80%93_Profit.jpg"}
+  license={"Public domain"}
+  layout="wide"
+/>
 
-1. **Centralized the data layer first.** The SSOT investment wasn't glamorous, but it was prerequisite. Without it, 84.51° and KPM don't work.
+Many retailers collect large amounts of data. Analysts who study Kroger's approach typically point to four structural choices:
 
-2. **Monetized the data externally.** Selling supplier insights and running a retail media business means the data investment pays for itself — and then some.
+1. **Centralizing the data layer first.** The SSOT work was a prerequisite for 84.51° and KPM.
 
-3. **Built a dedicated subsidiary.** Having 84.51° as a semi-independent entity lets Kroger recruit data science talent in competition with tech companies, not just other grocers.
+2. **Monetizing data externally.** Supplier insights and retail media create revenue that can offset the cost of the data investment.
 
-4. **Closed the attribution loop.** The value of KPM isn't the reach — it's the proof. Any brand can buy digital ads. Not many can prove the ad drove a grocery purchase.
+3. **Building a dedicated subsidiary.** Operating 84.51° as a semi-independent entity helps Kroger recruit data science talent that might otherwise go to technology companies.
+
+4. **Closed-loop measurement.** Linking ads to purchases is a key selling point for brands evaluating retail media.
+
+### Considerations and criticisms
+
+The same practices raise questions that are part of the broader debate over retail data:
+
+- **Privacy.** Loyalty programs collect detailed purchase histories. Kroger's privacy policy describes how data is shared with partners in aggregated or de-identified form, and privacy advocates have questioned how well de-identification protects individuals.
+- **Regulation.** Retail media and personalized pricing have attracted attention from lawmakers and the FTC, and future rules could change what is permitted.
+- **Competition.** Data scale was part of the debate over Kroger's proposed merger with Albertsons, which was blocked by federal and state courts in December 2024 and then abandoned.
 
 ---
 
 ## The Bigger Pattern
 
-Kroger's strategy reflects a broader trend: **companies that touch customer transactions at scale are becoming data businesses**, not just product or service businesses.
+<Figure
+  src={fig6}
+  alt={"An Amazon fulfillment center"}
+  caption={"An Amazon fulfillment center. Retailers that own first-party shopper data increasingly compete like tech companies."}
+  author={"Tony Webster from Minneapolis, Minnesota, United States"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Amazon_Fulfillment_Center_MSP1_(48609899896).jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="inset"
+/>
 
-The pattern shows up in financial services, healthcare, and telecommunications — anywhere a company sits at the intersection of customer behavior and high transaction volume. The companies that win are the ones that invest in the data infrastructure early, before they know exactly what they'll do with it.
+Kroger's strategy reflects a broader trend: **companies that process customer transactions at scale are increasingly operating data businesses** alongside their core products or services.
 
-Kroger didn't know in 2015 what retail media would be worth in 2024. But they built the capability anyway.
+The pattern appears in financial services, healthcare, and telecommunications, wherever a company combines high transaction volume with detailed customer behavior data. Companies that invested in data infrastructure early have often been better positioned to adopt new uses for it later.
 
-That's what a data strategy looks like in practice — not a roadmap, but an infrastructure bet.
+In 2015, the size of today's retail media market was not yet clear. Kroger's case illustrates a data strategy built on infrastructure investment ahead of specific use cases, with the benefits and the scrutiny that come with it.
 
 ---
 

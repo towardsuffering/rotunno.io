@@ -5,6 +5,13 @@ draft: false
 authors:
   - main-author
 pubDate: 2024-08-26
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Missvain"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Chipotle_burrito_bowl_-_October_2024_-_Sarah_Stierch.jpg"
+  license: "CC BY 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0"
 categories:
   - data-analysis
   - programming
@@ -15,6 +22,10 @@ tags:
   - visualization
   - exploratory-data-analysis
 ---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
 
 One of the fastest ways to make data analysis concrete is to work with data you already have intuitions about. Chipotle order data is perfect for this: you know what a burrito bowl is, you understand why Chicken is ordered more than Sofritas, and you can immediately sanity-check the results against your lived experience.
 
@@ -63,6 +74,17 @@ Sample output:
 
 ---
 
+<Figure
+  src={fig1}
+  alt={"A Chipotle storefront"}
+  caption={"A Chipotle storefront. The dataset is a sample of orders from locations like this one."}
+  author={"Michael Rivera"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Chipotle_Mexican_Grill,_Mobile.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="wide"
+/>
+
 ## Aggregating by Item
 
 To find which items are ordered most frequently, sum quantities by item name:
@@ -75,6 +97,17 @@ item_totals <- item_totals[order(-item_totals$quantity), ]
 
 head(item_totals, 10)
 ```
+
+<Figure
+  src={fig2}
+  alt={"A burrito cut open"}
+  caption={"A burrito cut open. Aggregating by item shows which menu staples dominate order volume."}
+  author={"RightCowLeftCoast"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:California_Burrito_from_Chuy%27s_1_of_2.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
 
 ```
                       item_name quantity
@@ -159,6 +192,17 @@ head(avg_price, 10)
 This kind of cleaning step — stripping formatting characters to get to usable numeric data — comes up constantly in real-world datasets.
 
 ---
+
+<Figure
+  src={fig3}
+  alt={"Chips and guacamole, a frequent add-on"}
+  caption={"Chips and guacamole, a frequent add-on. Prices are stored as text and need cleaning before analysis."}
+  author={"Nikodem Nijaki"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Guacamole_IMGP1303.jpg"}
+  license={"CC BY-SA 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/3.0"}
+  layout="split"
+/>
 
 ## What to Explore Next
 

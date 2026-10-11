@@ -1,0 +1,77 @@
+---
+/**
+ * A single ad placement. Usable in layouts and directly inside MDX posts:
+ *   <AdSlot placement="in-article" />
+ */
+import { type AdPlacement, adsConfig, adsEnabled } from "@/config/ads";
+
+interface Props {
+  placement: AdPlacement;
+  class?: string;
+}
+
+const { placement, class: className } = Astro.props as Props;
+const slotId = adsConfig.slots[placement];
+const live = adsEnabled && slotId !== "";
+const showPlaceholder = !live && import.meta.env.DEV;
+
+// reserve height up front so ads never shove the article around (CLS)
+const minHeight = {
+  feed: "min-h-[120px]",
+  "post-top": "min-h-[100px]",
+  "in-article": "min-h-[250px]",
+  sidebar: "min-h-[600px]",
+  "post-end": "min-h-[250px]",
+}[placement];
+---
+
+{
+  (live || showPlaceholder) && (
+    <aside class:list={["not-prose my-10 w-full", className]} aria-label="Advertisement">
+      <div class="text-muted-foreground mb-2 text-center text-[10px] font-medium tracking-[0.2em] uppercase">
+        Advertisement
+      </div>
+      {live ? (
+        <div class={minHeight}>
+          <ins
+            class="adsbygoogle block"
+            data-ad-client={adsConfig.client}
+            data-ad-slot={slotId}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+        </div>
+      ) : (
+        <div
+          class:list={[
+            "border-border text-muted-foreground flex items-center justify-center rounded-lg border border-dashed text-xs",
+            minHeight,
+          ]}
+        >
+          Ad placeholder: {placement} (dev only)
+        </div>
+      )}
+    </aside>
+  )
+}
+
+<script>
+  declare global {
+    interface Window {
+      adsbygoogle: unknown[];
+    }
+  }
+
+  // ask AdSense to fill every unit once; astro:page-load fires on first load and after each view transition
+  function fillAds() {
+    document.querySelectorAll<HTMLElement>("ins.adsbygoogle:not([data-queued])").forEach((ins) => {
+      ins.dataset.queued = "true";
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch {
+        // ad blockers or a missing script land here; the page is fine without ads
+      }
+    });
+  }
+  document.addEventListener("astro:page-load", fillAds);
+</script>

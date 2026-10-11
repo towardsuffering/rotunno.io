@@ -1,10 +1,17 @@
 ---
 title: "How Revenue Flows Through the Music Industry"
-description: From the moment a listener streams a song to the moment a songwriter cashes a check — here's the full map of how money moves through the music industry ecosystem.
+description: From the moment a listener streams a song to the moment a songwriter is paid, a map of how money moves through the music industry.
 draft: false
 authors:
   - main-author
 pubDate: 2024-07-02
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Celsoazevedo"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Vinyl_Store.jpg"
+  license: "CC0"
+  licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
 categories:
   - music-industry
   - business
@@ -17,22 +24,38 @@ tags:
   - live-performance
 ---
 
-The music industry looks simple from the outside: music gets made, people listen, artists get paid. The reality is a web of licensing agreements, rights organizations, intermediaries, and royalty splits that took over a century to develop — and that most people working in adjacent industries don't fully understand.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
+import fig5 from "./fig-5.jpg";
 
-Here's a map of how the money actually moves.
+The music industry looks simple from the outside: music gets made, people listen, artists get paid. In practice, it is a network of licensing agreements, rights organizations, intermediaries, and royalty splits that developed over more than a century.
+
+This article maps how the money moves.
 
 ---
 
 ## The Two Copyrights
 
+<Figure
+  src={fig1}
+  alt={"A handwritten music manuscript"}
+  caption={"A handwritten music manuscript. The composition is its own copyright, separate from any recording of it."}
+  author={"Frédéric Chopin"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Chopin_polonaise_Op._53.jpg"}
+  license={"Public domain"}
+  layout="inset"
+/>
+
 Everything in music monetization flows from a foundational legal structure: every song has **two separate copyrights**:
 
-1. **The musical composition** — the underlying melody and lyrics. This is what the songwriter(s) own.
-2. **The sound recording** — the specific recorded version of that composition. This is what the record label (or self-releasing artist) owns.
+1. **The musical composition**: the underlying melody and lyrics, owned by the songwriter(s) and their publishers.
+2. **The sound recording**: the specific recorded version of that composition, owned by the record label or a self-releasing artist.
 
 These can be held by the same person (an independent artist who writes and records their own music), or by entirely different parties (a cover song recorded by an artist who has no rights to the original composition).
 
-Every revenue stream in music touches one or both of these rights — and which one determines who gets paid.
+Every revenue stream in music involves one or both of these rights, and which right is involved determines who gets paid.
 
 ---
 
@@ -42,7 +65,7 @@ When a listener streams a song on Spotify or Apple Music, two royalty pools are 
 
 **Master royalties** (sound recording) → flow to the record label → distributed to artists based on their recording contract terms. For major label artists, this typically means 15–25% of net receipts. For artists on label services deals, it can be substantially higher.
 
-**Mechanical royalties** (musical composition) → paid to music publishers → distributed to songwriters. Streaming mechanicals in the US are set by the Copyright Royalty Board (currently at ~$0.00026 per stream, pooled and distributed by services).
+**Mechanical royalties** (musical composition) → paid to music publishers → distributed to songwriters. In the U.S., streaming mechanical rates are set by the Copyright Royalty Board as a percentage of service revenue (rising from 15.1% in 2023 to 15.35% by 2027), and are collected and distributed by the Mechanical Licensing Collective (MLC).
 
 **Performance royalties** (also musical composition) → collected by Performing Rights Organizations (PROs) like ASCAP, BMI, or SESAC → distributed to publishers and songwriters based on usage data.
 
@@ -52,10 +75,21 @@ The split between publisher and songwriter depends on their publishing agreement
 
 ## Revenue Stream 2: Broadcast and Public Performance
 
+<Figure
+  src={fig2}
+  alt={"A mid-century tube radio"}
+  caption={"A mid-century tube radio. Broadcast play still generates performance royalties decades after this design."}
+  author={"Jacek Halicki"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:2017_Odbiornik_radiowy_%C5%9Awiatowid.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="wide"
+/>
+
 When a song plays on terrestrial radio or television:
 
 - **Performance royalties** are generated for the musical composition, collected by PROs from broadcasters who hold blanket licenses
-- In the US (unlike most of the world), terrestrial radio does **not** pay master royalties to recording artists — only performance royalties to songwriters. This is a significant political issue that periodically resurfaces in Congress
+- In the U.S., unlike most countries, AM/FM radio does **not** pay performance royalties for sound recordings, only for compositions. Proposals such as the American Music Fairness Act would change this; recording artists and labels have supported them, while broadcasters have opposed them
 
 When a song plays in a restaurant, retail store, or public space:
 - The venue holds a blanket license from PROs
@@ -65,13 +99,13 @@ When a song plays in a restaurant, retail store, or public space:
 
 ## Revenue Stream 3: Sync Licensing
 
-This is music in films, TV shows, commercials, and video games. Sync is often the highest per-placement revenue stream available:
+This covers music in films, TV shows, commercials, and video games. Sync often pays the most per individual placement:
 
 **Sync fee** → paid upfront by the content producer to use the music. This typically requires clearing both the master (record label) and the sync rights (publisher), each negotiated separately.
 
 **Backend performance royalties** → when the film or show airs, performance royalties continue to accrue for the composition through PRO reporting.
 
-A single high-profile sync placement — a song in a major film, an Apple commercial — can generate more revenue than years of streaming.
+A single high-profile placement, such as a song in a major film or national commercial, can generate more revenue than years of streaming for many artists.
 
 ---
 
@@ -81,7 +115,18 @@ For most working artists, live performance is the primary revenue driver:
 
 **Ticket sales** → distributed among the artist, promoter, venue, booking agent, and management (typical agent commission: 10-15% of gross)
 
-**Merchandise** → typically split between artist and venue (venues commonly take 20–30% of merch sales)
+**Merchandise** → typically split between artist and venue (venues commonly take 20 to 30% of merchandise sales)
+
+<Figure
+  src={fig4}
+  alt={"A lighting rig for an outdoor stage in Sydney"}
+  caption={"A lighting rig for an outdoor stage in Sydney. Live shows earn more per fan, but carry real production costs."}
+  author={"David Edwards"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:One_of_the_Lighting_Rigs_for_the_Floating_Stage._-_panoramio.jpg"}
+  license={"CC BY 3.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/3.0"}
+  layout="standard"
+/>
 
 **Performance rights** → venues hold PRO licenses; performance royalties accrue to songwriters for live performances (though this pool is proportionally smaller than broadcast or streaming)
 
@@ -101,6 +146,17 @@ Downloads have been declining for years as streaming consumption grows, but they
 
 ---
 
+<Figure
+  src={fig3}
+  alt={"A clear CD case under polarized light"}
+  caption={"A clear CD case under polarized light. Physical formats now earn far less than streaming but still matter to dedicated fans."}
+  author={"Colin"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Photoelasticity_-_Clear_CD_case_centre.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="split"
+/>
+
 ## The Support Layer
 
 Behind every artist are professionals who take a cut of various income streams:
@@ -116,6 +172,17 @@ Behind every artist are professionals who take a cut of various income streams:
 
 The more successful an artist becomes, the more of their infrastructure they can afford to vertically integrate — owning their masters, administering their own publishing, reducing the share flowing to intermediaries.
 
+<Figure
+  src={fig5}
+  alt={"Mixing a record at Metway Studios"}
+  caption={"Mixing a record at Metway Studios. Engineers, managers and distributors all take a share of the flow."}
+  author={"Jeremy Keith"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Mixing,_Salter_Cane,_Metway_Studios.jpg"}
+  license={"CC BY 2.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by/2.0"}
+  layout="standard"
+/>
+
 ---
 
 ## Why This Matters Beyond Music
@@ -123,7 +190,7 @@ The more successful an artist becomes, the more of their infrastructure they can
 The music industry's revenue structure is a useful case study for anyone working with multi-sided markets, licensing-based businesses, or any domain where intellectual property rights create layered ownership:
 
 - Streaming platforms are multi-sided markets connecting listeners, artists, labels, and publishers
-- Rights management is essentially a database problem — and a poorly solved one, historically
-- The fight over master ownership is the same fight that plays out in any industry where the upstream asset holder and the downstream distributor have misaligned incentives
+- Rights management is largely a data problem, historically complicated by incomplete and inconsistent ownership metadata
+- Disputes over master ownership resemble negotiations in other industries where the creator of an asset and its distributor have different incentives
 
-The industry spent the 2000s in denial about what digital distribution would do to its economics. The data engineers and analytics teams who work in music today are building on an infrastructure that's still catching up to those disruptions.
+Recorded-music revenue fell sharply in the 2000s as piracy and digital downloads displaced physical sales, then recovered through the 2010s as streaming grew. Data and analytics teams in music today work with infrastructure that is still adapting to those changes.

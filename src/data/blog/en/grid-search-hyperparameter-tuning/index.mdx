@@ -5,6 +5,12 @@ draft: false
 authors:
   - main-author
 pubDate: 2025-02-07
+heroImage: ./cover.jpg
+heroCredit:
+  author: "John A. Kelley, USDA Natural Resources Conservation Service"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Aerial_photo_of_center_pivot_irrigations_systems_(9364).jpg"
+  license: "Public domain"
 categories:
   - machine-learning
   - programming
@@ -16,6 +22,11 @@ tags:
   - cross-validation
   - machine-learning
 ---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
 A well-chosen model with poorly tuned hyperparameters routinely underperforms a simpler model with sensible ones. Hyperparameter tuning isn't optional polish — it's a meaningful part of the modeling process.
 
@@ -29,6 +40,17 @@ Grid Search is the most systematic approach: define a grid of values for each hy
 2. `GridSearchCV` creates every possible combination of those values
 3. For each combination, it runs k-fold cross-validation on your training data
 4. It returns the combination with the best average cross-validation score
+
+<Figure
+  src={fig1}
+  alt={"City blocks in Stockholm from above"}
+  caption={"City blocks in Stockholm from above. Grid search checks every intersection of the parameter values you list."}
+  author={"Arild Vågen"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Garnisonen_September_2014_02.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="wide"
+/>
 
 The key advantage: if your best model is somewhere in the grid, Grid Search will find it. The key disadvantage: the search space grows exponentially with the number of parameters and values.
 
@@ -106,6 +128,17 @@ plt.show()
 
 Visualizing the results helps you understand the sensitivity of performance to each parameter — and whether you need to expand the grid in a particular direction.
 
+<Figure
+  src={fig2}
+  alt={"A chessboard"}
+  caption={"A chessboard. Inspecting results means reading the whole board, not just the best square."}
+  author={"Wilfredor"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Chess_game_Staunton_No._6_perfil_view_8.jpg"}
+  license={"CC0"}
+  licenseUrl={"http://creativecommons.org/publicdomain/zero/1.0/deed.en"}
+  layout="standard"
+/>
+
 ---
 
 ## Using Best Params Directly
@@ -149,6 +182,16 @@ Note the `svm__` prefix on parameter names — this is the Pipeline's syntax for
 
 ## When Grid Search Is the Right Choice
 
+<Figure
+  src={fig4}
+  alt={"The periodic table, a grid that covers every combination in order"}
+  caption={"The periodic table, a grid that covers every combination in order. Grid search works best when the space is this small and well defined."}
+  author={"NIST (R.A. Dragoset et al.)"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Periodic_Table_-_Atomic_Properties_of_the_Elements.png"}
+  license={"Public domain"}
+  layout="split"
+/>
+
 **Use Grid Search when:**
 - Your parameter grid is small (< ~100 combinations)
 - Computational budget allows exhaustive evaluation
@@ -180,3 +223,14 @@ fine_grid = {
 ```
 
 Two-pass grid search gives you more precision at lower compute cost than a single large grid.
+
+<Figure
+  src={fig3}
+  alt={"A magnifying glass over a ruler"}
+  caption={"A magnifying glass over a ruler. Search coarse first, then zoom in on the promising range."}
+  author={"Gpkp"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Magnifying_glass_(2026).jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>

@@ -2,48 +2,68 @@
 export const prerender = true;
 import { type Page } from "astro";
 
+import AdSlot from "@/components/ads/AdSlot.astro";
 import CategoryCloud from "@/components/category-cloud/CategoryCloud.astro";
 import Pagination from "@/components/pagination/Pagination.astro";
 import PostCard from "@/components/post-card/PostCardMultiLink.astro";
 import { defaultLocale } from "@/config/siteSettings.json";
 import { getAllPosts } from "@/js/blogUtils";
-import { getLocaleFromUrl } from "@/js/localeUtils";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 export async function getStaticPaths({ paginate }) {
   const posts = await getAllPosts(defaultLocale);
 
   return paginate(posts, {
-    pageSize: 4,
+    pageSize: 7,
   });
 }
 
 const { page } = Astro.props as { page: Page };
+
+// first page leads with the newest post as a feature story
+const isFirstPage = page.currentPage === 1;
+const [lead, ...rest] = page.data;
+const gridPosts = isFirstPage ? rest : page.data;
 ---
 
 <BaseLayout
-  title="Blog — Christopher A. Rotunno"
-  description="Writing on analytics engineering, BI strategy, SQL patterns, and the practical side of building data products."
+  title="Blog | Christopher A. Rotunno"
+  description="Data-driven writing on markets, policy, and analytics. Showing the method, not just the conclusion."
 >
-  <section class="site-container py-24 md:pt-40">
-    <div class="overflow-x-clip">
-      <div class="mr-auto flex max-w-5xl flex-col">
-        <h1 class="h1">Analytics Engineering & BI Strategy</h1>
-        <p class="text-muted-foreground mt-2 md:text-lg">
-          Practical writing on data modeling, SQL patterns, dashboard design, and the lessons learned shipping data products to real stakeholders.
+  <section class="site-container py-24 md:pt-36">
+    <header class="border-border flex flex-col gap-6 border-b pb-8 md:flex-row md:items-end md:justify-between">
+      <div class="max-w-3xl">
+        <p class="text-primary text-xs font-semibold tracking-[0.2em] uppercase">Grounded in Analytics</p>
+        <h1 class="h1 mt-3 tracking-tight">Data, markets &amp; the decisions behind them</h1>
+        <p class="text-muted-foreground mt-4 md:text-lg">
+          Analysis on economics, policy, and analytics engineering. I show the data and the method, so you can
+          check my work and reach your own conclusion.
         </p>
       </div>
+      <p class="text-muted-foreground shrink-0 text-sm">
+        {page.total} articles &middot; Page {page.currentPage} of {page.lastPage}
+      </p>
+    </header>
 
-      <div class="mt-6 flex pb-16">
-        <CategoryCloud />
-      </div>
+    <div class="mt-6 flex">
+      <CategoryCloud />
     </div>
 
-    <div class="grid gap-8 gap-y-10 md:grid-cols-2">
-      {page.data.map((post) => <PostCard post={post} showDescription={true} data-mos="fade-up" />)}
+    {
+      isFirstPage && lead && (
+        <div class="mt-12 md:mt-16">
+          <PostCard post={lead} variant="feature" data-mos="fade-up" />
+        </div>
+      )
+    }
+
+    <AdSlot placement="feed" class="mt-14" />
+
+    <div class="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+      {gridPosts.map((post) => <PostCard post={post} showDescription={true} data-mos="fade-up" />)}
     </div>
 
-    <div class="mt-10 flex justify-center md:mt-16">
+    <div class="mt-14 flex justify-center md:mt-20">
       <Pagination
         basePath={`/blog/`}
         prevUrl={page.url.prev}

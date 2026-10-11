@@ -1,10 +1,17 @@
 ---
-title: "The Iran War Put Oil Back in the Headlines. I Wanted to Test Where Oil Actually Shows Up in the Economy."
-description: Instead of assuming oil explains everything, I used FRED data to test where it's actually statistically significant — across inflation, unemployment, payrolls, industrial production, and GDP. The results were more nuanced than the headlines suggest.
+title: "Oil Is Back in the Headlines. Where Does It Actually Show Up in the U.S. Economy?"
+description: Using FRED data to test where oil prices are statistically significant across inflation, unemployment, payrolls, industrial production, and GDP, and how those effects depend on economic conditions.
 draft: false
 authors:
   - main-author
 pubDate: 2026-03-20
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Arne Hückelheim"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Pumpjacks.JPG"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
 categories:
   - data-analysis
   - data-science
@@ -18,9 +25,14 @@ tags:
   - inflation
 ---
 
-Every time oil makes headlines, the same narrative runs: oil prices up → inflation up → economy at risk. It's not wrong, but it's incomplete. I wanted to test it properly — not assume it.
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
 
-Using Federal Reserve Economic Data (FRED), I built a structured analysis to determine *where* oil prices are statistically significant in the U.S. macroeconomy, how large those effects are, and critically, whether they're conditional on broader economic context.
+When oil makes headlines, a familiar chain is usually implied: oil prices up → inflation up → economy at risk. That chain is broadly supported by research, but it leaves open where, how strongly, and under what conditions oil matters. This analysis tests it with data.
+
+Using Federal Reserve Economic Data (FRED), the analysis examines *where* oil prices are statistically significant in the U.S. macroeconomy, how large those associations are, and whether they depend on broader economic conditions.
 
 ---
 
@@ -31,6 +43,17 @@ Three oil-linked variables formed the independent side of the analysis:
 - **WTI Crude Oil Spot Price**
 - **U.S. Regular Gasoline Retail Prices**
 - **U.S. Diesel Retail Prices**
+
+<Figure
+  src={fig1}
+  alt={"A crude tanker at sea"}
+  caption={"A crude tanker at sea. Shipping risk in the Gulf is one channel through which conflict reaches prices."}
+  author={"Wilfredor"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Sunrise_on_Vereda_del_Lago_and_Eagle_Austin_Ship_in_Maracaibo_lake.jpg"}
+  license={"CC0"}
+  licenseUrl={"http://creativecommons.org/publicdomain/zero/1.0/deed.en"}
+  layout="wide"
+/>
 
 These were tested against six macroeconomic targets:
 
@@ -55,34 +78,45 @@ The analysis ran three layers of models for each target:
 
 ### Where Oil Has Strong Direct Effects
 
-The headline inflation result was the least surprising — and the most statistically emphatic:
+The headline inflation result was the least surprising and the most statistically significant:
 
 - **Headline CPI:** p-value ~6.5e-26
 - **Core CPI:** p-value ~2.5e-11
 - **Industrial production:** p-value ~1.6e-08
 - **Payroll growth:** p-value ~5.7e-07
 
-These aren't marginal findings. Oil is deeply embedded in headline inflation by construction (energy is a CPI component), but the core inflation result is more interesting — it says oil price movements pass through into non-energy prices with statistical reliability, likely through transportation and input cost channels.
+These are strong statistical associations. Oil is part of headline inflation by construction, since energy is a CPI component. The core inflation result is more informative: it indicates that oil price movements are associated with later changes in non-energy prices, consistent with pass-through via transportation and input costs.
 
-The industrial production result makes intuitive sense: manufacturing and industrial activity are energy-intensive, and oil price volatility affects operating costs and production decisions in measurable ways.
+<Figure
+  src={fig2}
+  alt={"A refinery and rail yard at night"}
+  caption={"A refinery and rail yard at night. Crude has to be refined and moved before it shows up in consumer prices."}
+  author={"Martin Falbisoner"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Godorf_Station_at_Dusk,_May_2018.jpg"}
+  license={"CC BY-SA 4.0"}
+  licenseUrl={"https://creativecommons.org/licenses/by-sa/4.0"}
+  layout="standard"
+/>
 
-### Where Oil Is Surprisingly Weak
+The industrial production result is consistent with economic intuition: manufacturing and industrial activity are energy-intensive, so oil prices affect operating costs and production decisions.
 
-The unemployment result was the most counterintuitive finding:
+### Where the Direct Link Is Weaker
+
+The unemployment result was the least expected finding:
 
 - **Unemployment rate:** p-value ~0.108
 
-Oil doesn't directly predict unemployment with conventional statistical significance. This doesn't mean oil shocks can't cause job losses — they clearly can, in specific sectors. But the aggregate unemployment rate is buffered enough by other dynamics (labor market adjustment speed, sectoral composition, policy response) that the direct oil-to-unemployment signal is weak in the data.
+In this specification, oil prices do not predict the unemployment rate at conventional significance levels. That does not mean oil shocks cannot affect employment; sector-level job losses are well documented. A likely explanation is that the aggregate unemployment rate is influenced by many other factors, such as labor market adjustment, sectoral composition, and policy responses, which weaken the direct statistical signal.
 
-This is an important corrective to the narrative that rising oil prices mechanically spike unemployment. The transmission is slower, more indirect, and more conditional than a simple regression captures.
+This suggests the link from oil prices to aggregate unemployment is slower, more indirect, and more conditional than a simple direct relationship implies.
 
 ### The Conditional Story
 
 All six targets showed significant interaction effects — meaning **oil's role depends on surrounding conditions**. Specifically:
 
-- **Federal funds rate as a moderator:** High-rate environments amplify oil's inflationary pass-through (monetary policy has less room to absorb the shock, so more of it lands in prices)
-- **Financial conditions (NFCI):** Tight financial conditions interact with oil shocks to produce larger real economy effects — when credit is already stressed, an energy cost shock hits harder
-- **Consumer sentiment:** Low sentiment amplifies oil's negative demand effects; high sentiment buffers them
+- **Federal funds rate as a moderator:** Oil's association with inflation is larger in high-rate environments. One interpretation is that policy has less room to offset the shock
+- **Financial conditions (NFCI):** Tighter financial conditions are associated with larger real-economy effects of oil price changes, consistent with energy costs compounding credit stress
+- **Consumer sentiment:** Oil's negative association with demand is larger when sentiment is low and smaller when it is high
 
 The interaction models produced meaningfully better forecasts for inflation specifically:
 
@@ -92,7 +126,7 @@ The interaction models produced meaningfully better forecasts for inflation spec
 | Core CPI | 0.271 | 0.218 | ~20% |
 | Unemployment | 0.412 | 0.389 | ~6% |
 
-The inflation improvement is substantial. The unemployment improvement is minimal — consistent with the weak direct effect finding.
+The inflation improvement is substantial. The unemployment improvement is minimal, consistent with the weak direct effect.
 
 ---
 
@@ -100,20 +134,40 @@ The inflation improvement is substantial. The unemployment improvement is minima
 
 The current oil move is happening in a specific macroeconomic context:
 
+<Figure
+  src={fig3}
+  alt={"Qeshm Island in the Strait of Hormuz, seen by NASA"}
+  caption={"Qeshm Island in the Strait of Hormuz, seen by NASA. Roughly a fifth of global oil consumption passes through this chokepoint."}
+  author={"NASA"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:QeshmIsland_NASA.jpg"}
+  license={"Public domain"}
+  layout="inset"
+/>
+
 - The Fed is not in an aggressively easing stance
 - Financial conditions have tightened with the geopolitical uncertainty
 - Consumer sentiment has been under pressure
 
-According to the interaction model findings, this is roughly the worst-case configuration for oil's inflationary pass-through. High rates + tighter financial conditions + softer sentiment all push toward amplified inflation effects rather than buffered ones.
+In the interaction models, this combination of higher rates, tighter financial conditions, and softer sentiment is associated with larger inflationary pass-through than average. Like any historical model, these estimates describe past relationships and may not hold in new conditions.
 
-It also means the unemployment transmission — already weak in the direct model — is the channel most likely to show up last, if at all. What the current moment more closely resembles is the inflationary-oil-shock scenario rather than the stagflationary one, at least in the immediate term.
+The models also suggest that any effect on unemployment, already weak in the direct model, would likely appear later than effects on prices. On these estimates, the near-term pattern more closely resembles an inflationary oil shock than a stagflationary one, though that could change as conditions evolve.
 
 ---
 
 ## The Methodological Point
 
-The broader takeaway here isn't specific to oil. The pattern — "variable X matters, but how much depends on Y and Z" — shows up constantly in macroeconomic data. Main effects models understate complexity. Interaction models, tested properly, reveal that most economic relationships are conditional rather than universal.
+The broader point is not specific to oil. The pattern "variable X matters, but how much depends on Y and Z" appears frequently in macroeconomic data. Main-effects models can understate that complexity, and interaction models, tested carefully, often show relationships that are conditional rather than universal.
 
-Oil doesn't uniformly cause inflation. Oil causes inflation *more* when rates are high, financial conditions are tight, and sentiment is already stressed. That's a fundamentally different statement — and a more useful one for anyone trying to forecast what happens next.
+In this data, oil's association with inflation is not uniform: it is larger when rates are high, financial conditions are tight, and sentiment is weak. That conditional statement is more precise, and more useful for forecasting, than a single average effect. Because these are observational regressions, they identify associations rather than proving causation.
 
-The data is available. FRED makes it free. The models aren't complicated. The analysis is worth doing before reaching for the narrative.
+<Figure
+  src={fig4}
+  alt={"Formulas on a blackboard"}
+  caption={"Formulas on a blackboard. Testing a relationship statistically beats assuming it from the headlines."}
+  author={"Andrew Krizhanovsky"}
+  sourceUrl={"https://commons.wikimedia.org/wiki/File:Natalia_Krizhanovskaya_writes_mathematical_formulas_on_the_blackboard_2021.jpg"}
+  license={"Public domain"}
+  layout="standard"
+/>
+
+The data is freely available through FRED, and the models are straightforward to reproduce.

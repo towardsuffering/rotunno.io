@@ -228,3 +228,18 @@ export function sortByValue(jsObj: object): [string, number][] {
   // looks like [ [ 'productivity', 2 ], [ 'cool-code', 1 ] ]
   return sorted;
 }
+
+// --------------------------------------------------------
+/**
+ * * estimated reading time in minutes for a post body (MDX/markdown source)
+ * @param body: string - raw post body
+ * @returns minutes, at ~230 words per minute, minimum 1
+ */
+export function getReadingTime(body: string = ""): number {
+  const text = body
+    .replace(/```[\s\S]*?```/g, " ") // code blocks
+    .replace(/<[^>]+>/g, " ") // jsx / html
+    .replace(/[#>*_`|[\]()-]/g, " ");
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 230));
+}
