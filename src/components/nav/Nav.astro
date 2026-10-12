@@ -40,7 +40,14 @@ const showBlogPointer = Astro.url.pathname === "/";
 >
   <!-- Contact strip -->
   <div class="bg-background/80 border-b border-border/50">
-    <div class="site-container flex flex-wrap items-center justify-center gap-x-6 gap-y-1 py-1 text-xs md:justify-end md:text-sm">
+    <div class="site-container flex flex-wrap items-center justify-center gap-x-6 gap-y-2 py-1.5 md:py-1 text-xs md:justify-end md:text-sm">
+      <a
+        href="/support"
+        aria-label="Support My Work"
+        class="border-primary-accent/60 text-foreground hover:bg-primary-accent hover:text-background inline-flex min-h-6 items-center gap-1 rounded-full border px-3 py-0.5 font-medium transition-colors"
+      >
+        <span aria-hidden="true">💵</span> Support My Work <span aria-hidden="true">💵</span>
+      </a>
       <a href="tel:+17272212980" class="text-muted-foreground font-medium hover:text-primary-accent -my-1 inline-block py-1 transition-colors">
         +1 (727) 221-2980
       </a>

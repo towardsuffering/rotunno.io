@@ -1,0 +1,52 @@
+---
+import { references } from "@/data/references";
+
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+---
+
+<section id="references" class="my-12 py-12">
+  <div class="site-container">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="text-primary text-xs font-semibold tracking-[0.2em] uppercase">References</p>
+      <h2 class="h2 mt-3" data-reveal="pop">In their words</h2>
+    </div>
+
+    <div class="mx-auto mt-14 grid max-w-6xl gap-6 md:grid-cols-3">
+      {
+        references.map((r, i) => (
+          <figure
+            class="border-border bg-card relative flex flex-col rounded-xl border p-7 shadow-sm"
+            data-mos="fade-up"
+            data-mos-delay={`${0.1 * i}`}
+          >
+            <span aria-hidden="true" class="text-primary-accent font-heading absolute top-3 right-6 text-6xl leading-none opacity-30">
+              &ldquo;
+            </span>
+            <p class="text-muted-foreground text-xs font-semibold tracking-wider uppercase">{r.context}</p>
+            <blockquote class:list={["mt-4 flex-1 leading-relaxed", r.placeholder && "text-muted-foreground italic"]}>
+              {r.quote}
+            </blockquote>
+            <figcaption class="border-border mt-6 flex items-center gap-3 border-t pt-5">
+              <span
+                aria-hidden="true"
+                class="bg-primary-accent/15 text-primary-accent flex h-11 w-11 shrink-0 items-center justify-center rounded-full font-semibold"
+              >
+                {initials(r.name)}
+              </span>
+              <span>
+                <span class="block font-semibold">{r.name}</span>
+                <span class="text-muted-foreground block text-sm">{r.title}</span>
+              </span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

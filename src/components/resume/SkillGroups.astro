@@ -1,0 +1,27 @@
+---
+import { type CollectionEntry } from "astro:content";
+
+interface Props {
+  groups: NonNullable<CollectionEntry<"resume">["data"]["skillGroups"]>;
+}
+
+const { groups } = Astro.props;
+---
+
+<div class="space-y-4">
+  <h2 class="h3">Skills</h2>
+  <div class="grid gap-4 md:grid-cols-3">
+    {
+      groups.map((group) => (
+        <div class="dark:bg-base-900 hover:border-primary-accent/50 rounded-lg border bg-white p-5 transition-all">
+          <h3 class="text-primary-accent mb-3 text-sm font-semibold tracking-wider uppercase">{group.category}</h3>
+          <ul class="flex flex-wrap gap-2">
+            {group.items.map((item) => (
+              <li class="bg-base-100 dark:bg-base-800 rounded-full px-3 py-1 text-sm">{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</div>

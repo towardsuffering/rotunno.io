@@ -17,8 +17,9 @@ const { diplomas } = Astro.props;
           <div>
             <h3 class="font-medium">{diploma.title}</h3>
             <p class="text-sm opacity-70">{diploma.school}</p>
+            {diploma.focus && <p class="text-muted-foreground mt-2 text-sm italic">{diploma.focus}</p>}
           </div>
-          <span class="text-primary-accent">{diploma.year}</span>
+          <span class="text-primary-accent shrink-0 pl-3">{diploma.year}</span>
         </div>
       ))
     }

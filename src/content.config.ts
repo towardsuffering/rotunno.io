@@ -103,11 +103,13 @@ const resumeCollection = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{json,jsonc}", base: "./src/data/resume" }),
   schema: ({ image }) =>
     z.object({
+      summary: z.string().optional(),
       diplomas: z.array(
         z.object({
           title: z.string(),
           school: z.string(),
           year: z.number(),
+          focus: z.string().optional(),
         }),
       ),
       certifications: z.array(
@@ -126,6 +128,14 @@ const resumeCollection = defineCollection({
           responsibilities: z.array(z.string()),
         }),
       ),
+      skillGroups: z
+        .array(
+          z.object({
+            category: z.string(),
+            items: z.array(z.string()),
+          }),
+        )
+        .optional(),
       hardSkills: z.array(
         z.object({
           skill: z.string(),

@@ -1,75 +1,245 @@
 {
+  "summary": "Data analytics engineer and BI leader who has been on both sides of the dashboard. Built financial data pipelines and analytics systems from scratch. Ran the floor in retail, food service, and home improvement. That combination is rare: low-level pipeline architecture paired with the operational context that makes dashboards actually useful. Now focused on a BI leadership seat with full visibility into how a business connects, not a siloed view of one team's slice.",
   "diplomas": [
     {
-      "title": "Master of Science — Business Analytics",
-      "school": "University of Colorado Boulder",
-      "year": 2023
+      "title": "M.S. Business Analytics",
+      "school": "University of Colorado Boulder, Leeds School of Business",
+      "year": 2023,
+      "focus": "Statistical methods, decision science, predictive/prescriptive analytics, ML/AI, NLP, deep learning, data warehouses, cloud computing"
     },
     {
-      "title": "Master of Business Administration — Music Business",
+      "title": "M.B.A.",
       "school": "Middle Tennessee State University",
-      "year": 2024
+      "year": 2024,
+      "focus": "Business strategy, contracts, P&L, management"
     }
   ],
   "certifications": [],
   "experience": [
     {
+      "title": "HD Sales Associate",
+      "company": "ARS Rescue Rooter (Florida Home Air Conditioning)",
+      "companyImage": "./index/experience/ars/companyImage.svg",
+      "dates": "May 2026 – Present",
+      "location": "Northeast Florida",
+      "responsibilities": [
+        "Generate qualified leads and set in-home HVAC service appointments inside Home Depot locations, engaging homeowners on energy efficiency upgrades, AC replacement, and comfort solutions.",
+        "Operate in a commission-driven performance environment, consistently hitting daily activity targets through disciplined customer engagement and product knowledge."
+      ]
+    },
+    {
+      "title": "Retail Brand Ambassador",
+      "company": "Renuity Home",
+      "companyImage": "./index/experience/renuity/companyImage.svg",
+      "dates": "Nov 2025 – Apr 2026",
+      "location": "Northeast Florida",
+      "responsibilities": [
+        "Achieved S-Tier status, the highest internal performance designation, through top-tier lead generation and appointment setting for home improvement consultations.",
+        "Delivered face-to-face product presentations in retail and event settings, converting homeowner conversations into scheduled in-home consultations at a rate that ranked among the top performers in the region."
+      ]
+    },
+    {
       "title": "Founder & Data Engineer",
       "company": "Root Labs",
       "companyImage": "./index/experience/0/companyImage.jpg",
       "dates": "Feb 2023 – Sep 2025",
-      "location": "St. Augustine, FL",
+      "location": "Nashville, TN",
       "responsibilities": [
-        "Architected a custom API ingestion pipeline that reduced third-party financial data costs by 80%",
-        "Built and led a team of 4 developers to construct a SQL ORM-based data pipeline in Python through the full build cycle",
-        "Organized 10+ technical meetups with 100+ attendees to cultivate local talent pipelines"
+        "Architected a custom API ingestion pipeline that cut third-party financial data costs by 80%, replacing recurring vendor spend with internal data control.",
+        "Built and led a team of 4 developers through the full cycle of a SQL ORM-based data pipeline in Python, navigating infrastructure constraints from architecture through deployment.",
+        "Organized 10+ technical meetups with 100+ attendees, cultivating local talent pipelines and expanding a professional network across Northeast Florida's data and tech community."
       ]
     },
     {
       "title": "Data Analyst",
-      "company": "AE Global Solutions Inc. (Socrates Platform)",
+      "company": "AE Global Solutions Inc. (DBA Socrates Platform)",
       "companyImage": "./index/experience/1/companyImage.jpg",
       "dates": "Feb 2018 – Nov 2021",
       "location": "St. Petersburg, FL",
       "responsibilities": [
-        "Maintained 99% system uptime across 24/7 data center operations for critical financial data infrastructure",
-        "Processed and validated 200GB+ of daily financial data, improving pipeline efficiency by 30% at 99% accuracy",
-        "Expanded data product offerings by 120% through partnerships with external providers including S&P and Reuters"
+        "Maintained 99% system uptime across 24/7 data center operations supporting critical financial data infrastructure.",
+        "Processed and validated 200GB+ of daily financial data, improving pipeline efficiency by 30% while sustaining 99% accuracy across all outputs.",
+        "Expanded data product offerings by 120% through partnerships with external providers including S&P and Reuters."
+      ]
+    }
+  ],
+  "skillGroups": [
+    {
+      "category": "Engineering",
+      "items": [
+        "SQL",
+        "Python",
+        "ETL/Data Pipelines",
+        "Data Modeling",
+        "RESTful APIs",
+        "Spark",
+        "Docker"
+      ]
+    },
+    {
+      "category": "Infrastructure",
+      "items": [
+        "AWS",
+        "Azure",
+        "GCP",
+        "Hadoop",
+        "Cloud-Native Architecture",
+        "High-Availability Systems"
+      ]
+    },
+    {
+      "category": "Analytics and BI",
+      "items": [
+        "Tableau",
+        "Power BI",
+        "Scikit-Learn",
+        "NLP",
+        "Supervised/Unsupervised ML",
+        "Feature Engineering",
+        "Financial Data Analysis"
       ]
     }
   ],
   "hardSkills": [
-    { "skill": "SQL",                     "percentage": 95 },
-    { "skill": "Python",                  "percentage": 90 },
-    { "skill": "ETL / Data Pipelines",    "percentage": 88 },
-    { "skill": "Data Modeling",           "percentage": 85 },
-    { "skill": "Tableau",                 "percentage": 82 }
+    {
+      "skill": "SQL",
+      "percentage": 95
+    },
+    {
+      "skill": "Python",
+      "percentage": 90
+    },
+    {
+      "skill": "ETL / Data Pipelines",
+      "percentage": 88
+    },
+    {
+      "skill": "Data Modeling",
+      "percentage": 85
+    },
+    {
+      "skill": "Tableau",
+      "percentage": 82
+    }
   ],
   "softSkills": [
-    { "skill": "Stakeholder Communication", "icon": "🗣️" },
-    { "skill": "Problem Solving",           "icon": "🧩" },
-    { "skill": "Data Storytelling",         "icon": "📊" },
-    { "skill": "Team Leadership",           "icon": "👥" }
+    {
+      "skill": "Stakeholder Communication",
+      "icon": "🗣️"
+    },
+    {
+      "skill": "Customer Trust",
+      "icon": "🤝"
+    },
+    {
+      "skill": "Data Storytelling",
+      "icon": "📊"
+    },
+    {
+      "skill": "Team Leadership",
+      "icon": "👥"
+    }
   ],
   "languages": [
-    { "language": "English", "level": 10 },
-    { "language": "Spanish", "level": 4 }
+    {
+      "language": "English",
+      "level": 10
+    },
+    {
+      "language": "Spanish",
+      "level": 4
+    }
   ],
   "tools": [
-    { "name": "Python",  "category": "Data Engineering",   "image": "./index/tools/0/image.svg", "link": "https://python.org" },
-    { "name": "Tableau", "category": "BI & Visualization", "image": "./index/tools/1/image.svg", "link": "https://tableau.com" },
-    { "name": "AWS",     "category": "Cloud",              "image": "./index/tools/2/image.svg", "link": "https://aws.amazon.com" },
-    { "name": "Docker",  "category": "Infrastructure",     "image": "./index/tools/3/image.svg", "link": "https://docker.com" },
-    { "name": "Spark",   "category": "Data Engineering",   "image": "./index/tools/4/image.svg", "link": "https://spark.apache.org" },
-    { "name": "GitHub",       "category": "Version Control",    "image": "./index/tools/5/image.svg",  "link": "https://github.com" },
-    { "name": "SQL",          "category": "Data Engineering",   "image": "./index/tools/6/image.svg",  "link": "https://en.wikipedia.org/wiki/SQL" },
-    { "name": "Astro",        "category": "Web Development",    "image": "./index/tools/7/image.svg",  "link": "https://astro.build" },
-    { "name": "Node.js",      "category": "Web Development",    "image": "./index/tools/8/image.svg",  "link": "https://nodejs.org" },
-    { "name": "JavaScript",   "category": "Web Development",    "image": "./index/tools/9/image.svg",  "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
-    { "name": "MongoDB",      "category": "Data Engineering",   "image": "./index/tools/10/image.svg", "link": "https://mongodb.com" },
-    { "name": "GCP",          "category": "Cloud",              "image": "./index/tools/11/image.svg", "link": "https://cloud.google.com" },
-    { "name": "Azure",        "category": "Cloud",              "image": "./index/tools/12/image.svg", "link": "https://azure.microsoft.com" },
-    { "name": "Excel",        "category": "BI & Visualization", "image": "./index/tools/13/image.svg", "link": "https://microsoft.com/excel" },
-    { "name": "Claude Code",  "category": "AI & Tooling",       "image": "./index/tools/14/image.svg", "link": "https://claude.ai/code" }
+    {
+      "name": "Python",
+      "category": "Data Engineering",
+      "image": "./index/tools/0/image.svg",
+      "link": "https://python.org"
+    },
+    {
+      "name": "Tableau",
+      "category": "BI & Visualization",
+      "image": "./index/tools/1/image.svg",
+      "link": "https://tableau.com"
+    },
+    {
+      "name": "AWS",
+      "category": "Cloud",
+      "image": "./index/tools/2/image.svg",
+      "link": "https://aws.amazon.com"
+    },
+    {
+      "name": "Docker",
+      "category": "Infrastructure",
+      "image": "./index/tools/3/image.svg",
+      "link": "https://docker.com"
+    },
+    {
+      "name": "Spark",
+      "category": "Data Engineering",
+      "image": "./index/tools/4/image.svg",
+      "link": "https://spark.apache.org"
+    },
+    {
+      "name": "GitHub",
+      "category": "Version Control",
+      "image": "./index/tools/5/image.svg",
+      "link": "https://github.com"
+    },
+    {
+      "name": "SQL",
+      "category": "Data Engineering",
+      "image": "./index/tools/6/image.svg",
+      "link": "https://en.wikipedia.org/wiki/SQL"
+    },
+    {
+      "name": "Astro",
+      "category": "Web Development",
+      "image": "./index/tools/7/image.svg",
+      "link": "https://astro.build"
+    },
+    {
+      "name": "Node.js",
+      "category": "Web Development",
+      "image": "./index/tools/8/image.svg",
+      "link": "https://nodejs.org"
+    },
+    {
+      "name": "JavaScript",
+      "category": "Web Development",
+      "image": "./index/tools/9/image.svg",
+      "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+    },
+    {
+      "name": "MongoDB",
+      "category": "Data Engineering",
+      "image": "./index/tools/10/image.svg",
+      "link": "https://mongodb.com"
+    },
+    {
+      "name": "GCP",
+      "category": "Cloud",
+      "image": "./index/tools/11/image.svg",
+      "link": "https://cloud.google.com"
+    },
+    {
+      "name": "Azure",
+      "category": "Cloud",
+      "image": "./index/tools/12/image.svg",
+      "link": "https://azure.microsoft.com"
+    },
+    {
+      "name": "Excel",
+      "category": "BI & Visualization",
+      "image": "./index/tools/13/image.svg",
+      "link": "https://microsoft.com/excel"
+    },
+    {
+      "name": "Claude Code",
+      "category": "AI & Tooling",
+      "image": "./index/tools/14/image.svg",
+      "link": "https://claude.ai/code"
+    }
   ]
 }

@@ -16,7 +16,7 @@ const { experience } = Astro.props;
       experience.map((exp) => (
         <div class="dark:bg-base-900 hover:border-primary-accent/50 rounded-lg border bg-white p-6 transition-all">
           <div class="flex items-start gap-4">
-            <div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
+            <div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border bg-white p-1">
               <Image
                 src={exp.companyImage}
                 alt={`${exp.company} logo`}
