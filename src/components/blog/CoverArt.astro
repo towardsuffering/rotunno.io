@@ -10,11 +10,13 @@ interface Props {
   id: string;
   subject: string; // slug + title + tags, used to detect the theme
   theme?: string;
+  label?: string; // overrides the theme's label (e.g. for project covers)
   class?: string;
 }
 
-const { id, subject, theme: themeOverride, class: className } = Astro.props as Props;
-const { palette: p, theme, label, rand } = getCoverSpec(id, subject, themeOverride);
+const { id, subject, theme: themeOverride, label: labelOverride, class: className } = Astro.props as Props;
+const { palette: p, theme, label: themeLabel, rand } = getCoverSpec(id, subject, themeOverride);
+const label = labelOverride ?? themeLabel;
 
 // unique id prefix so multiple covers on one page don't share defs
 const uid = `cv-${id.replace(/[^a-z0-9]/gi, "")}`;

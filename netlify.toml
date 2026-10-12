@@ -44,6 +44,68 @@
   status = 301
   force  = true
 
+
+# project pages renamed from template slugs
+[[redirects]]
+  from   = "/projects/smart-home-dashboard/*"
+  to     = "/projects/financial-market-data-platform/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/smart-home-dashboard"
+  to     = "/projects/financial-market-data-platform/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/e-commerce-dashboard/*"
+  to     = "/projects/custom-api-ingestion-pipeline/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/e-commerce-dashboard"
+  to     = "/projects/custom-api-ingestion-pipeline/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/ai-content-platform/*"
+  to     = "/projects/python-sql-orm-data-pipeline/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/ai-content-platform"
+  to     = "/projects/python-sql-orm-data-pipeline/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/blockchain-marketplace/*"
+  to     = "/projects/analytics-community-program/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/blockchain-marketplace"
+  to     = "/projects/analytics-community-program/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/mobile-fitness-app/*"
+  to     = "/projects/marketing-attribution-pipeline/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/mobile-fitness-app"
+  to     = "/projects/marketing-attribution-pipeline/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/virtual-event-platform/*"
+  to     = "/projects/data-warehouse-migration/"
+  status = 301
+
+[[redirects]]
+  from   = "/projects/virtual-event-platform"
+  to     = "/projects/data-warehouse-migration/"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]
