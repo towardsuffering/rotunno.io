@@ -88,26 +88,41 @@ const currLocale = getLocaleFromUrl(Astro.url);
       document.addEventListener('astro:after-swap', initReveal);
     </script>
 
-    <!-- Scroll animations -->
+    <!-- Scroll animations: lightweight replacement for motion-on-scroll (same data-mos attributes) -->
     <script>
-      import { MOS } from "motion-on-scroll";
-
       import { siteSettings } from "@/config/siteSettings.json";
 
-      if (siteSettings.useAnimations === true) {
-        MOS.init({
-          offset: 100,
-          duration: 0.8,
-          timeUnits: "s",
-          distance: 20,
-          delay: 0,
-          easing: "ease-out-cubic",
-          once: true,
-          mirror: false,
+      function initScrollAnimations() {
+        const els = [...document.querySelectorAll<HTMLElement>("[data-mos]:not(.mos-animate)")];
+        if (!els.length) return;
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (siteSettings.useAnimations !== true || reduce || !("IntersectionObserver" in window)) {
+          els.forEach((el) => el.classList.add("mos-animate"));
+          return;
+        }
+        // an element animates when it (or its data-mos-anchor) comes 100px into view, once
+        const targets = new Map<Element, HTMLElement[]>();
+        els.forEach((el) => {
+          if (el.dataset.mosDelay) el.style.setProperty("--mos-delay", `${parseFloat(el.dataset.mosDelay)}s`);
+          if (el.dataset.mosDuration) el.style.setProperty("--mos-duration", `${parseFloat(el.dataset.mosDuration)}s`);
+          const anchor = (el.dataset.mosAnchor && document.querySelector(el.dataset.mosAnchor)) || el;
+          targets.set(anchor, [...(targets.get(anchor) ?? []), el]);
         });
-
-        document.addEventListener("astro:after-swap", MOS.refreshHard);
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              targets.get(entry.target)?.forEach((el) => el.classList.add("mos-animate"));
+              io.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -100px 0px" },
+        );
+        targets.forEach((_, anchor) => io.observe(anchor));
       }
+
+      initScrollAnimations();
+      document.addEventListener("astro:after-swap", initScrollAnimations);
     </script>
   </body>
 </html>

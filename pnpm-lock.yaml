@@ -71,9 +71,6 @@ importers:
       motion:
         specifier: 12.23.25
         version: 12.23.25(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      motion-on-scroll:
-        specifier: ^1.0.0
-        version: 1.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -3007,10 +3004,6 @@ packages:
 
   motion-dom@12.40.0:
     resolution: {integrity: sha512-HxU3ZaBwNPVQUBQf1xxgq+7JrPNZvjLVxgbpEZL7RrWJnsxOf0/OM+yrHG9ogLQ31Do/r57Oz2gQWPK+6q62mg==}
-
-  motion-on-scroll@1.0.0:
-    resolution: {integrity: sha512-eRRQW8xszGCNNDv73Uwww598ssFx5tziRxdPSYMRurwCixaYwpj9MMgL72Hb/B9OXhoup3dteVUOcUgxiZi2EQ==}
-    engines: {node: ^20.6.0 || >=22.0.0}
 
   motion-utils@12.39.0:
     resolution: {integrity: sha512-8nadJAJjTtqRkmRF36FoJTrywK9nnFmnPwnSMyxaOCU7GDjN9RTMJIxx9De8ErM+vpPhMccr/6fo5WciyQLnMQ==}
@@ -7734,14 +7727,6 @@ snapshots:
   motion-dom@12.40.0:
     dependencies:
       motion-utils: 12.39.0
-
-  motion-on-scroll@1.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-    dependencies:
-      motion: 12.23.25(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - react
-      - react-dom
 
   motion-utils@12.39.0: {}
 

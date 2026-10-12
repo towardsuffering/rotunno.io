@@ -1,5 +1,19 @@
 ---
+import { readFileSync } from "node:fs";
+
 import { companies } from "@/data/companies";
+
+// intrinsic size from each SVG's viewBox (scaled to the 36px display height) so the
+// browser can reserve space before the logo loads; CSS still controls the rendered size
+const logoSize = (src: string) => {
+  try {
+    const box = readFileSync(`public${src}`, "utf8").match(/viewBox="([^"]+)"/)?.[1];
+    const [, , w, h] = (box ?? "").split(/[\s,]+/).map(Number);
+    return w && h ? { width: Math.round((36 * w) / h), height: 36 } : {};
+  } catch {
+    return {};
+  }
+};
 
 // fallback text styling for any company without a logo file
 const companyChipStyles: Record<string, string> = {
@@ -49,6 +63,7 @@ const companyChipStyles: Record<string, string> = {
                       <img
                         src={logo}
                         alt={name}
+                        {...logoSize(logo)}
                         class:list={["logo-img", { "logo-invert": name === "Socrates Platform" }]}
                         loading="eager"
                       />

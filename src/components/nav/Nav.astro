@@ -168,6 +168,11 @@ const showBlogPointer = !Astro.url.pathname.startsWith("/blog");
     @apply text-white/90 hover:text-white hover:bg-white/10;
   }
 
+  /* over the dark hero photo the tagline stays bright sky blue in both themes */
+  .navbar--has-hero.navbar--initial :global(.catchphrase) {
+    color: #38bdf8;
+  }
+
   .navbar--has-hero.navbar--initial :global(.nav-logo a) {
     @apply text-white;
     text-shadow: 0 1px 4px rgba(0,0,0,0.6);

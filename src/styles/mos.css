@@ -28,3 +28,27 @@
   transform: rotateY(-180deg);
   backface-visibility: hidden;
 }
+
+/* ---- lightweight scroll animations (replaces the motion-on-scroll runtime) ---- */
+.use-animations [data-mos^="fade"] {
+  transition-property: opacity, translate;
+  transition-duration: var(--mos-duration, 0.8s);
+  transition-delay: var(--mos-delay, 0s);
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); /* ease-out-cubic */
+}
+.use-animations [data-mos="fade-up"] {
+  translate: 0 20px;
+}
+.use-animations [data-mos="fade-down"] {
+  translate: 0 -20px;
+}
+.use-animations [data-mos="fade-left"] {
+  translate: 20px 0;
+}
+.use-animations [data-mos="fade-right"] {
+  translate: -20px 0;
+}
+.use-animations [data-mos^="fade"].mos-animate {
+  opacity: 1;
+  translate: 0 0;
+}
