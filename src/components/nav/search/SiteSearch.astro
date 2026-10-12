@@ -21,7 +21,6 @@ const id = `site-search-${variant}`;
           <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
         </svg>
         <input id={id} type="search" placeholder="Search site" autocomplete="off" role="combobox" aria-expanded="false" aria-controls={`${id}-results`} aria-autocomplete="list" data-search-input />
-        <kbd class="search-kbd" aria-hidden="true">/</kbd>
       </div>
       <ul id={`${id}-results`} class="search-results" role="listbox" hidden data-search-results />
     </div>
@@ -76,13 +75,6 @@ const id = `site-search-${variant}`;
   }
   .search-field input::-webkit-search-cancel-button {
     display: none;
-  }
-  .search-kbd {
-    font-size: 0.7rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.3rem;
-    padding: 0 0.35rem;
-    color: var(--color-muted-foreground);
   }
   .search-results {
     position: absolute;

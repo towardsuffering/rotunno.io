@@ -46,7 +46,6 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
             ><span aria-hidden="true"
               >{heroShardWords.map((word, w) => (
                 <>
-                  {w > 0 && " "}
                   <span class="tw-word">
                     {word.map((c) => (
                       <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
@@ -73,6 +72,10 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
   .tw-word {
     display: inline-block;
     white-space: nowrap;
+  }
+  /* explicit word spacing (inline-block words can lose the text-node space between them) */
+  .tw-word + .tw-word {
+    margin-left: 0.28em;
   }
   .tw-char {
     display: inline-block;

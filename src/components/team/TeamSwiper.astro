@@ -243,8 +243,9 @@ const pillars = [
   .tw-char.tw-scale {
     transform: scale(var(--shard-scale, 3));
     filter: none;
-    color: #f1f5f9;
-    text-shadow: 0 0 12px rgba(241, 245, 249, 0.8);
+    /* theme-aware: white glow on dark, dark text with a soft glow on light */
+    color: var(--color-foreground);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--color-foreground) 45%, transparent);
   }
   .tw-char.tw-scale.is-revealed {
     transform: scale(1);
