@@ -50,6 +50,7 @@ const creditText = heroCredit ? `Photo: ${heroCredit.author}, ${heroCredit.licen
           quality={85}
           format="webp"
           loading={eager ? "eager" : "lazy"}
+          fetchpriority={eager ? "high" : "auto"}
           class:list={["w-full object-cover", isHero ? "h-auto max-h-[72vh]" : "h-full"]}
           style={heroFocus ? `object-position: ${heroFocus}` : undefined}
         />

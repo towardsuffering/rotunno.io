@@ -34,6 +34,7 @@ const companyChipStyles: Record<string, string> = {
               <div
                 class="company-marquee-track flex min-w-full shrink-0 items-center justify-around gap-10"
                 aria-hidden={i === 1 ? "true" : undefined}
+                inert={i === 1}
               >
                 {companies.map(({ name, logo, url }) =>
                   logo ? (

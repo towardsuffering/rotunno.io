@@ -41,14 +41,33 @@ import InterVariable from "@fontsource-variable/inter/files/inter-latin-wght-nor
 <meta name="apple-mobile-web-app-title" content="Starter" />
 <link rel="manifest" href="/favicons/site.webmanifest" />
 
-<!-- Google AdSense, only when configured in src/config/ads.ts -->
+<!-- Google AdSense, only when configured in src/config/ads.ts.
+     The meta tag verifies site ownership; the ad script loads on the visitor's first interaction
+     (scroll, tap, key, pointer move) so it doesn't slow the initial page load. -->
+{adsEnabled && <meta name="google-adsense-account" content={adsConfig.client} />}
 {
   adsEnabled && (
-    <script
-      async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsConfig.client}`}
-      crossorigin="anonymous"
-    />
+    <script is:inline define:vars={{ client: adsConfig.client }}>
+      (function () {
+        var loaded = false;
+        var events = ["scroll", "pointerdown", "pointermove", "keydown", "touchstart"];
+        function load() {
+          if (loaded) return;
+          loaded = true;
+          events.forEach(function (e) {
+            window.removeEventListener(e, load);
+          });
+          var s = document.createElement("script");
+          s.async = true;
+          s.crossOrigin = "anonymous";
+          s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + client;
+          document.head.appendChild(s);
+        }
+        events.forEach(function (e) {
+          window.addEventListener(e, load, { once: true, passive: true });
+        });
+      })();
+    </script>
   )
 }
 

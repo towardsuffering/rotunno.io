@@ -110,7 +110,7 @@
 
     /* sky blue buttons in dark mode */
     --primary: var(--color-primary-500);
-    --primary-foreground: oklch(0.99 0 0);
+    --primary-foreground: oklch(0.17 0.03 255); /* dark navy on sky-500 for WCAG AA contrast */
 
     /* sky blue accent — #38bdf8 */
     --primary-accent: oklch(0.746 0.160 233);
