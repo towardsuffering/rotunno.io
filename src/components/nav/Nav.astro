@@ -26,8 +26,8 @@ interface Props {
 
 const { navStyle = "default", transparentNav = false } = Astro.props as Props;
 
-// the "look here" arrow under the Blog tab is pointless once you're on the blog
-const showBlogPointer = !Astro.url.pathname.startsWith("/blog");
+// the hand-drawn "look here" arrow under the Blog tab only appears on the homepage
+const showBlogPointer = Astro.url.pathname === "/";
 ---
 
 <div
