@@ -47,8 +47,8 @@ const {
     <Image
       src={src}
       alt={alt}
-      width={layout.startsWith("inset") || layout.startsWith("split") ? 900 : 1400}
-      densities={[1.5, 2]}
+      widths={[400, 640, 900, 1300, 1700]}
+      sizes={layout.startsWith("inset") || layout.startsWith("split") ? "(min-width: 768px) 420px, 100vw" : "(min-width: 900px) 860px, 100vw"}
       quality={82}
       format="webp"
       loading="lazy"

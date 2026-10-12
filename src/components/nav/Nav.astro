@@ -4,6 +4,7 @@ import "@fontsource/caveat/latin-600.css";
 import Button from "@/components/button/Button.astro";
 import LanguageSelect from "@/components/language-select/LanguageSelect.astro";
 import SiteLogo from "@/components/site-logo/SiteLogo.astro";
+import SiteSearch from "@/components/nav/search/SiteSearch.astro";
 import ThemeToggle from "@/components/theme-toggle/ThemeToggle.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getTranslatedData } from "@/js/translationUtils";
@@ -76,6 +77,8 @@ const showBlogPointer = !Astro.url.pathname.startsWith("/blog");
 
         <!-- desktop nav menu -->
         <div class="flex flex-auto justify-end">
+          <SiteSearch variant="desktop" class="my-auto hidden w-52 lg:block xl:w-64" />
+
           <nav class="my-auto hidden md:block">
             <ul class="flex h-fit items-center px-4">
               {
@@ -130,6 +133,9 @@ const showBlogPointer = !Astro.url.pathname.startsWith("/blog");
           {locales.length > 1 && <LanguageSelect class="ml-4 hidden md:block" />}
 
           <!-- mobile nav menu, only load on small screens where it is visible -->
+          <!-- mobile/tablet search sits outside the hamburger menu -->
+          <SiteSearch variant="mobile" class="my-auto flex lg:hidden" />
+
           <div class="md:hidden">
             <MobileNav />
           </div>

@@ -21,6 +21,15 @@ const heroShardChars = heroShardText.split("").map((ch, i) => {
     : `--shard-x:${((i * 47) % 37) - 18}px;--shard-y:${((i * 83) % 37) - 18}px;--shard-rot:${((i * 61) % 101) - 50}deg;`;
   return { ch, index: i, isSpace: ch === " ", isConfidence, style };
 });
+// group the letters into words so the line can only wrap between words, never mid-word
+const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
+  (words, c) => {
+    if (c.isSpace) words.push([]);
+    else words[words.length - 1].push(c);
+    return words;
+  },
+  [[]],
+);
 ---
 
 <section id="contact" class="site-container scroll-mt-20 py-8">
@@ -35,13 +44,16 @@ const heroShardChars = heroShardText.split("").map((ch, i) => {
           ><span class="tw-shard-word" data-role="shard" data-length={heroShardText.length}
             ><span class="sr-only">{heroShardText}</span
             ><span aria-hidden="true"
-              >{heroShardChars.map((c) =>
-                c.isSpace ? (
-                  " "
-                ) : (
-                  <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
-                ),
-              )}</span
+              >{heroShardWords.map((word, w) => (
+                <>
+                  {w > 0 && " "}
+                  <span class="tw-word">
+                    {word.map((c) => (
+                      <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
+                    ))}
+                  </span>
+                </>
+              ))}</span
             ></span
           ></span
         ></h2
@@ -58,6 +70,10 @@ const heroShardChars = heroShardText.split("").map((ch, i) => {
 </section>
 
 <style>
+  .tw-word {
+    display: inline-block;
+    white-space: nowrap;
+  }
   .tw-char {
     display: inline-block;
     opacity: 0;
@@ -77,8 +93,9 @@ const heroShardChars = heroShardText.split("").map((ch, i) => {
   .tw-char.tw-scale {
     transform: scale(var(--shard-scale, 3));
     filter: none;
-    color: #f1f5f9;
-    text-shadow: 0 0 12px rgba(241, 245, 249, 0.8);
+    /* theme-aware: white glow on dark, dark text with a soft glow on light */
+    color: var(--color-foreground);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--color-foreground) 45%, transparent);
   }
   .tw-char.tw-scale.is-revealed {
     transform: scale(1);

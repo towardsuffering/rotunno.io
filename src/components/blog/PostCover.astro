@@ -45,12 +45,12 @@ const creditText = heroCredit ? `Photo: ${heroCredit.author}, ${heroCredit.licen
           src={heroImage}
           alt={`Cover photo for ${title}`}
           title={creditText || undefined}
-          width={width}
-          densities={[1.5, 2]}
-          quality={85}
+          widths={isHero ? [480, 800, 1100, 1500, 2000] : [400, 640, 960]}
+          sizes={isHero ? "(min-width: 1140px) 1100px, 100vw" : "(min-width: 1024px) 400px, (min-width: 768px) 50vw, 100vw"}
+          quality={80}
           format="webp"
-          loading={eager ? "eager" : "lazy"}
-          fetchpriority={eager ? "high" : "auto"}
+          priority={eager}
+          loading={eager ? undefined : "lazy"}
           class:list={["w-full object-cover", isHero ? "h-auto max-h-[72vh]" : "h-full"]}
           style={heroFocus ? `object-position: ${heroFocus}` : undefined}
         />
