@@ -13,7 +13,7 @@ export default defineConfig({
   // i18n configuration must match src/config/translations.json.ts
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "fr"],
+    locales: ["en"],
     routing: {
       prefixDefaultLocale: false,
     },
@@ -38,7 +38,10 @@ export default defineConfig({
     mdx(),
     react(),
     icon(),
-    sitemap(),
+    sitemap({
+      // keep private and utility pages out of search engines
+      filter: (page) => !page.includes("/admin/"),
+    }),
     compress({
       HTML: true,
       JavaScript: true,
