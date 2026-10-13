@@ -17,7 +17,7 @@ const heroConfidenceEnd = heroConfidenceStart + "Confidence".length;
 const heroShardChars = heroShardText.split("").map((ch, i) => {
   const isConfidence = i >= heroConfidenceStart && i < heroConfidenceEnd;
   const style = isConfidence
-    ? `--shard-scale:${(3 + ((i - heroConfidenceStart) % 3) * 0.4).toFixed(1)};`
+    ? `--shard-scale:${(1.6 + ((i - heroConfidenceStart) % 3) * 0.2).toFixed(1)};`
     : `--shard-x:${((i * 47) % 37) - 18}px;--shard-y:${((i * 83) % 37) - 18}px;--shard-rot:${((i * 61) % 101) - 50}deg;`;
   return { ch, index: i, isSpace: ch === " ", isConfidence, style };
 });
@@ -99,6 +99,10 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
     /* theme-aware: white glow on dark, dark text with a soft glow on light */
     color: var(--color-foreground);
     text-shadow: 0 0 12px color-mix(in srgb, var(--color-foreground) 45%, transparent);
+    /* quick, no-overshoot settle so the word snaps in rather than wobbling */
+    transition:
+      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.2s ease;
   }
   .tw-char.tw-scale.is-revealed {
     transform: scale(1);
@@ -133,8 +137,9 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
       function update() {
         const rect = group.getBoundingClientRect();
         const vh = window.innerHeight;
-        const startY = vh * 0.9;
-        const endY = vh * 0.15;
+        // finish by mid-screen so the last word ("Confidence") lands while it's still in easy view
+        const startY = vh * 0.95;
+        const endY = vh * 0.55;
         let progress = (startY - rect.top) / (startY - endY);
         progress = Math.max(0, Math.min(1, progress));
         const revealed = Math.round(progress * total);
