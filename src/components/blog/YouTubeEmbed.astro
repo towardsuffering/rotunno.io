@@ -6,9 +6,10 @@
 interface Props {
   id: string;
   title: string;
+  label?: string; // visible button text, e.g. to credit a third-party video
 }
 
-const { id, title } = Astro.props as Props;
+const { id, title, label = "Watch the video version" } = Astro.props as Props;
 ---
 
 <div class="yt-embed bg-card relative aspect-video w-full overflow-hidden rounded-xl border md:rounded-2xl">
@@ -17,7 +18,7 @@ const { id, title } = Astro.props as Props;
     class="group absolute inset-0 h-full w-full cursor-pointer"
     data-yt-id={id}
     data-yt-title={title}
-    aria-label={`Play video: ${title}`}
+    aria-label={`${label}: ${title}`}
   >
     <img
       src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
@@ -32,7 +33,7 @@ const { id, title } = Astro.props as Props;
       >
         <svg viewBox="0 0 24 24" class="ml-1 size-6" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
       </span>
-      <span class="text-sm font-semibold tracking-wide uppercase md:text-base">Watch the video version</span>
+      <span class="text-sm font-semibold tracking-wide uppercase md:text-base">{label}</span>
     </span>
   </button>
 </div>

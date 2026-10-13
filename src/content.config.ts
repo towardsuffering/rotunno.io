@@ -38,6 +38,7 @@ const blogCollection = defineCollection({
       coverTheme: z.string().optional(),
       // YouTube video id (the part after "v=") for the video version, shown under the title
       youtubeId: z.string().optional(),
+      youtubeLabel: z.string().optional(), // button text when the video is not your own
       categories: z.array(z.string()),
       tags: z.array(z.string()),
       // mappingKey allows you to match entries across languages for SEO purposes

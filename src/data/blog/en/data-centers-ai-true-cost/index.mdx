@@ -1,0 +1,264 @@
+---
+title: "What AI Really Costs: The Data Center Debate Comes to Florida"
+description: "AI feels weightless, but it runs on buildings full of servers that draw power and water. A look at the evidence on electricity bills, emissions, water, jobs, and taxes, and why more than a dozen Florida communities have paused data centers in 2026."
+draft: false
+authors:
+  - main-author
+pubDate: 2026-10-13
+heroImage: ./cover.jpg
+heroCredit:
+  author: "Derrick Coetzee"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Front_of_server_racks_at_NERSC.jpg"
+  license: "CC0"
+  licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+youtubeId: "cz3AYYZBiGs"
+youtubeLabel: "Watch: How much electricity does AI use? (IEA)"
+categories:
+  - data-strategy
+  - business
+tags:
+  - data-centers
+  - artificial-intelligence
+  - energy
+  - electricity-rates
+  - water
+  - florida
+  - economics
+---
+
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
+import fig5 from "./fig-5.jpg";
+import fig6 from "./fig-6.jpg";
+import fig7 from "./fig-7.jpg";
+import fig8 from "./fig-8.jpg";
+
+I use AI every day. It drafts, debugs, summarizes, and helped research this article. It also feels weightless: type a question, get an answer, no visible cost.
+
+But every answer runs on a physical building somewhere, full of servers that draw electricity around the clock and often use water to stay cool. In 2026, those buildings became one of the most contested land-use questions in the country, including here in Northeast Florida.
+
+I wanted to understand the real trade-offs, without the hype on either side. Here is what the evidence says.
+
+## First, a Data Warehouse Is Not a Data Center
+
+The two terms get mixed up constantly, so it is worth separating them.
+
+A **data warehouse** is software: a database designed for analysis, where a company consolidates its sales, finance, and operations data so analysts can query it in one place. Snowflake, BigQuery, and Redshift are data warehouses. It is a way of *organizing* data.
+
+A **data center** is a building: power, cooling, networking, and racks of servers. Data warehouses, websites, streaming video, and AI models all run *inside* data centers.
+
+<Figure
+  src={fig1}
+  alt="An IBM System/360 mainframe with its control panel and tape drives on display"
+  caption="An IBM System/360 mainframe. Computing has always needed a room. What changed is the size of the room."
+  author="Erik Pitti"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:IBM_System360_Mainframe.jpg"
+  license="CC BY 2.0"
+  licenseUrl="https://creativecommons.org/licenses/by/2.0"
+  layout="split"
+/>
+
+The debate in 2026 is about the second one, and specifically about **hyperscale** data centers: campuses built for AI that can each draw 50 megawatts or more. That 50 MW line shows up again and again in the laws below, so keep it in mind. A facility that size can use as much power as tens of thousands of homes.
+
+## How Big Is the Boom?
+
+The International Energy Agency (IEA) reported in April 2026 that global data center electricity use **rose 17% in 2025**, while overall global electricity demand grew about 3%. AI-focused facilities grew faster still. The IEA expects data center electricity use to **roughly double by 2030**, and it notes that capital spending by the five largest tech companies was expected to rise by a further 75% in 2026.
+
+In the United States, a Department of Energy report produced by Lawrence Berkeley National Laboratory (LBNL) found that data centers used about **4.4% of all U.S. electricity in 2023**, and projected **6.7% to 12% by 2028**. The wide range reflects real uncertainty about how fast AI adoption grows and how efficient the hardware becomes.
+
+<Figure
+  src={fig2}
+  alt="Aerial view of dozens of large, flat-roofed data center buildings in Ashburn, Virginia"
+  caption="Data centers in Ashburn, Virginia. Northern Virginia hosts the largest concentration of data centers in the world, and it is where most of the economic research on them comes from."
+  author="Theodore Christopher"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:Data_centers_in_Ashburn.jpg"
+  license="CC0"
+  licenseUrl="http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  layout="wide"
+/>
+
+Virginia is the best case study because it is furthest along. A December 2024 study by the state's Joint Legislative Audit and Review Commission (JLARC) counted roughly **340 data center buildings** needing about **5 gigawatts** of generating capacity, a figure expected to double over the next 15 years.
+
+## One Prompt Is Tiny. Billions Are Not.
+
+The per-question footprint is smaller than many people assume. In August 2025, Google published a detailed methodology estimating that the median Gemini text prompt uses **0.24 watt-hours** of energy and about **0.26 milliliters of water**, roughly five drops. Google said that is comparable to watching TV for less than nine seconds, and that the energy per median prompt fell **33-fold** over 12 months.
+
+<Figure
+  src={fig3}
+  alt="Close-up of the back of a server with a cable management arm and bundled network cables"
+  caption="The back of a single server. One prompt barely registers. The question is what happens when a planet's worth of users and automated agents send them all day."
+  author="Anton Olsen"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:Server_Cable_Management_Arm_(2).jpg"
+  license="CC BY 2.0"
+  licenseUrl="https://creativecommons.org/licenses/by/2.0"
+  layout="inset"
+/>
+
+Both things are true at once, and that is the heart of the debate. The IEA's own framing is that each AI task is getting more efficient, yet overall demand keeps rising because usage is expanding faster than efficiency improves. Economists call this the rebound effect: when something gets cheaper to use, people use much more of it.
+
+So "my prompts are trivial" and "AI is straining the grid" are not contradictions. They describe the same system at two different scales.
+
+## Who Pays for the Grid?
+
+This is the issue most likely to reach your mailbox.
+
+When a data center connects, a utility may need new power plants, transmission lines, and substations. The policy question is whether the data center pays for all of it, or whether some of the cost spreads across everyone's bill.
+
+<Figure
+  src={fig4}
+  alt="Rows of high-voltage transmission towers carrying power lines across flat farmland"
+  caption="High-voltage transmission towers. New lines and substations are some of the most expensive pieces of serving a large new customer."
+  author="Frans Berkelaar"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:High_voltage_transmission_towers_-_Polder_Stein_-_Haastrecht_(25374398535).jpg"
+  license="CC BY 2.0"
+  licenseUrl="https://creativecommons.org/licenses/by/2.0"
+  layout="standard"
+/>
+
+The clearest real-world signal comes from **PJM**, the grid operator for 13 states and Washington, D.C. PJM runs auctions to pay power plants to be available in future years. The results:
+
+| Delivery year | Capacity price (per MW-day) |
+|---|---|
+| 2024/2025 | $28.92 |
+| 2025/2026 | $269.92 |
+| 2026/2027 | $329.17 (at a price cap) |
+| 2027/2028 | $333.44 (at a price cap) |
+
+PJM attributed the record 2025/2026 price to tighter supply, higher demand, and market rule changes. Analysts at the Institute for Energy Economics and Financial Analysis (IEEFA) tied much of that demand growth to projected data centers. In the December 2025 auction, PJM's demand forecast rose by 5,250 MW, almost entirely from data centers, and the grid still fell about 6,625 MW short of its reliability target. Without a temporary price cap, the price would have reached roughly $530.
+
+There is a counterpoint. PJM said bills would see little change from that particular auction, because prices were nearly flat compared with the year before and capacity is a relatively small part of a typical bill. And Virginia's JLARC study found that current utility rates *do* correctly assign costs to the customers who cause them, data centers included.
+
+The concern is the future. The same JLARC study estimated that a typical Dominion Energy residential customer could see generation and transmission costs rise by **$14 to $37 a month by 2040**, in today's dollars, as the system expands to meet demand. That is a projection, not a guarantee, and it depends heavily on how states write their rate rules.
+
+## Emissions and Air Quality
+
+Data centers do not emit much on their own. The emissions depend on what powers them.
+
+The two biggest tech companies' own reports show the tension. Google's 2025 environmental report put its total emissions **51% above 2019 levels**, largely because of AI's energy demand, even as its data center energy emissions fell 12% in 2024 through efficiency gains and clean energy purchases. Microsoft reported its total footprint up **23.4% from 2020**, though its direct and energy-related emissions (Scope 1 and 2) fell 30%.
+
+<Figure
+  src={fig5}
+  alt="A combined-cycle natural gas power plant with blue steel framework, pipes, and an exhaust stack"
+  caption="A combined-cycle natural gas plant in Valle Hermoso, Mexico. Gas plants are among the options utilities weigh when they need firm power for large new customers."
+  author="Carlos Valenzuela"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:TECicloCombinadoValleHermosoP3.jpg"
+  license="CC BY-SA 4.0"
+  licenseUrl="https://creativecommons.org/licenses/by-sa/4.0"
+  layout="split-reverse"
+/>
+
+The industry is also one of the largest buyers of clean energy. The IEA found that tech companies signed about **40% of all corporate renewable power purchase agreements** in 2025 and are driving new interest in nuclear and advanced geothermal.
+
+Local air quality is a separate issue from climate. The most cited example is xAI's "Colossus" supercomputer in South Memphis, which ran natural gas turbines before receiving a permit. In July 2025, the Shelby County Health Department permitted 15 turbines with emissions limits and testing requirements, after months of protests from nearby residents. The Southern Environmental Law Center said aerial imagery had shown as many as 35 turbines on site.
+
+<Figure
+  src={fig7}
+  alt="Rows of solar panels under a blue sky with scattered clouds at NASA's Kennedy Space Center"
+  caption="The Discovery Solar Energy Center at Kennedy Space Center, Florida. Whether new demand is met with solar, gas, or nuclear largely determines a data center's climate footprint."
+  author="NASA/Frank Michaux"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:Discovery_Solar_Energy_Center_(KSC-20210527-PH-FMX01_0118).jpg"
+  license="Public domain"
+  layout="inset-left"
+/>
+
+## Water: The Florida Question
+
+Many data centers cool their servers with water that evaporates. LBNL estimated U.S. data centers **directly consumed about 17.4 billion gallons** of water in 2023, plus about **211 billion gallons indirectly** through the power plants that supplied their electricity. It projected direct use could reach **38 to 73 billion gallons by 2028**.
+
+For perspective, that is a small share of national water use. But water is local in a way electricity is not. What matters is whether a specific facility draws from a specific aquifer that is already stressed.
+
+<Figure
+  src={fig6}
+  alt="Clear blue spring water winding through dense green forest at Silver Springs State Park"
+  caption="Silver Springs State Park in Marion County, fed by the Floridan Aquifer. Marion County passed a 12-month pause on data centers of 50 MW or more in September 2026."
+  author="P. Hughes"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:Silver_Springs_State_Park_1.jpg"
+  license="CC BY-SA 4.0"
+  licenseUrl="https://creativecommons.org/licenses/by-sa/4.0"
+  layout="wide"
+/>
+
+That is why water dominates the Florida debate. Orange County's proposed pause cited a projected **96-million-gallon-per-day groundwater shortfall by 2045**. Levy County cited aquifer concerns. Florida's new state law requires large data centers to get separate water-use permits and to use reclaimed water where feasible.
+
+## The Economic Case
+
+Supporters point to real benefits. JLARC found Virginia's data center industry supports about **74,000 jobs, $5.5 billion in labor income, and $9.1 billion in annual GDP**, and it is a major source of local property tax revenue.
+
+The fine print matters, though. Most of that activity comes from **construction**, not operations. A typical data center employs about **50 full-time workers**, roughly half of them contractors, compared with around 1,500 workers on site at the peak of construction. And Virginia's sales tax exemption for data center equipment saved the industry about **$928 million** in fiscal 2023.
+
+Whether that is a good deal depends on what a community values: a large property tax base with few permanent jobs, or land and water reserved for other uses.
+
+## Florida's Answer So Far
+
+Florida has moved on two tracks at once.
+
+**At the state level**, Gov. DeSantis signed SB 484, the Florida Hyperscale Data Center Act, on May 7, 2026. It took effect July 1 and applies to facilities with a peak load of 50 MW or more. Among other things, it:
+
+- Directs the Public Service Commission to set baseline tariffs so large-load customers cover the full cost of serving them
+- Requires separate water-use permits and reclaimed water where feasible
+- Preserves local government control over planning and zoning
+- Bars utilities from serving data centers controlled by "foreign entities of concern"
+- Limits state agencies' use of nondisclosure agreements about prospective projects
+
+Florida Power & Light says its existing large-load tariffs, approved in January 2026, already comply. They require customers of 50 MW or more to sign **20-year contracts** and pay for at least **70% of contracted demand** whether they use it or not, so the utility is not left holding the cost if a project shrinks or leaves.
+
+**At the local level**, the response has been far more cautious. Since June, more than a dozen Florida cities and counties have passed or proposed pauses or bans, including Nassau, Sarasota, Marion, Levy, Wakulla, and North Port. Edgewater voted for a permanent ban, and its voters will decide on Nov. 3 whether to write it into the city charter. Volusia County's proposed ban on large data centers in unincorporated areas has a final vote scheduled for Oct. 20.
+
+Florida is not alone. In July 2026, New York became the first state to pause permits for new hyperscale data centers statewide, for one year, while it writes new rules.
+
+## Close to Home: St. Johns County and Jacksonville
+
+<Figure
+  src={fig8}
+  alt="The St. Johns County courthouse complex in St. Augustine, Florida, with palm trees and a parking area"
+  caption="The St. Johns County courthouse in St. Augustine. County commissioners agreed in June to take up a possible one-year pause on data centers."
+  author="Georgia Guercio"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:St._Augustine,_FL,_Courthouse,_St._Johns_County,_08-09-2010_(3).JPG"
+  license="CC BY-SA 3.0"
+  licenseUrl="https://creativecommons.org/licenses/by-sa/3.0"
+  layout="split"
+/>
+
+In June, the St. Johns County Commission agreed unanimously to schedule a discussion of a one-year moratorium, even though no data center had applied. Commissioner Ann Taylor argued that "if our neighboring counties shut their doors to AI data centers, we become the path of least resistance." Commissioner Christian Whitehurst, who had opposed the idea a month earlier, said decisions should be "based in fact, not in fear." Nassau County had already passed a yearlong moratorium, and Clay County was weighing one.
+
+In Jacksonville, JEA has confirmed it has received inquiries about large-load data centers but said it does not currently have the electric and water infrastructure to serve a hyperscale facility. JEA said it is committed to ensuring that "large-load customers pay for their own infrastructure" and is developing a new rate class for them, with work continuing into 2027.
+
+## The Trade-Offs at a Glance
+
+| Question | The case for building | The case for caution |
+|---|---|---|
+| **Electricity bills** | Well-designed tariffs (like FPL's) make data centers pay their own way | Regional markets like PJM show prices can rise faster than rules adapt |
+| **Emissions** | Tech firms are the biggest corporate buyers of clean power | Total emissions at Google and Microsoft are still above their baselines |
+| **Water** | Per-prompt water use is tiny; reclaimed water can help | Local aquifers, not national totals, set the real limit |
+| **Jobs and taxes** | Large construction spending and property tax base | Few permanent jobs; tax breaks can be large |
+| **Local control** | Clear state rules give investors certainty | Communities want a say before projects arrive |
+
+## What I'm Taking Away
+
+I am going to keep using AI. But I no longer think of it as weightless.
+
+The useful question is not "AI: good or bad?" It is narrower and more practical: **where** these facilities go, **what** powers and cools them, and **who** pays for the grid and water they need. Those answers are being written right now, in state utility commissions and county meetings, often with only a handful of residents in the room.
+
+If your county is one of them, it is worth showing up.
+
+---
+
+### Sources
+
+1. IEA data center electricity growth (2025) and outlook: [IEA, "Data centre electricity use surged in 2025," April 2026](https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions); [Rigzone summary](https://www.rigzone.com/news/data_center_electricity_use_surges-20-apr-2026-183486-article/).
+2. U.S. electricity and water use: [Lawrence Berkeley National Laboratory, *2024 United States Data Center Energy Usage Report*, December 2024](https://eta-publications.lbl.gov/publications/2024-lbnl-data-center-energy-usage-report).
+3. Per-prompt energy and water: [Google Cloud, "Measuring the environmental impact of AI inference," August 2025](https://cloud.google.com/blog/products/infrastructure/measuring-the-environmental-impact-of-ai-inference); [MIT Technology Review](https://www.technologyreview.com/2025/08/21/1122288/google.gemini.ai.energy/).
+4. PJM capacity prices: [IEEFA, "Projected data center growth spurs PJM capacity prices by factor of 10"](https://ieefa.org/resources/projected-data-center-growth-spurs-pjm-capacity-prices-factor-10); [S&P Global on the 2025/2026 auction](https://spglobal.com/commodity-insights/en/news-research/latest-news/electric-power/073024-pjm-power-capacity-auction-clears-at-record-high-price-of-26992mw-day-for-most-of-footprint); [Utility Dive, Dec. 18, 2025](https://www.utilitydive.com/news/pjm-interconnection-capacity-auction-data-center/808264/); [Canary Media](https://www.canarymedia.com/articles/data-centers/pjm-record-capacity-costs-rising-bills).
+5. Virginia economics, rates, and tax exemption: [JLARC report summary, Dec. 2024](https://pwcva.gov/assets/2024-12/JLARC%20Report%20Summary_12-16-2024.pdf); [Virginia Association of Counties](https://www.vaco.org/county-connections/comprehensive-jlarc-study-on-data-centers-highlights-positive-impacts-to-virginia-economy-but-forecasted-demand-to-provide-electricity-will-be-difficult-to-meet/); [Virginia Mercury, June 11, 2026](https://virginiamercury.com/2026/06/11/the-exemption-virginia-cant-price-and-wont-stop/).
+6. Corporate emissions: [Sustainability Magazine on Google's 2025 report](https://sustainabilitymag.com/articles/google-environmental-report-2025); [Technology Magazine on Microsoft's 2025 report](https://technologymagazine.com/articles/microsofts-2030-plan-revealed-as-emissions-rise-by-23-4).
+7. xAI in Memphis: [NBC/CNBC on the Shelby County permit](https://www.nbcsandiego.com/news/business/money-report/musks-xai-scores-permit-for-gas-burning-turbines-to-power-grok-supercomputer-in-memphis/3861835/); [Inside Climate News, July 17, 2025](https://insideclimatenews.org/news/17072025/elon-musk-xai-data-center-gas-turbines-memphis/).
+8. Florida SB 484: [The Florida Senate, SB 484 (2026)](https://www.flsenate.gov/Session/Bill/2026/484); [Holland & Knight analysis](https://www.hklaw.com/en/insights/publications/2026/02/proposed-florida-legislation-creates-new-regulatory-framework).
+9. FPL large-load tariffs: [FPL Newsroom, Oct. 1, 2026](https://newsroom.fpl.com/FPL-rate-structure-protects-Florida-customers-from-data-center-costs); [Daily Energy Insider](https://dailyenergyinsider.com/news/53987-florida-power-light-outlines-current-compliance-with-state-data-center-law/).
+10. Florida local moratoriums: [DataCenterBans.com, Florida tracker](https://www.datacenterbans.com/state/florida); [Fox 35 Orlando on Edgewater and Orange County](https://www.fox35orlando.com/news/edgewater-approves-ban-ai-data-centers-orange-county-weighs-moratorium.amp); [Spectrum News 13 on Volusia County, Oct. 6, 2026](https://mynews13.com/fl/orlando/news/2026/10/06/volusia-county-data-center-ban-heads-to-first-reading).
+11. New York statewide pause: [Inside Climate News, July 14, 2026](https://insideclimatenews.org/news/14072026/new-york-first-data-center-moratorium/); [Route Fifty](https://www.route-fifty.com/artificial-intelligence/2026/07/new-york-governor-signs-nations-first-moratorium-large-data-centers/414752/).
+12. St. Johns County: [Jax Today, June 16, 2026](https://jaxtoday.org/2026/06/16/st-johns-data-center/).
+13. JEA and Jacksonville: [News4JAX, Oct. 7, 2026](https://www.news4jax.com/news/local/2026/10/07/jea-has-received-inquiries-about-large-data-centers-could-jacksonville-handle-one/).
+14. Video: [International Energy Agency, "How much electricity does AI actually use?"](https://www.youtube.com/watch?v=cz3AYYZBiGs)

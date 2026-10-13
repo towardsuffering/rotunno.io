@@ -96,7 +96,7 @@ const authorsData = await getEntries(authors);
     <div class="mx-auto mt-10 w-full max-w-[1100px] md:mt-14">
       {
         youtubeId ? (
-          <YouTubeEmbed id={youtubeId} title={title} />
+          <YouTubeEmbed id={youtubeId} title={title} label={post.data.youtubeLabel} />
         ) : (
           <PostCover post={post} width={1400} eager framing="hero" showCredit class="rounded-xl border md:rounded-2xl" />
         )
