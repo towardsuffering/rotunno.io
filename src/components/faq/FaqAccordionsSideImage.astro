@@ -85,15 +85,6 @@ const faqData = getTranslatedData("faqData", currLocale);
     transition: color 0.15s ease;
     color: color-mix(in srgb, #34d399 calc(var(--focus) * 100%), var(--color-foreground));
   }
-  /* hovering (or tabbing to) a question lights it up fully, overriding the scroll-driven inline --focus */
-  @media (hover: hover) {
-    #faq-list .starwind-accordion-item:hover {
-      --focus: 1 !important;
-    }
-  }
-  #faq-list .starwind-accordion-item:has(:focus-visible) {
-    --focus: 1 !important;
-  }
 </style>
 
 <script>
@@ -108,18 +99,45 @@ const faqData = getTranslatedData("faqData", currLocale);
     list.dataset.focusInit = "true";
 
     const falloff = 220; // px of distance over which focus fades from 1 to 0
+    const releaseAfter = 150; // px of scrolling after which a hover-picked question hands back to scroll focus
+
+    // Hovering (or tabbing to) a question picks it: it alone stays lit, every
+    // other question dims, and it stays picked after the pointer leaves.
+    let picked: HTMLElement | null = null;
+    let pickedAtScroll = 0;
 
     function update() {
+      if (picked && Math.abs(window.scrollY - pickedAtScroll) > releaseAfter) picked = null;
+
       const referenceY = window.innerHeight * 0.45;
 
       items.forEach((item) => {
-        const rect = item.getBoundingClientRect();
-        const mid = rect.top + rect.height / 2;
-        const distance = Math.abs(mid - referenceY);
-        const focus = Math.max(0, 1 - distance / falloff);
+        let focus: number;
+        if (picked) {
+          focus = item === picked ? 1 : 0;
+        } else {
+          const rect = item.getBoundingClientRect();
+          const mid = rect.top + rect.height / 2;
+          const distance = Math.abs(mid - referenceY);
+          focus = Math.max(0, 1 - distance / falloff);
+        }
         item.style.setProperty("--focus", focus.toFixed(3));
       });
     }
+
+    function pick(item: HTMLElement) {
+      picked = item;
+      pickedAtScroll = window.scrollY;
+      update();
+    }
+
+    items.forEach((item) => {
+      // touch screens have no real hover; they keep the scroll-driven focus
+      item.addEventListener("pointerenter", (e) => {
+        if (e.pointerType === "mouse") pick(item);
+      });
+      item.addEventListener("focusin", () => pick(item));
+    });
 
     update();
     window.addEventListener("scroll", update, { passive: true });
