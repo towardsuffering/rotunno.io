@@ -85,6 +85,15 @@ const faqData = getTranslatedData("faqData", currLocale);
     transition: color 0.15s ease;
     color: color-mix(in srgb, #34d399 calc(var(--focus) * 100%), var(--color-foreground));
   }
+  /* hovering (or tabbing to) a question lights it up fully, overriding the scroll-driven inline --focus */
+  @media (hover: hover) {
+    #faq-list .starwind-accordion-item:hover {
+      --focus: 1 !important;
+    }
+  }
+  #faq-list .starwind-accordion-item:has(:focus-visible) {
+    --focus: 1 !important;
+  }
 </style>
 
 <script>
