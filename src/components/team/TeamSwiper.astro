@@ -1,6 +1,5 @@
 ---
 import chris from "@images/chris.jpg";
-import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 
 import Badge from "../badge/Badge.astro";
@@ -26,24 +25,15 @@ const shardChars = shardText.split("").map((ch, i) => {
     : `--shard-x:${((i * 47) % 37) - 18}px;--shard-y:${((i * 83) % 37) - 18}px;--shard-rot:${((i * 61) % 101) - 50}deg;`;
   return { ch, index: i, isSpace: ch === " ", isConfidence, style };
 });
-
-const pillars = [
-  {
-    icon: "tabler/users",
-    title: "People, not platforms",
-    bullets: ["Empowers the team to do their best work", "Sets the pace on performance", "Builds, innovates, iterates relentlessly"],
+// group letters into words so the line only wraps between words, never mid-word
+const shardWords = shardChars.reduce<(typeof shardChars)[]>(
+  (words, c) => {
+    if (c.isSpace) words.push([]);
+    else words[words.length - 1].push(c);
+    return words;
   },
-  {
-    icon: "tabler/briefcase",
-    title: "Organizational fluency",
-    bullets: ["Brings every stakeholder to the table early", "Catches scope creep before it spreads", "Solves the bottleneck before it stalls the team"],
-  },
-  {
-    icon: "tabler/database",
-    title: "Technical depth",
-    bullets: ["Goes hands-on with SQL, Python, and cloud platforms", "Centralizes systems at bank-grade scale", "Reaches well beyond basic office tools"],
-  },
-];
+  [[]],
+);
 ---
 
 <section id="team-swiper" class="px-4 py-12 lg:py-16">
@@ -53,12 +43,12 @@ const pillars = [
       id="team-trigger"
     >
       <!-- Two-column grid: text | photo -->
-      <div class="grid items-start gap-8 md:grid-cols-[1fr_auto] md:gap-8">
+      <div class="grid items-center gap-8 md:grid-cols-[1fr_auto] md:gap-8">
         <!-- Col 1: text -->
         <div class="flex flex-col gap-4" data-mos="fade-right" data-mos-anchor="#team-trigger">
           <Badge>About Me</Badge>
           <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
-          <p class="text-lg font-heading font-semibold" style="color: #34d399;">
+          <p class="text-lg font-heading font-semibold leading-snug md:text-2xl" style="color: #34d399;">
             <span class="typewriter-group"
               ><span class="rounded-md px-1.5 py-0.5" style="background: #34d399; color: #0f172a;"
                 ><span class="tw-slice" data-text={badgeText} data-role="badge"
@@ -73,53 +63,20 @@ const pillars = [
               ><span class="tw-shard-word" data-role="shard" data-length={shardText.length}
                 ><span class="sr-only">{shardText}</span
                 ><span aria-hidden="true"
-                  >{shardChars.map((c) =>
-                    c.isSpace ? (
-                      " "
-                    ) : (
-                      <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
-                    ),
-                  )}</span
+                  >{shardWords.map((word, w) => (
+                    <>
+                      {w > 0 && " "}
+                      <span class="whitespace-nowrap">
+                        {word.map((c) => (
+                          <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
+                        ))}
+                      </span>
+                    </>
+                  ))}</span
                 ></span
               ></span
             >
           </p>
-
-          <ul class="pillar-list mt-1 flex flex-col divide-y overflow-hidden rounded-xl border">
-            {
-              pillars.map((p) => (
-                <li class="flex items-start gap-3 px-4 py-3">
-                  <span
-                    class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full"
-                    style="background: color-mix(in srgb, #34d399 15%, transparent); color: #34d399;"
-                  >
-                    <Icon name={p.icon} class="size-4" />
-                  </span>
-                  <span class="flex-1">
-                    <span class="text-foreground block font-semibold">{p.title}</span>
-                    <ul class="text-muted-foreground mt-1 flex flex-col gap-0.5 text-sm">
-                      {p.bullets.map((b) => (
-                        <li class="flex items-start gap-1.5">
-                          <span class="bullet-dot mt-2 size-1 shrink-0 rounded-full" />
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </span>
-                </li>
-              ))
-            }
-          </ul>
-
-          <div class="flex flex-wrap gap-2">
-            {
-              ["Financial Services", "Retail", "Food Service", "Home Improvement"].map((tag) => (
-                <span class="border-primary-accent/30 text-primary-accent bg-primary-accent/10 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide uppercase">
-                  {tag}
-                </span>
-              ))
-            }
-          </div>
         </div>
 
         <!-- Col 2: photo -->
@@ -187,16 +144,6 @@ const pillars = [
     50% {
       opacity: 0.5;
     }
-  }
-
-  .pillar-list {
-    border-color: color-mix(in srgb, #34d399 20%, transparent);
-  }
-  .pillar-list > li + li {
-    border-color: color-mix(in srgb, #34d399 15%, transparent);
-  }
-  .bullet-dot {
-    background: color-mix(in srgb, #34d399 60%, transparent);
   }
 
   .photo-backdrop {

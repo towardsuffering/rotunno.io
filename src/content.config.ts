@@ -76,6 +76,9 @@ const servicesCollection = defineCollection({
       mappingKey: z.string().optional(),
       order: z.number().optional(),
       draft: z.boolean().optional(),
+      // short headline + punchy one-liners shown in the capability page's summary card
+      tagline: z.string().optional(),
+      highlights: z.array(z.string()).optional(),
     }),
 });
 

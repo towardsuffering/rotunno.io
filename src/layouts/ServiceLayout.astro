@@ -46,6 +46,23 @@ const currLocale = getLocaleFromUrl(Astro.url);
           <Icon name={data.icon} class="text-primary-accent size-24" />
           <h2 class="h2">{data.title}</h2>
           <p class="text-muted-foreground text-lg">{data.description}</p>
+          {
+            data.highlights && data.highlights.length > 0 && (
+              <div class="w-full border-t pt-6 text-left">
+                {data.tagline && (
+                  <p class="text-primary-accent mb-3 text-center text-xs font-semibold tracking-widest uppercase">{data.tagline}</p>
+                )}
+                <ul class="flex flex-col gap-2">
+                  {data.highlights.map((h) => (
+                    <li class="flex items-start gap-2">
+                      <Icon name="tabler/check" class="text-primary-accent mt-1 size-4 shrink-0" aria-hidden="true" />
+                      <span class="text-foreground">{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
         </div>
       </div>
 
