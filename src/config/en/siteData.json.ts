@@ -7,7 +7,7 @@ const siteData: SiteDataProps = {
   title:
     "Christopher A. Rotunno | Data Analytics Engineer & BI Leader",
   description:
-    "Data analytics engineer and BI leader with experience turning raw data into decisions. Portfolio of dashboards, data pipelines, and analytical projects. Based in St. Augustine, FL.",
+    "Analytics engineer turned sales leader: data pipelines, dashboards, and the client trust that turns insight into results. Based in St. Augustine, FL.",
 
   // Your information for blog post purposes
   author: {
