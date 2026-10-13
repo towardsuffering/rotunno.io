@@ -7,9 +7,11 @@ interface Props {
   id: string;
   title: string;
   label?: string; // visible button text, e.g. to credit a third-party video
+  thumb?: "maxresdefault" | "hqdefault"; // older videos have no maxres thumbnail
+  eager?: boolean; // false when the embed sits further down the page
 }
 
-const { id, title, label = "Watch the video version" } = Astro.props as Props;
+const { id, title, label = "Watch the video version", thumb = "maxresdefault", eager = true } = Astro.props as Props;
 ---
 
 <div class="yt-embed bg-card relative aspect-video w-full overflow-hidden rounded-xl border md:rounded-2xl">
@@ -21,9 +23,9 @@ const { id, title, label = "Watch the video version" } = Astro.props as Props;
     aria-label={`${label}: ${title}`}
   >
     <img
-      src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
+      src={`https://i.ytimg.com/vi/${id}/${thumb}.jpg`}
       alt=""
-      loading="eager"
+      loading={eager ? "eager" : "lazy"}
       class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
     />
     <span class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></span>

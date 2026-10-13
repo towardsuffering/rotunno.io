@@ -1,71 +1,312 @@
 ---
-import type { CollectionEntry } from "astro:content";
+/**
+ * Core capability page, in the same editorial style as blog posts:
+ * masthead, sourced cover photo, a band of proof numbers, then the story
+ * (with figures) beside a sticky "at a glance" card and table of contents.
+ */
+import type { MarkdownHeading } from "astro";
+import { Image } from "astro:assets";
+import { type CollectionEntry, getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 
+import Button from "@/components/button/Button.astro";
+import TableOfContents from "@/components/table-of-contents/TableOfContents.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getLocalizedRoute } from "@/js/translationUtils";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Props {
   service: CollectionEntry<"services">;
+  headings: MarkdownHeading[];
 }
 
-const { service } = Astro.props as Props;
+const { service, headings } = Astro.props as Props;
 const { data } = service;
 const currLocale = getLocaleFromUrl(Astro.url);
+// ids may or may not still carry the locale prefix (filterCollectionByLanguage strips it in place)
+const bare = (id: string) => id.replace(/^en\//, "");
+const cover = data.heroImage ?? data.image;
+const credit = data.heroCredit;
+
+const otherCapabilities = (await getCollection("services", (s) => s.data.draft !== true))
+  .filter((s) => bare(s.id) !== bare(service.id))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const wanted = data.relatedProjects ?? [];
+const relatedProjects = (await getCollection("projects", (p) => p.data.draft !== true))
+  .filter((p) => wanted.includes(bare(p.id)))
+  .sort((a, b) => wanted.indexOf(bare(a.id)) - wanted.indexOf(bare(b.id)));
+
+const calendly = "https://calendly.com/chrisrotunno-_my2/30min";
 ---
 
-<BaseLayout
-  title={`${data.title} — Christopher A. Rotunno`}
-  description={data.description}
-  fullHeight={false}
->
-  <section class="site-container mt-8 py-20 md:pt-32">
-
-    <!-- Back link -->
-    <a
-      href={getLocalizedRoute(currLocale, "/#capabilities-cards")}
-      class="text-primary-accent mb-8 inline-flex items-center gap-1 text-sm font-semibold hover:underline"
-    >
-      ← Back to Capabilities
-    </a>
-
-    <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
-
-      <!-- Left: title + content -->
-      <div class="flex flex-col gap-8">
-        <h1 class="h1">{data.titleLong}</h1>
-        <div class="markdown-content max-w-none">
-          <slot />
-        </div>
+<BaseLayout title={`${data.title} | Christopher A. Rotunno`} description={data.description} image={cover}>
+  <article class="capability site-container mt-24 xl:px-16">
+    <!-- Masthead -->
+    <header class="mx-auto w-full max-w-[860px] pt-8 text-center md:pt-14">
+      <div>
+        <a
+          href={getLocalizedRoute(currLocale, "/#capabilities-cards")}
+          class="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm font-medium transition-colors"
+        >
+          <Icon name="tabler/arrow-narrow-left" class="size-4" aria-hidden="true" /> Core Capabilities
+        </a>
       </div>
 
-      <!-- Right: icon + description card -->
-      <div class="relative order-first md:order-last">
-        <div class="rounded-2xl border bg-muted p-12 flex flex-col items-center justify-center text-center gap-6 min-h-[360px]">
-          <Icon name={data.icon} class="text-primary-accent size-24" />
-          <h2 class="h2">{data.title}</h2>
-          <p class="text-muted-foreground text-lg">{data.description}</p>
-          {
-            data.highlights && data.highlights.length > 0 && (
-              <div class="w-full border-t pt-6 text-left">
-                {data.tagline && (
-                  <p class="text-primary-accent mb-3 text-center text-xs font-semibold tracking-widest uppercase">{data.tagline}</p>
-                )}
-                <ul class="flex flex-col gap-2">
-                  {data.highlights.map((h) => (
-                    <li class="flex items-start gap-2">
-                      <Icon name="tabler/check" class="text-primary-accent mt-1 size-4 shrink-0" aria-hidden="true" />
-                      <span class="text-foreground">{h}</span>
-                    </li>
-                  ))}
-                </ul>
+      <p class="cap-eyebrow mt-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase">
+        <Icon name={data.icon} class="size-4" aria-hidden="true" />
+        {data.title}
+      </p>
+
+      <h1 class="h1 mt-5 tracking-tight text-balance">{data.titleLong}</h1>
+
+      <p class="text-muted-foreground mx-auto mt-5 max-w-[720px] text-lg leading-relaxed text-pretty md:text-xl">
+        {data.description}
+      </p>
+    </header>
+
+    <!-- Cover -->
+    <figure class="mx-auto mt-10 w-full max-w-[1100px] md:mt-14">
+      <div class="overflow-hidden rounded-xl border md:rounded-2xl">
+        <Image
+          src={cover}
+          alt={`Cover photo for ${data.title}`}
+          widths={[480, 800, 1100, 1500, 2000]}
+          sizes="(min-width: 1140px) 1100px, 100vw"
+          quality={80}
+          format="webp"
+          priority
+          class="h-auto max-h-[68vh] w-full object-cover"
+          style={data.heroFocus ? `object-position: ${data.heroFocus}` : undefined}
+        />
+      </div>
+      {
+        credit && (
+          <figcaption class="text-muted-foreground mt-3 text-right text-xs">
+            Photo:{" "}
+            <a href={credit.url} target="_blank" rel="noopener" class="hover:text-foreground underline underline-offset-2">
+              {credit.author}
+            </a>
+            {" / "}
+            {credit.licenseUrl ? (
+              <a href={credit.licenseUrl} target="_blank" rel="noopener license" class="hover:text-foreground underline underline-offset-2">
+                {credit.license}
+              </a>
+            ) : (
+              credit.license
+            )}
+            {" / "}
+            {credit.source}
+          </figcaption>
+        )
+      }
+    </figure>
+
+    <!-- Proof in numbers -->
+    {
+      data.stats && data.stats.length > 0 && (
+        <section aria-label="By the numbers" class="mx-auto mt-12 w-full max-w-[1100px]">
+          <dl class="cap-stats grid grid-cols-2 overflow-hidden rounded-2xl border md:grid-cols-4">
+            {data.stats.map((s) => (
+              <div class="cap-stat flex flex-col gap-1 p-5 md:p-7" data-reveal="rise">
+                <dt class="sr-only">{s.label}</dt>
+                <dd class="cap-num font-heading text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">{s.value}</dd>
+                <dd class="text-foreground text-sm leading-snug font-medium md:text-base">{s.label}</dd>
+                {s.source && <dd class="text-muted-foreground mt-auto pt-2 text-xs">{s.source}</dd>}
               </div>
-            )
-          }
-        </div>
-      </div>
+            ))}
+          </dl>
+        </section>
+      )
+    }
 
+    <!-- At a glance (mobile and tablet: above the story) -->
+    {
+      data.highlights && data.highlights.length > 0 && (
+        <div class="mx-auto mt-10 max-w-[864px] lg:hidden">
+          <div class="cap-glance rounded-2xl border p-6">
+            <p class="cap-eyebrow-text mb-3 text-xs font-semibold tracking-[0.2em] uppercase">{data.tagline ?? "At a glance"}</p>
+            <ul class="flex flex-col gap-2">
+              {data.highlights.map((h) => (
+                <li class="flex items-start gap-2">
+                  <Icon name="tabler/check" class="cap-check mt-1 size-4 shrink-0" aria-hidden="true" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Story + sidebar -->
+    <div class="py-12">
+      <div class="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8 xl:grid-cols-[1fr_360px] xl:gap-12">
+        <div class="mr-auto w-full max-w-[864px]">
+          <div class="markdown-content">
+            <slot />
+          </div>
+        </div>
+
+        <aside class="hidden lg:block">
+          <div class="sticky top-24 flex max-h-[calc(100vh-(var(--spacing)*_26))] flex-col gap-6 overflow-y-auto pb-4">
+            {
+              data.highlights && data.highlights.length > 0 && (
+                <div class="cap-glance rounded-2xl border p-6">
+                  <div class="mb-4 flex items-center gap-3">
+                    <span class="cap-icon flex size-10 shrink-0 items-center justify-center rounded-full">
+                      <Icon name={data.icon} class="size-5" aria-hidden="true" />
+                    </span>
+                    <p class="cap-eyebrow-text text-xs font-semibold tracking-[0.2em] uppercase">{data.tagline ?? "At a glance"}</p>
+                  </div>
+                  <ul class="flex flex-col gap-2 text-sm">
+                    {data.highlights.map((h) => (
+                      <li class="flex items-start gap-2">
+                        <Icon name="tabler/check" class="cap-check mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                        <span class="text-foreground">{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            }
+            <div>
+              <p class="text-muted-foreground mb-3 text-xs font-semibold tracking-[0.2em] uppercase">On this page</p>
+              <TableOfContents headings={headings} />
+            </div>
+            <Button href={calendly} target="_blank" rel="noopener" class="w-full">
+              Schedule a Call
+            </Button>
+          </div>
+        </aside>
+      </div>
     </div>
-  </section>
+
+    <!-- In practice: related projects -->
+    {
+      relatedProjects.length > 0 && (
+        <section class="border-t py-12" aria-labelledby="cap-projects">
+          <p class="cap-eyebrow-text text-xs font-semibold tracking-[0.2em] uppercase">In practice</p>
+          <h2 id="cap-projects" class="h3 mt-2">Projects where this shows up</h2>
+          <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {relatedProjects.map((p) => (
+              <a
+                href={getLocalizedRoute(currLocale, `/projects/${bare(p.id)}/`)}
+                class="cap-card group flex flex-col overflow-hidden rounded-xl border transition-colors"
+              >
+                <div class="aspect-video overflow-hidden">
+                  <Image
+                    src={p.data.image}
+                    alt=""
+                    widths={[400, 640]}
+                    sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw"
+                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                </div>
+                <div class="flex flex-1 flex-col gap-2 p-5">
+                  <h3 class="font-heading text-lg font-semibold">{p.data.title}</h3>
+                  <p class="text-muted-foreground line-clamp-3 text-sm">{p.data.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- The other pillars -->
+    <section class="border-t py-12" aria-labelledby="cap-more">
+      <p class="cap-eyebrow-text text-xs font-semibold tracking-[0.2em] uppercase">Core Capabilities</p>
+      <h2 id="cap-more" class="h3 mt-2">The other pillars</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-3">
+        {
+          otherCapabilities.map((c) => (
+            <a
+              href={getLocalizedRoute(currLocale, `/capabilities/${bare(c.id)}/`)}
+              class="cap-card group flex items-start gap-4 rounded-xl border p-5 transition-colors"
+            >
+              <span class="cap-icon flex size-10 shrink-0 items-center justify-center rounded-full">
+                <Icon name={c.data.icon} class="size-5" aria-hidden="true" />
+              </span>
+              <span class="flex flex-col gap-1">
+                <span class="font-heading font-semibold">{c.data.title}</span>
+                <span class="text-muted-foreground text-sm">{c.data.description}</span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Call to action -->
+    <section class="cap-cta mb-16 rounded-2xl border p-8 text-center md:p-12">
+      <h2 class="h3 text-balance">Want this on your team?</h2>
+      <p class="text-muted-foreground mx-auto mt-3 max-w-xl">
+        Thirty minutes is enough to see whether what I bring fits what you need.
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <Button href={calendly} target="_blank" rel="noopener">Schedule a Call</Button>
+        <Button href={getLocalizedRoute(currLocale, "/resume/")} variant="outline">View Resume</Button>
+      </div>
+    </section>
+  </article>
 </BaseLayout>
+
+<style>
+  /* green that stays readable in both themes */
+  .capability {
+    --cap: #047857;
+    --cap-soft: color-mix(in srgb, #10b981 10%, transparent);
+    --cap-line: color-mix(in srgb, #10b981 30%, transparent);
+  }
+  :global(.dark) .capability {
+    --cap: #34d399;
+    --cap-soft: color-mix(in srgb, #34d399 10%, transparent);
+    --cap-line: color-mix(in srgb, #34d399 30%, transparent);
+  }
+
+  .cap-eyebrow {
+    color: var(--cap);
+    background: var(--cap-soft);
+    border-color: var(--cap-line);
+  }
+  .cap-eyebrow-text,
+  .cap-check,
+  .cap-num {
+    color: var(--cap);
+  }
+  .cap-icon {
+    color: var(--cap);
+    background: var(--cap-soft);
+  }
+
+  .cap-stats {
+    border-color: var(--cap-line);
+    background: var(--cap-soft);
+  }
+  .cap-stat + .cap-stat {
+    border-left: 1px solid var(--cap-line);
+  }
+  /* 2-column grid on phones: no left rule at the start of each row, a top rule on the second row */
+  @media (max-width: 767px) {
+    .cap-stat:nth-child(odd) {
+      border-left: 0;
+    }
+    .cap-stat:nth-child(n + 3) {
+      border-top: 1px solid var(--cap-line);
+    }
+  }
+
+  .cap-glance {
+    border-color: var(--cap-line);
+    background: var(--cap-soft);
+  }
+  .cap-card:hover {
+    border-color: var(--cap-line);
+    background: var(--cap-soft);
+  }
+  .cap-cta {
+    border-color: var(--cap-line);
+    background: radial-gradient(120% 140% at 50% 0%, var(--cap-soft), transparent 70%);
+  }
+</style>

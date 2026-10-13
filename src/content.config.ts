@@ -79,6 +79,22 @@ const servicesCollection = defineCollection({
       // short headline + punchy one-liners shown in the capability page's summary card
       tagline: z.string().optional(),
       highlights: z.array(z.string()).optional(),
+      // sourced, credited cover photo (like blog posts); falls back to `image`
+      heroImage: image().optional(),
+      heroCredit: z
+        .object({
+          author: z.string(),
+          source: z.string(),
+          url: z.string().url(),
+          license: z.string(),
+          licenseUrl: z.string().url().optional(),
+        })
+        .optional(),
+      heroFocus: z.string().optional(),
+      // proof points shown as a band of big numbers under the cover
+      stats: z.array(z.object({ value: z.string(), label: z.string(), source: z.string().optional() })).optional(),
+      // project slugs (src/data/projects/en/<slug>) that show this capability in action
+      relatedProjects: z.array(z.string()).optional(),
     }),
 });
 

@@ -1,9 +1,15 @@
 ---
 title: "Finding Structure"
 titleLong: "How I Find the Structure Hiding Inside the Chaos"
-description: "Finds the structure hiding inside the chaos."
+description: "Every messy project already contains its own blueprint. The work is drawing it out: every voice at the table, the real priorities, a plan everyone can see, and scope that stays honest."
 icon: tabler/briefcase
 image: ../finding-structure/cover.jpg
+heroImage: ./hero.jpg
+heroCredit:
+  author: "Warner, Burns, Toan and Lunde"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Original_Blueprint_of_United_States_National_Agricultural_Library.jpg"
+  license: "Public domain"
 mappingKey: "finding-structure"
 order: 2
 draft: false
@@ -12,9 +18,108 @@ highlights:
   - "Brings every stakeholder to the table early"
   - "Catches scope creep before it spreads"
   - "Solves the bottleneck before it stalls the team"
+stats:
+  - value: "120%"
+    label: "Growth in data products through S&P and Reuters partnerships"
+    source: "AE Global Solutions"
+  - value: "80%"
+    label: "Cut in third-party data costs by restructuring the pipeline"
+    source: "Root Labs"
+  - value: "4"
+    label: "Developers aligned from architecture through deployment"
+    source: "Root Labs"
+  - value: "2"
+    label: "Graduate degrees: M.S. Business Analytics and MBA"
+    source: "CU Boulder 2023, MTSU 2024"
+relatedProjects:
+  - custom-api-ingestion-pipeline
+  - financial-market-data-platform
+  - python-sql-orm-data-pipeline
 ---
 
-- Gathering input from every seat at the table before assessing real needs, so effort lands on what actually matters instead of what's loudest.
-- Weighing every perspective before prioritizing, so the most urgent problems get solved first instead of just the ones easiest to see from one seat.
-- Mapping the plan with everyone it touches in mind, so the people depending on a project know what to expect instead of finding out during a delay.
-- Keeping scope honest to every voice that shaped it, so resources aren't wasted rebuilding what a truly inclusive plan would have caught the first time.
+import YouTubeEmbed from "@/components/blog/YouTubeEmbed.astro";
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+
+Chaos is rarely random. Behind most messy projects there is a structure trying to get out: a handful of real priorities, a few people whose input changes everything, and one or two bottlenecks holding the rest hostage.
+
+My job is to find that structure before anyone pours concrete.
+
+## Every Seat at the Table, Before the Plan
+
+The loudest voice in the room is not always the most important one. The analyst who touches the data every day, the salesperson who hears the customer complaint, the engineer who knows which system is held together with tape: they see what an executive summary can't.
+
+So before I scope anything, I gather input from every seat that the work will touch. It is slower for a week and faster for the rest of the project, because effort lands on what actually matters instead of what was easiest to see from one chair.
+
+<Figure
+  src={fig1}
+  alt="Delegates seated around a large conference table during a ministerial meeting, reviewing papers and talking"
+  caption="A full table is not a crowd. It is coverage: every perspective that can sink the plan later gets a say now."
+  author="Aron Urb, EU2017EE Estonian Presidency"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:Informal_meeting_of_health_ministers_(iEPSCO)._Round_table_Round_table_(36003372806).jpg"
+  license="CC BY 2.0"
+  licenseUrl="https://creativecommons.org/licenses/by/2.0"
+  layout="wide"
+/>
+
+## Weigh Everything, Then Rank It
+
+Gathering input is half the job. The other half is deciding. I weigh every perspective, then rank problems by urgency and impact so the team solves the ones that matter first, not the ones that happen to be visible from the top.
+
+The same discipline applies to growth. At AE Global Solutions, the platform expanded its data product offerings by **120%** through partnerships with external providers including **S&P and Reuters**. Growth like that only holds together when someone decides which integrations come first and how each one fits the data clients already rely on.
+
+## Map the Plan So Nobody Is Surprised
+
+<Figure
+  src={fig2}
+  alt="A detailed 1657 engraved map of Paris showing streets, the Seine, and city walls"
+  caption="Jan Janssonius's 1657 plan of Paris. A good map does not change the city. It lets everyone navigate the same one."
+  author="Jan Janssonius"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:Plan_de_Paris_en_1657.JPG"
+  license="Public domain"
+  layout="inset-left"
+/>
+
+A plan only works if the people depending on it can read it. I map timelines, owners, and dependencies with every affected team in mind, so nobody finds out about a delay by living through it.
+
+That map is also where restructuring opportunities show up. At Root Labs, mapping where our data budget actually went revealed that most of it paid for a vendor's markup on data we could reach directly. Rebuilding that layer as our own ingestion pipeline **cut third-party data costs by 80%** and gave us control over how the data could be used. The savings came from seeing the structure clearly, not from working harder inside the old one.
+
+## Keep Scope Honest
+
+Scope creep is not a rare event. In PMI's 2018 Pulse of the Profession survey, **52% of projects** completed in the prior year experienced scope creep or uncontrolled changes, up from 43% five years earlier.<sup>[1](#sources)</sup>
+
+The fix is not saying no to everything. It is building the plan with every voice up front, so late requests can be measured against what everyone already agreed matters. When a new ask arrives, the question becomes simple: what does it replace? Resources stop being wasted rebuilding what an inclusive plan would have caught the first time.
+
+<YouTubeEmbed id="H0_yKBitO8M" title="Build a tower, build a team" label="Watch: Build a tower, build a team (Tom Wujec, TED)" thumb="hqdefault" eager={false} />
+
+Tom Wujec's marshmallow challenge makes the point in a few minutes: teams that test and iterate their structure early beat teams that plan in the abstract and discover the problem at the deadline.
+
+## Solve the Bottleneck First
+
+Every system has one constraint that sets the pace for everything else. Optimize anything other than the bottleneck and you have only made a faster queue.
+
+When I led four developers through a SQL ORM data pipeline in Python, the constraint was not code. It was infrastructure: what we could deploy, where, and how fast. We sequenced the build around those limits instead of pretending they weren't there, and the project moved from architecture to deployment without stalling.
+
+<Figure
+  src={fig3}
+  alt="Scaffolding and formwork rising around a building under construction against a blue sky"
+  caption="Scaffolding is temporary structure that makes the permanent one possible. Good process should feel the same way: present, useful, then out of the way."
+  author="Dietmar Rabich"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:D%C3%BClmen,_Baustelle_IGZ_--_2018_--_0457.jpg"
+  license="CC BY-SA 4.0"
+  licenseUrl="https://creativecommons.org/licenses/by-sa/4.0"
+  layout="standard"
+/>
+
+## What You Get on Day One
+
+- **A plan built from every seat**, so the people who can sink it later get heard now.
+- **Ruthless prioritization**: the most urgent problems first, not the most visible ones.
+- **A map everyone can read**, with owners and dependencies nobody has to guess at.
+- **Scope that stays honest**, because new requests get measured against what everyone agreed matters.
+
+## Sources
+
+1. Project Management Institute, [Pulse of the Profession 2018](https://www.pmi.org/learning/library/scope-creep-rising-11308), as summarized in PMI's "Scope Patrol."
+2. Tom Wujec, ["Build a tower, build a team"](https://www.youtube.com/watch?v=H0_yKBitO8M), TED.

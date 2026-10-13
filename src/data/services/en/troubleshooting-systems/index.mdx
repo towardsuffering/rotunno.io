@@ -1,9 +1,16 @@
 ---
 title: "Troubleshooting Systems"
 titleLong: "How I Keep Critical Systems Running"
-description: "Keeps critical systems running when the business depends on them."
+description: "When clients depend on live data around the clock, reliability is the product. Here is how I keep critical systems up: watch everything, validate before it ships, chase root causes, and build so it runs without me."
 icon: tabler/database
 image: ../troubleshooting-systems/cover.jpg
+heroImage: ./hero.jpg
+heroCredit:
+  author: "NASA, restored by Adam Cuerden"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Eugene_F._Kranz_at_his_console_at_the_NASA_Mission_Control_Center.jpg"
+  license: "Public domain"
+heroFocus: "center 35%"
 mappingKey: "troubleshooting-systems"
 order: 3
 draft: false
@@ -12,9 +19,116 @@ highlights:
   - "Goes hands-on with SQL, Python, and cloud platforms"
   - "Centralizes systems at bank-grade scale"
   - "Reaches well beyond basic office tools"
+stats:
+  - value: "99%"
+    label: "Uptime across 24/7 financial data operations"
+    source: "AE Global Solutions"
+  - value: "200GB+"
+    label: "Financial data processed and validated every day"
+    source: "AE Global Solutions"
+  - value: "30%"
+    label: "Pipeline efficiency gained without losing accuracy"
+    source: "AE Global Solutions"
+  - value: "99%"
+    label: "Accuracy sustained across all outputs"
+    source: "AE Global Solutions"
+relatedProjects:
+  - financial-market-data-platform
+  - custom-api-ingestion-pipeline
+  - python-sql-orm-data-pipeline
 ---
 
-- Keeping 24/7 financial data infrastructure at 99% uptime, so clients relying on live market data never had to wonder whether it was there.
-- Validating 200GB+ of financial data every day, catching bad inputs before they reached a single report or decision.
-- Diagnosing failures down to the root cause, from the pipeline to the operating system, so the same problem doesn't come back next week.
-- Building for reliability first, with monitoring, documentation, and clean handoffs, so systems keep running when I'm not in the room.
+import YouTubeEmbed from "@/components/blog/YouTubeEmbed.astro";
+import fig1 from "./fig-1.jpg";
+import fig2 from "./fig-2.jpg";
+import fig3 from "./fig-3.jpg";
+import fig4 from "./fig-4.jpg";
+
+Nobody notices infrastructure until it fails. Then it is the only thing anyone notices.
+
+For nearly four years at AE Global Solutions, I worked on financial data infrastructure that ran **24/7** for clients who needed live market data every hour the markets moved. There was no quiet season and no acceptable excuse. The standard was simple: the data is there, and it is right.
+
+## Reliability Is the Product
+
+<Figure
+  src={fig3}
+  alt="A lineman in a hard hat and harness repairing a damaged power line atop a utility pole"
+  caption="Lineman Marion Chappell restores a power line damaged by Hurricane Rita in Cameron, Louisiana, 2005. Reliability work happens on the bad days, in the field, one connection at a time."
+  author="Marvin Nauman, FEMA"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:FEMA_-_20472_-_Photograph_by_Marvin_Nauman_taken_on_11-10-2005_in_Louisiana.jpg"
+  license="Public domain"
+  layout="inset"
+/>
+
+Clients buying market data are not buying servers or pipelines. They are buying the confidence that the number on their screen is current and correct. Every architecture choice I make starts from that promise.
+
+That meant maintaining **99% system uptime** across round-the-clock data center operations, and treating every minute of downtime as a client's decision made blind.
+
+## Validate Before It Ships
+
+Bad data is worse than no data, because people act on it. So validation can't be a final step. It has to live at every stage.
+
+Every day, I processed and validated **200GB+ of financial data**: record counts, schema conformance, value range checks, and reconciliation across sources. Anomalies triggered alerts *before* downstream consumers were affected. The result was **99% accuracy across all outputs**, sustained while the volume kept growing.
+
+## Find the Real Cause, Not the Nearest One
+
+<Figure
+  src={fig1}
+  alt="A page from a 1947 computer logbook with a moth taped to it beside the note: First actual case of bug being found"
+  caption="September 9, 1947: operators of Harvard's Mark II calculator found a moth in Relay #70, Panel F, and taped it into the log. Literal root cause analysis."
+  author="Naval Surface Warfare Center, Dahlgren"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:First_Computer_Bug,_1947.jpg"
+  license="Public domain"
+  layout="split"
+/>
+
+On September 9, 1947, the team running Harvard's Mark II found a moth wedged between the contacts of Relay #70 and taped it into the logbook with the note "First actual case of bug being found."<sup>[1](#sources)</sup> Engineers had called faults "bugs" for decades by then. What makes the page famous is that someone went all the way down to the physical cause, and wrote it down.
+
+That is the habit I bring. A failed job is a symptom. I trace failures down to the root, from the pipeline to the query to the operating system, using the same discipline as Toyota's **"five whys"**: keep asking why until the answer is something you can actually fix.<sup>[2](#sources)</sup> Patch the symptom and the same problem comes back next week. Fix the cause and it doesn't come back at all.
+
+## Make It Faster Without Making It Fragile
+
+Speed that costs accuracy is not an improvement. At AE Global, I improved **pipeline efficiency by 30%** while holding accuracy at 99%, by profiling the slowest transformation steps, rewriting bottleneck queries, and adding parallel processing only where the data flow allowed it. Lower latency during peak market hours, with no new ways to fail.
+
+The same instinct drove the custom ingestion pipeline I later architected at Root Labs: exponential backoff on rate limits, dead-letter queues for failed records, and alerts for anomalies above a set threshold. Failure is planned for, so it is never a surprise.
+
+<Figure
+  src={fig2}
+  alt="A Navy electronics technician calibrating an oscilloscope in a shipboard laboratory"
+  caption="Calibrating an oscilloscope aboard USS Nimitz. Trustworthy systems start with trustworthy instruments: you can't fix what you can't measure."
+  author="Mass Communication Specialist 3rd Class Patrick Heil, U.S. Navy"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:US_Navy_090116-N-3946H-004_Aviation_Electronics_Technician_3rd_Class_Tony_Jackson_calibrates_an_oscilloscope_in_the_aircraft_intermediate_maintenance_department_calibration_laboratory_aboard_the_aircraft_carrier_USS_Nimitz_(CVN.jpg"
+  license="Public domain"
+  layout="wide"
+/>
+
+## Build It to Run Without You
+
+The cover photo shows flight director Gene Kranz at his console during a 1965 simulation for Gemini IV. Simulations like that were how Mission Control learned to solve problems calmly under pressure, and five years later Kranz's White Team helped bring Apollo 13 home.<sup>[3](#sources)</sup> The heroics were built on rehearsal, procedure, and documentation.
+
+A system that only one person understands is a single point of failure with a pulse. So I build for reliability first: monitoring that pages the right person, documentation someone else can follow at 3 a.m., and clean handoffs that let the system keep running when I'm not in the room.
+
+<YouTubeEmbed id="si9iqF5uTFk" title="Capt. Grace Hopper on Future Possibilities: Data, Hardware, Software, and People (Part One, 1982)" label="Watch: Capt. Grace Hopper's 1982 lecture on data and systems (NSA)" thumb="hqdefault" eager={false} />
+
+<Figure
+  src={fig4}
+  alt="Flight controllers celebrate in the Apollo 15 Mission Operations Control Room as screens show the crew's recovery"
+  caption="Mission Control at the end of Apollo 15, August 1971. The best outcome in operations is a quiet room that gets to celebrate."
+  author="NASA Johnson Space Center"
+  sourceUrl="https://commons.wikimedia.org/wiki/File:Mission_Control_Center_at_conclusion_of_Apollo_15_lunar_landing_mission_(S71-43429).jpg"
+  license="Public domain"
+  layout="standard"
+/>
+
+## What You Get on Day One
+
+- **Someone who has kept 24/7 financial infrastructure at 99% uptime**, and knows what that takes.
+- **Validation built into every stage**, so bad data gets caught before it reaches a report or a decision.
+- **Root causes, not patches**, from the pipeline down to the operating system.
+- **Systems documented and monitored** well enough to run without me in the room.
+
+## Sources
+
+1. ["Log Book With Computer Bug"](https://www.si.edu/object/log-book-computer-bug:nmah_334663), Smithsonian National Museum of American History (catalog 1994.0191.01).
+2. ["Five whys"](https://en.wikipedia.org/wiki/Five_whys), Wikipedia.
+3. ["Gene Kranz"](https://en.wikipedia.org/wiki/Gene_Kranz), Wikipedia.

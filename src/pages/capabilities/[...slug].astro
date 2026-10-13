@@ -24,9 +24,9 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"services">;
 
 const service = Astro.props as Props;
-const { Content } = await render(service);
+const { Content, headings } = await render(service);
 ---
 
-<ServiceLayout service={service}>
+<ServiceLayout service={service} headings={headings}>
   <Content components={{ a: ExternalLink }} />
 </ServiceLayout>
