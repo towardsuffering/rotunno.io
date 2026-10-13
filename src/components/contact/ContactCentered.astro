@@ -44,14 +44,9 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
           ><span class="tw-shard-word" data-role="shard" data-length={heroShardText.length}
             ><span class="sr-only">{heroShardText}</span
             ><span aria-hidden="true"
-              >{heroShardWords.map((word, w) => (
-                <>
-                  <span class="tw-word">
-                    {word.map((c) => (
-                      <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>
-                    ))}
-                  </span>
-                </>
+              >{heroShardWords.map((word) => (
+                // kept on one line: any whitespace in here would survive minification as stray spaces
+                <span class="tw-word">{word.map((c) => <span class:list={["tw-char", { "tw-scale": c.isConfidence }]} data-index={c.index} style={c.style}>{c.ch}</span>)}</span>
               ))}</span
             ></span
           ></span
@@ -74,8 +69,9 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
     white-space: nowrap;
   }
   /* explicit word spacing (inline-block words can lose the text-node space between them) */
-  .tw-word + .tw-word {
-    margin-left: 0.28em;
+  /* space after each word (not before), so a word that wraps to a new line starts flush left */
+  .tw-word:not(:last-child) {
+    margin-right: 0.28em;
   }
   .tw-char {
     display: inline-block;
