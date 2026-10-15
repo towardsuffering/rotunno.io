@@ -1,4 +1,5 @@
 ---
+import ObfuscatedEmail from "@/components/ObfuscatedEmail.astro";
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -21,7 +22,7 @@ const email = "chrisrotunno@icloud.com";
         <p>
           This policy explains what information is collected when you visit <strong>rotunno.ai</strong> (the
           "site"), operated by Christopher A. Rotunno, how it is used, and the choices you have. If you have
-          questions, contact <a href={`mailto:${email}`}>{email}</a>.
+          questions, contact <ObfuscatedEmail email={email} />.
         </p>
 
         <h2>Information collected</h2>
@@ -132,7 +133,7 @@ const email = "chrisrotunno@icloud.com";
         </p>
 
         <h2>Contact</h2>
-        <p>Questions about this policy can be sent to <a href={`mailto:${email}`}>{email}</a>.</p>
+        <p>Questions about this policy can be sent to <ObfuscatedEmail email={email} />.</p>
       </div>
     </div>
   </section>

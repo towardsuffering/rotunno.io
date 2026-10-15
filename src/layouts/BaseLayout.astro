@@ -62,6 +62,20 @@ const currLocale = getLocaleFromUrl(Astro.url);
       <Footer />
     </div>
 
+    <!-- Decode ObfuscatedEmail links -->
+    <script>
+      function initEmails() {
+        document.querySelectorAll<HTMLAnchorElement>("a[data-email]").forEach((a) => {
+          const address = [...atob(a.dataset.email!)].reverse().join("");
+          a.href = `mailto:${address}`;
+          if (a.hasAttribute("data-email-show-address")) a.textContent = address;
+          a.removeAttribute("data-email");
+        });
+      }
+      initEmails();
+      document.addEventListener("astro:after-swap", initEmails);
+    </script>
+
     <!-- Custom reveal animations -->
     <script>
       function initReveal() {

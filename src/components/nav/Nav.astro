@@ -1,4 +1,5 @@
 ---
+import ObfuscatedEmail from "@/components/ObfuscatedEmail.astro";
 import "@fontsource/caveat/latin-600.css";
 
 import Button from "@/components/button/Button.astro";
@@ -51,9 +52,7 @@ const showBlogPointer = Astro.url.pathname === "/";
       <a href="tel:+17272212980" class="text-muted-foreground font-medium hover:text-primary-accent -my-1 inline-block py-1 transition-colors">
         +1 (727) 221-2980
       </a>
-      <a href="mailto:chrisrotunno@icloud.com" class="text-primary-accent font-medium hover:underline -my-1 inline-block py-1">
-        chrisrotunno@icloud.com
-      </a>
+      <ObfuscatedEmail email="chrisrotunno@icloud.com" class="text-primary-accent font-medium hover:underline -my-1 inline-block py-1" />
       <div class="flex items-center gap-1">
         <a href="https://www.linkedin.com/in/chris-rotunno/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-muted-foreground hover:text-primary-accent -my-1.5 inline-flex p-1.5 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M8 11l0 5"/><path d="M8 8l0 .01"/><path d="M12 16l0 -5"/><path d="M16 16v-3a2 2 0 0 0 -4 0"/></svg>

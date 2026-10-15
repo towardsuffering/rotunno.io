@@ -1,0 +1,18 @@
+---
+// Renders a mailto link without the address in the HTML, so scrapers can't harvest it.
+// The address ships reversed and base64-encoded; the script in BaseLayout decodes it in the browser.
+// Without JS the link falls back to the contact form.
+type Props = {
+  email: string;
+  class?: string;
+  // visible text; omit to show the address itself once decoded
+  label?: string;
+};
+
+const { email, class: className, label } = Astro.props;
+const encoded = btoa([...email].reverse().join(""));
+---
+
+<a href="/#contact" class={className} data-email={encoded} data-email-show-address={label ? undefined : ""}>
+  {label ?? "Email me"}
+</a>

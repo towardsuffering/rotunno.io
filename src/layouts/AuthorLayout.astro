@@ -1,4 +1,5 @@
 ---
+import ObfuscatedEmail from "@/components/ObfuscatedEmail.astro";
 import { Image } from "astro:assets";
 import { type CollectionEntry } from "astro:content";
 
@@ -38,12 +39,11 @@ const { name, avatar, about, email, authorLink } = author.data;
       <div class="flex flex-wrap justify-center gap-4">
         {
           email && (
-            <a
-              href={`mailto:${email}`}
+            <ObfuscatedEmail
+              email={email}
+              label="Email"
               class="text-primary-accent hover:text-primary-dark hover:underline"
-            >
-              Email
-            </a>
+            />
           )
         }
         {

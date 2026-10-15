@@ -1,4 +1,5 @@
 ---
+import ObfuscatedEmail from "@/components/ObfuscatedEmail.astro";
 import Button from "@/components/button/Button.astro";
 import { Checkbox } from "@/components/starwind/checkbox";
 import { Input } from "@/components/starwind/input";
@@ -21,7 +22,7 @@ import { Textarea } from "@/components/starwind/textarea";
 </div>
 
 <div id="form-error" class="hidden rounded-xl border border-red-500/30 bg-red-500/10 px-6 py-4 text-center">
-  <p class="text-sm text-red-600 dark:text-red-400">Something went wrong. Please try again or email me at <a href="mailto:chrisrotunno@icloud.com" class="underline">chrisrotunno@icloud.com</a>.</p>
+  <p class="text-sm text-red-600 dark:text-red-400">Something went wrong. Please try again or email me at <ObfuscatedEmail email="chrisrotunno@icloud.com" class="underline" />.</p>
 </div>
 
 <form
