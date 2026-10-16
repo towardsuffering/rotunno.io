@@ -59,7 +59,10 @@ const steps = [
       {[0, 1, 2, 3].map((i) => <span data-dot={i} />)}
     </div>
 
-    <p class="converge__hint" aria-hidden="true">Scroll <span>↓</span> &nbsp;·&nbsp; move your cursor through the data</p>
+    <div class="converge__hint">
+      <p class="converge__hint-action" aria-hidden="true">Scroll <span>↓</span> &nbsp;·&nbsp; move your cursor through the data</p>
+      <p class="converge__hint-note">Illustration only: every data point here is fictional.</p>
+    </div>
   </div>
 </section>
 
@@ -150,8 +153,17 @@ const steps = [
     transform: translateX(-50%);
     font-size: 0.8rem;
     color: #7f93ad;
+    text-align: center;
     white-space: nowrap;
+  }
+  .converge__hint-action {
     transition: opacity 0.4s;
+  }
+  .converge__hint-note {
+    margin-top: 4px;
+    font-size: 0.7rem;
+    color: #8aa0bb;
+    font-style: italic;
   }
   .converge__hint span {
     display: inline-block;
@@ -218,7 +230,7 @@ const steps = [
     const ctx = canvas.getContext("2d")!;
     const steps = [...section.querySelectorAll<HTMLElement>("[data-step]")];
     const dots = [...section.querySelectorAll<HTMLElement>("[data-dot]")];
-    const hint = section.querySelector<HTMLElement>(".converge__hint");
+    const hint = section.querySelector<HTMLElement>(".converge__hint-action");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // view transitions keep this script alive across pages; stop when the hero leaves
     let alive = true;
