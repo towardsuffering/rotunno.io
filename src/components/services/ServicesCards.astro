@@ -29,8 +29,6 @@ const pillars = [
     slug: "predicting-patterns",
   },
 ];
-
-const industries = ["Financial Services", "Retail", "Food Service", "Home Improvement"];
 ---
 
 <section id="capabilities-cards" class="my-12 py-12">
@@ -86,19 +84,6 @@ const industries = ["Financial Services", "Retail", "Food Service", "Home Improv
           ))
         }
       </div>
-    </div>
-
-    <div class="mt-12 flex flex-col items-center gap-3" data-reveal="rise">
-      <p class="text-muted-foreground text-xs font-semibold tracking-widest uppercase">Applied across</p>
-      <ul class="flex flex-wrap justify-center gap-2">
-        {
-          industries.map((tag) => (
-            <li class="border-primary-accent/30 text-primary-accent bg-primary-accent/10 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide uppercase">
-              {tag}
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </div>
 </section>
