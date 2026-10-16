@@ -179,19 +179,16 @@ const steps = [
   }
 
   @media (max-width: 767px) {
+    /* phones: captions sit at the top under the nav, the shapes draw below them */
     .converge__captions {
-      top: auto;
-      bottom: 72px;
+      top: 144px;
       transform: none;
       width: auto;
       right: 16px;
       left: 16px;
-      height: 150px;
     }
     .converge__step {
       transform: none;
-      bottom: 0;
-      top: auto;
     }
     .converge__hint {
       bottom: 20px;
@@ -252,7 +249,10 @@ const steps = [
 
     // the area the shapes are drawn in, leaving room for captions
     function stage() {
-      if (mobile) return { x: 16, y: H * 0.12, w: W - 32, h: H * 0.5 };
+      if (mobile) {
+        const y = Math.max(305, H * 0.4);
+        return { x: 16, y, w: W - 32, h: H - y - 90 };
+      }
       const left = Math.min(W * 0.42, 560);
       return { x: left, y: H * 0.14, w: W - left - 80, h: H * 0.72 };
     }
