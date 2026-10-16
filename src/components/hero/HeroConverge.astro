@@ -18,7 +18,7 @@ const steps = [
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
 
     <div class="converge__captions">
-      <div class="converge__step converge__step--hero" data-step="0">
+      <div class="converge__step converge__step--hero is-active" data-step="0">
         <p class="converge__tag">01 / Fragmented</p>
         <h1 class="leading-tighter font-heading mb-4 text-4xl font-semibold text-white md:text-5xl xl:text-6xl">
           Ten years.<br />Four industries.
@@ -58,7 +58,7 @@ const steps = [
     </div>
 
     <div class="converge__rail" aria-hidden="true">
-      {[0, 1, 2, 3].map((i) => <span data-dot={i} />)}
+      {[0, 1, 2, 3].map((i) => <span data-dot={i} class:list={{ "is-active": i === 0 }} />)}
     </div>
 
     <div class="converge__hint">
@@ -269,7 +269,7 @@ const steps = [
     function stage() {
       if (mobile) {
         const y = Math.max(305, H * 0.4);
-        return { x: 16, y, w: W - 32, h: H - y - 90 };
+        return { x: 16, y, w: W - 32, h: Math.max(160, H - y - 90) };
       }
       const left = Math.min(W * 0.42, 560);
       return { x: left, y: H * 0.14, w: W - left - 80, h: H * 0.72 };
@@ -322,7 +322,7 @@ const steps = [
     function wordTargets(): Pt[] {
       const s = stage();
       const off = document.createElement("canvas");
-      const ow = Math.floor(s.w), oh = Math.floor(s.h);
+      const ow = Math.max(1, Math.floor(s.w)), oh = Math.max(1, Math.floor(s.h));
       off.width = ow; off.height = oh;
       const o = off.getContext("2d")!;
       const word = mobile ? "trusted." : "confidence.";
@@ -343,6 +343,7 @@ const steps = [
       for (let y = sp / 2; y < oh; y += sp)
         for (let x = sp / 2; x < ow; x += sp)
           if (data[(Math.floor(y) * ow + Math.floor(x)) * 4 + 3] > 140) pts.push({ x: s.x + x, y: s.y + y });
+      if (!pts.length) return chaosTargets();
       shuffle(pts);
       return particles.map((_, i) => pts[i % pts.length]);
     }
@@ -355,18 +356,22 @@ const steps = [
       return a;
     }
 
-    let builtWidth = -1;
+    let builtWidth = -1, builtHeight = -1;
     function build() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = canvas!.clientWidth;
       H = canvas!.clientHeight;
+      // in-app browsers (Facebook, LinkedIn) can lay the page out in a hidden or
+      // zero-size webview first; wait for a real viewport before building shapes
+      if (W < 50 || H < 50) return;
       mobile = W < 768;
       canvas!.width = Math.round(W * dpr);
       canvas!.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       // a height-only resize (phone address bar sliding) keeps every point where it is
-      if (W === builtWidth) return;
+      if (W === builtWidth && Math.abs(H - builtHeight) < 160) return;
       builtWidth = W;
+      builtHeight = H;
 
       const count = mobile ? 800 : 2400;
       if (particles.length !== count) {
@@ -405,10 +410,17 @@ const steps = [
 
     let lastActive = -1;
     function frame(time: number) {
-      if (section!.getBoundingClientRect().bottom <= 0) {
-        if (alive) requestAnimationFrame(frame);
-        return;
+      try {
+        draw(time);
+      } catch (err) {
+        console.error(err);
       }
+      if (alive) requestAnimationFrame(frame);
+    }
+
+    function draw(time: number) {
+      if (builtWidth < 0) return;
+      if (section!.getBoundingClientRect().bottom <= 0) return;
       // each step holds fully formed for the outer 20% of its scroll range on each side,
       // so the shape is in focus wherever a swipe happens to stop near it
       const raw = progress() * (STAGES - 1);
@@ -471,7 +483,6 @@ const steps = [
       }
 
       drawLabels(s);
-      if (alive) requestAnimationFrame(frame);
     }
 
     // hovering wires the points near the cursor into a network: edges to the cursor and between neighbours
@@ -559,11 +570,18 @@ const steps = [
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(build, 150);
     }, { signal });
+    // webviews don't always fire window resize when they're first shown
+    const ro = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(build, 150);
+    });
+    ro.observe(canvas);
+    signal.addEventListener("abort", () => ro.disconnect());
 
     build();
     // fonts change the word's shape; rebuild once they're ready
     document.fonts?.load('900 100px "Inter Variable"').then(() => {
-      if (alive) targets[3] = wordTargets();
+      if (alive && builtWidth > 0) targets[3] = wordTargets();
     });
     requestAnimationFrame(frame);
   }
