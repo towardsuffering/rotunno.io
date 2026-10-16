@@ -60,7 +60,7 @@ const steps = [
     </div>
 
     <div class="converge__hint">
-      <p class="converge__hint-action" aria-hidden="true">Scroll <span>↓</span> &nbsp;·&nbsp; move your cursor to connect the dots</p>
+      <p class="converge__hint-action" aria-hidden="true">Scroll <span>↓</span><span class="converge__hint-cursor"> &nbsp;·&nbsp; move your cursor to connect the dots</span></p>
       <p class="converge__hint-note">Illustration only: every dot here is fictional.</p>
     </div>
   </div>
@@ -156,6 +156,11 @@ const steps = [
     text-align: center;
     white-space: nowrap;
   }
+  @media (hover: none), (pointer: coarse) {
+    .converge__hint-cursor {
+      display: none;
+    }
+  }
   .converge__hint-action {
     transition: opacity 0.4s;
   }
@@ -165,7 +170,7 @@ const steps = [
     color: #8aa0bb;
     font-style: italic;
   }
-  .converge__hint span {
+  .converge__hint-action > span:first-child {
     display: inline-block;
     animation: converge-bob 1.6s ease-in-out infinite;
   }
@@ -332,20 +337,24 @@ const steps = [
       return a;
     }
 
+    let builtWidth = -1;
     function build() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = canvas!.clientWidth;
       H = canvas!.clientHeight;
       mobile = W < 768;
-      canvas!.width = W * dpr;
-      canvas!.height = H * dpr;
+      canvas!.width = Math.round(W * dpr);
+      canvas!.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // a height-only resize (phone address bar sliding) keeps every point where it is
+      if (W === builtWidth) return;
+      builtWidth = W;
 
-      const count = mobile ? 1100 : 2400;
+      const count = mobile ? 800 : 2400;
       if (particles.length !== count) {
         particles = Array.from({ length: count }, (_, i) => ({
-          x: Math.random() * W,
-          y: Math.random() * H,
+          x: 0,
+          y: 0,
           seed: Math.random(),
           phase: Math.random() * Math.PI * 2,
           group: i % GROUPS.length,
@@ -361,6 +370,11 @@ const steps = [
         targets[2].map((t) => mixRgb(lo, hi, clamp01((s.y + s.h - t.y) / s.h))),
         particles.map(() => hexToRgb(Math.random() < 0.85 ? "#34d399" : "#a7f3d0")),
       ];
+      // start every point on its scattered spot, so nothing streaks across the screen on load
+      particles.forEach((p, i) => {
+        p.x = targets[0][i].x;
+        p.y = targets[0][i].y;
+      });
     }
 
     const forced = new URLSearchParams(location.search).get("p");
@@ -373,6 +387,10 @@ const steps = [
 
     let lastActive = -1;
     function frame(time: number) {
+      if (section!.getBoundingClientRect().bottom <= 0) {
+        if (alive) requestAnimationFrame(frame);
+        return;
+      }
       const s = progress() * (STAGES - 1);
       const k = Math.min(STAGES - 2, Math.floor(s));
       const local = s - k;
@@ -507,6 +525,7 @@ const steps = [
     }
 
     canvas.addEventListener("pointermove", (e) => {
+      if (e.pointerType === "touch") return;
       const r = canvas.getBoundingClientRect();
       mouse.x = e.clientX - r.left;
       mouse.y = e.clientY - r.top;
@@ -521,7 +540,9 @@ const steps = [
 
     build();
     // fonts change the word's shape; rebuild once they're ready
-    document.fonts?.load('900 100px "Inter Variable"').then(() => alive && build());
+    document.fonts?.load('900 100px "Inter Variable"').then(() => {
+      if (alive) targets[3] = wordTargets();
+    });
     requestAnimationFrame(frame);
   }
 
