@@ -43,42 +43,40 @@ const pillars = [
       <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0" id="capabilities-list">
         {
           pillars.map((p, idx) => (
-            <div
-              class="pillar-column group flex flex-col items-center text-center"
-              data-reveal="rise"
-              data-reveal-delay={idx * 0.1}
-              data-capability-index={idx}
-            >
-              <!-- capital: abacus (wide slab) over echinus (the curve down to the shaft) -->
-              <div class="flex w-full flex-col items-center">
-                <div class="pillar-abacus h-2 w-full rounded-sm" />
-                <div class="pillar-echinus h-1.5 w-[88%] rounded-b-full" />
-              </div>
-
-              <div class="pillar-shaft relative flex w-full flex-1 flex-col items-center px-6 py-8 transition-colors">
-                <div class="pillar-flute pillar-flute-l" aria-hidden="true" />
-                <div class="pillar-flute pillar-flute-r" aria-hidden="true" />
-                <div
-                  class="relative mb-4 flex size-14 shrink-0 items-center justify-center rounded-full"
-                  style="background: color-mix(in srgb, #34d399 15%, transparent); color: #34d399;"
-                >
-                  <Icon name={p.icon} class="size-7" />
+            <div class="flex" data-reveal="rise" data-reveal-delay={idx * 0.1}>
+              <!-- the reveal animation owns this wrapper's transform; focus styles live on the inner column -->
+              <div class="pillar-column group flex w-full flex-col items-center text-center" data-capability-index={idx}>
+                <!-- capital: abacus (wide slab) over echinus (the curve down to the shaft) -->
+                <div class="flex w-full flex-col items-center">
+                  <div class="pillar-abacus h-2 w-full rounded-sm" />
+                  <div class="pillar-echinus h-1.5 w-[88%] rounded-b-full" />
                 </div>
-                <h3 class="relative font-heading text-lg font-semibold">{p.title}</h3>
-                <Button
-                  variant="ghost"
-                  arrow="right"
-                  href={getLocalizedRoute(currLocale, `/capabilities/${p.slug}`)}
-                  class="relative mt-4 font-medium hover:bg-transparent"
-                >
-                  Learn More <span class="sr-only">about {p.title}</span>
-                </Button>
-              </div>
 
-              <!-- base: fillet (the curve up from the shaft) over plinth (wide slab) -->
-              <div class="flex w-full flex-col items-center">
-                <div class="pillar-fillet h-1.5 w-[88%] rounded-t-full" />
-                <div class="pillar-plinth h-2.5 w-full rounded-sm" />
+                <div class="pillar-shaft relative flex w-full flex-1 flex-col items-center px-6 py-8 transition-colors">
+                  <div class="pillar-flute pillar-flute-l" aria-hidden="true" />
+                  <div class="pillar-flute pillar-flute-r" aria-hidden="true" />
+                  <div
+                    class="relative mb-4 flex size-14 shrink-0 items-center justify-center rounded-full"
+                    style="background: color-mix(in srgb, #34d399 15%, transparent); color: #34d399;"
+                  >
+                    <Icon name={p.icon} class="size-7" />
+                  </div>
+                  <h3 class="relative font-heading text-lg font-semibold">{p.title}</h3>
+                  <Button
+                    variant="ghost"
+                    arrow="right"
+                    href={getLocalizedRoute(currLocale, `/capabilities/${p.slug}`)}
+                    class="relative mt-4 font-medium hover:bg-transparent"
+                  >
+                    Learn More <span class="sr-only">about {p.title}</span>
+                  </Button>
+                </div>
+
+                <!-- base: fillet (the curve up from the shaft) over plinth (wide slab) -->
+                <div class="flex w-full flex-col items-center">
+                  <div class="pillar-fillet h-1.5 w-[88%] rounded-t-full" />
+                  <div class="pillar-plinth h-2.5 w-full rounded-sm" />
+                </div>
               </div>
             </div>
           ))
@@ -116,9 +114,6 @@ const pillars = [
       background-color 0.15s ease,
       border-color 0.15s ease;
   }
-  .pillar-column:hover .pillar-shaft {
-    background: color-mix(in srgb, #34d399 7%, var(--color-background));
-  }
 
   /* faint fluting, tucked against the shaft edges so it reads as texture,
      not clutter, behind the icon/text */
@@ -141,8 +136,11 @@ const pillars = [
      rather than a single shared "active" card. */
   .pillar-column {
     --focus: 0;
-    transform: scale(calc(0.96 + var(--focus, 0) * 0.04)) translateY(calc((1 - var(--focus, 0)) * 6px));
-    transition: transform 0.15s ease;
+    opacity: calc(0.45 + var(--focus, 0) * 0.55);
+    transform: scale(calc(0.94 + var(--focus, 0) * 0.06)) translateY(calc((1 - var(--focus, 0)) * 6px));
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
   }
   .pillar-column h3 {
     transition: color 0.15s ease;
@@ -163,11 +161,23 @@ const pillars = [
     const falloff = 260; // px of distance over which focus fades from 1 to 0
 
     const wave = 70; // px offset per card, so the focus peak sweeps left to right
+    const releaseAfter = 150; // px of scrolling after which a hover-picked pillar hands back to scroll focus
+
+    // Hovering (or tabbing to) a pillar picks it: it alone stays lit, the
+    // others dim, and it stays picked after the pointer leaves.
+    let picked: HTMLElement | null = null;
+    let pickedAtScroll = 0;
 
     function update() {
+      if (picked && Math.abs(window.scrollY - pickedAtScroll) > releaseAfter) picked = null;
+
       const baseReferenceY = window.innerHeight * 0.55;
 
       items.forEach((item, i) => {
+        if (picked) {
+          item.style.setProperty("--focus", item === picked ? "1" : "0");
+          return;
+        }
         // Scrolling down moves mid from high to low; subtracting per-index
         // offset makes the leftmost card (i=0) cross its target first,
         // so the focus peak visibly sweeps left to right as you scroll.
@@ -179,6 +189,20 @@ const pillars = [
         item.style.setProperty("--focus", focus.toFixed(3));
       });
     }
+
+    function pick(item: HTMLElement) {
+      picked = item;
+      pickedAtScroll = window.scrollY;
+      update();
+    }
+
+    items.forEach((item) => {
+      // touch screens have no real hover; they keep the scroll-driven focus
+      item.addEventListener("pointerenter", (e) => {
+        if (e.pointerType === "mouse") pick(item);
+      });
+      item.addEventListener("focusin", () => pick(item));
+    });
 
     update();
     window.addEventListener("scroll", update, { passive: true });
