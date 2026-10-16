@@ -12,6 +12,8 @@ const steps = [
 ---
 
 <section id="converge" class="converge" aria-label="Hero section">
+  <!-- one snap point per step, so a phone swipe settles on a fully formed shape -->
+  {[0, 1, 2, 3].map((i) => <div class="converge__snap" style={`top: ${(i * 280) / 3}vh`} aria-hidden="true" />)}
   <div class="converge__sticky">
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
 
@@ -67,6 +69,22 @@ const steps = [
 </section>
 
 <style>
+  .converge__snap {
+    position: absolute;
+    left: 0;
+    height: 1px;
+    width: 1px;
+    pointer-events: none;
+  }
+  @media (max-width: 767px) {
+    :global(html:has(#converge)) {
+      scroll-snap-type: y proximity;
+    }
+    .converge__snap {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+  }
   .converge {
     position: relative;
     height: 380vh;
@@ -391,7 +409,11 @@ const steps = [
         if (alive) requestAnimationFrame(frame);
         return;
       }
-      const s = progress() * (STAGES - 1);
+      // each step holds fully formed for the outer 20% of its scroll range on each side,
+      // so the shape is in focus wherever a swipe happens to stop near it
+      const raw = progress() * (STAGES - 1);
+      const seg = Math.min(STAGES - 2, Math.floor(raw));
+      const s = seg + clamp01((raw - seg - 0.2) / 0.6);
       const k = Math.min(STAGES - 2, Math.floor(s));
       const local = s - k;
       const active = Math.round(s);
