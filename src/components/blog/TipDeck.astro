@@ -1,0 +1,401 @@
+---
+/**
+ * Compact, filterable library of "Tip of the Day" posts for blog articles:
+ * category chips over a dense list, with the selected tip in a detail pane beside it
+ * (above it on phones). Without JavaScript every tip is shown, stacked.
+ *
+ *   import TipDeck from "@/components/blog/TipDeck.astro";
+ *   import { tips } from "./tips";
+ *   <TipDeck tips={tips} />
+ */
+import type { Tip } from "./tipTypes";
+
+interface Props {
+  tips: Tip[];
+  label?: string;
+}
+
+const { tips, label = "Tip of the Day" } = Astro.props as Props;
+const uid = `tipdeck-${Math.random().toString(36).slice(2, 8)}`;
+
+const cats = [...new Set(tips.map((t) => t.cat))];
+const palette = ["#34d399", "#38bdf8", "#a78bfa", "#f59e0b", "#f472b6", "#94a3b8"];
+const color = (cat: string) => palette[cats.indexOf(cat) % palette.length];
+---
+
+<div class="not-content tipdeck" data-tipdeck>
+  <div class="td-head">
+    <span class="td-badge">🔧 {label}</span>
+    <span class="td-meta">{tips.length} tips posted to my team</span>
+  </div>
+
+  <div class="td-chips" role="toolbar" aria-label="Filter tips by category">
+    <button type="button" class="td-chip" data-filter="all" aria-pressed="true">
+      All <span>{tips.length}</span>
+    </button>
+    {
+      cats.map((c) => (
+        <button type="button" class="td-chip" data-filter={c} aria-pressed="false" style={`--c: ${color(c)}`}>
+          <i aria-hidden="true" />
+          {c} <span>{tips.filter((t) => t.cat === c).length}</span>
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="td-grid">
+    <ol class="td-list" aria-label="Tips">
+      {
+        tips.map((t, i) => (
+          <li data-cat={t.cat}>
+            <button
+              type="button"
+              class="td-row"
+              data-i={i}
+              aria-controls={`${uid}-d${i}`}
+              aria-current={i === 0 ? "true" : undefined}
+              style={`--c: ${color(t.cat)}`}
+            >
+              <span class="td-row-title">{t.title}</span>
+              <span class="td-row-sum">{t.summary}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="td-detail">
+      {
+        tips.map((t, i) => (
+          <article id={`${uid}-d${i}`} class:list={["td-card", { "is-active": i === 0 }]} data-d={i} style={`--c: ${color(t.cat)}`}>
+            <p class="td-card-cat">{t.cat}</p>
+            <h3 class="td-card-title">{t.title}</h3>
+            <p class="td-card-sum">{t.summary}</p>
+            <p class="td-card-body">{t.body}</p>
+            {t.say && (
+              <div class="td-say">
+                <span>{t.whenLabel ?? "Say it"}</span>
+                <p>“{t.say}”</p>
+              </div>
+            )}
+          </article>
+        ))
+      }
+      <div class="td-nav">
+        <button type="button" data-dir="-1" aria-label="Previous tip">←</button>
+        <span aria-live="polite"><b data-pos>1</b> / <span data-total>{tips.length}</span></span>
+        <button type="button" data-dir="1" aria-label="Next tip">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tipdeck {
+    margin: 2rem 0;
+    padding: 0.875rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.875rem;
+    background: color-mix(in srgb, var(--color-primary) 4%, var(--color-background));
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .td-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.125rem 0.75rem;
+  }
+  .td-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  .td-meta {
+    font-size: 0.75rem;
+    color: var(--color-muted-foreground);
+  }
+
+  /* filter chips: one tight, wrapping row */
+  .td-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3125rem;
+    margin: 0.625rem 0;
+  }
+  .td-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    padding: 0.125rem 0.5625rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-muted-foreground);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+  .td-chip i {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 999px;
+    background: var(--c);
+  }
+  .td-chip span {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.7;
+  }
+  .td-chip:hover {
+    color: var(--color-foreground);
+  }
+  .td-chip[aria-pressed="true"] {
+    color: var(--color-foreground);
+    border-color: var(--c, var(--color-primary));
+    background: color-mix(in srgb, var(--c, var(--color-primary)) 14%, transparent);
+  }
+
+  .td-grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+  @media (min-width: 768px) {
+    .td-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      align-items: start;
+    }
+  }
+
+  /* the list: two-line rows, scrolling inside a fixed height */
+  .td-list {
+    position: relative; /* rows measure offsetTop from the list itself, for keeping the selection in view */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-height: 17rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-top: 1px solid var(--color-border);
+    scrollbar-width: thin;
+  }
+  @media (min-width: 768px) {
+    .td-list {
+      max-height: 19.5rem;
+    }
+  }
+  .td-list li[hidden] {
+    display: none;
+  }
+  .td-row {
+    display: grid;
+    width: 100%;
+    padding: 0.3125rem 0.5rem 0.3125rem 0.625rem;
+    border-bottom: 1px solid var(--color-border);
+    border-left: 3px solid var(--c);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .td-row:hover {
+    background: color-mix(in srgb, var(--c) 8%, transparent);
+  }
+  .td-row[aria-current="true"] {
+    background: color-mix(in srgb, var(--c) 16%, transparent);
+  }
+  .td-row:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+  .td-row-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-foreground);
+  }
+  .td-row-sum {
+    overflow: hidden;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--color-muted-foreground);
+  }
+
+  /* the detail pane: every card shares one grid cell, so it holds the tallest card's height */
+  .td-detail {
+    display: grid;
+  }
+  .td-card {
+    grid-area: 1 / 1;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--c);
+    border-radius: 0.625rem;
+    background: var(--color-background);
+  }
+  .td-card + .td-card {
+    margin-top: 0.75rem; /* stacked, before JS */
+  }
+  .td-nav {
+    display: none;
+  }
+  :global([data-tipdeck].is-ready) .td-card {
+    margin-top: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+  :global([data-tipdeck].is-ready) .td-card.is-active {
+    visibility: visible;
+    opacity: 1;
+  }
+  :global([data-tipdeck].is-ready) .td-nav {
+    grid-area: 2 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-muted-foreground);
+  }
+  /* on phones the selected tip sits above the list, so a tap shows it right away */
+  @media (max-width: 767px) {
+    :global([data-tipdeck].is-ready) .td-detail {
+      order: -1;
+    }
+  }
+  .td-nav b {
+    color: var(--color-foreground);
+  }
+  .td-nav button {
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+  .td-nav button:hover {
+    background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  }
+  .td-card-cat {
+    margin: 0 0 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+  .td-card-title {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-foreground);
+  }
+  .td-card-sum {
+    margin: 0.125rem 0 0.5rem;
+    font-weight: 600;
+    color: var(--c);
+  }
+  .td-card-body {
+    margin: 0;
+    color: var(--color-foreground);
+  }
+  .td-say {
+    margin-top: 0.625rem;
+  }
+  .td-say span {
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted-foreground);
+  }
+  .td-say p {
+    margin: 0;
+    padding: 0.4375rem 0.75rem;
+    border-radius: 0.75rem 0.75rem 0.75rem 0.25rem;
+    background: color-mix(in srgb, var(--c) 16%, transparent);
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+</style>
+
+<script>
+  function initTipDecks() {
+    document.querySelectorAll<HTMLElement>("[data-tipdeck]:not(.is-ready)").forEach((deck) => {
+      const chips = [...deck.querySelectorAll<HTMLButtonElement>("[data-filter]")];
+      const items = [...deck.querySelectorAll<HTMLLIElement>(".td-list li")];
+      const rows = items.map((li) => li.querySelector<HTMLButtonElement>(".td-row")!);
+      const cards = [...deck.querySelectorAll<HTMLElement>("[data-d]")];
+      const pos = deck.querySelector<HTMLElement>("[data-pos]");
+      const total = deck.querySelector<HTMLElement>("[data-total]");
+      const list = deck.querySelector<HTMLElement>(".td-list")!;
+      let current = 0;
+
+      const visible = () => items.map((li, i) => (li.hidden ? -1 : i)).filter((i) => i >= 0);
+
+      function select(i: number, focus = false) {
+        current = i;
+        rows.forEach((r, k) => (k === i ? r.setAttribute("aria-current", "true") : r.removeAttribute("aria-current")));
+        cards.forEach((c, k) => c.classList.toggle("is-active", k === i));
+        const v = visible();
+        if (pos) pos.textContent = String(v.indexOf(i) + 1);
+        if (total) total.textContent = String(v.length);
+        // keep the selected row in view inside the list, without scrolling the page
+        const r = rows[i];
+        if (r.offsetTop < list.scrollTop) list.scrollTop = r.offsetTop;
+        else if (r.offsetTop + r.offsetHeight > list.scrollTop + list.clientHeight)
+          list.scrollTop = r.offsetTop + r.offsetHeight - list.clientHeight;
+        if (focus) r.focus({ preventScroll: true });
+      }
+
+      function step(dir: number, focus = false) {
+        const v = visible();
+        const k = v.indexOf(current);
+        select(v[(k + dir + v.length) % v.length], focus);
+      }
+
+      chips.forEach((chip) =>
+        chip.addEventListener("click", () => {
+          const f = chip.dataset.filter!;
+          chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+          items.forEach((li) => (li.hidden = f !== "all" && li.dataset.cat !== f));
+          list.scrollTop = 0;
+          const v = visible();
+          select(v.includes(current) ? current : v[0]);
+        }),
+      );
+      rows.forEach((r, i) => {
+        r.addEventListener("click", () => select(i));
+        r.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+            e.preventDefault();
+            step(e.key === "ArrowDown" ? 1 : -1, true);
+          }
+        });
+      });
+      deck.querySelectorAll<HTMLButtonElement>("[data-dir]").forEach((b) =>
+        b.addEventListener("click", () => step(Number(b.dataset.dir))),
+      );
+
+      deck.classList.add("is-ready");
+      select(0);
+    });
+  }
+
+  initTipDecks();
+  document.addEventListener("astro:after-swap", initTipDecks);
+</script>
