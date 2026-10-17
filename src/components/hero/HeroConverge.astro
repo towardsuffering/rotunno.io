@@ -552,7 +552,7 @@ const steps = [
         const cx = st.x + cw * ((i % cols) + 0.5);
         const cy = st.y + ch * (Math.floor(i / cols) + 0.45);
         ctx.fillStyle = GROUP_COLORS[i];
-        ctx.fillText(g.toUpperCase(), cx, cy + r + 26);
+        ctx.fillText(g.toUpperCase(), cx, cy + r + (mobile ? 15 : 26));
       });
       ctx.restore();
     }
