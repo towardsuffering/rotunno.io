@@ -137,6 +137,9 @@ const faqData = getTranslatedData("faqData", currLocale);
         if (e.pointerType === "mouse") pick(item);
       });
       item.addEventListener("focusin", () => pick(item));
+      // tapping or clicking the + (or anywhere on the question) moves the highlight to it,
+      // since phones never send hover or, on iOS, focus for a tap
+      item.addEventListener("click", () => pick(item));
     });
 
     update();
