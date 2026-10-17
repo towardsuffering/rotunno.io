@@ -535,7 +535,7 @@ const steps = [
       GROUPS.forEach((g, i) => {
         const cx = st.x + cw * ((i % cols) + 0.5);
         ctx.fillStyle = GROUP_COLORS[i];
-        ctx.fillText(g.toUpperCase(), cx, labelY[i] + (mobile ? 17 : 24));
+        ctx.fillText(g.toUpperCase(), cx, labelY[i] + (mobile ? 27 : 30));
       });
       ctx.restore();
     }
