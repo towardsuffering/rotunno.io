@@ -12,8 +12,6 @@ const steps = [
 ---
 
 <section id="converge" class="converge" aria-label="Hero section">
-  <!-- one snap point per step, so a phone swipe settles on a fully formed shape -->
-  {[0, 1, 2, 3].map((i) => <div class="converge__snap" style={`top: ${(i * 280) / 3}vh`} aria-hidden="true" />)}
   <div class="converge__sticky">
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
 
@@ -69,22 +67,6 @@ const steps = [
 </section>
 
 <style>
-  .converge__snap {
-    position: absolute;
-    left: 0;
-    height: 1px;
-    width: 1px;
-    pointer-events: none;
-  }
-  @media (max-width: 767px) {
-    :global(html:has(#converge)) {
-      scroll-snap-type: y proximity;
-    }
-    .converge__snap {
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-    }
-  }
   .converge {
     position: relative;
     height: 380vh;
@@ -357,6 +339,7 @@ const steps = [
     }
 
     let builtWidth = -1, builtHeight = -1;
+    let labelY: number[] = []; // bottom edge of each formed cluster
     function build() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = canvas!.clientWidth;
@@ -385,6 +368,8 @@ const steps = [
         }));
       }
       targets = [chaosTargets(), clusterTargets(), chartTargets(), wordTargets()];
+      labelY = GROUPS.map(() => 0);
+      particles.forEach((p, i) => (labelY[p.group] = Math.max(labelY[p.group], targets[1][i].y)));
       const s = stage();
       const lo = hexToRgb("#0ea5e9"), hi = hexToRgb("#7dd3fc");
       colors = [
@@ -541,18 +526,16 @@ const steps = [
       const alpha = clamp01(1 - Math.abs(s - 1) * 2.2);
       if (alpha <= 0) return;
       const st = stage();
-      const cols = mobile ? 2 : 4, rows = mobile ? 2 : 1;
-      const cw = st.w / cols, ch = st.h / rows;
-      const r = Math.min(cw, ch) * 0.32;
+      const cols = mobile ? 2 : 4;
+      const cw = st.w / cols;
       ctx.save();
       ctx.globalAlpha = alpha;
       ctx.font = `600 ${mobile ? 11 : 13}px "Inter Variable", system-ui, sans-serif`;
       ctx.textAlign = "center";
       GROUPS.forEach((g, i) => {
         const cx = st.x + cw * ((i % cols) + 0.5);
-        const cy = st.y + ch * (Math.floor(i / cols) + 0.45);
         ctx.fillStyle = GROUP_COLORS[i];
-        ctx.fillText(g.toUpperCase(), cx, cy + r + (mobile ? 15 : 26));
+        ctx.fillText(g.toUpperCase(), cx, labelY[i] + (mobile ? 17 : 24));
       });
       ctx.restore();
     }
@@ -577,6 +560,42 @@ const steps = [
     });
     ro.observe(canvas);
     signal.addEventListener("abort", () => ro.disconnect());
+
+    // Touch screens: each swipe moves exactly one step, however hard the fling.
+    // Inside the hero the page doesn't scroll natively; a swipe animates to the
+    // next (or previous) step, and a swipe past the last step leaves the hero.
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      const stepY = (i: number) => {
+        const top = section.getBoundingClientRect().top + window.scrollY;
+        if (i >= STAGES) return top + section.offsetHeight; // the content after the hero
+        return top + ((section.offsetHeight - window.innerHeight) * Math.max(0, i)) / (STAGES - 1);
+      };
+      const nearestStep = () => {
+        let best = 0;
+        for (let i = 1; i <= STAGES; i++) if (Math.abs(stepY(i) - window.scrollY) < Math.abs(stepY(best) - window.scrollY)) best = i;
+        return best;
+      };
+      let startY = 0, owned = false, current = 0, moving = 0;
+      window.addEventListener("touchstart", (e) => {
+        startY = e.touches[0].clientY;
+        // only take over while the page is on (or between) the hero's steps
+        // (touches on the nav or an open menu keep their normal scrolling)
+        owned = e.touches.length === 1 && section.contains(e.target as Node) && window.scrollY <= stepY(STAGES - 1) + 2;
+        if (owned && performance.now() > moving) current = nearestStep();
+      }, { passive: true, signal });
+      window.addEventListener("touchmove", (e) => {
+        if (owned && e.cancelable) e.preventDefault();
+      }, { passive: false, signal });
+      window.addEventListener("touchend", (e) => {
+        if (!owned) return;
+        owned = false;
+        const dy = startY - e.changedTouches[0].clientY;
+        if (Math.abs(dy) < 24) return; // a tap, not a swipe
+        current = Math.max(0, Math.min(STAGES, current + (dy > 0 ? 1 : -1)));
+        moving = performance.now() + 700; // swipes during the glide keep counting from its target
+        window.scrollTo({ top: stepY(current), behavior: reduce ? "auto" : "smooth" });
+      }, { passive: true, signal });
+    }
 
     build();
     // fonts change the word's shape; rebuild once they're ready
