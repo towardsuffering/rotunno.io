@@ -35,46 +35,70 @@ const pillars = [
   <div class="site-container" id="capabilities-cards-trigger">
     <h2 class="h2 mx-auto max-w-3xl text-center" data-reveal="pop">Core Capabilities</h2>
 
-    <div class="pillars-row relative mt-20">
-      <!-- entablature: the beam the four pillars hold up -->
-      <div class="pillar-beam absolute -top-5 right-0 left-0 hidden h-2 rounded-full lg:block">
+    <div class="temple relative mx-auto mt-16 max-w-5xl">
+      <!-- roof: pediment over the entablature (cornice, frieze, architrave) -->
+      <div class="hidden lg:block" aria-hidden="true">
+        <svg class="pediment block h-16 w-full" viewBox="0 0 100 10" preserveAspectRatio="none">
+          <polygon points="0,10 50,0.6 100,10" vector-effect="non-scaling-stroke" />
+        </svg>
+        <div class="temple-cornice h-2.5 rounded-sm" />
+        <div class="temple-frieze mx-3 h-4" />
+        <div class="temple-architrave mx-5 h-2.5 rounded-b-sm" />
       </div>
 
-      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0" id="capabilities-list">
+      <div
+        class="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 lg:grid-cols-4 lg:gap-x-10 lg:px-10"
+        id="capabilities-list"
+      >
         {
           pillars.map((p, idx) => (
-            <div class="flex" data-reveal="rise" data-reveal-delay={idx * 0.1}>
+            <div class="flex justify-center" data-reveal="rise" data-reveal-delay={idx * 0.1}>
               <!-- the reveal animation owns this wrapper's transform; focus styles live on the inner column -->
-              <div class="pillar-column group flex w-full flex-col items-center text-center" data-capability-index={idx}>
-                <!-- capital: abacus (wide slab) over echinus (the curve down to the shaft) -->
-                <div class="flex w-full flex-col items-center">
-                  <div class="pillar-abacus h-2 w-full rounded-sm" />
-                  <div class="pillar-echinus h-1.5 w-[88%] rounded-b-full" />
+              <div
+                class="pillar-column flex w-full max-w-[230px] flex-col items-center text-center"
+                data-capability-index={idx}
+              >
+                <!-- Ionic capital: abacus slab, volutes scrolling off an echinus, astragal ring at the neck -->
+                <div class="flex w-full flex-col items-center" aria-hidden="true">
+                  <div class="pillar-abacus h-2.5 w-full rounded-sm" />
+                  <div class="flex h-6 w-full items-start">
+                    <svg class="pillar-volute size-6 shrink-0" viewBox="0 0 24 24">
+                      <path d="M12 12 A1.5 1.5 0 0 1 15 12 A3 3 0 0 1 9 12 A4.5 4.5 0 0 1 18 12 A6 6 0 0 1 6 12 A6.5 6.5 0 0 1 12 1" />
+                    </svg>
+                    <div class="pillar-echinus h-3.5 flex-1 rounded-b-[50%]" />
+                    <svg class="pillar-volute size-6 shrink-0 -scale-x-100" viewBox="0 0 24 24">
+                      <path d="M12 12 A1.5 1.5 0 0 1 15 12 A3 3 0 0 1 9 12 A4.5 4.5 0 0 1 18 12 A6 6 0 0 1 6 12 A6.5 6.5 0 0 1 12 1" />
+                    </svg>
+                  </div>
+                  <div class="pillar-astragal h-1.5 w-[80%] rounded-full" />
                 </div>
 
-                <div class="pillar-shaft relative flex w-full flex-1 flex-col items-center px-6 py-8 transition-colors">
-                  <div class="pillar-flute pillar-flute-l" aria-hidden="true" />
-                  <div class="pillar-flute pillar-flute-r" aria-hidden="true" />
+                <!-- fluted shaft with a slight entasis taper toward the top -->
+                <div class="pillar-shaft relative flex w-[78%] flex-1 flex-col items-center px-2 pt-8 pb-10 lg:pt-10 lg:pb-14">
                   <div
-                    class="relative mb-4 flex size-14 shrink-0 items-center justify-center rounded-full"
-                    style="background: color-mix(in srgb, #34d399 15%, transparent); color: #34d399;"
+                    class="relative mb-4 flex size-12 shrink-0 items-center justify-center rounded-full lg:size-14"
+                    style="background: color-mix(in srgb, #34d399 15%, var(--color-background)); color: #34d399;"
                   >
-                    <Icon name={p.icon} class="size-7" />
+                    <Icon name={p.icon} class="size-6 lg:size-7" />
                   </div>
-                  <h3 class="relative font-heading text-lg font-semibold">{p.title}</h3>
+                  <h3 class="pillar-title relative font-heading text-sm leading-snug font-semibold sm:text-base lg:text-lg">
+                    {p.title}
+                  </h3>
                   <Button
                     variant="ghost"
                     arrow="right"
                     href={getLocalizedRoute(currLocale, `/capabilities/${p.slug}`)}
-                    class="relative mt-4 font-medium hover:bg-transparent"
+                    class="relative mt-auto px-2 pt-6 text-sm font-medium hover:bg-transparent lg:text-base"
                   >
                     Learn More <span class="sr-only">about {p.title}</span>
                   </Button>
                 </div>
 
-                <!-- base: fillet (the curve up from the shaft) over plinth (wide slab) -->
-                <div class="flex w-full flex-col items-center">
-                  <div class="pillar-fillet h-1.5 w-[88%] rounded-t-full" />
+                <!-- Attic base: torus, scotia, torus, plinth -->
+                <div class="flex w-full flex-col items-center" aria-hidden="true">
+                  <div class="pillar-torus h-2 w-[86%] rounded-full" />
+                  <div class="pillar-scotia h-1 w-[80%]" />
+                  <div class="pillar-torus h-2.5 w-[94%] rounded-full" />
                   <div class="pillar-plinth h-2.5 w-full rounded-sm" />
                 </div>
               </div>
@@ -82,53 +106,89 @@ const pillars = [
           ))
         }
       </div>
+
+      <!-- stylobate: the stepped platform the colonnade stands on -->
+      <div class="hidden lg:block" aria-hidden="true">
+        <div class="temple-step mx-4 h-2.5" />
+        <div class="temple-step mx-1 h-2.5" />
+        <div class="temple-step -mx-2 h-2.5 rounded-b-sm" />
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .pillar-beam {
-    background: linear-gradient(
-      90deg,
-      transparent,
-      color-mix(in srgb, #34d399 45%, transparent) 12%,
-      color-mix(in srgb, #34d399 45%, transparent) 88%,
-      transparent
-    );
+  /* stone tones: the site's green, mixed into the background */
+  .temple {
+    --stone: color-mix(in srgb, #34d399 24%, var(--color-background));
+    --stone-light: color-mix(in srgb, #34d399 34%, var(--color-background));
+    --stone-dark: color-mix(in srgb, #34d399 14%, var(--color-background));
+  }
+
+  .pediment polygon {
+    fill: color-mix(in srgb, #34d399 7%, var(--color-background));
+    stroke: color-mix(in srgb, #34d399 45%, transparent);
+    stroke-width: 1.5px;
+  }
+  .temple-cornice,
+  .temple-architrave {
+    background: var(--stone);
+  }
+  /* frieze: triglyph-like grooves between the cornice and architrave */
+  .temple-frieze {
+    background:
+      repeating-linear-gradient(90deg, var(--stone-light) 0 3px, transparent 3px 6px, var(--stone-light) 6px 9px, transparent 9px 44px),
+      var(--stone-dark);
+  }
+  .temple-step {
+    background: var(--stone-dark);
+    border-top: 1px solid var(--stone-light);
   }
 
   .pillar-abacus,
   .pillar-plinth {
-    background: color-mix(in srgb, #34d399 28%, transparent);
+    background: var(--stone-light);
   }
   .pillar-echinus,
-  .pillar-fillet {
-    background: color-mix(in srgb, #34d399 18%, transparent);
+  .pillar-torus {
+    background: var(--stone);
+  }
+  .pillar-astragal {
+    background: var(--stone-light);
+  }
+  .pillar-scotia {
+    background: var(--stone-dark);
+  }
+  .pillar-volute {
+    fill: none;
+    stroke: var(--stone-light);
+    stroke-width: 2.2;
+    stroke-linecap: round;
   }
 
+  /* fluting (vertical grooves) over cylinder shading (dark edges, lit middle);
+     the flutes and light both rise with focus */
   .pillar-shaft {
-    background: color-mix(in srgb, #34d399 calc(3% + var(--focus, 0) * 12%), var(--color-background));
-    border-right: 1px solid color-mix(in srgb, #34d399 calc(18% + var(--focus, 0) * 30%), transparent);
-    border-left: 1px solid color-mix(in srgb, #34d399 calc(18% + var(--focus, 0) * 30%), transparent);
-    transition:
-      background-color 0.15s ease,
-      border-color 0.15s ease;
+    min-height: 260px;
+    clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
+    background:
+      repeating-linear-gradient(
+        90deg,
+        color-mix(in srgb, #34d399 calc(14% + var(--focus, 0) * 14%), transparent) 0 1px,
+        transparent 1px 12%
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, #34d399 6%, var(--color-background)) 0%,
+        color-mix(in srgb, #34d399 calc(12% + var(--focus, 0) * 10%), var(--color-background)) 40%,
+        color-mix(in srgb, #34d399 calc(10% + var(--focus, 0) * 8%), var(--color-background)) 60%,
+        color-mix(in srgb, #34d399 4%, var(--color-background)) 100%
+      );
   }
-
-  /* faint fluting, tucked against the shaft edges so it reads as texture,
-     not clutter, behind the icon/text */
-  .pillar-flute {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: color-mix(in srgb, #34d399 12%, transparent);
-  }
-  .pillar-flute-l {
-    left: 14px;
-  }
-  .pillar-flute-r {
-    right: 14px;
+  @media (min-width: 1024px) {
+    .pillar-shaft {
+      min-height: 360px;
+    }
   }
 
   /* Continuous, independent-per-card focus driven by scroll position:
@@ -136,13 +196,14 @@ const pillars = [
      rather than a single shared "active" card. */
   .pillar-column {
     --focus: 0;
-    opacity: calc(0.45 + var(--focus, 0) * 0.55);
-    transform: scale(calc(0.94 + var(--focus, 0) * 0.06)) translateY(calc((1 - var(--focus, 0)) * 6px));
+    /* light only, no scale: the columns have to keep holding up the roof */
+    opacity: calc(0.6 + var(--focus, 0) * 0.4);
+    filter: drop-shadow(0 0 calc(var(--focus, 0) * 18px) color-mix(in srgb, #34d399 30%, transparent));
     transition:
       opacity 0.15s ease,
-      transform 0.15s ease;
+      filter 0.15s ease;
   }
-  .pillar-column h3 {
+  .pillar-title {
     transition: color 0.15s ease;
     color: color-mix(in srgb, #34d399 calc(var(--focus, 0) * 100%), var(--color-foreground));
   }
