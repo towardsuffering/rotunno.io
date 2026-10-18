@@ -160,6 +160,10 @@ const steps = [
     height: 380vh;
     background: radial-gradient(ellipse at 50% 0%, #0c1f3d 0%, #050d1c 55%, #02060e 100%);
     color: #e6f1ff;
+    /* the hero's sky dissolves into the site-wide one behind it over its last stretch, instead of
+       ending on a hard line; the pinned scene fades with it as it scrolls away */
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 50vh), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 50vh), transparent);
   }
   .converge__sticky {
     position: sticky;
