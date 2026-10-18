@@ -1,0 +1,190 @@
+---
+/**
+ * Florida drawn as a constellation: stars on the key points of the real state outline, joined
+ * by faint lines, with the Northeast Florida territory as a brighter green constellation inside it.
+ * Points are simplified from the traced outline at build time, so no coordinates are hand-placed.
+ */
+import { FLORIDA_PATH, HOME, NE_FLORIDA_PATH } from "./floridaPaths";
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+type Pt = [number, number];
+
+// "M x,y L x,y ... Z M ..." into one point list per subpath
+function subpaths(d: string): Pt[][] {
+  return d
+    .split("M")
+    .filter((p) => p.trim())
+    .map((p) =>
+      [...p.replace(/Z/g, "").matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])] as Pt),
+    );
+}
+
+// Ramer-Douglas-Peucker: keep only the points that carry the shape
+function simplify(pts: Pt[], eps: number): Pt[] {
+  if (pts.length < 3) return pts;
+  const [a, b] = [pts[0], pts[pts.length - 1]];
+  let worst = 0;
+  let at = 0;
+  for (let i = 1; i < pts.length - 1; i++) {
+    const [x, y] = pts[i];
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+    const dist = Math.abs((b[1] - a[1]) * x - (b[0] - a[0]) * y + b[0] * a[1] - b[1] * a[0]) / len;
+    if (dist > worst) [worst, at] = [dist, i];
+  }
+  if (worst <= eps) return [a, b];
+  return [...simplify(pts.slice(0, at + 1), eps).slice(0, -1), ...simplify(pts.slice(at), eps)];
+}
+
+// a closed ring loses its duplicate end point
+const ring = (pts: Pt[], eps: number) => {
+  const s = simplify(pts, eps);
+  return s.length > 2 && s[0][0] === s.at(-1)![0] && s[0][1] === s.at(-1)![1] ? s.slice(0, -1) : s;
+};
+
+const state = subpaths(FLORIDA_PATH)
+  .map((p) => ring(p, 4.5))
+  .filter((p) => p.length >= 3);
+const ne = subpaths(NE_FLORIDA_PATH).map((p) => ring(p, 3.5))[0];
+
+const poly = (pts: Pt[]) => pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+// deterministic "random" per star, so every build draws the same sky
+const hash = (x: number, y: number) => {
+  const v = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+  return v - Math.floor(v);
+};
+const stars = (pts: Pt[]) => pts.map(([x, y]) => ({ x, y, h: hash(x, y) }));
+---
+
+<svg class={className} viewBox="-14 -26 300 228" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="fl-star-glow">
+      <stop offset="0" stop-color="#e6f1ff" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#e6f1ff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="fl-star-glow-green">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0.7" />
+      <stop offset="1" stop-color="#34d399" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- the state: thin constellation lines between its stars -->
+  {state.map((p) => <polygon points={poly(p)} class="fl-line" />)}
+  {
+    state.flatMap(stars).map((s) => (
+      <g class="fl-star" style={`--d: ${(s.h * 4).toFixed(2)}s`}>
+        <circle cx={s.x} cy={s.y} r={3 + s.h * 3} fill="url(#fl-star-glow)" />
+        <circle cx={s.x} cy={s.y} r={0.7 + s.h * 0.9} fill="#e6f1ff" />
+      </g>
+    ))
+  }
+
+  <!-- Northeast Florida: shaded, with brighter green stars -->
+  <polygon points={poly(ne)} class="fl-ne" />
+  {
+    stars(ne).map((s) => (
+      <g class="fl-star" style={`--d: ${(s.h * 4).toFixed(2)}s`}>
+        <circle cx={s.x} cy={s.y} r={4 + s.h * 3} fill="url(#fl-star-glow-green)" />
+        <circle cx={s.x} cy={s.y} r={1 + s.h * 0.8} fill="#a7f3d0" />
+      </g>
+    ))
+  }
+
+  <!-- home base: the brightest star -->
+  <circle cx={HOME.x} cy={HOME.y} r="12" fill="url(#fl-star-glow-green)" class="fl-home-glow" />
+  <circle cx={HOME.x} cy={HOME.y} r="2.6" fill="#ecfdf5" />
+  <path d={`M${HOME.x} ${HOME.y - 7}V${HOME.y + 7}M${HOME.x - 7} ${HOME.y}H${HOME.x + 7}`} class="fl-spike" />
+
+  <!-- star-chart labels -->
+  <!-- labels sit up and to the left, over the land, so they never run off the screen's right edge -->
+  <polyline points={`${HOME.x - 6},${HOME.y - 6} ${HOME.x - 22},${HOME.y - 26} ${HOME.x - 30},${HOME.y - 26}`} fill="none" class="fl-leader" />
+  <text x={HOME.x - 33} y={HOME.y - 28} class="fl-name" text-anchor="end">NORTHEAST FLORIDA</text>
+  <text x={HOME.x - 33} y={HOME.y - 19} class="fl-sub" text-anchor="end">home base</text>
+  <text x="112" y="160" class="fl-state">FLORIDA</text>
+</svg>
+
+<style>
+  svg {
+    overflow: visible;
+  }
+  .fl-line {
+    fill: none;
+    stroke: #a5bedb;
+    stroke-opacity: 0.32;
+    stroke-width: 0.6;
+    stroke-linejoin: round;
+  }
+  .fl-ne {
+    fill: #34d399;
+    fill-opacity: 0.1;
+    stroke: #34d399;
+    stroke-opacity: 0.6;
+    stroke-width: 0.8;
+    stroke-linejoin: round;
+  }
+  .fl-star {
+    animation: fl-twinkle 4s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  @keyframes fl-twinkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+  .fl-home-glow {
+    animation: fl-pulse 2.6s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes fl-pulse {
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.25);
+    }
+  }
+  .fl-spike {
+    stroke: #ecfdf5;
+    stroke-opacity: 0.7;
+    stroke-width: 0.5;
+  }
+  .fl-leader {
+    fill: none;
+    stroke: #34d399;
+    stroke-opacity: 0.5;
+    stroke-width: 0.5;
+  }
+  .fl-name {
+    fill: #a7f3d0;
+    font: 700 6.5px "Inter Variable", system-ui, sans-serif;
+    letter-spacing: 0.18em;
+  }
+  .fl-sub {
+    fill: #8aa0bb;
+    font: italic 500 6px "Inter Variable", system-ui, sans-serif;
+    letter-spacing: 0.04em;
+  }
+  .fl-state {
+    fill: #8aa0bb;
+    fill-opacity: 0.7;
+    font: 600 6px "Inter Variable", system-ui, sans-serif;
+    letter-spacing: 0.5em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fl-star,
+    .fl-home-glow {
+      animation: none;
+    }
+  }
+</style>

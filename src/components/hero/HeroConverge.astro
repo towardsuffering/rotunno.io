@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import Button from "@/components/button/Button.astro";
+import FloridaConstellation from "@/components/hero/FloridaConstellation.astro";
 
 // Scroll-driven hero: scattered data points sort, structure, and finally spell "confidence."
 const steps = [
@@ -13,6 +14,10 @@ const steps = [
 
 <section id="converge" class="converge" aria-label="Hero section">
   <div class="converge__sticky">
+    <!-- home base as a constellation, under the particles; it fades as the shapes take over -->
+    <div class="converge__map" data-map>
+      <FloridaConstellation class="h-full w-full" />
+    </div>
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
 
     <div class="converge__captions">
@@ -79,6 +84,27 @@ const steps = [
     height: 100vh;
     height: 100svh;
     overflow: hidden;
+  }
+  .converge__map {
+    position: absolute;
+    top: 50%;
+    right: calc(max(0px, (100% - 86rem) / 2) + 16px);
+    width: min(44vw, 600px);
+    aspect-ratio: 300 / 228;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: opacity 0.3s linear;
+  }
+  @media (max-width: 767px) {
+    /* phones: in the open space under the captions */
+    .converge__map {
+      top: max(330px, 44%);
+      right: 16px;
+      left: 16px;
+      width: auto;
+      max-height: calc(100% - max(330px, 44%) - 100px);
+      transform: none;
+    }
   }
   #converge-canvas {
     position: absolute;
@@ -234,6 +260,7 @@ const steps = [
     const steps = [...section.querySelectorAll<HTMLElement>("[data-step]")];
     const dots = [...section.querySelectorAll<HTMLElement>("[data-dot]")];
     const hint = section.querySelector<HTMLElement>(".converge__hint-action");
+    const map = section.querySelector<HTMLElement>("[data-map]");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // view transitions keep this script alive across pages; stop when the hero leaves
     let alive = true;
@@ -426,6 +453,7 @@ const steps = [
         lastActive = active;
       }
       if (hint) hint.style.opacity = s < 0.15 ? "1" : "0";
+      if (map) map.style.opacity = String(clamp01(1 - s * 2.5));
 
       ctx.clearRect(0, 0, W, H);
       const t = time / 1000;
