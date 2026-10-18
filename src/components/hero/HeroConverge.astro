@@ -207,13 +207,13 @@ const steps = [
     transition: opacity 0.3s linear;
   }
   @media (max-width: 767px) {
-    /* phones: in the open space under the captions */
+    /* phones: in the open space under the captions; --map-top is measured from the copy (see placeMap) */
     .converge__map {
-      top: max(330px, 44%);
+      top: var(--map-top, max(330px, 44%));
       right: 16px;
       left: 16px;
       width: auto;
-      max-height: calc(100% - max(330px, 44%) - 100px);
+      max-height: calc(100% - var(--map-top, max(330px, 44%)) - 96px);
       transform: none;
     }
   }
@@ -312,12 +312,11 @@ const steps = [
       display: block;
     }
   }
+  /* phones: Florida alone; the small ones would be clutter at this size */
   @media (max-width: 767px) {
-    /* phones: the corner would meet the buttons, so it stays east of the peninsula */
-    .converge__mini--cart {
-      top: 26%;
-      left: 74%;
-      width: 17%;
+    .converge__mini--cart,
+    .converge__mini--bank {
+      display: none;
     }
   }
   .converge__mini--bank {
@@ -554,10 +553,28 @@ const steps = [
       clear = read();
     }
 
+    // phones: Florida sits under the hero copy, which wraps to a different height on every phone
+    function placeMap() {
+      const el = section!.querySelector<HTMLElement>("[data-map]");
+      const hero = section!.querySelector<HTMLElement>(".converge__step--hero");
+      if (!el || !hero) return;
+      if (W >= 768) return el.style.removeProperty("--map-top");
+      const top = hero.getBoundingClientRect().bottom - canvas!.getBoundingClientRect().top + 24;
+      el.style.setProperty("--map-top", `${Math.round(top)}px`);
+    }
+
     // thousands of faint background stars, thicker along the Milky Way band
     function paintStarfield() {
       const el = section!.querySelector<HTMLElement>(".converge__stars");
       if (!el) return;
+      // seeded, so a repaint (a phone's address bar sliding) draws the same sky, not a new one
+      let seed = 20260917;
+      const rand = () => {
+        seed = (seed + 0x6d2b79f5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
       const sf = document.createElement("canvas");
       sf.width = Math.round(W * dpr); sf.height = Math.round(H * dpr);
       const g = sf.getContext("2d")!;
@@ -565,20 +582,20 @@ const steps = [
       const temps = ["220,232,255", "200,218,255", "255,240,214", "255,226,190", "180,200,235"];
       // band axis matches the CSS Milky Way (118deg): unit normal of the band through the center
       const ang = ((118 - 90) * Math.PI) / 180, nx = Math.cos(ang), ny = Math.sin(ang);
-      const count = Math.round((W * H) / 520);
+      const count = Math.round((W * H) / (mobile ? 1300 : 520)); // phones get a sparser sky
       // the caption block (its active step) keeps a quieter patch of sky, so the copy stays crisp
       const c = canvas!.getBoundingClientRect();
       const step = section!.querySelector<HTMLElement>(".converge__step.is-active") ?? section!.querySelector<HTMLElement>(".converge__step");
       const cr = step?.getBoundingClientRect();
       const quiet = cr ? { l: cr.left - c.left - 30, r: cr.right - c.left + 30, t: cr.top - c.top - 30, b: cr.bottom - c.top + 30 } : null;
       for (let i = 0; i < count; i++) {
-        const x = Math.random() * W, y = Math.random() * H;
+        const x = rand() * W, y = rand() * H;
         const d = Math.abs((x - W / 2) * nx + (y - H / 2) * ny) / Math.max(W, H);
-        if (Math.random() > 0.35 + 0.65 * Math.exp(-((d / 0.12) ** 2))) continue; // denser near the band
+        if (rand() > 0.35 + 0.65 * Math.exp(-((d / 0.12) ** 2))) continue; // denser near the band
         if (hit(clear, x, y)) continue;
-        const r = Math.random() < 0.94 ? 0.25 + Math.random() * 0.45 : 0.7 + Math.random() * 0.5;
+        const r = rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5;
         const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? 0.3 : 1;
-        g.fillStyle = `rgba(${temps[Math.floor(Math.random() * temps.length)]},${((0.15 + Math.random() * 0.5) * dim).toFixed(2)})`;
+        g.fillStyle = `rgba(${temps[Math.floor(rand() * temps.length)]},${((0.15 + rand() * 0.5) * dim).toFixed(2)})`;
         g.beginPath();
         g.arc(x, y, r, 0, Math.PI * 2);
         g.fill();
@@ -687,6 +704,7 @@ const steps = [
       canvas!.width = Math.round(W * dpr);
       canvas!.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      placeMap();
       buildWall();
       paintStarfield(); // after the walls, so no background star sits inside a constellation
       // the map can move on resize; scattered points it now covers find a new spot
