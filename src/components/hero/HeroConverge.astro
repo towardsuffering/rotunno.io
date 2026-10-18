@@ -129,8 +129,6 @@ const steps = [
     <div class="converge__captions">
       <div class="converge__step converge__step--hero is-active" data-step="0">
         <p class="converge__tag">01 / Fragmented</p>
-        <!-- a dark glass panel keeps the copy readable over the moving sky -->
-        <div class="converge__panel">
         <h1 class="leading-tighter font-heading mb-3 text-4xl font-semibold text-white md:text-5xl xl:text-6xl">
           Ten years.<br />Four industries.
         </h1>
@@ -156,7 +154,6 @@ const steps = [
             <Icon name="tabler/calendar" aria-hidden="true" class="size-5" />
             <span>Schedule a Call</span>
           </a>
-        </div>
         </div>
       </div>
       {
@@ -362,29 +359,6 @@ const steps = [
     opacity: 0;
     transition: opacity 0.5s ease, transform 0.5s ease;
   }
-  /* the panel's padding is pulled back out with a negative margin, so the copy keeps
-     lining up with the site name and only the glass extends past it */
-  .converge__panel {
-    --pad: 28px;
-    margin: 14px calc(-1 * var(--pad)) 0;
-    padding: var(--pad);
-    border: 1px solid rgba(165, 190, 219, 0.14);
-    border-radius: 20px;
-    background: rgba(3, 8, 18, 0.62);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
-  }
-  @media (max-width: 767px) {
-    /* phones: no blur (it would redraw every frame of the animation), a bit more opaque instead */
-    .converge__panel {
-      --pad: 18px;
-      margin-right: 0; /* the copy already runs to the screen's 16px gutter */
-      background: rgba(3, 8, 18, 0.74);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-  }
   .converge__step.is-active {
     opacity: 1;
     pointer-events: auto;
@@ -567,6 +541,10 @@ const steps = [
           o.closePath();
         }
       });
+      // the opening copy keeps clear sky behind it, like the later steps' captions
+      const copy = section!.querySelector<HTMLElement>(".converge__step--hero");
+      const cr = copy?.getBoundingClientRect();
+      if (cr && cr.width) o.roundRect(cr.left - c.left - 12, cr.top - c.top - 8, cr.width + 24, cr.height + 16, 16);
       const read = () => {
         const d = o.getImageData(0, 0, W, H).data, m = new Uint8Array(W * H);
         for (let i = 0; i < m.length; i++) m[i] = d[i * 4 + 3] > 0 ? 1 : 0;
@@ -621,7 +599,7 @@ const steps = [
         if (rand() > 0.35 + 0.65 * Math.exp(-((d / 0.12) ** 2))) continue; // denser near the band
         if (hit(clear, x, y)) continue;
         const r = rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5;
-        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? 0.3 : 1;
+        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? 0.12 : 1;
         g.fillStyle = `rgba(${temps[Math.floor(rand() * temps.length)]},${((0.15 + rand() * 0.5) * dim).toFixed(2)})`;
         g.beginPath();
         g.arc(x, y, r, 0, Math.PI * 2);
