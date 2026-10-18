@@ -183,11 +183,11 @@ const steps = [
     pointer-events: none;
     transition: opacity 0.3s linear;
   }
-  /* desktop: one faint glass plate over the sky and under the copy, wrapping the headline and Florida
+  /* one frosted glass plate over the sky and under the copy, wrapping the headline and Florida
      (sized in placeMap); light enough that the dots passing behind it stay clearly visible */
   .converge__plate {
     position: absolute;
-    display: none;
+    z-index: 1;
     border: 1px solid rgba(165, 190, 219, 0.12);
     border-radius: 28px;
     background: linear-gradient(160deg, rgba(12, 26, 50, 0.42), rgba(4, 10, 22, 0.34));
@@ -198,18 +198,17 @@ const steps = [
     pointer-events: none;
     transition: opacity 0.3s linear;
   }
-  @media (min-width: 768px) {
-    /* layered: dots, then the plate, then Florida and the copy on top, crisp */
+  /* layered: dots, then the plate, then Florida and the copy on top, crisp */
+  .converge__map,
+  .converge__mini {
+    z-index: 2;
+  }
+  .converge__captions {
+    z-index: 3;
+  }
+  @media (max-width: 767px) {
     .converge__plate {
-      display: block;
-      z-index: 1;
-    }
-    .converge__map,
-    .converge__mini {
-      z-index: 2;
-    }
-    .converge__captions {
-      z-index: 3;
+      border-radius: 22px;
     }
   }
   @media (max-width: 767px) {
@@ -303,7 +302,7 @@ const steps = [
   .converge__mini--house {
     bottom: 11%;
     left: calc(max(0px, (100% - 86rem) / 2) + 64px + 190px);
-    width: 116px;
+    width: 100px;
   }
   /* inside the Florida box (percentages of it), in the open water east of the peninsula */
   /* top right corner, above the Northeast Florida label */
@@ -334,23 +333,11 @@ const steps = [
       display: none;
     }
   }
-  /* well clear of the plate's right edge, out in the open sky */
+  /* out in the open sky past the plate; placeMap sets its exact spot from the plate's edges */
   .converge__mini--bank {
     top: 74%;
     left: 101%;
     width: 10%;
-  }
-  /* narrower desktops have no room past the plate's right edge, so Finance drops below it */
-  @media (max-width: 1535px) {
-    .converge__mini--bank {
-      top: 114%;
-      left: 78%;
-    }
-  }
-  @media (max-width: 1535px) and (max-height: 800px) {
-    .converge__mini--bank {
-      display: none;
-    }
   }
   /* tablets, phones and short screens: no room beside the text, so only Florida's group shows */
   @media (max-width: 1023px), (max-height: 720px) {
@@ -732,10 +719,47 @@ const steps = [
         const nav = document.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
         const t = Math.max(nav + 8, Math.min(h.top, m.top) - pad) - c.top, b = Math.max(h.bottom, m.bottom) - c.top + pad;
         Object.assign(plate.style, { left: `${l}px`, top: `${t}px`, width: `${r - l}px`, height: `${b - t}px` });
+
+        // Home Services and Finance sit well clear of the plate, so they read as their own stars;
+        // the gap shrinks a little on short screens, and where even that won't fit they step aside
+        const gap = 44, minGap = 28;
+        const hr = section!.querySelector<HTMLElement>(".converge__hint")?.getBoundingClientRect();
+        // room below the plate for a box at x..x+w: down to the screen edge, or the scroll hint if it's in the way
+        const floorAt = (x: number, w: number) =>
+          hr && x < hr.right - c.left && x + w > hr.left - c.left ? hr.top - c.top - 8 : H - 12;
+        const below = (x: number, w: number, h: number) => {
+          const y = b + Math.min(gap, floorAt(x, w) - h - b);
+          return { y, fits: y - b >= minGap };
+        };
+        const house = section!.querySelector<HTMLElement>(".converge__mini--house");
+        if (house) {
+          // diagonal from the copy: under the plate's left end
+          const x = l + 48, { y, fits } = below(x, house.offsetWidth, house.offsetHeight);
+          Object.assign(house.style, { left: `${x}px`, top: `${y}px`, bottom: "auto" });
+          house.style.visibility = !house.offsetHeight || fits ? "" : "hidden";
+        }
+        const bank = el.querySelector<HTMLElement>(".converge__mini--bank");
+        if (bank) {
+          const bw = bank.offsetWidth, bh = bank.offsetHeight, mx = m.left - c.left, my = m.top - c.top;
+          let x = r + gap, y = my + m.height * 0.74 - bh / 2, fits = x + bw < W - 16;
+          if (!fits) {
+            // no room to the right: below the plate's right end instead
+            x = r - bw - 48;
+            ({ y, fits } = below(x, bw, bh));
+          }
+          Object.assign(bank.style, { left: `${x - mx}px`, top: `${y - my}px` });
+          bank.style.visibility = fits ? "" : "hidden";
+        }
         return;
       }
       const top = hero.getBoundingClientRect().bottom - canvas!.getBoundingClientRect().top + 4;
       el.style.setProperty("--map-top", `${Math.round(top)}px`);
+      // phones: the plate runs from the copy down around Florida, inside the page gutters
+      const plate = section!.querySelector<HTMLElement>("[data-plate]");
+      if (!plate) return;
+      const c = canvas!.getBoundingClientRect(), h = hero.getBoundingClientRect(), m = el.getBoundingClientRect();
+      const t = h.top - c.top - 18, b = m.bottom - c.top + 10;
+      Object.assign(plate.style, { left: "8px", top: `${t}px`, width: `${W - 16}px`, height: `${b - t}px` });
     }
 
     // thousands of faint background stars, thicker along the Milky Way band
@@ -773,7 +797,7 @@ const steps = [
           ? (rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5)
           : (rand() < 0.94 ? 0.28 + rand() * 0.45 : 0.8 + rand() * 0.7);
         // (desktop's plate already sets the copy apart, so its stars stay brighter there)
-        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.12 : 0.8) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
+        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.5 : 0.8) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
         const col = temps[Math.floor(rand() * temps.length)];
         const a = (mobile ? 0.15 + rand() * 0.5 : 0.18 + rand() * 0.5) * dim;
         if (!mobile && r > 1.25) {
@@ -1047,9 +1071,9 @@ const steps = [
         const p = particles[i];
         const on = linked.has(i);
         let alpha = twinkle && !on ? 1 - twinkle * (0.5 + 0.5 * Math.sin(t * (1.2 + p.seed * 2.8) + p.phase * 4)) : 1;
-        // behind the opening copy a dot dims: barely there on a phone, still clearly visible on desktop's plate
+        // behind the opening copy a dot dims on the plate: softer on a phone, where the copy is denser
         if (copyBox && p.x > copyBox.x0 && p.x < copyBox.x1 && p.y > copyBox.y0 && p.y < copyBox.y1) {
-          const floor = mobile ? 0.08 : 0.75;
+          const floor = mobile ? 0.45 : 0.75;
           alpha *= floor + (1 - floor) * clamp01(s * 2);
         }
         ctx.globalAlpha = alpha;
