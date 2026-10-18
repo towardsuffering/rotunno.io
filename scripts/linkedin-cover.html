@@ -79,7 +79,7 @@ function star(x,y,h,green=false,scale=1){
   el("circle",{cx:x,cy:y,r:((green?1.05:.75)+h*.9)*scale,fill:color});
 }
 const poly=p=>p.map(q=>q.map(v=>v.toFixed(1)).join(",")).join(" ");
-state.forEach(p=>el("polygon",{points:poly(p),fill:"none",stroke:"#a5bedb","stroke-opacity":.32,"stroke-width":.9,"stroke-linejoin":"round"}));
+state.forEach(p=>el("polygon",{points:poly(p),fill:"none",stroke:"#a5bedb","stroke-opacity":.5,"stroke-width":2,"stroke-linejoin":"round"}));
 state.flat().forEach(([x,y])=>star(x,y,hash(x,y),false,1.15));
 el("polygon",{points:poly(ne),fill:"#34d399","fill-opacity":.1,stroke:"#34d399","stroke-opacity":.6,"stroke-width":1.2,"stroke-linejoin":"round"});
 ne.forEach(([x,y])=>star(x,y,hash(x,y),true,1.15));
