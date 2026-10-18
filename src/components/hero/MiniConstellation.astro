@@ -2,22 +2,45 @@
 /**
  * A small, dim constellation for the hero sky: stars at `stars`, joined by `lines`
  * (each line is a list of star indexes), with a star-chart label underneath.
- * `wall` lists closed outlines (star indexes) that HeroConverge's dots may not cross.
+ * `wall` lists closed outlines (star indexes) that HeroConverge's dots may not cross,
+ * or "hull" for the outline around all the stars.
+ * A star can carry its real brightness (0-1) and color: [x, y, brightness?, color?].
  */
 import { starHash, starLook } from "./starLook";
 
 interface Props {
-  stars: [number, number][];
+  stars: [number, number, number?, string?][];
   lines: number[][];
   label: string;
   viewBox: string;
-  wall?: number[][];
+  wall?: number[][] | "hull";
   class?: string;
 }
 const { stars, lines, label, viewBox, wall = [], class: className } = Astro.props;
 const [vx, vy, vw, vh] = viewBox.split(" ").map(Number);
-const shape = wall.length ? JSON.stringify({ viewBox: [vx, vy, vw, vh], rings: wall.map((r) => r.map((i) => stars[i])) }) : undefined;
-const looks = stars.map(([x, y]) => ({ x, y, h: starHash(x, y), ...starLook(starHash(x, y)) }));
+const xy = (i: number) => [stars[i][0], stars[i][1]];
+
+// convex hull (monotone chain) of the stars, as indexes
+function hull(): number[] {
+  const idx = stars.map((_, i) => i).sort((a, b) => stars[a][0] - stars[b][0] || stars[a][1] - stars[b][1]);
+  const cross = (o: number, a: number, b: number) =>
+    (stars[a][0] - stars[o][0]) * (stars[b][1] - stars[o][1]) - (stars[a][1] - stars[o][1]) * (stars[b][0] - stars[o][0]);
+  const half = (list: number[]) => {
+    const h: number[] = [];
+    for (const i of list) {
+      while (h.length >= 2 && cross(h[h.length - 2], h[h.length - 1], i) <= 0) h.pop();
+      h.push(i);
+    }
+    return h.slice(0, -1);
+  };
+  return [...half(idx), ...half([...idx].reverse())];
+}
+const rings = wall === "hull" ? [hull()] : wall;
+const shape = rings.length ? JSON.stringify({ viewBox: [vx, vy, vw, vh], rings: rings.map((r) => r.map(xy)) }) : undefined;
+const looks = stars.map(([x, y, b, c]) => {
+  const h = b ?? starHash(x, y);
+  return { x, y, h, ...starLook(h), ...(c ? { color: c, glow: c } : {}) };
+});
 const glowColors = [...new Set(looks.map((s) => s.glow))];
 const gid = (c: string) => `mini-glow-${c.slice(1)}`;
 ---
@@ -33,7 +56,7 @@ const gid = (c: string) => `mini-glow-${c.slice(1)}`;
       ))
     }
   </defs>
-  {lines.map((l) => <polyline points={l.map((i) => stars[i].join(",")).join(" ")} class="mini-line" />)}
+  {lines.map((l) => <polyline points={l.map((i) => xy(i).join(",")).join(" ")} class="mini-line" />)}
   {
     looks.map((s) => (
       <g class="mini-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
