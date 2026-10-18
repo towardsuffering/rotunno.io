@@ -570,7 +570,13 @@ const steps = [
         const k = Math.min(r.width / vw, r.height / vh);
         const ox = r.left - c.left + (r.width - vw * k) / 2 - vx * k;
         const oy = r.top - c.top + (r.height - vh * k) / 2 - vy * k;
-        for (const ring of rings) {
+        for (const raw of rings) {
+          // same winding for every ring, so overlapping shapes add up instead of cancelling out
+          const area = raw.reduce((sum, [x, y], i) => {
+            const [nx, ny] = raw[(i + 1) % raw.length];
+            return sum + x * ny - nx * y;
+          }, 0);
+          const ring = area < 0 ? [...raw].reverse() : raw;
           ring.forEach(([x, y], i) => (i ? o.lineTo : o.moveTo).call(o, ox + x * k, oy + y * k));
           o.closePath();
         }
@@ -578,13 +584,19 @@ const steps = [
       // the opening copy keeps clear sky behind it, like the later steps' captions
       const copy = section!.querySelector<HTMLElement>(".converge__step--hero");
       const cr = copy?.getBoundingClientRect();
-      if (cr && cr.width) o.roundRect(cr.left - c.left - 12, cr.top - c.top - 8, cr.width + 24, cr.height + 16, 16);
+      if (cr && cr.width) {
+        // drawn clockwise by hand (roundRect's direction isn't guaranteed to match the rings)
+        const x0 = cr.left - c.left - 12, y0 = cr.top - c.top - 8, x1 = x0 + cr.width + 24, y1 = y0 + cr.height + 16;
+        o.moveTo(x0, y0); o.lineTo(x1, y0); o.lineTo(x1, y1); o.lineTo(x0, y1); o.closePath();
+      }
       const read = () => {
         const d = o.getImageData(0, 0, W, H).data, m = new Uint8Array(W * H);
         for (let i = 0; i < m.length; i++) m[i] = d[i * 4 + 3] > 0 ? 1 : 0;
         return m;
       };
-      o.fill();
+      // "evenodd" would punch holes where shapes overlap, and so would opposite windings under the
+      // default rule, so fill with nonzero after making every subpath wind the same way (see below)
+      o.fill("nonzero");
       inside = read();
       o.lineWidth = 34; // drift and the cursor pocket never reach a border from here
       o.lineJoin = "round";
