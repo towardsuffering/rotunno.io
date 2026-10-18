@@ -89,8 +89,13 @@ const steps = [
     position: absolute;
     top: 50%;
     right: calc(max(0px, (100% - 86rem) / 2) + 16px);
-    width: min(44vw, 600px);
-    aspect-ratio: 300 / 228;
+    /* as big as the space right of the captions allows: page width, minus the container margins,
+       the caption column (its 64px inset plus up to 520px), and a 24px gap */
+    width: min(
+      960px,
+      calc(100% - 2 * max(0px, (100% - 86rem) / 2) - 64px - min(520px, 40vw) - 16px - 24px)
+    );
+    aspect-ratio: 306 / 214;
     transform: translateY(-50%);
     pointer-events: none;
     transition: opacity 0.3s linear;
@@ -286,8 +291,48 @@ const steps = [
       return { x: left, y: H * 0.14, w: W - left - 80, h: H * 0.72 };
     }
 
+    // Florida's border is a wall: `inside` marks the state, `clear` adds a margin around it
+    let inside: Uint8Array | null = null;
+    let clear: Uint8Array | null = null;
+    const hit = (m: Uint8Array | null, x: number, y: number) =>
+      !!m && x >= 0 && y >= 0 && x < W && y < H && m[(y | 0) * W + (x | 0)] === 1;
+
+    function buildWall() {
+      const svg = map?.querySelector<SVGSVGElement>("svg[data-shape]");
+      if (!svg) return;
+      const { viewBox: [vx, vy, vw, vh], rings } = JSON.parse(svg.dataset.shape!) as { viewBox: number[]; rings: number[][][] };
+      const r = svg.getBoundingClientRect(), c = canvas!.getBoundingClientRect();
+      // the svg scales its viewBox to fit, centered (preserveAspectRatio's default)
+      const k = Math.min(r.width / vw, r.height / vh);
+      const ox = r.left - c.left + (r.width - vw * k) / 2 - vx * k;
+      const oy = r.top - c.top + (r.height - vh * k) / 2 - vy * k;
+      const off = document.createElement("canvas");
+      off.width = W; off.height = H;
+      const o = off.getContext("2d")!;
+      o.beginPath();
+      for (const ring of rings) ring.forEach(([x, y], i) => (i ? o.lineTo : o.moveTo).call(o, ox + x * k, oy + y * k));
+      o.closePath();
+      const read = () => {
+        const d = o.getImageData(0, 0, W, H).data, m = new Uint8Array(W * H);
+        for (let i = 0; i < m.length; i++) m[i] = d[i * 4 + 3] > 0 ? 1 : 0;
+        return m;
+      };
+      o.fill();
+      inside = read();
+      o.lineWidth = 34; // drift and the cursor pocket never reach the border from here
+      o.lineJoin = "round";
+      o.stroke();
+      clear = read();
+    }
+
+    function scatterPoint(): Pt {
+      let pt = { x: Math.random() * W, y: Math.random() * H };
+      for (let tries = 0; tries < 30 && hit(clear, pt.x, pt.y); tries++) pt = { x: Math.random() * W, y: Math.random() * H };
+      return pt;
+    }
+
     function chaosTargets(): Pt[] {
-      return particles.map(() => ({ x: Math.random() * W, y: Math.random() * H }));
+      return particles.map(scatterPoint);
     }
 
     function clusterTargets(): Pt[] {
@@ -381,6 +426,9 @@ const steps = [
       canvas!.width = Math.round(W * dpr);
       canvas!.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      buildWall();
+      // the map can move on resize; scattered points it now covers find a new spot
+      if (targets[0]) targets[0] = targets[0].map((t) => (hit(clear, t.x, t.y) ? scatterPoint() : t));
       // a height-only resize (phone address bar sliding) keeps every point where it is
       if (W === builtWidth && Math.abs(H - builtHeight) < 160) return;
       builtWidth = W;
@@ -453,7 +501,8 @@ const steps = [
         lastActive = active;
       }
       if (hint) hint.style.opacity = s < 0.15 ? "1" : "0";
-      if (map) map.style.opacity = String(clamp01(1 - s * 2.5));
+      const mapAlpha = clamp01(1 - s * 2.5);
+      if (map) map.style.opacity = String(mapAlpha);
 
       ctx.clearRect(0, 0, W, H);
       const t = time / 1000;
@@ -483,8 +532,12 @@ const steps = [
         }
 
         const spring = forced !== null || reduce ? 1 : 0.14;
-        p.x += (tx - p.x) * spring;
-        p.y += (ty - p.y) * spring;
+        const nx = p.x + (tx - p.x) * spring, ny = p.y + (ty - p.y) * spring;
+        // while Florida is on screen, no dot crosses its border; it waits at the edge instead
+        if (!(mapAlpha > 0.02 && hit(inside, nx, ny) && !hit(inside, p.x, p.y))) {
+          p.x = nx;
+          p.y = ny;
+        }
 
         frameColors[i] = mixRgb(colors[k][i], colors[k + 1][i], lt);
       }
