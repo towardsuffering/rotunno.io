@@ -188,7 +188,7 @@ const steps = [
       right: 16px;
       left: 16px;
       width: auto;
-      max-height: calc(100% - var(--map-top, max(330px, 44%)) - 64px);
+      max-height: calc(100% - var(--map-top, max(330px, 44%)) - 36px);
       transform: none;
     }
   }
@@ -397,6 +397,30 @@ const steps = [
       margin-bottom: 1.2rem;
     }
   }
+  /* short phones (most phones once the browser's bars are counted): a tighter stack, so
+     Florida gets real room under the buttons */
+  @media (max-width: 767px) and (max-height: 800px) {
+    .converge__headline {
+      margin-bottom: 0.7rem;
+    }
+    .converge__role {
+      margin-bottom: 0.8rem;
+    }
+    .converge__beats {
+      display: block;
+      margin-bottom: 0.7rem;
+      font-size: 1rem;
+    }
+    .converge__beats span::after {
+      content: " ";
+    }
+    .converge__signature {
+      margin-bottom: 1rem;
+    }
+    .converge__step--hero .flex-wrap {
+      row-gap: 0.25rem;
+    }
+  }
   .converge__tag {
     font-size: 0.75rem;
     letter-spacing: 0.18em;
@@ -480,8 +504,27 @@ const steps = [
       transform: none;
     }
     .converge__hint {
-      bottom: 20px;
+      bottom: 14px;
       font-size: 0.7rem;
+    }
+    /* the step dots already say there's more; the space goes to Florida */
+    .converge__hint-action {
+      display: none;
+    }
+    /* both buttons on one row */
+    .converge__step--hero .flex-wrap {
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .converge__step--hero .flex-wrap > :first-child {
+      padding-inline: 1rem;
+      white-space: nowrap;
+    }
+    .converge__step--hero .flex-wrap > a:last-child {
+      padding-inline: 0.25rem;
+      font-size: 0.875rem;
+      white-space: nowrap;
     }
   }
 </style>
@@ -551,6 +594,7 @@ const steps = [
 
     // constellation borders are walls: `inside` marks their shapes, `clear` adds a margin around them
     let inside: Uint8Array | null = null;
+    let copyBox: { x0: number; y0: number; x1: number; y1: number } | null = null; // phones only
     let clear: Uint8Array | null = null;
     const hit = (m: Uint8Array | null, x: number, y: number) =>
       !!m && x >= 0 && y >= 0 && x < W && y < H && m[(y | 0) * W + (x | 0)] === 1;
@@ -585,9 +629,16 @@ const steps = [
       const copy = section!.querySelector<HTMLElement>(".converge__step--hero");
       const cr = copy?.getBoundingClientRect();
       if (cr && cr.width) {
-        // drawn clockwise by hand (roundRect's direction isn't guaranteed to match the rings)
         const x0 = cr.left - c.left - 12, y0 = cr.top - c.top - 8, x1 = x0 + cr.width + 24, y1 = y0 + cr.height + 16;
-        o.moveTo(x0, y0); o.lineTo(x1, y0); o.lineTo(x1, y1); o.lineTo(x0, y1); o.closePath();
+        if (mobile) {
+          // on a phone the copy covers most of the screen; walling it off would cram every dot into
+          // the strip that's left, so dots may pass behind it and are faded there instead (see draw)
+          copyBox = { x0, y0, x1, y1 };
+        } else {
+          // drawn clockwise by hand (roundRect's direction isn't guaranteed to match the rings)
+          o.moveTo(x0, y0); o.lineTo(x1, y0); o.lineTo(x1, y1); o.lineTo(x0, y1); o.closePath();
+          copyBox = null;
+        }
       }
       const read = () => {
         const d = o.getImageData(0, 0, W, H).data, m = new Uint8Array(W * H);
@@ -880,7 +931,11 @@ const steps = [
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         const on = linked.has(i);
-        ctx.globalAlpha = twinkle && !on ? 1 - twinkle * (0.5 + 0.5 * Math.sin(t * (1.2 + p.seed * 2.8) + p.phase * 4)) : 1;
+        let alpha = twinkle && !on ? 1 - twinkle * (0.5 + 0.5 * Math.sin(t * (1.2 + p.seed * 2.8) + p.phase * 4)) : 1;
+        // phones: behind the opening copy a dot is barely there, so the text stays clean
+        if (copyBox && p.x > copyBox.x0 && p.x < copyBox.x1 && p.y > copyBox.y0 && p.y < copyBox.y1)
+          alpha *= 0.08 + 0.92 * clamp01(s * 2);
+        ctx.globalAlpha = alpha;
         ctx.fillStyle = css(on ? mixRgb(frameColors[i], WHITE, 0.65) : frameColors[i]);
         ctx.beginPath();
         ctx.arc(p.x, p.y, on ? p.size + 1.2 : p.size, 0, Math.PI * 2);
