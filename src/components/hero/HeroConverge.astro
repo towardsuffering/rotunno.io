@@ -129,6 +129,8 @@ const steps = [
     <div class="converge__captions">
       <div class="converge__step converge__step--hero is-active" data-step="0">
         <p class="converge__tag">01 / Fragmented</p>
+        <!-- a dark glass panel keeps the copy readable over the moving sky -->
+        <div class="converge__panel">
         <h1 class="leading-tighter font-heading mb-3 text-4xl font-semibold text-white md:text-5xl xl:text-6xl">
           Ten years.<br />Four industries.
         </h1>
@@ -154,6 +156,7 @@ const steps = [
             <Icon name="tabler/calendar" aria-hidden="true" class="size-5" />
             <span>Schedule a Call</span>
           </a>
+        </div>
         </div>
       </div>
       {
@@ -358,6 +361,29 @@ const steps = [
     transform: translateY(-50%);
     opacity: 0;
     transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  /* the panel's padding is pulled back out with a negative margin, so the copy keeps
+     lining up with the site name and only the glass extends past it */
+  .converge__panel {
+    --pad: 28px;
+    margin: 14px calc(-1 * var(--pad)) 0;
+    padding: var(--pad);
+    border: 1px solid rgba(165, 190, 219, 0.14);
+    border-radius: 20px;
+    background: rgba(3, 8, 18, 0.62);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+  @media (max-width: 767px) {
+    /* phones: no blur (it would redraw every frame of the animation), a bit more opaque instead */
+    .converge__panel {
+      --pad: 18px;
+      margin-right: 0; /* the copy already runs to the screen's 16px gutter */
+      background: rgba(3, 8, 18, 0.74);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
   }
   .converge__step.is-active {
     opacity: 1;
