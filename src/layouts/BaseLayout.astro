@@ -6,6 +6,7 @@ import { type CollectionEntry } from "astro:content";
 
 import Footer from "@/components/footer/Footer.astro";
 import Nav from "@/components/nav/Nav.astro";
+import SpaceBackdrop from "@/components/SpaceBackdrop.astro";
 import siteSettings from "@/config/siteSettings.json";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import BaseHead from "@/layouts/BaseHead.astro";
@@ -53,6 +54,7 @@ const currLocale = getLocaleFromUrl(Astro.url);
     />
   </head>
   <body id="body" class={` ${siteSettings.useAnimations === true ? "use-animations" : ""}`}>
+    <SpaceBackdrop />
     <div id="page" class="">
 
       <Nav {...navProps} />
