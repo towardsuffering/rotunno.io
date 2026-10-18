@@ -39,6 +39,15 @@ const steps = [
       </div>
     </div>
     <!-- two smaller, dimmer constellations in the open sky: the data side and the home side -->
+    <div class="converge__mini converge__mini--cart-sky" data-sky>
+      <MiniConstellation
+        label="RETAIL"
+        viewBox="0 0 110 96"
+        stars={[[6, 12], [22, 16], [32, 58], [92, 58], [102, 26], [26, 30], [40, 72], [86, 72], [44, 84], [82, 84]]}
+        lines={[[0, 1, 5, 4, 3, 2, 6, 7], [1, 2], [8], [9]]}
+        class="h-full w-full"
+      />
+    </div>
     <div class="converge__mini converge__mini--chart" data-sky>
       <MiniConstellation
         label="ANALYTICS"
@@ -173,6 +182,21 @@ const steps = [
     top: -13%;
     left: 85%;
     width: 15%;
+  }
+  /* wide screens: Retail moves out to the window's top right corner, past the content area */
+  .converge__mini--cart-sky {
+    display: none;
+    top: max(104px, 6%);
+    right: 3vw;
+    width: 150px;
+  }
+  @media (min-width: 1600px) and (min-height: 721px) {
+    .converge__mini--cart {
+      display: none;
+    }
+    .converge__mini--cart-sky {
+      display: block;
+    }
   }
   @media (max-width: 767px) {
     /* phones: the corner would meet the buttons, so it stays east of the peninsula */
