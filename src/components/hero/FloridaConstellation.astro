@@ -59,10 +59,9 @@ const VIEWBOX = [28, -20, 306, 214]; // the state spans x 34 to 230, y 0 to 189
 const GULF: Pt[] = [
   [36, 22], [-34, 24], [-40, 110], [-44, 187], [211, 192], [205, 186], [170, 150], [150, 80], [130, 40], [95, 25],
 ];
-const shape = JSON.stringify({
-  viewBox: VIEWBOX,
-  rings: [...outline, GULF].map((p) => p.map(([x, y]) => [+x.toFixed(1), +y.toFixed(1)])),
-});
+const r1 = (p: Pt[]) => p.map(([x, y]) => [+x.toFixed(1), +y.toFixed(1)]);
+// `wide` rings only apply on desktop: on a phone, dots may fill the Gulf on both sides of the state
+const shape = JSON.stringify({ viewBox: VIEWBOX, rings: outline.map(r1), wide: [r1(GULF)] });
 
 const poly = (pts: Pt[]) => pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
 const stars = (pts: Pt[], green = false) => pts.map(([x, y]) => ({ x, y, h: starHash(x, y), ...starLook(starHash(x, y), green) }));

@@ -609,7 +609,9 @@ const steps = [
       section!.querySelectorAll<SVGSVGElement>("svg[data-shape]").forEach((svg) => {
         const r = svg.getBoundingClientRect();
         if (!r.width || !r.height) return;
-        const { viewBox: [vx, vy, vw, vh], rings } = JSON.parse(svg.dataset.shape!) as { viewBox: number[]; rings: number[][][] };
+        const data = JSON.parse(svg.dataset.shape!) as { viewBox: number[]; rings: number[][][]; wide?: number[][][] };
+        const [vx, vy, vw, vh] = data.viewBox;
+        const rings = mobile ? data.rings : [...data.rings, ...(data.wide ?? [])];
         // the svg scales its viewBox to fit, centered (preserveAspectRatio's default)
         const k = Math.min(r.width / vw, r.height / vh);
         const ox = r.left - c.left + (r.width - vw * k) / 2 - vx * k;
@@ -919,6 +921,9 @@ const steps = [
         if (!(mapAlpha > 0.02 && hit(inside, nx, ny) && !hit(inside, p.x, p.y))) {
           p.x = nx;
           p.y = ny;
+        } else if (k === 0) {
+          // blocked at a border: rather than wait there (and pile up along the coast), head for a new open spot
+          targets[0][i] = scatterPoint();
         }
 
         frameColors[i] = mixRgb(colors[k][i], colors[k + 1][i], lt);
