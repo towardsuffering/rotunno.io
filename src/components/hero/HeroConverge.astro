@@ -535,6 +535,7 @@ const steps = [
     transition: opacity 0.4s;
   }
   .converge__hint-note {
+    transition: opacity 0.4s, visibility 0.4s;
     margin-top: 4px;
     font-size: 0.7rem;
     color: #8aa0bb;
@@ -622,6 +623,14 @@ const steps = [
     const steps = [...section.querySelectorAll<HTMLElement>("[data-step]")];
     const dots = [...section.querySelectorAll<HTMLElement>("[data-dot]")];
     const hint = section.querySelector<HTMLElement>(".converge__hint-action");
+    const note = section.querySelector<HTMLElement>(".converge__hint-note");
+    // the disclaimer leaves entirely once the hero starts dissolving into the page below (its last 50vh)
+    const placeNote = () => {
+      if (!note) return;
+      const gone = section.getBoundingClientRect().bottom < window.innerHeight * 1.5;
+      note.style.opacity = gone ? "0" : "1";
+      note.style.visibility = gone ? "hidden" : "visible";
+    };
     const sky = [...section.querySelectorAll<HTMLElement>("[data-sky]")];
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // view transitions keep this script alive across pages; stop when the hero leaves
@@ -629,6 +638,9 @@ const steps = [
     const ac = new AbortController();
     const signal = ac.signal;
     document.addEventListener("astro:before-swap", () => { alive = false; ac.abort(); }, { once: true });
+    placeNote();
+    window.addEventListener("scroll", placeNote, { passive: true, signal });
+    window.addEventListener("resize", placeNote, { signal });
 
     let W = 0, H = 0, dpr = 1, mobile = false;
     let particles: Particle[] = [];
