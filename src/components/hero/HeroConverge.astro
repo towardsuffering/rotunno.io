@@ -190,8 +190,11 @@ const steps = [
     display: none;
     border: 1px solid rgba(165, 190, 219, 0.12);
     border-radius: 28px;
-    background: linear-gradient(160deg, rgba(12, 26, 50, 0.3), rgba(4, 10, 22, 0.22));
-    box-shadow: 0 24px 70px -24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    background: linear-gradient(160deg, rgba(12, 26, 50, 0.42), rgba(4, 10, 22, 0.34));
+    box-shadow: 0 24px 70px -24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    /* frosted: dots behind it soften and dim, but still show through */
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
     pointer-events: none;
     transition: opacity 0.3s linear;
   }
@@ -201,7 +204,8 @@ const steps = [
       display: block;
       z-index: 1;
     }
-    .converge__map {
+    .converge__map,
+    .converge__mini {
       z-index: 2;
     }
     .converge__captions {
@@ -769,7 +773,7 @@ const steps = [
           ? (rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5)
           : (rand() < 0.94 ? 0.28 + rand() * 0.45 : 0.8 + rand() * 0.7);
         // (desktop's plate already sets the copy apart, so its stars stay brighter there)
-        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.12 : 1) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
+        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.12 : 0.8) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
         const col = temps[Math.floor(rand() * temps.length)];
         const a = (mobile ? 0.15 + rand() * 0.5 : 0.18 + rand() * 0.5) * dim;
         if (!mobile && r > 1.25) {
@@ -1045,7 +1049,7 @@ const steps = [
         let alpha = twinkle && !on ? 1 - twinkle * (0.5 + 0.5 * Math.sin(t * (1.2 + p.seed * 2.8) + p.phase * 4)) : 1;
         // behind the opening copy a dot dims: barely there on a phone, still clearly visible on desktop's plate
         if (copyBox && p.x > copyBox.x0 && p.x < copyBox.x1 && p.y > copyBox.y0 && p.y < copyBox.y1) {
-          const floor = mobile ? 0.08 : 0.92;
+          const floor = mobile ? 0.08 : 0.75;
           alpha *= floor + (1 - floor) * clamp01(s * 2);
         }
         ctx.globalAlpha = alpha;
