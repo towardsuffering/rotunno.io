@@ -188,7 +188,7 @@ const steps = [
       right: 16px;
       left: 16px;
       width: auto;
-      max-height: calc(100% - var(--map-top, max(330px, 44%)) - 96px);
+      max-height: calc(100% - var(--map-top, max(330px, 44%)) - 64px);
       transform: none;
     }
   }
@@ -394,7 +394,7 @@ const steps = [
       margin-bottom: 1rem;
     }
     .converge__signature {
-      margin-bottom: 1.6rem;
+      margin-bottom: 1.2rem;
     }
   }
   .converge__tag {
@@ -598,7 +598,7 @@ const steps = [
       const hero = section!.querySelector<HTMLElement>(".converge__step--hero");
       if (!el || !hero) return;
       if (W >= 768) return el.style.removeProperty("--map-top");
-      const top = hero.getBoundingClientRect().bottom - canvas!.getBoundingClientRect().top + 24;
+      const top = hero.getBoundingClientRect().bottom - canvas!.getBoundingClientRect().top + 4;
       el.style.setProperty("--map-top", `${Math.round(top)}px`);
     }
 
