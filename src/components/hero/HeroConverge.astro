@@ -216,6 +216,27 @@ const steps = [
         transparent 72%
       );
   }
+  @media (min-width: 768px) {
+    /* desktop: the deeper sky from the LinkedIn cover, richer nebulae and a brighter Milky Way */
+    .converge__space {
+      background:
+        radial-gradient(ellipse 34% 34% at 74% 42%, rgba(52, 211, 153, 0.13), transparent 70%),
+        radial-gradient(ellipse 18% 20% at 82% 16%, rgba(45, 212, 191, 0.07), transparent 70%),
+        radial-gradient(ellipse 30% 30% at 12% 88%, rgba(139, 92, 246, 0.14), transparent 70%),
+        radial-gradient(ellipse 22% 22% at 34% 8%, rgba(99, 102, 241, 0.07), transparent 70%),
+        radial-gradient(ellipse 26% 22% at 94% 4%, rgba(56, 189, 248, 0.1), transparent 70%),
+        radial-gradient(ellipse 22% 20% at 56% 100%, rgba(168, 85, 247, 0.07), transparent 70%),
+        linear-gradient(
+          118deg,
+          transparent 24%,
+          rgba(150, 175, 215, 0.055) 37%,
+          rgba(200, 212, 240, 0.11) 48%,
+          rgba(235, 220, 240, 0.095) 52%,
+          rgba(150, 175, 215, 0.055) 62%,
+          transparent 74%
+        );
+    }
+  }
   .converge__stars {
     background-size: 100% 100%;
     opacity: 0.9;
@@ -697,12 +718,50 @@ const steps = [
         const d = Math.abs((x - W / 2) * nx + (y - H / 2) * ny) / Math.max(W, H);
         if (rand() > 0.35 + 0.65 * Math.exp(-((d / 0.12) ** 2))) continue; // denser near the band
         if (hit(clear, x, y)) continue;
-        const r = rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5;
-        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? 0.12 : 1;
-        g.fillStyle = `rgba(${temps[Math.floor(rand() * temps.length)]},${((0.15 + rand() * 0.5) * dim).toFixed(2)})`;
+        // desktop gets the cover's brighter sky: larger stars, and the biggest ones glow
+        const r = mobile
+          ? (rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5)
+          : (rand() < 0.94 ? 0.28 + rand() * 0.45 : 0.8 + rand() * 0.7);
+        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? 0.12 : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
+        const col = temps[Math.floor(rand() * temps.length)];
+        const a = (mobile ? 0.15 + rand() * 0.5 : 0.18 + rand() * 0.5) * dim;
+        if (!mobile && r > 1.25) {
+          const gl = g.createRadialGradient(x, y, 0, x, y, r * 4);
+          gl.addColorStop(0, `rgba(${col},${(a * 0.35).toFixed(2)})`);
+          gl.addColorStop(1, `rgba(${col},0)`);
+          g.fillStyle = gl;
+          g.beginPath();
+          g.arc(x, y, r * 4, 0, Math.PI * 2);
+          g.fill();
+        }
+        g.fillStyle = `rgba(${col},${a.toFixed(2)})`;
         g.beginPath();
         g.arc(x, y, r, 0, Math.PI * 2);
         g.fill();
+      }
+      // and a handful of bright flare stars out in the open sky, away from the copy
+      for (let i = 0, placed = 0; !mobile && placed < 7 && i < 200; i++) {
+        const x = rand() * W, y = rand() * H;
+        if (hit(clear, x, y) || y < 130 || y > H - 120 || (quiet && x > quiet.l - 40 && x < quiet.r + 40 && y > quiet.t - 40 && y < quiet.b + 40)) continue;
+        const sz = 3 + (placed % 3) * 1.6;
+        const gl = g.createRadialGradient(x, y, 0, x, y, sz * 3.2);
+        gl.addColorStop(0, "rgba(220,232,255,.5)");
+        gl.addColorStop(1, "rgba(220,232,255,0)");
+        g.fillStyle = gl;
+        g.beginPath();
+        g.arc(x, y, sz * 3.2, 0, Math.PI * 2);
+        g.fill();
+        g.strokeStyle = "rgba(230,240,255,.5)";
+        g.lineWidth = 0.6;
+        g.beginPath();
+        g.moveTo(x - sz * 2, y); g.lineTo(x + sz * 2, y);
+        g.moveTo(x, y - sz * 2); g.lineTo(x, y + sz * 2);
+        g.stroke();
+        g.fillStyle = "#f4f8ff";
+        g.beginPath();
+        g.arc(x, y, 1.2 + (placed % 3) * 0.35, 0, Math.PI * 2);
+        g.fill();
+        placed++;
       }
       el.style.backgroundImage = `url(${sf.toDataURL("image/png")})`;
     }
@@ -1020,7 +1079,7 @@ const steps = [
           for (let d = -METEOR_TAIL; d <= METEOR_RUN && ok; d += 8) ok = !hit(clear, c.x + c.dx * d, c.y + c.dy * d);
           if (ok) meteor = c;
         }
-        nextMeteor = t + 10 + Math.random() * 5;
+        nextMeteor = t + (mobile ? 10 : 6) + Math.random() * 5; // desktop's wider sky sees them more often
       }
       if (!meteor) return;
       const p = (t - meteor.t0) / METEOR_LIFE;
