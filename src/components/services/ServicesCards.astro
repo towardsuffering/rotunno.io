@@ -55,7 +55,7 @@ const pillars = [
             <div class="flex justify-center" data-reveal="rise" data-reveal-delay={idx * 0.1}>
               <!-- the reveal animation owns this wrapper's transform; focus styles live on the inner column -->
               <div
-                class="pillar-column flex w-full max-w-[230px] flex-col items-center text-center"
+                class="pillar-column flex w-full max-w-[230px] cursor-pointer flex-col items-center text-center"
                 data-capability-index={idx}
               >
                 <!-- Ionic capital: abacus slab, volutes scrolling off an echinus, astragal ring at the neck -->
@@ -74,21 +74,21 @@ const pillars = [
                 </div>
 
                 <!-- fluted shaft with a slight entasis taper toward the top -->
-                <div class="pillar-shaft relative flex w-[78%] flex-1 flex-col items-center px-2 pt-8 pb-10 lg:pt-10 lg:pb-14">
+                <div class="pillar-shaft flex w-[78%] flex-1 flex-col items-center px-2 pt-8 pb-10 lg:pt-10 lg:pb-14">
                   <div
-                    class="relative mb-4 flex size-12 shrink-0 items-center justify-center rounded-full lg:size-14"
+                    class="mb-4 flex size-12 shrink-0 items-center justify-center rounded-full lg:size-14"
                     style="background: color-mix(in srgb, #34d399 15%, var(--color-background)); color: #34d399;"
                   >
                     <Icon name={p.icon} class="size-6 lg:size-7" />
                   </div>
-                  <h3 class="pillar-title relative font-heading text-sm leading-snug font-semibold sm:text-base lg:text-lg">
+                  <h3 class="pillar-title font-heading text-sm leading-snug font-semibold sm:text-base lg:text-lg">
                     {p.title}
                   </h3>
                   <Button
                     variant="ghost"
                     arrow="right"
                     href={getLocalizedRoute(currLocale, `/capabilities/${p.slug}`)}
-                    class="relative mt-auto px-2 pt-6 text-sm font-medium hover:bg-transparent lg:text-base"
+                    class="mt-auto px-2 pt-6 text-sm font-medium hover:bg-transparent lg:text-base"
                   >
                     Learn More <span class="sr-only">about {p.title}</span>
                   </Button>
@@ -263,6 +263,13 @@ const pillars = [
         if (e.pointerType === "mouse") pick(item);
       });
       item.addEventListener("focusin", () => pick(item));
+      // the whole pillar is clickable; it follows its Learn More link
+      const link = item.querySelector<HTMLAnchorElement>("a[href]");
+      item.addEventListener("click", (e) => {
+        if (!link || (e.target as Element).closest("a")) return;
+        if (e.metaKey || e.ctrlKey) window.open(link.href, "_blank");
+        else link.click();
+      });
     });
 
     update();
