@@ -1,0 +1,105 @@
+<!doctype html>
+<html><head><meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=block" rel="stylesheet" />
+<style>
+  html,body{margin:0;padding:0}
+  body{width:1584px;height:396px;overflow:hidden;font-family:Inter,system-ui,sans-serif;background:#02060e}
+  #stage{position:relative;width:100%;height:100%;
+    background:
+      radial-gradient(ellipse 30% 70% at 47% 45%, rgba(52,211,153,.07), transparent 70%),
+      radial-gradient(ellipse 22% 60% at 8% 90%, rgba(139,92,246,.07), transparent 70%),
+      radial-gradient(ellipse 26% 70% at 90% 0%, rgba(56,189,248,.06), transparent 70%),
+      linear-gradient(104deg, transparent 22%, rgba(150,175,215,.035) 36%, rgba(200,212,240,.075) 46%, rgba(225,215,235,.06) 50%, rgba(150,175,215,.035) 58%, transparent 70%),
+      radial-gradient(ellipse at 50% 0%, #0c1f3d 0%, #050d1c 55%, #02060e 100%);}
+  canvas,svg{position:absolute;inset:0}
+  .text{position:absolute;right:76px;top:50%;transform:translateY(-50%);text-align:right;width:560px}
+  .head{margin:0;font-weight:700;font-size:58px;line-height:1;letter-spacing:-.035em;
+    background:linear-gradient(180deg,#fff 0%,#eef3fb 55%,#b9c6da 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 2px 22px rgba(120,170,255,.2))}
+  .role{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin:16px 0 14px;font-size:13px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#7dd3fc}
+  .role i{width:36px;height:1px;background:linear-gradient(270deg,#38bdf8,rgba(56,189,248,.15))}
+  .beats{font-size:19px;color:rgba(226,234,246,.82);letter-spacing:-.005em}
+  .url{margin-top:14px;font-size:15px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#34d399;text-shadow:0 0 18px rgba(52,211,153,.35)}
+  .lbl{font:600 9px Inter,sans-serif;letter-spacing:.38em;fill:#a5bedb}
+  .ne{font:700 11px Inter,sans-serif;letter-spacing:.2em;fill:#a7f3d0}
+  .nes{font:italic 500 10px Inter,sans-serif;letter-spacing:.04em;fill:#8aa0bb}
+</style></head><body>
+<div id="stage">
+  <canvas id="c"></canvas>
+  <svg id="s" width="1584" height="396" viewBox="0 0 1584 396"></svg>
+  <div class="text">
+    <h1 class="head">I connect the dots.</h1>
+    <div class="role">Analytics Engineer · SI Orchestration<i></i></div>
+    <div class="beats">I design the system. SI builds it. I make sure it works.</div>
+    <div class="url">rotunno.ai</div>
+  </div>
+</div>
+<script>
+const FL="M88.772,0.13L89.052,0.104L101.656,0L105.017,8.278L105.297,8.772L117.902,9.422L120.423,9.552L125.558,9.838L127.612,9.968L134.428,10.383L137.882,10.591L144.511,11.007L146.658,11.162L150.206,11.422L161.877,12.201L164.585,12.383L167.852,12.616L168.879,12.694L174.201,13.084L178.496,19.306L179.15,6.588L182.324,5.47L194.275,8.824L194.275,14.848L195.955,22.619L200.25,40.081L203.144,47.376L212.761,66.303L218.176,76.129L216.029,81.158L220.23,93.796L223.498,102.706L226.673,111.34L229.754,119.901L229.847,138.802L228.727,148.809L222.004,168.119L224.805,166.783L225.272,167.08L218.923,171.182L209.493,171.849L203.705,173.503L198.289,157.126L193.621,153.777L187.833,152.362L183.818,138.528L176.162,129.59L178.216,125.713L174.108,125.763L172.707,125.162L170,120.603L163.091,107.642L165.331,100.134L169.533,94.504L162.904,89.091L161.223,98.57L157.676,93.72L157.395,84.633L158.236,84.633L158.889,84.633L162.157,76.917L162.437,69.183L160.01,60.305L158.889,55.728L149.459,51.504L143.017,40.209L127.985,27.685L125.745,27.349L118.929,31.401L104.831,38.203L95.868,39.875L91.666,32.484L75.887,22.127L65.43,18.814L54.973,18.581L51.799,19.073L36.207,21.791L40.222,17.078L34.153,0.104L45.45,0.052L55.347,0.104L57.868,0.182L65.617,0.209L70.846,0.209L74.86,0.235ZM184.658,189.263L194.275,182.278L199.503,186.264Z", NE="M200.25,40.081L203.144,47.376L212.761,66.303L206.599,66.328L206.132,71.602L193.901,70.787L195.022,66.481L188.673,67.017L188.673,79.457L180.924,79.508L181.017,61.301L171.68,61.276L165.892,58.772L169.253,45.631L162.717,43.268L162.624,35.319L158.983,32.252L159.076,20.083L161.877,12.201L164.585,12.383L167.852,12.616L168.879,12.694L174.201,13.084L178.496,19.306L179.15,6.588L182.324,5.47L194.275,8.824L194.275,14.848L195.955,22.619Z", HOME=[197.7,33.2];
+const W=1584,H=396,dpr=2;
+let seed=20261018;const rnd=()=>{seed=(seed+0x6d2b79f5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296};
+const sub=d=>d.split("M").filter(p=>p.trim()).map(p=>[...p.replace(/Z/g,"").matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]));
+function rdp(p,e){if(p.length<3)return p;const a=p[0],b=p[p.length-1];let w=0,at=0;for(let i=1;i<p.length-1;i++){const[x,y]=p[i];const L=Math.hypot(b[0]-a[0],b[1]-a[1])||1;const d=Math.abs((b[1]-a[1])*x-(b[0]-a[0])*y+b[0]*a[1]-b[1]*a[0])/L;if(d>w){w=d;at=i}}if(w<=e)return[a,b];return[...rdp(p.slice(0,at+1),e).slice(0,-1),...rdp(p.slice(at),e)]}
+const ring=(p,e)=>{const s=rdp(p,e);return s.length>2&&s[0][0]===s.at(-1)[0]&&s[0][1]===s.at(-1)[1]?s.slice(0,-1):s};
+const hash=(x,y)=>{const v=Math.sin(x*12.9898+y*78.233)*43758.5453;return v-Math.floor(v)};
+const TEMPS=["#e6f1ff","#e6f1ff","#e6f1ff","#d4e4ff","#c9dcff","#fff1d6","#ffe0b8"];
+
+// Florida: 264x190 box placed in the middle
+const K=1.55, OX=560, OY=46;
+const T=([x,y])=>[OX+x*K,OY+y*K];
+const state=sub(FL).map(p=>ring(p,4.5).map(T)).filter(p=>p.length>=3);
+const ne=ring(sub(NE)[0],3.5).map(T);
+const home=T(HOME);
+const outline=sub(FL).map(p=>p.map(T));
+
+// starfield, kept out of Florida and quieter behind the text and photo
+const cv=document.getElementById("c");cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+"px";cv.style.height=H+"px";
+const g=cv.getContext("2d");g.scale(dpr,dpr);
+const mask=new Path2D();outline.forEach(r=>{r.forEach(([x,y],i)=>i?mask.lineTo(x,y):mask.moveTo(x,y));mask.closePath()});
+const temps=["220,232,255","200,218,255","255,240,214","255,226,190","180,200,235"];
+for(let i=0;i<5200;i++){const x=rnd()*W,y=rnd()*H;
+  const band=Math.abs((x-W*.46)*Math.cos(.24)+(y-H/2)*Math.sin(.24)*3)/W; if(rnd()>.35+.65*Math.exp(-((band/.12)**2)))continue;
+  if(g.isPointInPath(mask,x,y))continue;
+  let a=.15+rnd()*.55; if(x>W-680)a*=.35;
+  const r=rnd()<.94?.3+rnd()*.5:.8+rnd()*.6;
+  g.fillStyle=`rgba(${temps[Math.floor(rnd()*temps.length)]},${a.toFixed(2)})`;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()}
+
+// svg constellations
+const S=document.getElementById("s"),NS="http://www.w3.org/2000/svg";
+const el=(n,a,p=S)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
+const defs=el("defs",{});
+const grads={};const grad=c=>{if(grads[c])return grads[c];const id="g"+c.slice(1);const rg=el("radialGradient",{id},defs);
+  [[0,.9],[.3,.32],[1,0]].forEach(([o,op])=>el("stop",{offset:o,"stop-color":c,"stop-opacity":op},rg));return grads[c]=`url(#${id})`};
+function star(x,y,h,green=false,scale=1){
+  const color=green?(h>.7?"#ecfdf5":"#a7f3d0"):TEMPS[Math.min(6,Math.floor(((h*13.37)%1)*7))];
+  const glow=green?"#34d399":color;
+  el("circle",{cx:x,cy:y,r:(5.5+h*4.5)*scale,fill:grad(glow),opacity:.3});
+  el("circle",{cx:x,cy:y,r:(2.2+h*2.2)*scale,fill:grad(glow),opacity:.85});
+  if(h>.72){const s=(4.5+h*4)*scale;el("path",{d:`M${x-s} ${y}H${x+s}M${x} ${y-s}V${y+s}`,stroke:color,"stroke-width":.45,"stroke-opacity":.55,"stroke-linecap":"round"})}
+  el("circle",{cx:x,cy:y,r:((green?1.05:.75)+h*.9)*scale,fill:color});
+}
+const poly=p=>p.map(q=>q.map(v=>v.toFixed(1)).join(",")).join(" ");
+state.forEach(p=>el("polygon",{points:poly(p),fill:"none",stroke:"#a5bedb","stroke-opacity":.32,"stroke-width":.9,"stroke-linejoin":"round"}));
+state.flat().forEach(([x,y])=>star(x,y,hash(x,y),false,1.15));
+el("polygon",{points:poly(ne),fill:"#34d399","fill-opacity":.1,stroke:"#34d399","stroke-opacity":.6,"stroke-width":1.2,"stroke-linejoin":"round"});
+ne.forEach(([x,y])=>star(x,y,hash(x,y),true,1.15));
+const hg=el("radialGradient",{id:"hg"},defs);el("stop",{offset:0,"stop-color":"#34d399","stop-opacity":.75},hg);el("stop",{offset:1,"stop-color":"#34d399","stop-opacity":0},hg);
+el("circle",{cx:home[0],cy:home[1],r:22,fill:"url(#hg)"});el("circle",{cx:home[0],cy:home[1],r:3.6,fill:"#ecfdf5"});
+el("path",{d:`M${home[0]} ${home[1]-11}V${home[1]+11}M${home[0]-11} ${home[1]}H${home[0]+11}`,stroke:"#ecfdf5","stroke-opacity":.7,"stroke-width":.7});
+el("polyline",{points:`${home[0]+9},${home[1]-9} ${home[0]+28},${home[1]-30} ${home[0]+40},${home[1]-30}`,fill:"none",stroke:"#34d399","stroke-opacity":.5,"stroke-width":.8});
+const t1=el("text",{x:home[0]+45,y:home[1]-33,class:"ne"});t1.textContent="NORTHEAST FLORIDA";
+const t2=el("text",{x:home[0]+45,y:home[1]-19,class:"nes"});t2.textContent="home base";
+
+// the small constellations, same star sets as the site
+function mini(stars,lines,label,ox,oy,k){
+  const T2=([x,y])=>[ox+x*k,oy+y*k];
+  lines.forEach(l=>el("polyline",{points:l.map(i=>T2(stars[i]).join(",")).join(" "),fill:"none",stroke:"#a5bedb","stroke-opacity":.5,"stroke-width":1,"stroke-linejoin":"round"}));
+  stars.forEach(s=>{const[x,y]=T2(s);star(x,y,hash(s[0],s[1]),false,.95)});
+  const xs=stars.map(s=>T2(s)[0]),ys=stars.map(s=>T2(s)[1]);
+  const t=el("text",{x:(Math.min(...xs)+Math.max(...xs))/2,y:Math.max(...ys)+18,"text-anchor":"middle",class:"lbl"});t.textContent=label;
+}
+mini([[8,70],[28,58],[46,62],[66,40],[86,33],[108,12],[8,78],[112,78]],[[0,1,2,3,4,5],[6,7]],"ANALYTICS",360,40,.9);
+mini([[14,78],[86,78],[86,44],[50,12],[14,44],[70,26],[70,14],[42,78],[42,58],[58,58],[58,78]],[[0,1,2,3,4,0],[5,6],[7,8,9,10]],"HOME SERVICES",400,230,.85);
+mini([[6,12],[22,16],[32,58],[92,58],[102,26],[26,30],[40,72],[86,72],[44,84],[82,84]],[[0,1,5,4,3,2,6,7],[1,2],[8],[9]],"RETAIL",1150,24,.7);
+mini([[10,34],[50,10],[90,34],[22,40],[22,76],[50,40],[50,76],[78,40],[78,76],[8,84],[92,84]],[[0,1,2,0],[3,4],[5,6],[7,8],[9,10]],"FINANCE",945,262,.72);
+</script></body></html>
