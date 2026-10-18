@@ -29,6 +29,30 @@ const pillars = [
     slug: "predicting-patterns",
   },
 ];
+
+type Star = [x: number, y: number, size: number];
+// joints of every column, in percent of the column box (see the svg paths below)
+const JOINTS: Star[] = [
+  [0, 1, 1.2], [100, 1, 1.2], [6, 8, 0.8], [94, 8, 0.8],
+  [11, 91, 0.8], [89, 91, 0.8], [0, 99, 1.1], [100, 99, 1.1],
+];
+// a few stars along the shaft's edges, different on each column so they read as constellations, not clones
+const EDGE_YS = [[30, 64], [22, 52, 76], [40, 70], [26, 58]];
+const pillarStars = (idx: number): Star[] => [
+  ...JOINTS,
+  ...EDGE_YS[idx % EDGE_YS.length].map((y, i): Star => {
+    const left = i % 2 === 0;
+    const x = left ? 13 - (2 * (y - 8)) / 83 : 87 + (2 * (y - 8)) / 83; // on the tapered edge
+    return [x, y, 0.55 + ((idx + i) % 3) * 0.15];
+  }),
+];
+// roof (viewBox 100x24): the pediment's corners and a few along its slopes, then the beam's ends
+const ROOF_STARS: Star[] = [
+  [0, 16, 1.2], [50, 1, 1.5], [100, 16, 1.2], [24, 8.6, 0.7], [76, 8.6, 0.7],
+  [2, 22, 0.9], [98, 22, 0.9], [36, 22, 0.6], [64, 22, 0.6],
+];
+// steps (viewBox 100x12): each line's ends
+const STEP_STARS: Star[] = [[4, 2, 0.8], [96, 2, 0.8], [1.5, 6, 0.9], [98.5, 6, 0.9], [0, 10, 1.1], [100, 10, 1.1]];
 ---
 
 <section id="capabilities-cards" class="my-12 py-12">
@@ -36,14 +60,14 @@ const pillars = [
     <h2 class="h2 mx-auto max-w-3xl text-center" data-reveal="pop">Core Capabilities</h2>
 
     <div class="temple relative mx-auto mt-16 max-w-5xl">
-      <!-- roof: pediment over the entablature (cornice, frieze, architrave) -->
-      <div class="hidden lg:block" aria-hidden="true">
-        <svg class="pediment block h-16 w-full" viewBox="0 0 100 10" preserveAspectRatio="none">
-          <polygon points="0,10 50,0.6 100,10" vector-effect="non-scaling-stroke" />
+      <!-- roof: a constellation pediment over a starlit beam -->
+      <div class="relative hidden lg:block" aria-hidden="true">
+        <svg class="block h-24 w-full" viewBox="0 0 100 24" preserveAspectRatio="none">
+          <polygon class="temple-glass" points="0,16 50,1 100,16" />
+          <path class="temple-line" d="M0 16L50 1L100 16Z M2 16V22H98V16" />
+          <path class="temple-dots" d="M2 19H98" />
         </svg>
-        <div class="temple-cornice h-2.5 rounded-sm" />
-        <div class="temple-frieze mx-3 h-4" />
-        <div class="temple-architrave mx-5 h-2.5 rounded-b-sm" />
+        {ROOF_STARS.map(([x, y, s]) => <span class="cstar" style={`left:${x}%;top:${(y / 24) * 100}%;--s:${s}`} />)}
       </div>
 
       <div
@@ -55,30 +79,27 @@ const pillars = [
             <div class="flex justify-center" data-reveal="rise" data-reveal-delay={idx * 0.1}>
               <!-- the reveal animation owns this wrapper's transform; focus styles live on the inner column -->
               <div
-                class="pillar-column flex w-full max-w-[230px] cursor-pointer flex-col items-center text-center"
+                class="pillar-column relative flex w-full max-w-[230px] cursor-pointer flex-col items-center text-center"
                 data-capability-index={idx}
               >
-                <!-- Ionic capital: abacus slab, volutes scrolling off an echinus, astragal ring at the neck -->
-                <div class="flex w-full flex-col items-center" aria-hidden="true">
-                  <div class="pillar-abacus h-2.5 w-full rounded-sm" />
-                  <div class="flex h-6 w-full items-start">
-                    <svg class="pillar-volute size-6 shrink-0" viewBox="0 0 24 24">
-                      <path d="M12 12 A1.5 1.5 0 0 1 15 12 A3 3 0 0 1 9 12 A4.5 4.5 0 0 1 18 12 A6 6 0 0 1 6 12 A6.5 6.5 0 0 1 12 1" />
-                    </svg>
-                    <div class="pillar-echinus h-3.5 flex-1 rounded-b-[50%]" />
-                    <svg class="pillar-volute size-6 shrink-0 -scale-x-100" viewBox="0 0 24 24">
-                      <path d="M12 12 A1.5 1.5 0 0 1 15 12 A3 3 0 0 1 9 12 A4.5 4.5 0 0 1 18 12 A6 6 0 0 1 6 12 A6.5 6.5 0 0 1 12 1" />
-                    </svg>
-                  </div>
-                  <div class="pillar-astragal h-1.5 w-[80%] rounded-full" />
-                </div>
+                <!-- the column drawn as a constellation: capital, a shaft tapering toward the top, and a base,
+                     with stars at the joints and a few along the shaft's edges -->
+                <svg
+                  class="pointer-events-none absolute inset-0 h-full w-full"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <polygon class="pillar-glass" points="13,8 87,8 89,91 11,91" />
+                  <path class="pillar-flute" d="M31 13V87M50 13V87M69 13V87" />
+                  <path class="pillar-line" d="M0 1H100L94 8H6Z M13 8L11 91 M87 8L89 91 M6 91H94L100 99H0Z" />
+                </svg>
+                {pillarStars(idx).map(([x, y, s]) => (
+                  <span class="cstar" style={`left:${x}%;top:${y}%;--s:${s}`} aria-hidden="true" />
+                ))}
 
-                <!-- fluted shaft with a slight entasis taper toward the top -->
-                <div class="pillar-shaft flex w-[78%] flex-1 flex-col items-center px-2 pt-8 pb-10 lg:pt-10 lg:pb-14">
-                  <div
-                    class="mb-4 flex size-12 shrink-0 items-center justify-center rounded-full lg:size-14"
-                    style="background: color-mix(in srgb, #34d399 15%, var(--color-background)); color: #34d399;"
-                  >
+                <div class="pillar-shaft relative flex w-[78%] flex-1 flex-col items-center px-2 pt-14 pb-14 lg:pt-16 lg:pb-16">
+                  <div class="pillar-icon mb-4 flex size-12 shrink-0 items-center justify-center rounded-full lg:size-14">
                     <Icon name={p.icon} class="size-6 lg:size-7" />
                   </div>
                   <h3 class="pillar-title font-heading text-sm leading-snug font-semibold sm:text-base lg:text-lg">
@@ -93,97 +114,92 @@ const pillars = [
                     Learn More <span class="sr-only">about {p.title}</span>
                   </Button>
                 </div>
-
-                <!-- Attic base: torus, scotia, torus, plinth -->
-                <div class="flex w-full flex-col items-center" aria-hidden="true">
-                  <div class="pillar-torus h-2 w-[86%] rounded-full" />
-                  <div class="pillar-scotia h-1 w-[80%]" />
-                  <div class="pillar-torus h-2.5 w-[94%] rounded-full" />
-                  <div class="pillar-plinth h-2.5 w-full rounded-sm" />
-                </div>
               </div>
             </div>
           ))
         }
       </div>
 
-      <!-- stylobate: the stepped platform the colonnade stands on -->
-      <div class="hidden lg:block" aria-hidden="true">
-        <div class="temple-step mx-4 h-2.5" />
-        <div class="temple-step mx-1 h-2.5" />
-        <div class="temple-step -mx-2 h-2.5 rounded-b-sm" />
+      <!-- the steps the colonnade stands on: three starlit lines, widening toward the ground -->
+      <div class="relative mt-1 hidden lg:block" aria-hidden="true">
+        <svg class="block h-8 w-full" viewBox="0 0 100 12" preserveAspectRatio="none">
+          <path class="temple-line" d="M4 2H96 M1.5 6H98.5 M0 10H100" />
+        </svg>
+        {STEP_STARS.map(([x, y, s]) => <span class="cstar" style={`left:${x}%;top:${(y / 12) * 100}%;--s:${s}`} />)}
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  /* stone tones: the site's green, mixed into the background */
-  .temple {
-    --stone: color-mix(in srgb, #34d399 24%, var(--color-background));
-    --stone-light: color-mix(in srgb, #34d399 34%, var(--color-background));
-    --stone-dark: color-mix(in srgb, #34d399 14%, var(--color-background));
-  }
-
-  .pediment polygon {
-    fill: color-mix(in srgb, #34d399 7%, var(--color-background));
-    stroke: color-mix(in srgb, #34d399 45%, transparent);
-    stroke-width: 1.5px;
-  }
-  .temple-cornice,
-  .temple-architrave {
-    background: var(--stone);
-  }
-  /* frieze: triglyph-like grooves between the cornice and architrave */
-  .temple-frieze {
-    background:
-      repeating-linear-gradient(90deg, var(--stone-light) 0 3px, transparent 3px 6px, var(--stone-light) 6px 9px, transparent 9px 44px),
-      var(--stone-dark);
-  }
-  .temple-step {
-    background: var(--stone-dark);
-    border-top: 1px solid var(--stone-light);
-  }
-
-  .pillar-abacus,
-  .pillar-plinth {
-    background: var(--stone-light);
-  }
-  .pillar-echinus,
-  .pillar-torus {
-    background: var(--stone);
-  }
-  .pillar-astragal {
-    background: var(--stone-light);
-  }
-  .pillar-scotia {
-    background: var(--stone-dark);
-  }
-  .pillar-volute {
+  /* constellation lines and stars, in the site's green; each column brightens with its own --focus */
+  .temple-line,
+  .pillar-line {
     fill: none;
-    stroke: var(--stone-light);
-    stroke-width: 2.2;
+    stroke-width: 1.2px;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .temple-line {
+    stroke: color-mix(in srgb, #a7f3d0 45%, transparent);
+  }
+  .temple-dots {
+    fill: none;
+    stroke: color-mix(in srgb, #a7f3d0 35%, transparent);
+    stroke-width: 1.4px;
     stroke-linecap: round;
+    stroke-dasharray: 0 9;
+    vector-effect: non-scaling-stroke;
+  }
+  .temple-glass {
+    fill: color-mix(in srgb, #34d399 5%, transparent);
+  }
+  .pillar-line {
+    stroke: color-mix(in srgb, #a7f3d0 calc(32% + var(--focus, 0) * 50%), transparent);
+  }
+  /* fluting as faint dotted star trails */
+  .pillar-flute {
+    fill: none;
+    stroke: color-mix(in srgb, #a7f3d0 calc(14% + var(--focus, 0) * 26%), transparent);
+    stroke-width: 1.3px;
+    stroke-linecap: round;
+    stroke-dasharray: 0 7;
+    vector-effect: non-scaling-stroke;
+  }
+  /* glass between the shaft's edges, lit a little more in focus */
+  .pillar-glass {
+    fill: color-mix(in srgb, #34d399 calc(4% + var(--focus, 0) * 7%), transparent);
   }
 
-  /* fluting (vertical grooves) over cylinder shading (dark edges, lit middle);
-     the flutes and light both rise with focus */
+  /* a star: a bright core with a green halo; --s scales it */
+  .cstar {
+    position: absolute;
+    width: calc(3.2px * var(--s, 1));
+    height: calc(3.2px * var(--s, 1));
+    border-radius: 50%;
+    background: #f0fff8;
+    box-shadow:
+      0 0 calc(3px * var(--s, 1)) rgba(255, 255, 255, 0.8),
+      0 0 calc(10px * var(--s, 1)) calc(1.5px * var(--s, 1)) rgba(52, 211, 153, 0.45);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .pillar-column .cstar {
+    opacity: calc(0.55 + var(--focus, 0) * 0.45);
+    transition: opacity 0.15s ease;
+  }
+
+  /* the icon as the column's brightest star */
+  .pillar-icon {
+    color: #34d399;
+    background: radial-gradient(circle, color-mix(in srgb, #34d399 22%, transparent) 0%, transparent 72%);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, #34d399 calc(25% + var(--focus, 0) * 35%), transparent),
+      0 0 calc(var(--focus, 0) * 22px) color-mix(in srgb, #34d399 35%, transparent);
+  }
+
   .pillar-shaft {
     min-height: 260px;
-    clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
-    background:
-      repeating-linear-gradient(
-        90deg,
-        color-mix(in srgb, #34d399 calc(14% + var(--focus, 0) * 14%), transparent) 0 1px,
-        transparent 1px 12%
-      ),
-      linear-gradient(
-        90deg,
-        color-mix(in srgb, #34d399 6%, var(--color-background)) 0%,
-        color-mix(in srgb, #34d399 calc(12% + var(--focus, 0) * 10%), var(--color-background)) 40%,
-        color-mix(in srgb, #34d399 calc(10% + var(--focus, 0) * 8%), var(--color-background)) 60%,
-        color-mix(in srgb, #34d399 4%, var(--color-background)) 100%
-      );
   }
   @media (min-width: 1024px) {
     .pillar-shaft {
