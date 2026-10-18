@@ -12,16 +12,16 @@
       linear-gradient(104deg, transparent 22%, rgba(150,175,215,.035) 36%, rgba(200,212,240,.075) 46%, rgba(225,215,235,.06) 50%, rgba(150,175,215,.035) 58%, transparent 70%),
       radial-gradient(ellipse at 50% 0%, #0c1f3d 0%, #050d1c 55%, #02060e 100%);}
   canvas,svg{position:absolute;inset:0}
-  .text{position:absolute;right:76px;top:50%;transform:translateY(-50%);text-align:right;width:560px}
-  .head{margin:0;font-weight:700;font-size:58px;line-height:1;letter-spacing:-.035em;
+  .text{position:absolute;right:56px;top:50%;transform:translateY(-50%);text-align:right;width:800px}
+  .head{margin:0;font-weight:700;font-size:86px;line-height:1;letter-spacing:-.035em;
     background:linear-gradient(180deg,#fff 0%,#eef3fb 55%,#b9c6da 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
     filter:drop-shadow(0 2px 22px rgba(120,170,255,.2))}
-  .role{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin:16px 0 14px;font-size:13px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#7dd3fc}
-  .beats{font-size:19px;color:rgba(226,234,246,.82);letter-spacing:-.005em}
-  .url{margin-top:14px;font-size:15px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#34d399;text-shadow:0 0 18px rgba(52,211,153,.35)}
-  .lbl{font:600 9px Inter,sans-serif;letter-spacing:.38em;fill:#a5bedb}
-  .ne{font:700 11px Inter,sans-serif;letter-spacing:.2em;fill:#a7f3d0}
-  .nes{font:italic 500 10px Inter,sans-serif;letter-spacing:.04em;fill:#8aa0bb}
+  .role{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin:20px 0 16px;font-size:19px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#7dd3fc}
+  .beats{font-size:27px;color:rgba(226,234,246,.82);letter-spacing:-.005em}
+  .url{margin-top:16px;font-size:22px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#34d399;text-shadow:0 0 18px rgba(52,211,153,.35)}
+  .lbl{font:600 12px Inter,sans-serif;letter-spacing:.38em;fill:#a5bedb}
+  .ne{font:700 15px Inter,sans-serif;letter-spacing:.2em;fill:#a7f3d0}
+  .nes{font:italic 500 13px Inter,sans-serif;letter-spacing:.04em;fill:#8aa0bb}
 </style></head><body>
 <div id="stage">
   <canvas id="c"></canvas>
@@ -44,7 +44,7 @@ const hash=(x,y)=>{const v=Math.sin(x*12.9898+y*78.233)*43758.5453;return v-Math
 const TEMPS=["#e6f1ff","#e6f1ff","#e6f1ff","#d4e4ff","#c9dcff","#fff1d6","#ffe0b8"];
 
 // Florida: 264x190 box placed in the middle
-const K=1.55, OX=560, OY=46;
+const K=1.95, OX=300, OY=14;
 const T=([x,y])=>[OX+x*K,OY+y*K];
 const state=sub(FL).map(p=>ring(p,4.5).map(T)).filter(p=>p.length>=3);
 const ne=ring(sub(NE)[0],3.5).map(T);
@@ -59,7 +59,7 @@ const temps=["220,232,255","200,218,255","255,240,214","255,226,190","180,200,23
 for(let i=0;i<5200;i++){const x=rnd()*W,y=rnd()*H;
   const band=Math.abs((x-W*.46)*Math.cos(.24)+(y-H/2)*Math.sin(.24)*3)/W; if(rnd()>.35+.65*Math.exp(-((band/.12)**2)))continue;
   if(g.isPointInPath(mask,x,y))continue;
-  let a=.15+rnd()*.55; if(x>W-680)a*=.35;
+  let a=.15+rnd()*.55; if(x>W-820)a*=.35;
   const r=rnd()<.94?.3+rnd()*.5:.8+rnd()*.6;
   g.fillStyle=`rgba(${temps[Math.floor(rnd()*temps.length)]},${a.toFixed(2)})`;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()}
 
@@ -78,12 +78,12 @@ function star(x,y,h,green=false,scale=1){
   el("circle",{cx:x,cy:y,r:((green?1.05:.75)+h*.9)*scale,fill:color});
 }
 const poly=p=>p.map(q=>q.map(v=>v.toFixed(1)).join(",")).join(" ");
-state.forEach(p=>el("polygon",{points:poly(p),fill:"none",stroke:"#a5bedb","stroke-opacity":.5,"stroke-width":2,"stroke-linejoin":"round"}));
-state.flat().forEach(([x,y])=>star(x,y,hash(x,y),false,1.15));
-el("polygon",{points:poly(ne),fill:"#34d399","fill-opacity":.1,stroke:"#34d399","stroke-opacity":.6,"stroke-width":1.2,"stroke-linejoin":"round"});
-ne.forEach(([x,y])=>star(x,y,hash(x,y),true,1.15));
+state.forEach(p=>el("polygon",{points:poly(p),fill:"none",stroke:"#a5bedb","stroke-opacity":.55,"stroke-width":2.6,"stroke-linejoin":"round"}));
+state.flat().forEach(([x,y])=>star(x,y,hash(x,y),false,1.45));
+el("polygon",{points:poly(ne),fill:"#34d399","fill-opacity":.1,stroke:"#34d399","stroke-opacity":.7,"stroke-width":2,"stroke-linejoin":"round"});
+ne.forEach(([x,y])=>star(x,y,hash(x,y),true,1.45));
 const hg=el("radialGradient",{id:"hg"},defs);el("stop",{offset:0,"stop-color":"#34d399","stop-opacity":.75},hg);el("stop",{offset:1,"stop-color":"#34d399","stop-opacity":0},hg);
-el("circle",{cx:home[0],cy:home[1],r:22,fill:"url(#hg)"});el("circle",{cx:home[0],cy:home[1],r:3.6,fill:"#ecfdf5"});
+el("circle",{cx:home[0],cy:home[1],r:30,fill:"url(#hg)"});el("circle",{cx:home[0],cy:home[1],r:4.8,fill:"#ecfdf5"});
 el("path",{d:`M${home[0]} ${home[1]-11}V${home[1]+11}M${home[0]-11} ${home[1]}H${home[0]+11}`,stroke:"#ecfdf5","stroke-opacity":.7,"stroke-width":.7});
 el("polyline",{points:`${home[0]+9},${home[1]-9} ${home[0]+28},${home[1]-30} ${home[0]+40},${home[1]-30}`,fill:"none",stroke:"#34d399","stroke-opacity":.5,"stroke-width":.8});
 const t1=el("text",{x:home[0]+45,y:home[1]-33,class:"ne"});t1.textContent="NORTHEAST FLORIDA";
@@ -92,13 +92,13 @@ const t2=el("text",{x:home[0]+45,y:home[1]-19,class:"nes"});t2.textContent="home
 // the small constellations, same star sets as the site
 function mini(stars,lines,label,ox,oy,k){
   const T2=([x,y])=>[ox+x*k,oy+y*k];
-  lines.forEach(l=>el("polyline",{points:l.map(i=>T2(stars[i]).join(",")).join(" "),fill:"none",stroke:"#a5bedb","stroke-opacity":.5,"stroke-width":1,"stroke-linejoin":"round"}));
+  lines.forEach(l=>el("polyline",{points:l.map(i=>T2(stars[i]).join(",")).join(" "),fill:"none",stroke:"#a5bedb","stroke-opacity":.6,"stroke-width":1.6,"stroke-linejoin":"round"}));
   stars.forEach(s=>{const[x,y]=T2(s);star(x,y,hash(s[0],s[1]),false,.95)});
   const xs=stars.map(s=>T2(s)[0]),ys=stars.map(s=>T2(s)[1]);
-  const t=el("text",{x:(Math.min(...xs)+Math.max(...xs))/2,y:Math.max(...ys)+18,"text-anchor":"middle",class:"lbl"});t.textContent=label;
+  const t=el("text",{x:(Math.min(...xs)+Math.max(...xs))/2,y:Math.max(...ys)+24,"text-anchor":"middle",class:"lbl"});t.textContent=label;
 }
-mini([[8,70],[28,58],[46,62],[66,40],[86,33],[108,12],[8,78],[112,78]],[[0,1,2,3,4,5],[6,7]],"ANALYTICS",360,40,.9);
-mini([[14,78],[86,78],[86,44],[50,12],[14,44],[70,26],[70,14],[42,78],[42,58],[58,58],[58,78]],[[0,1,2,3,4,0],[5,6],[7,8,9,10]],"HOME SERVICES",400,230,.85);
-mini([[6,12],[22,16],[32,58],[92,58],[102,26],[26,30],[40,72],[86,72],[44,84],[82,84]],[[0,1,5,4,3,2,6,7],[1,2],[8],[9]],"RETAIL",1150,24,.7);
-mini([[10,34],[50,10],[90,34],[22,40],[22,76],[50,40],[50,76],[78,40],[78,76],[8,84],[92,84]],[[0,1,2,0],[3,4],[5,6],[7,8],[9,10]],"FINANCE",945,262,.72);
+mini([[8,70],[28,58],[46,62],[66,40],[86,33],[108,12],[8,78],[112,78]],[[0,1,2,3,4,5],[6,7]],"ANALYTICS",40,34,1.15);
+mini([[14,78],[86,78],[86,44],[50,12],[14,44],[70,26],[70,14],[42,78],[42,58],[58,58],[58,78]],[[0,1,2,3,4,0],[5,6],[7,8,9,10]],"HOME SERVICES",420,236,1.1);
+mini([[6,12],[22,16],[32,58],[92,58],[102,26],[26,30],[40,72],[86,72],[44,84],[82,84]],[[0,1,5,4,3,2,6,7],[1,2],[8],[9]],"RETAIL",190,40,1.0);
+mini([[10,34],[50,10],[90,34],[22,40],[22,76],[50,40],[50,76],[78,40],[78,76],[8,84],[92,84]],[[0,1,2,0],[3,4],[5,6],[7,8],[9,10]],"FINANCE",770,272,.95);
 </script></body></html>
