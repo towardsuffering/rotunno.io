@@ -168,18 +168,27 @@ const steps = [
     width: 116px;
   }
   /* inside the Florida box (percentages of it), in the open water east of the peninsula */
+  /* top right corner, above the Northeast Florida label */
   .converge__mini--cart {
-    top: 26%;
-    left: 74%;
-    width: 17%;
+    top: -13%;
+    left: 85%;
+    width: 15%;
+  }
+  @media (max-width: 767px) {
+    /* phones: the corner would meet the buttons, so it stays east of the peninsula */
+    .converge__mini--cart {
+      top: 26%;
+      left: 74%;
+      width: 17%;
+    }
   }
   .converge__mini--bank {
     top: 70%;
     left: 80%;
     width: 14%;
   }
-  /* phones and short screens: no room beside the text, so only Florida shows */
-  @media (max-width: 767px), (max-height: 720px) {
+  /* tablets, phones and short screens: no room beside the text, so only Florida's group shows */
+  @media (max-width: 1023px), (max-height: 720px) {
     .converge__mini--chart,
     .converge__mini--house {
       display: none;
