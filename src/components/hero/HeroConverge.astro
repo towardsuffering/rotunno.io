@@ -86,34 +86,6 @@ const steps = [
         class="h-full w-full"
       />
     </div>
-    <!-- two real constellations, for flavor: positions from their stars' sky coordinates, brightness from magnitude -->
-    <div class="converge__mini converge__mini--virgo" data-sky>
-      <MiniConstellation
-        label="VIRGO"
-        viewBox="0 0 146 94"
-        stars={[
-          [123.7, 14.4, 0.11], [138, 20.8, 0.13], [134.5, 34.5, 0.22], [113.4, 41.5, 0.15], [97.8, 43.7, 0.41],
-          [87.5, 29.8, 0.26], [82.7, 8, 0.39], [77.5, 55.5, 0.05], [66.3, 71.7, 0.86, "#c9dcff"], [59.4, 41.3, 0.26],
-          [40, 35.1, 0.07], [8, 34.1, 0.2], [29.6, 56.8, 0.11], [10.2, 55.9, 0.15],
-        ]}
-        lines={[[6, 5, 4, 3, 2, 1, 0], [4, 7, 8], [5, 9, 10, 11], [9, 12, 13]]}
-        wall="hull"
-        class="h-full w-full"
-      />
-    </div>
-    <div class="converge__mini converge__mini--orion" data-sky>
-      <MiniConstellation
-        label="ORION"
-        viewBox="0 0 86 164"
-        stars={[
-          [8, 25.3, 0.92, "#ffc59a"], [59.5, 32.6, 0.65], [42, 8, 0.26], [48.1, 78.2, 0.52],
-          [40.9, 84.4, 0.63], [32.7, 89.5, 0.61], [20.4, 142.5, 0.54], [78, 132.4, 0.98, "#cfe0ff"],
-        ]}
-        lines={[[0, 2, 1], [1, 3, 4, 5, 0], [5, 6], [3, 7]]}
-        wall="hull"
-        class="h-full w-full"
-      />
-    </div>
     <div class="converge__mini converge__mini--house" data-sky>
       <MiniConstellation
         label="HOME SERVICES"
@@ -134,9 +106,9 @@ const steps = [
         </h1>
         <p class="converge__role"><span aria-hidden="true"></span>Data Engineer · AI Orchestration</p>
         <p class="converge__beats">
-          <span>Designs the system.</span>
+          <span>I design the system.</span>
           <span>AI builds it.</span>
-          <span>Makes sure it works.</span>
+          <span>I make sure it works.</span>
         </p>
         <p class="converge__signature">I connect the dots.</p>
         <div class="flex flex-wrap gap-4">
@@ -281,18 +253,6 @@ const steps = [
     left: calc(max(0px, (100% - 86rem) / 2) + 64px + 190px);
     width: 116px;
   }
-  /* Virgo low in the middle, between Home Services and Florida's tip */
-  .converge__mini--virgo {
-    bottom: 13%;
-    left: calc(max(0px, (100% - 86rem) / 2) + 64px + min(520px, 40vw) - 40px);
-    width: 170px;
-  }
-  /* Orion in the lower right corner */
-  .converge__mini--orion {
-    bottom: 6%;
-    right: calc(max(0px, (100% - 86rem) / 2) + 46px);
-    width: 78px;
-  }
   /* inside the Florida box (percentages of it), in the open water east of the peninsula */
   /* top right corner, above the Northeast Florida label */
   .converge__mini--cart {
@@ -330,9 +290,7 @@ const steps = [
   /* tablets, phones and short screens: no room beside the text, so only Florida's group shows */
   @media (max-width: 1023px), (max-height: 720px) {
     .converge__mini--chart,
-    .converge__mini--house,
-    .converge__mini--virgo,
-    .converge__mini--orion {
+    .converge__mini--house {
       display: none;
     }
   }
