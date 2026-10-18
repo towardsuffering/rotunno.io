@@ -4,6 +4,8 @@
  * (each line is a list of star indexes), with a star-chart label underneath.
  * `wall` lists closed outlines (star indexes) that HeroConverge's dots may not cross.
  */
+import { starHash, starLook } from "./starLook";
+
 interface Props {
   stars: [number, number][];
   lines: number[][];
@@ -15,30 +17,32 @@ interface Props {
 const { stars, lines, label, viewBox, wall = [], class: className } = Astro.props;
 const [vx, vy, vw, vh] = viewBox.split(" ").map(Number);
 const shape = wall.length ? JSON.stringify({ viewBox: [vx, vy, vw, vh], rings: wall.map((r) => r.map((i) => stars[i])) }) : undefined;
-const hash = (x: number, y: number) => {
-  const v = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
-  return v - Math.floor(v);
-};
+const looks = stars.map(([x, y]) => ({ x, y, h: starHash(x, y), ...starLook(starHash(x, y)) }));
+const glowColors = [...new Set(looks.map((s) => s.glow))];
+const gid = (c: string) => `mini-glow-${c.slice(1)}`;
 ---
-
 <svg class:list={["mini", className]} viewBox={viewBox} data-shape={shape} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
-    <radialGradient id="mini-glow">
-      <stop offset="0" stop-color="#e6f1ff" stop-opacity="0.45" />
-      <stop offset="1" stop-color="#e6f1ff" stop-opacity="0" />
-    </radialGradient>
+    {
+      glowColors.map((c) => (
+        <radialGradient id={gid(c)}>
+          <stop offset="0" stop-color={c} stop-opacity="0.9" />
+          <stop offset="0.3" stop-color={c} stop-opacity="0.32" />
+          <stop offset="1" stop-color={c} stop-opacity="0" />
+        </radialGradient>
+      ))
+    }
   </defs>
   {lines.map((l) => <polyline points={l.map((i) => stars[i].join(",")).join(" ")} class="mini-line" />)}
   {
-    stars.map(([x, y]) => {
-      const h = hash(x, y);
-      return (
-        <g class="mini-star" style={`--d: ${(h * 4).toFixed(2)}s`}>
-          <circle cx={x} cy={y} r={5.5 + h * 2.5} fill="url(#mini-glow)" />
-          <circle cx={x} cy={y} r={1.9 + h * 0.8} fill="#e6f1ff" />
-        </g>
-      );
-    })
+    looks.map((s) => (
+      <g class="mini-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
+        <circle cx={s.x} cy={s.y} r={s.bloom} fill={`url(#${gid(s.glow)})`} opacity="0.3" />
+        <circle cx={s.x} cy={s.y} r={s.halo + 0.8} fill={`url(#${gid(s.glow)})`} opacity="0.85" />
+        {s.spike > 0 && <path d={`M${s.x - s.spike} ${s.y}H${s.x + s.spike}M${s.x} ${s.y - s.spike}V${s.y + s.spike}`} stroke={s.color} class="mini-spikes" />}
+        <circle cx={s.x} cy={s.y} r={s.core + 0.9} fill={s.color} />
+      </g>
+    ))
   }
   <text x={vx + vw / 2} y={vy + vh - 1} text-anchor="middle" class="mini-label">{label}</text>
 </svg>
@@ -55,18 +59,38 @@ const hash = (x: number, y: number) => {
     stroke-width: 1;
     stroke-linejoin: round;
   }
+  /* each star scintillates on its own rhythm, already mid-cycle when the page opens */
   .mini-star {
-    animation: mini-twinkle 4.5s ease-in-out infinite;
-    animation-delay: var(--d);
+    animation: mini-scint var(--tw) ease-in-out calc(-1 * var(--d)) infinite;
   }
-  @keyframes mini-twinkle {
+  @keyframes mini-scint {
     0%,
     100% {
       opacity: 1;
     }
-    50% {
-      opacity: 0.4;
+    13% {
+      opacity: 0.78;
     }
+    21% {
+      opacity: 0.96;
+    }
+    37% {
+      opacity: 0.6;
+    }
+    52% {
+      opacity: 1;
+    }
+    68% {
+      opacity: 0.84;
+    }
+    83% {
+      opacity: 0.95;
+    }
+  }
+  .mini-spikes {
+    stroke-width: 0.45;
+    stroke-opacity: 0.55;
+    stroke-linecap: round;
   }
   .mini-label {
     fill: #a5bedb;

@@ -5,6 +5,7 @@
  * Points are simplified from the traced outline at build time, so no coordinates are hand-placed.
  */
 import { FLORIDA_PATH, HOME, NE_FLORIDA_PATH } from "./floridaPaths";
+import { starHash, starLook } from "./starLook";
 
 interface Props {
   class?: string;
@@ -56,20 +57,26 @@ const VIEWBOX = [28, -20, 306, 214]; // the state spans x 34 to 230, y 0 to 189
 const shape = JSON.stringify({ viewBox: VIEWBOX, rings: outline.map((p) => p.map(([x, y]) => [+x.toFixed(1), +y.toFixed(1)])) });
 
 const poly = (pts: Pt[]) => pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
-// deterministic "random" per star, so every build draws the same sky
-const hash = (x: number, y: number) => {
-  const v = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
-  return v - Math.floor(v);
-};
-const stars = (pts: Pt[]) => pts.map(([x, y]) => ({ x, y, h: hash(x, y) }));
+const stars = (pts: Pt[], green = false) => pts.map(([x, y]) => ({ x, y, h: starHash(x, y), ...starLook(starHash(x, y), green) }));
+
+const stateStars = state.flatMap((p) => stars(p));
+const neStars = stars(ne, true);
+// one glow gradient per star color
+const glowColors = [...new Set([...stateStars, ...neStars].map((s) => s.glow))];
+const gid = (c: string) => `fl-glow-${c.slice(1)}`;
 ---
 
 <svg class={className} viewBox={VIEWBOX.join(" ")} data-shape={shape} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
-    <radialGradient id="fl-star-glow">
-      <stop offset="0" stop-color="#e6f1ff" stop-opacity="0.55" />
-      <stop offset="1" stop-color="#e6f1ff" stop-opacity="0" />
-    </radialGradient>
+    {
+      glowColors.map((c) => (
+        <radialGradient id={gid(c)}>
+          <stop offset="0" stop-color={c} stop-opacity="0.9" />
+          <stop offset="0.3" stop-color={c} stop-opacity="0.32" />
+          <stop offset="1" stop-color={c} stop-opacity="0" />
+        </radialGradient>
+      ))
+    }
     <radialGradient id="fl-star-glow-green">
       <stop offset="0" stop-color="#34d399" stop-opacity="0.7" />
       <stop offset="1" stop-color="#34d399" stop-opacity="0" />
@@ -79,10 +86,12 @@ const stars = (pts: Pt[]) => pts.map(([x, y]) => ({ x, y, h: hash(x, y) }));
   <!-- the state: thin constellation lines between its stars -->
   {state.map((p) => <polygon points={poly(p)} class="fl-line" />)}
   {
-    state.flatMap(stars).map((s) => (
-      <g class="fl-star" style={`--d: ${(s.h * 4).toFixed(2)}s`}>
-        <circle cx={s.x} cy={s.y} r={3 + s.h * 3} fill="url(#fl-star-glow)" />
-        <circle cx={s.x} cy={s.y} r={0.7 + s.h * 0.9} fill="#e6f1ff" />
+    stateStars.map((s) => (
+      <g class="fl-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
+        <circle cx={s.x} cy={s.y} r={s.bloom} fill={`url(#${gid(s.glow)})`} opacity="0.3" />
+        <circle cx={s.x} cy={s.y} r={s.halo} fill={`url(#${gid(s.glow)})`} opacity="0.85" />
+        {s.spike > 0 && <path d={`M${s.x - s.spike} ${s.y}H${s.x + s.spike}M${s.x} ${s.y - s.spike}V${s.y + s.spike}`} stroke={s.color} class="fl-spikes" />}
+        <circle cx={s.x} cy={s.y} r={s.core} fill={s.color} />
       </g>
     ))
   }
@@ -90,23 +99,29 @@ const stars = (pts: Pt[]) => pts.map(([x, y]) => ({ x, y, h: hash(x, y) }));
   <!-- Northeast Florida: shaded, with brighter green stars -->
   <polygon points={poly(ne)} class="fl-ne" />
   {
-    stars(ne).map((s) => (
-      <g class="fl-star" style={`--d: ${(s.h * 4).toFixed(2)}s`}>
-        <circle cx={s.x} cy={s.y} r={4 + s.h * 3} fill="url(#fl-star-glow-green)" />
-        <circle cx={s.x} cy={s.y} r={1 + s.h * 0.8} fill="#a7f3d0" />
+    neStars.map((s) => (
+      <g class="fl-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
+        <circle cx={s.x} cy={s.y} r={s.bloom} fill={`url(#${gid(s.glow)})`} opacity="0.3" />
+        <circle cx={s.x} cy={s.y} r={s.halo} fill={`url(#${gid(s.glow)})`} opacity="0.85" />
+        {s.spike > 0 && <path d={`M${s.x - s.spike} ${s.y}H${s.x + s.spike}M${s.x} ${s.y - s.spike}V${s.y + s.spike}`} stroke={s.color} class="fl-spikes" />}
+        <circle cx={s.x} cy={s.y} r={s.core} fill={s.color} />
       </g>
     ))
   }
 
   <!-- home base: the brightest star -->
-  <circle cx={home[0]} cy={home[1]} r="12" fill="url(#fl-star-glow-green)" class="fl-home-glow" />
-  <circle cx={home[0]} cy={home[1]} r="2.6" fill="#ecfdf5" />
-  <path d={`M${home[0]} ${home[1] - 7}V${home[1] + 7}M${home[0] - 7} ${home[1]}H${home[0] + 7}`} class="fl-spike" />
+  <g>
+    <circle cx={home[0]} cy={home[1]} r="12" fill="url(#fl-star-glow-green)" class="fl-home-glow" />
+    <circle cx={home[0]} cy={home[1]} r="2.6" fill="#ecfdf5" />
+    <path d={`M${home[0]} ${home[1] - 7}V${home[1] + 7}M${home[0] - 7} ${home[1]}H${home[0] + 7}`} class="fl-spike" />
+  </g>
 
   <!-- star-chart labels, east of the state over the ocean -->
-  <polyline points={`${home[0] + 6},${home[1] - 6} ${home[0] + 20},${home[1] - 22} ${home[0] + 28},${home[1] - 22}`} fill="none" class="fl-leader" />
-  <text x={home[0] + 31} y={home[1] - 24} class="fl-name">NORTHEAST FLORIDA</text>
-  <text x={home[0] + 31} y={home[1] - 15} class="fl-sub">home base</text>
+  <g>
+    <polyline points={`${home[0] + 6},${home[1] - 6} ${home[0] + 20},${home[1] - 22} ${home[0] + 28},${home[1] - 22}`} fill="none" class="fl-leader" />
+    <text x={home[0] + 31} y={home[1] - 24} class="fl-name">NORTHEAST FLORIDA</text>
+    <text x={home[0] + 31} y={home[1] - 15} class="fl-sub">home base</text>
+  </g>
 </svg>
 
 <style>
@@ -128,18 +143,38 @@ const stars = (pts: Pt[]) => pts.map(([x, y]) => ({ x, y, h: hash(x, y) }));
     stroke-width: 0.8;
     stroke-linejoin: round;
   }
+  /* each star scintillates on its own rhythm, already mid-cycle when the page opens */
   .fl-star {
-    animation: fl-twinkle 4s ease-in-out infinite;
-    animation-delay: var(--d);
+    animation: fl-scint var(--tw) ease-in-out calc(-1 * var(--d)) infinite;
   }
-  @keyframes fl-twinkle {
+  @keyframes fl-scint {
     0%,
     100% {
       opacity: 1;
     }
-    50% {
-      opacity: 0.45;
+    13% {
+      opacity: 0.78;
     }
+    21% {
+      opacity: 0.96;
+    }
+    37% {
+      opacity: 0.6;
+    }
+    52% {
+      opacity: 1;
+    }
+    68% {
+      opacity: 0.84;
+    }
+    83% {
+      opacity: 0.95;
+    }
+  }
+  .fl-spikes {
+    stroke-width: 0.3;
+    stroke-opacity: 0.55;
+    stroke-linecap: round;
   }
   .fl-home-glow {
     animation: fl-pulse 2.6s ease-in-out infinite;

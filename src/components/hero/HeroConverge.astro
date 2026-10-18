@@ -5,6 +5,23 @@ import Button from "@/components/button/Button.astro";
 import FloridaConstellation from "@/components/hero/FloridaConstellation.astro";
 import MiniConstellation from "@/components/hero/MiniConstellation.astro";
 
+// a faint star-chart grid behind the sky: declination arcs and right-ascension lines,
+// drawn around a center far below the view so they curve gently across it
+const GRID = (() => {
+  const cx = 800, cy = 2900;
+  const pt = (r: number, a: number) => [cx + r * Math.sin(a), cy - r * Math.cos(a)];
+  const arcs = [2200, 2340, 2480, 2620, 2760, 2900].map((r) => {
+    const a = Math.asin(900 / r);
+    const [x1, y1] = pt(r, -a), [x2, y2] = pt(r, a);
+    return `M${x1.toFixed(0)} ${y1.toFixed(0)}A${r} ${r} 0 0 1 ${x2.toFixed(0)} ${y2.toFixed(0)}`;
+  });
+  const spokes = [-0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3].map((a) => {
+    const [x1, y1] = pt(2000, a), [x2, y2] = pt(3100, a);
+    return `M${x1.toFixed(0)} ${y1.toFixed(0)}L${x2.toFixed(0)} ${y2.toFixed(0)}`;
+  });
+  return [...arcs, ...spokes];
+})();
+
 // Scroll-driven hero: scattered data points sort, structure, and finally spell "confidence."
 const steps = [
   { tag: "02 / Organized", title: "Sorted into what they are.", body: "Financial services, retail, food service, home improvement: every tidbit finds its home." },
@@ -15,6 +32,14 @@ const steps = [
 
 <section id="converge" class="converge" aria-label="Hero section">
   <div class="converge__sticky">
+    <!-- deep space: faint nebulae and the Milky Way band, behind everything -->
+    <div class="converge__space" aria-hidden="true" data-sky></div>
+    <!-- thousands of tiny distant stars, painted once per size (see paintStarfield) -->
+    <div class="converge__stars" aria-hidden="true"></div>
+    <!-- star-chart grid, the faintest layer of the sky -->
+    <svg class="converge__grid" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-sky>
+      {GRID.map((d) => <path d={d} />)}
+    </svg>
     <!-- home base as a constellation, under the particles; it fades as the shapes take over -->
     <div class="converge__map" data-map data-sky>
       <FloridaConstellation class="h-full w-full" />
@@ -128,7 +153,7 @@ const steps = [
   .converge {
     position: relative;
     height: 380vh;
-    background: radial-gradient(ellipse at 50% 0%, #11294a 0%, #071223 55%, #050b16 100%);
+    background: radial-gradient(ellipse at 50% 0%, #0c1f3d 0%, #050d1c 55%, #02060e 100%);
     color: #e6f1ff;
   }
   .converge__sticky {
@@ -163,6 +188,50 @@ const steps = [
       max-height: calc(100% - max(330px, 44%) - 100px);
       transform: none;
     }
+  }
+  .converge__space,
+  .converge__stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .converge__space {
+    transition: opacity 0.3s linear;
+    background:
+      /* teal nebula behind Florida, violet one low on the left */
+      radial-gradient(ellipse 38% 30% at 74% 42%, rgba(52, 211, 153, 0.07), transparent 70%),
+      radial-gradient(ellipse 30% 24% at 16% 82%, rgba(139, 92, 246, 0.07), transparent 70%),
+      radial-gradient(ellipse 26% 18% at 88% 12%, rgba(56, 189, 248, 0.05), transparent 70%),
+      /* the Milky Way: a soft diagonal band of light */
+      linear-gradient(
+        118deg,
+        transparent 28%,
+        rgba(150, 175, 215, 0.035) 40%,
+        rgba(200, 212, 240, 0.075) 49%,
+        rgba(225, 215, 235, 0.06) 52%,
+        rgba(150, 175, 215, 0.035) 60%,
+        transparent 72%
+      );
+  }
+  .converge__stars {
+    background-size: 100% 100%;
+    opacity: 0.9;
+  }
+  .converge__grid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transition: opacity 0.3s linear;
+  }
+  .converge__grid path {
+    fill: none;
+    stroke: #a5bedb;
+    stroke-opacity: 0.08;
+    stroke-width: 1;
+    stroke-dasharray: 2 6;
+    vector-effect: non-scaling-stroke;
   }
   .converge__mini {
     position: absolute;
@@ -354,7 +423,8 @@ const steps = [
 
   const GROUPS = ["Financial Services", "Retail", "Food Service", "Home Improvement"];
   const GROUP_COLORS = ["#38bdf8", "#a78bfa", "#f59e0b", "#34d399"];
-  const CHAOS_COLORS = ["#4b5d78", "#6b7f99", "#8aa0bb", "#3b4a60", "#5c6f8a"];
+  // scattered points look like real stars: mostly blue-white, some hot blue, a few warm
+  const CHAOS_COLORS = ["#dbe7fb", "#c4d4ee", "#9fb3cf", "#7f93b0", "#b9cdf5", "#f4e6cc", "#f1d2ae"];
   const STAGES = 4;
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -440,6 +510,38 @@ const steps = [
       o.lineJoin = "round";
       o.stroke();
       clear = read();
+    }
+
+    // thousands of faint background stars, thicker along the Milky Way band
+    function paintStarfield() {
+      const el = section!.querySelector<HTMLElement>(".converge__stars");
+      if (!el) return;
+      const sf = document.createElement("canvas");
+      sf.width = Math.round(W * dpr); sf.height = Math.round(H * dpr);
+      const g = sf.getContext("2d")!;
+      g.scale(dpr, dpr);
+      const temps = ["220,232,255", "200,218,255", "255,240,214", "255,226,190", "180,200,235"];
+      // band axis matches the CSS Milky Way (118deg): unit normal of the band through the center
+      const ang = ((118 - 90) * Math.PI) / 180, nx = Math.cos(ang), ny = Math.sin(ang);
+      const count = Math.round((W * H) / 520);
+      // the caption block (its active step) keeps a quieter patch of sky, so the copy stays crisp
+      const c = canvas!.getBoundingClientRect();
+      const step = section!.querySelector<HTMLElement>(".converge__step.is-active") ?? section!.querySelector<HTMLElement>(".converge__step");
+      const cr = step?.getBoundingClientRect();
+      const quiet = cr ? { l: cr.left - c.left - 30, r: cr.right - c.left + 30, t: cr.top - c.top - 30, b: cr.bottom - c.top + 30 } : null;
+      for (let i = 0; i < count; i++) {
+        const x = Math.random() * W, y = Math.random() * H;
+        const d = Math.abs((x - W / 2) * nx + (y - H / 2) * ny) / Math.max(W, H);
+        if (Math.random() > 0.35 + 0.65 * Math.exp(-((d / 0.12) ** 2))) continue; // denser near the band
+        if (hit(clear, x, y)) continue;
+        const r = Math.random() < 0.94 ? 0.25 + Math.random() * 0.45 : 0.7 + Math.random() * 0.5;
+        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? 0.3 : 1;
+        g.fillStyle = `rgba(${temps[Math.floor(Math.random() * temps.length)]},${((0.15 + Math.random() * 0.5) * dim).toFixed(2)})`;
+        g.beginPath();
+        g.arc(x, y, r, 0, Math.PI * 2);
+        g.fill();
+      }
+      el.style.backgroundImage = `url(${sf.toDataURL("image/png")})`;
     }
 
     function scatterPoint(): Pt {
@@ -544,6 +646,7 @@ const steps = [
       canvas!.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       buildWall();
+      paintStarfield(); // after the walls, so no background star sits inside a constellation
       // the map can move on resize; scattered points it now covers find a new spot
       if (targets[0]) targets[0] = targets[0].map((t) => (hit(clear, t.x, t.y) ? scatterPoint() : t));
       // a height-only resize (phone address bar sliding) keeps every point where it is
@@ -661,16 +764,21 @@ const steps = [
 
       const linked = drawNetwork();
 
+      // while they're scattered stars, each one twinkles on its own rhythm; it fades out as they organize
+      const twinkle = reduce ? 0 : 0.45 * (1 - clamp01(s * 2));
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         const on = linked.has(i);
+        ctx.globalAlpha = twinkle && !on ? 1 - twinkle * (0.5 + 0.5 * Math.sin(t * (1.2 + p.seed * 2.8) + p.phase * 4)) : 1;
         ctx.fillStyle = css(on ? mixRgb(frameColors[i], WHITE, 0.65) : frameColors[i]);
         ctx.beginPath();
         ctx.arc(p.x, p.y, on ? p.size + 1.2 : p.size, 0, Math.PI * 2);
         ctx.fill();
       }
+      ctx.globalAlpha = 1;
 
       drawLabels(s);
+      drawMeteor(t, mapAlpha);
     }
 
     // hovering wires the points near the cursor into a network: edges to the cursor and between neighbours
@@ -722,6 +830,53 @@ const steps = [
       }
       ctx.restore();
       return linked;
+    }
+
+    // now and then a shooting star crosses the open sky (never through a constellation)
+    let meteor: { x: number; y: number; dx: number; dy: number; t0: number } | null = null;
+    let nextMeteor = -1;
+    const METEOR_LIFE = 0.9, METEOR_RUN = 380, METEOR_TAIL = 120;
+
+    function drawMeteor(t: number, alpha: number) {
+      if (reduce || forced !== null) return;
+      if (nextMeteor < 0) nextMeteor = t + 4 + Math.random() * 3; // the first one, a few seconds in
+      if (!meteor && t >= nextMeteor && alpha > 0.5) {
+        for (let tries = 0; tries < 12 && !meteor; tries++) {
+          const ang = ((18 + Math.random() * 16) * Math.PI) / 180;
+          const dir = Math.random() < 0.5 ? -1 : 1;
+          const c = { x: W * (0.15 + Math.random() * 0.7), y: H * (0.06 + Math.random() * 0.35), dx: Math.cos(ang) * dir, dy: Math.sin(ang), t0: t };
+          let ok = true;
+          for (let d = -METEOR_TAIL; d <= METEOR_RUN && ok; d += 8) ok = !hit(clear, c.x + c.dx * d, c.y + c.dy * d);
+          if (ok) meteor = c;
+        }
+        nextMeteor = t + 10 + Math.random() * 5;
+      }
+      if (!meteor) return;
+      const p = (t - meteor.t0) / METEOR_LIFE;
+      if (p >= 1) {
+        meteor = null;
+        return;
+      }
+      const run = METEOR_RUN * (1 - (1 - p) * (1 - p)); // fast start, easing out
+      const hx = meteor.x + meteor.dx * run, hy = meteor.y + meteor.dy * run;
+      const tail = METEOR_TAIL * Math.sin(Math.PI * Math.min(1, p * 1.4));
+      const a = Math.sin(Math.PI * p) * alpha;
+      const g = ctx.createLinearGradient(hx, hy, hx - meteor.dx * tail, hy - meteor.dy * tail);
+      g.addColorStop(0, `rgba(236,253,245,${(0.95 * a).toFixed(3)})`);
+      g.addColorStop(1, "rgba(236,253,245,0)");
+      ctx.save();
+      ctx.strokeStyle = g;
+      ctx.lineWidth = 1.6;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(hx, hy);
+      ctx.lineTo(hx - meteor.dx * tail, hy - meteor.dy * tail);
+      ctx.stroke();
+      ctx.fillStyle = `rgba(236,253,245,${a.toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(hx, hy, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
 
     function drawLabels(s: number) {
