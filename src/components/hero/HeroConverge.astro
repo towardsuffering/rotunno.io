@@ -25,6 +25,7 @@ const steps = [
           viewBox="0 0 110 96"
           stars={[[6, 12], [22, 16], [32, 58], [92, 58], [102, 26], [26, 30], [40, 72], [86, 72], [44, 84], [82, 84]]}
           lines={[[0, 1, 5, 4, 3, 2, 6, 7], [1, 2], [8], [9]]}
+          wall={[[5, 4, 3, 2]]}
           class="h-full w-full"
         />
       </div>
@@ -34,6 +35,7 @@ const steps = [
           viewBox="0 0 100 100"
           stars={[[10, 34], [50, 10], [90, 34], [22, 40], [22, 76], [50, 40], [50, 76], [78, 40], [78, 76], [8, 84], [92, 84]]}
           lines={[[0, 1, 2, 0], [3, 4], [5, 6], [7, 8], [9, 10]]}
+          wall={[[1, 2, 10, 9, 0]]}
           class="h-full w-full"
         />
       </div>
@@ -45,6 +47,7 @@ const steps = [
         viewBox="0 0 110 96"
         stars={[[6, 12], [22, 16], [32, 58], [92, 58], [102, 26], [26, 30], [40, 72], [86, 72], [44, 84], [82, 84]]}
         lines={[[0, 1, 5, 4, 3, 2, 6, 7], [1, 2], [8], [9]]}
+        wall={[[5, 4, 3, 2]]}
         class="h-full w-full"
       />
     </div>
@@ -54,6 +57,7 @@ const steps = [
         viewBox="0 0 120 92"
         stars={[[8, 70], [28, 58], [46, 62], [66, 40], [86, 33], [108, 12], [8, 78], [112, 78]]}
         lines={[[0, 1, 2, 3, 4, 5], [6, 7]]}
+        wall={[[0, 1, 2, 3, 4, 5, 7, 6]]}
         class="h-full w-full"
       />
     </div>
@@ -63,6 +67,7 @@ const steps = [
         viewBox="0 0 100 96"
         stars={[[14, 78], [86, 78], [86, 44], [50, 12], [14, 44], [70, 26], [70, 14], [42, 78], [42, 58], [58, 58], [58, 78]]}
         lines={[[0, 1, 2, 3, 4, 0], [5, 6], [7, 8, 9, 10]]}
+        wall={[[0, 1, 2, 3, 4]]}
         class="h-full w-full"
       />
     </div>
@@ -372,7 +377,6 @@ const steps = [
     const steps = [...section.querySelectorAll<HTMLElement>("[data-step]")];
     const dots = [...section.querySelectorAll<HTMLElement>("[data-dot]")];
     const hint = section.querySelector<HTMLElement>(".converge__hint-action");
-    const map = section.querySelector<HTMLElement>("[data-map]");
     const sky = [...section.querySelectorAll<HTMLElement>("[data-sky]")];
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // view transitions keep this script alive across pages; stop when the hero leaves
@@ -399,27 +403,32 @@ const steps = [
       return { x: left, y: H * 0.14, w: W - left - 80, h: H * 0.72 };
     }
 
-    // Florida's border is a wall: `inside` marks the state, `clear` adds a margin around it
+    // constellation borders are walls: `inside` marks their shapes, `clear` adds a margin around them
     let inside: Uint8Array | null = null;
     let clear: Uint8Array | null = null;
     const hit = (m: Uint8Array | null, x: number, y: number) =>
       !!m && x >= 0 && y >= 0 && x < W && y < H && m[(y | 0) * W + (x | 0)] === 1;
 
     function buildWall() {
-      const svg = map?.querySelector<SVGSVGElement>("svg[data-shape]");
-      if (!svg) return;
-      const { viewBox: [vx, vy, vw, vh], rings } = JSON.parse(svg.dataset.shape!) as { viewBox: number[]; rings: number[][][] };
-      const r = svg.getBoundingClientRect(), c = canvas!.getBoundingClientRect();
-      // the svg scales its viewBox to fit, centered (preserveAspectRatio's default)
-      const k = Math.min(r.width / vw, r.height / vh);
-      const ox = r.left - c.left + (r.width - vw * k) / 2 - vx * k;
-      const oy = r.top - c.top + (r.height - vh * k) / 2 - vy * k;
+      const c = canvas!.getBoundingClientRect();
       const off = document.createElement("canvas");
       off.width = W; off.height = H;
       const o = off.getContext("2d")!;
       o.beginPath();
-      for (const ring of rings) ring.forEach(([x, y], i) => (i ? o.lineTo : o.moveTo).call(o, ox + x * k, oy + y * k));
-      o.closePath();
+      // Florida and every visible small constellation; hidden ones measure zero and are skipped
+      section!.querySelectorAll<SVGSVGElement>("svg[data-shape]").forEach((svg) => {
+        const r = svg.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        const { viewBox: [vx, vy, vw, vh], rings } = JSON.parse(svg.dataset.shape!) as { viewBox: number[]; rings: number[][][] };
+        // the svg scales its viewBox to fit, centered (preserveAspectRatio's default)
+        const k = Math.min(r.width / vw, r.height / vh);
+        const ox = r.left - c.left + (r.width - vw * k) / 2 - vx * k;
+        const oy = r.top - c.top + (r.height - vh * k) / 2 - vy * k;
+        for (const ring of rings) {
+          ring.forEach(([x, y], i) => (i ? o.lineTo : o.moveTo).call(o, ox + x * k, oy + y * k));
+          o.closePath();
+        }
+      });
       const read = () => {
         const d = o.getImageData(0, 0, W, H).data, m = new Uint8Array(W * H);
         for (let i = 0; i < m.length; i++) m[i] = d[i * 4 + 3] > 0 ? 1 : 0;
@@ -427,7 +436,7 @@ const steps = [
       };
       o.fill();
       inside = read();
-      o.lineWidth = 34; // drift and the cursor pocket never reach the border from here
+      o.lineWidth = 34; // drift and the cursor pocket never reach a border from here
       o.lineJoin = "round";
       o.stroke();
       clear = read();

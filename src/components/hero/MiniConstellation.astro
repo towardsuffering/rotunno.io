@@ -2,23 +2,26 @@
 /**
  * A small, dim constellation for the hero sky: stars at `stars`, joined by `lines`
  * (each line is a list of star indexes), with a star-chart label underneath.
+ * `wall` lists closed outlines (star indexes) that HeroConverge's dots may not cross.
  */
 interface Props {
   stars: [number, number][];
   lines: number[][];
   label: string;
   viewBox: string;
+  wall?: number[][];
   class?: string;
 }
-const { stars, lines, label, viewBox, class: className } = Astro.props;
+const { stars, lines, label, viewBox, wall = [], class: className } = Astro.props;
 const [vx, vy, vw, vh] = viewBox.split(" ").map(Number);
+const shape = wall.length ? JSON.stringify({ viewBox: [vx, vy, vw, vh], rings: wall.map((r) => r.map((i) => stars[i])) }) : undefined;
 const hash = (x: number, y: number) => {
   const v = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
   return v - Math.floor(v);
 };
 ---
 
-<svg class:list={["mini", className]} viewBox={viewBox} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<svg class:list={["mini", className]} viewBox={viewBox} data-shape={shape} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     <radialGradient id="mini-glow">
       <stop offset="0" stop-color="#e6f1ff" stop-opacity="0.45" />
