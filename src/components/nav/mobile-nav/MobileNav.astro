@@ -6,7 +6,6 @@ import MobileNavDropdown from "@/components/nav/mobile-nav/MobileNavDropdown.ast
 //components
 import NavLink from "@/components/nav/NavLink.astro";
 import Button from "@/components/starwind/button";
-import ThemeToggle from "@/components/theme-toggle/ThemeToggle.astro";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { getTranslatedData } from "@/js/translationUtils";
 
@@ -78,8 +77,6 @@ import { locales } from "@/config/siteSettings.json";
       </div>
 
       <div class="mt-4 flex items-start justify-between pr-2 pl-4">
-        <ThemeToggle />
-
         {
           locales.length > 1 && (
             <div class="flex justify-end">

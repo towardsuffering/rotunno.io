@@ -83,31 +83,14 @@ import InterVariable from "@fontsource-variable/inter/files/inter-latin-wght-nor
 <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 <link rel="preconnect" href="https://www.google-analytics.com" />
 
-<!-- Theme change setup. Run early to eliminate Flash of inAccurate coloR Theme (FART) -->
+<!-- The site is dark only. Run early so nothing flashes light; this also clears a light choice
+     saved by the old theme toggle. -->
 <script is:inline>
   function initTheme() {
-    const colorTheme = localStorage.getItem("colorTheme");
-    if (!colorTheme) {
-      // set dark theme initially
-      document.documentElement.classList.add("dark");
+    document.documentElement.classList.add("dark");
+    try {
       localStorage.setItem("colorTheme", "dark");
-
-      // if no color theme yet, use the users preferences (uncomment the below code, and comment out the above code to use this instead)
-      // if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      // 	document.documentElement.classList.add("dark");
-      // 	localStorage.setItem("colorTheme", "dark");
-      // } else {
-      // 	document.documentElement.classList.remove("dark");
-      // 	localStorage.setItem("colorTheme", "light");
-      // }
-    } else {
-      // If there is, assign the theme based on the value in local storage
-      if (colorTheme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else if (colorTheme === "light") {
-        document.documentElement.classList.remove("dark");
-      }
-    }
+    } catch {}
   }
 
   // runs on initial page load
