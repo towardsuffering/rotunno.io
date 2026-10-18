@@ -183,7 +183,7 @@ const steps = [
     pointer-events: none;
     transition: opacity 0.3s linear;
   }
-  /* one frosted glass plate over the sky and under the copy, wrapping the headline and Florida
+  /* desktop: one frosted glass plate over the sky and under the copy, wrapping the headline and Florida
      (sized in placeMap); light enough that the dots passing behind it stay clearly visible */
   .converge__plate {
     position: absolute;
@@ -208,7 +208,7 @@ const steps = [
   }
   @media (max-width: 767px) {
     .converge__plate {
-      border-radius: 22px;
+      display: none;
     }
   }
   @media (max-width: 767px) {
@@ -754,12 +754,6 @@ const steps = [
       }
       const top = hero.getBoundingClientRect().bottom - canvas!.getBoundingClientRect().top + 4;
       el.style.setProperty("--map-top", `${Math.round(top)}px`);
-      // phones: the plate runs from the copy down around Florida, inside the page gutters
-      const plate = section!.querySelector<HTMLElement>("[data-plate]");
-      if (!plate) return;
-      const c = canvas!.getBoundingClientRect(), h = hero.getBoundingClientRect(), m = el.getBoundingClientRect();
-      const t = h.top - c.top - 18, b = m.bottom - c.top + 10;
-      Object.assign(plate.style, { left: "8px", top: `${t}px`, width: `${W - 16}px`, height: `${b - t}px` });
     }
 
     // thousands of faint background stars, thicker along the Milky Way band
@@ -797,7 +791,7 @@ const steps = [
           ? (rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5)
           : (rand() < 0.94 ? 0.28 + rand() * 0.45 : 0.8 + rand() * 0.7);
         // (desktop's plate already sets the copy apart, so its stars stay brighter there)
-        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.5 : 0.8) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
+        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.12 : 0.8) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
         const col = temps[Math.floor(rand() * temps.length)];
         const a = (mobile ? 0.15 + rand() * 0.5 : 0.18 + rand() * 0.5) * dim;
         if (!mobile && r > 1.25) {
@@ -1071,9 +1065,9 @@ const steps = [
         const p = particles[i];
         const on = linked.has(i);
         let alpha = twinkle && !on ? 1 - twinkle * (0.5 + 0.5 * Math.sin(t * (1.2 + p.seed * 2.8) + p.phase * 4)) : 1;
-        // behind the opening copy a dot dims on the plate: softer on a phone, where the copy is denser
+        // behind the opening copy a dot dims: barely there on a phone, still clearly visible on desktop's plate
         if (copyBox && p.x > copyBox.x0 && p.x < copyBox.x1 && p.y > copyBox.y0 && p.y < copyBox.y1) {
-          const floor = mobile ? 0.45 : 0.75;
+          const floor = mobile ? 0.08 : 0.75;
           alpha *= floor + (1 - floor) * clamp01(s * 2);
         }
         ctx.globalAlpha = alpha;
