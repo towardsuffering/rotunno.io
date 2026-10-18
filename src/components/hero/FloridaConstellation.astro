@@ -1,11 +1,10 @@
 ---
 /**
- * Florida drawn as a constellation: stars on the key points of the real state outline, joined
- * by faint lines, with the Northeast Florida territory as a brighter green constellation inside it.
- * Points are simplified from the traced outline at build time, so no coordinates are hand-placed.
+ * Florida drawn in the hero headline's style: the real state outline in a white-to-silver sheen
+ * with a soft blue glow, and the Northeast Florida territory shaded green inside it.
+ * Outlines are simplified from the traced boundary at build time, so nothing is hand-placed.
  */
 import { FLORIDA_PATH, HOME, NE_FLORIDA_PATH } from "./floridaPaths";
-import { starHash, starLook } from "./starLook";
 
 interface Props {
   class?: string;
@@ -47,8 +46,6 @@ const ring = (pts: Pt[], eps: number) => {
 };
 
 const outline = subpaths(FLORIDA_PATH);
-const state = outline.map((p) => ring(p, 4.5)).filter((p) => p.length >= 3);
-const ne = subpaths(NE_FLORIDA_PATH).map((p) => ring(p, 3.5))[0];
 const home: Pt = [HOME.x, HOME.y];
 
 // the frame includes room for the label east of the state, over the ocean
@@ -57,66 +54,42 @@ const VIEWBOX = [28, -20, 306, 214]; // the state spans x 34 to 230, y 0 to 189
 const shape = JSON.stringify({ viewBox: VIEWBOX, rings: outline.map((p) => p.map(([x, y]) => [+x.toFixed(1), +y.toFixed(1)])) });
 
 const poly = (pts: Pt[]) => pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
-const stars = (pts: Pt[], green = false) => pts.map(([x, y]) => ({ x, y, h: starHash(x, y), ...starLook(starHash(x, y), green) }));
-
-const stateStars = state.flatMap((p) => stars(p));
-const neStars = stars(ne, true);
-// one glow gradient per star color
-const glowColors = [...new Set([...stateStars, ...neStars].map((s) => s.glow))];
-const gid = (c: string) => `fl-glow-${c.slice(1)}`;
+// a finer outline than a constellation needs, so the coast reads as a drawn map
+const smooth = outline.map((p) => ring(p, 0.9)).filter((p) => p.length >= 3);
+const neSmooth = subpaths(NE_FLORIDA_PATH).map((p) => ring(p, 0.8))[0];
 ---
 
 <svg class={className} viewBox={VIEWBOX.join(" ")} data-shape={shape} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
-    {
-      glowColors.map((c) => (
-        <radialGradient id={gid(c)}>
-          <stop offset="0" stop-color={c} stop-opacity="0.9" />
-          <stop offset="0.3" stop-color={c} stop-opacity="0.32" />
-          <stop offset="1" stop-color={c} stop-opacity="0" />
-        </radialGradient>
-      ))
-    }
-    <radialGradient id="fl-star-glow-green">
+    <!-- the headline's treatment: bright white shading down to soft silver -->
+    <linearGradient id="fl-silver" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.55" stop-color="#eef3fb" />
+      <stop offset="1" stop-color="#b9c6da" />
+    </linearGradient>
+    <linearGradient id="fl-silver-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#b9c6da" stop-opacity="0.05" />
+    </linearGradient>
+    <radialGradient id="fl-home-glow">
       <stop offset="0" stop-color="#34d399" stop-opacity="0.7" />
       <stop offset="1" stop-color="#34d399" stop-opacity="0" />
     </radialGradient>
   </defs>
 
-  <!-- the state: thin constellation lines between its stars -->
-  {state.map((p) => <polygon points={poly(p)} class="fl-line" />)}
-  {
-    stateStars.map((s) => (
-      <g class="fl-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
-        <circle cx={s.x} cy={s.y} r={s.bloom} fill={`url(#${gid(s.glow)})`} opacity="0.3" />
-        <circle cx={s.x} cy={s.y} r={s.halo} fill={`url(#${gid(s.glow)})`} opacity="0.85" />
-        {s.spike > 0 && <path d={`M${s.x - s.spike} ${s.y}H${s.x + s.spike}M${s.x} ${s.y - s.spike}V${s.y + s.spike}`} stroke={s.color} class="fl-spikes" />}
-        <circle cx={s.x} cy={s.y} r={s.core} fill={s.color} />
-      </g>
-    ))
-  }
-
-  <!-- Northeast Florida: shaded, with brighter green stars -->
-  <polygon points={poly(ne)} class="fl-ne" />
-  {
-    neStars.map((s) => (
-      <g class="fl-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
-        <circle cx={s.x} cy={s.y} r={s.bloom} fill={`url(#${gid(s.glow)})`} opacity="0.3" />
-        <circle cx={s.x} cy={s.y} r={s.halo} fill={`url(#${gid(s.glow)})`} opacity="0.85" />
-        {s.spike > 0 && <path d={`M${s.x - s.spike} ${s.y}H${s.x + s.spike}M${s.x} ${s.y - s.spike}V${s.y + s.spike}`} stroke={s.color} class="fl-spikes" />}
-        <circle cx={s.x} cy={s.y} r={s.core} fill={s.color} />
-      </g>
-    ))
-  }
-
-  <!-- home base: the brightest star -->
-  <g>
-    <circle cx={home[0]} cy={home[1]} r="12" fill="url(#fl-star-glow-green)" class="fl-home-glow" />
-    <circle cx={home[0]} cy={home[1]} r="2.6" fill="#ecfdf5" />
-    <path d={`M${home[0]} ${home[1] - 7}V${home[1] + 7}M${home[0] - 7} ${home[1]}H${home[0] + 7}`} class="fl-spike" />
+  <!-- the state, drawn like the headline: a silver outline with a faint silver fill and a soft blue glow -->
+  <g class="fl-state">
+    {smooth.map((p) => <polygon points={poly(p)} />)}
   </g>
 
-  <!-- star-chart labels, east of the state over the ocean -->
+  <!-- Northeast Florida, shaded green -->
+  <polygon points={poly(neSmooth)} class="fl-ne" />
+
+  <!-- home base -->
+  <circle cx={home[0]} cy={home[1]} r="9" fill="url(#fl-home-glow)" class="fl-home-glow" />
+  <circle cx={home[0]} cy={home[1]} r="2.2" fill="#ecfdf5" />
+
+  <!-- label, east of the state over the ocean -->
   <g>
     <polyline points={`${home[0] + 6},${home[1] - 6} ${home[0] + 20},${home[1] - 22} ${home[0] + 28},${home[1] - 22}`} fill="none" class="fl-leader" />
     <text x={home[0] + 31} y={home[1] - 24} class="fl-name">NORTHEAST FLORIDA</text>
@@ -128,53 +101,22 @@ const gid = (c: string) => `fl-glow-${c.slice(1)}`;
   svg {
     overflow: visible;
   }
-  .fl-line {
-    fill: none;
-    stroke: #a5bedb;
-    stroke-opacity: 0.32;
-    stroke-width: 0.6;
+  .fl-state polygon {
+    fill: url(#fl-silver-fill);
+    stroke: url(#fl-silver);
+    stroke-width: 1.3;
     stroke-linejoin: round;
+  }
+  .fl-state {
+    filter: drop-shadow(0 1px 10px rgba(120, 170, 255, 0.28));
   }
   .fl-ne {
     fill: #34d399;
-    fill-opacity: 0.1;
+    fill-opacity: 0.16;
     stroke: #34d399;
-    stroke-opacity: 0.6;
-    stroke-width: 0.8;
+    stroke-opacity: 0.75;
+    stroke-width: 1;
     stroke-linejoin: round;
-  }
-  /* each star scintillates on its own rhythm, already mid-cycle when the page opens */
-  .fl-star {
-    animation: fl-scint var(--tw) ease-in-out calc(-1 * var(--d)) infinite;
-  }
-  @keyframes fl-scint {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    13% {
-      opacity: 0.78;
-    }
-    21% {
-      opacity: 0.96;
-    }
-    37% {
-      opacity: 0.6;
-    }
-    52% {
-      opacity: 1;
-    }
-    68% {
-      opacity: 0.84;
-    }
-    83% {
-      opacity: 0.95;
-    }
-  }
-  .fl-spikes {
-    stroke-width: 0.3;
-    stroke-opacity: 0.55;
-    stroke-linecap: round;
   }
   .fl-home-glow {
     animation: fl-pulse 2.6s ease-in-out infinite;
@@ -191,11 +133,6 @@ const gid = (c: string) => `fl-glow-${c.slice(1)}`;
       opacity: 1;
       transform: scale(1.25);
     }
-  }
-  .fl-spike {
-    stroke: #ecfdf5;
-    stroke-opacity: 0.7;
-    stroke-width: 0.5;
   }
   .fl-leader {
     fill: none;
@@ -214,7 +151,6 @@ const gid = (c: string) => `fl-glow-${c.slice(1)}`;
     letter-spacing: 0.04em;
   }
   @media (prefers-reduced-motion: reduce) {
-    .fl-star,
     .fl-home-glow {
       animation: none;
     }
