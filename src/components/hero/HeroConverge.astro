@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 
 import Button from "@/components/button/Button.astro";
 import FloridaConstellation from "@/components/hero/FloridaConstellation.astro";
+import MiniConstellation from "@/components/hero/MiniConstellation.astro";
 
 // Scroll-driven hero: scattered data points sort, structure, and finally spell "confidence."
 const steps = [
@@ -15,8 +16,27 @@ const steps = [
 <section id="converge" class="converge" aria-label="Hero section">
   <div class="converge__sticky">
     <!-- home base as a constellation, under the particles; it fades as the shapes take over -->
-    <div class="converge__map" data-map>
+    <div class="converge__map" data-map data-sky>
       <FloridaConstellation class="h-full w-full" />
+    </div>
+    <!-- two smaller, dimmer constellations in the open sky: the data side and the home side -->
+    <div class="converge__mini converge__mini--chart" data-sky>
+      <MiniConstellation
+        label="ANALYTICS"
+        viewBox="0 0 120 92"
+        stars={[[8, 70], [28, 58], [46, 62], [66, 40], [86, 33], [108, 12], [8, 78], [112, 78]]}
+        lines={[[0, 1, 2, 3, 4, 5], [6, 7]]}
+        class="h-full w-full"
+      />
+    </div>
+    <div class="converge__mini converge__mini--house" data-sky>
+      <MiniConstellation
+        label="HOME SERVICES"
+        viewBox="0 0 100 96"
+        stars={[[14, 78], [86, 78], [86, 44], [50, 12], [14, 44], [70, 26], [70, 14], [42, 78], [42, 58], [58, 58], [58, 78]]}
+        lines={[[0, 1, 2, 3, 4, 0], [5, 6], [7, 8, 9, 10]]}
+        class="h-full w-full"
+      />
     </div>
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
 
@@ -109,6 +129,29 @@ const steps = [
       width: auto;
       max-height: calc(100% - max(330px, 44%) - 100px);
       transform: none;
+    }
+  }
+  .converge__mini {
+    position: absolute;
+    pointer-events: none;
+    transition: opacity 0.3s linear;
+  }
+  /* above the headline, toward the right end of the caption column */
+  .converge__mini--chart {
+    top: 17%;
+    left: calc(max(0px, (100% - 86rem) / 2) + 64px + min(520px, 40vw) - 190px);
+    width: 120px;
+  }
+  /* below the buttons */
+  .converge__mini--house {
+    bottom: 12%;
+    left: calc(max(0px, (100% - 86rem) / 2) + 64px + 190px);
+    width: 92px;
+  }
+  /* phones and short screens: no room beside the text, so only Florida shows */
+  @media (max-width: 767px), (max-height: 720px) {
+    .converge__mini {
+      display: none;
     }
   }
   #converge-canvas {
@@ -266,6 +309,7 @@ const steps = [
     const dots = [...section.querySelectorAll<HTMLElement>("[data-dot]")];
     const hint = section.querySelector<HTMLElement>(".converge__hint-action");
     const map = section.querySelector<HTMLElement>("[data-map]");
+    const sky = [...section.querySelectorAll<HTMLElement>("[data-sky]")];
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // view transitions keep this script alive across pages; stop when the hero leaves
     let alive = true;
@@ -502,7 +546,7 @@ const steps = [
       }
       if (hint) hint.style.opacity = s < 0.15 ? "1" : "0";
       const mapAlpha = clamp01(1 - s * 2.5);
-      if (map) map.style.opacity = String(mapAlpha);
+      sky.forEach((el) => (el.style.opacity = String(mapAlpha)));
 
       ctx.clearRect(0, 0, W, H);
       const t = time / 1000;

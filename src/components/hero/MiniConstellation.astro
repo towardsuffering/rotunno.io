@@ -1,0 +1,78 @@
+---
+/**
+ * A small, dim constellation for the hero sky: stars at `stars`, joined by `lines`
+ * (each line is a list of star indexes), with a star-chart label underneath.
+ */
+interface Props {
+  stars: [number, number][];
+  lines: number[][];
+  label: string;
+  viewBox: string;
+  class?: string;
+}
+const { stars, lines, label, viewBox, class: className } = Astro.props;
+const [vx, vy, vw, vh] = viewBox.split(" ").map(Number);
+const hash = (x: number, y: number) => {
+  const v = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+  return v - Math.floor(v);
+};
+---
+
+<svg class:list={["mini", className]} viewBox={viewBox} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="mini-glow">
+      <stop offset="0" stop-color="#e6f1ff" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#e6f1ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  {lines.map((l) => <polyline points={l.map((i) => stars[i].join(",")).join(" ")} class="mini-line" />)}
+  {
+    stars.map(([x, y]) => {
+      const h = hash(x, y);
+      return (
+        <g class="mini-star" style={`--d: ${(h * 4).toFixed(2)}s`}>
+          <circle cx={x} cy={y} r={4.5 + h * 2.5} fill="url(#mini-glow)" />
+          <circle cx={x} cy={y} r={1.5 + h * 0.8} fill="#e6f1ff" />
+        </g>
+      );
+    })
+  }
+  <text x={vx + vw / 2} y={vy + vh - 1} text-anchor="middle" class="mini-label">{label}</text>
+</svg>
+
+<style>
+  .mini {
+    overflow: visible;
+    opacity: 0.75;
+  }
+  .mini-line {
+    fill: none;
+    stroke: #a5bedb;
+    stroke-opacity: 0.35;
+    stroke-width: 0.8;
+    stroke-linejoin: round;
+  }
+  .mini-star {
+    animation: mini-twinkle 4.5s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  @keyframes mini-twinkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+  .mini-label {
+    fill: #8aa0bb;
+    font: 600 6.5px "Inter Variable", system-ui, sans-serif;
+    letter-spacing: 0.4em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mini-star {
+      animation: none;
+    }
+  }
+</style>
