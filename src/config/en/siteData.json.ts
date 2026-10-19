@@ -18,7 +18,7 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-social-v5.jpg",
+    src: "/images/og-social-v6.jpg",
     alt: "Christopher A. Rotunno, Analytics Engineer and SI Orchestration: I connect the dots",
   },
 };

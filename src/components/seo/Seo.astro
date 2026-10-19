@@ -97,9 +97,9 @@ const imageUrl = trimEndSlash(Astro.site?.toString() || "") + rawImageSrc;
     },
     image: {
       type: 'image/jpeg',
-      // the default share image is rendered at 2x (2400x1260) so it stays sharp on high-density screens
-      width: optimizedImage?.attributes.width || "2400",
-      height: optimizedImage?.attributes.height || "1260",
+      // the default share image is supersampled from 2x down to Facebook's native 1200x630, so it isn't rescaled again
+      width: optimizedImage?.attributes.width || "1200",
+      height: optimizedImage?.attributes.height || "630",
       alt: title,
     },
   }}
