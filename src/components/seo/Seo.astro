@@ -118,6 +118,9 @@ const imageUrl = trimEndSlash(Astro.site?.toString() || "") + rawImageSrc;
 <!-- Facebook requires og:image:secure_url for HTTPS images -->
 <meta property="og:image:secure_url" content={imageUrl} />
 
+<!-- who wrote the page, for link previews (LinkedIn's Post Inspector looks for it) -->
+<meta name="author" content={siteData.author.name} />
+
 <!-- hreflang attributes -->
 <HrefLang />
 
