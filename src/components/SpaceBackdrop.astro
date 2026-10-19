@@ -1,10 +1,16 @@
 ---
-// the night sky behind every page: faint nebulae, a seeded starfield, a few twinkling stars and the
-// odd shooting star, so the whole site keeps the hero's sense of space (the hero paints its own sky on top)
+// the night sky behind every page, and a journey through it: scrolling down flies deeper into space.
+// Three star layers drift at different speeds for depth, galaxies, nebulae and star clusters rise from
+// below, grow as you approach and pass overhead, and the sky's color deepens the further you go.
+// (The hero paints its own sky on top, and dissolves into this one.)
 ---
 
 <div class="space" aria-hidden="true" transition:persist="space-backdrop">
-  <canvas class="space__stars"></canvas>
+  <div class="space__depth"></div>
+  <div class="space__layer" data-layer="0"></div>
+  <div class="space__layer" data-layer="1"></div>
+  <div class="space__objects"></div>
+  <div class="space__layer" data-layer="2"></div>
   <div class="space__twinkles"></div>
   <div class="space__meteor"></div>
 </div>
@@ -23,12 +29,39 @@
       radial-gradient(ellipse 22% 20% at 30% 15%, rgba(99, 102, 241, 0.06), transparent 70%),
       linear-gradient(118deg, transparent 28%, rgba(170, 190, 225, 0.05) 44%, rgba(220, 215, 240, 0.07) 52%, transparent 70%);
   }
-  .space__stars,
+  /* deeper space: richer violet and teal, faded in with scroll depth (see update) */
+  .space__depth {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background:
+      radial-gradient(ellipse 60% 45% at 20% 30%, rgba(124, 58, 237, 0.16), transparent 70%),
+      radial-gradient(ellipse 55% 40% at 85% 75%, rgba(20, 184, 166, 0.12), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 60% 10%, rgba(236, 72, 153, 0.07), transparent 70%),
+      linear-gradient(180deg, rgba(10, 6, 30, 0.35), rgba(4, 2, 18, 0.5));
+  }
+  /* star layers: a tall repeating tile, slid upward at its own speed (far stars slowest) */
+  .space__layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    background-repeat: repeat-y;
+    will-change: transform;
+  }
+  .space__objects {
+    position: absolute;
+    inset: 0;
+  }
+  .space__objects canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform, opacity;
+  }
   .space__twinkles {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
   }
   .space__twinkles :global(i) {
     position: absolute;
@@ -72,80 +105,118 @@
 </style>
 
 <script>
+  type RGB = [number, number, number];
+
   const root = document.querySelector<HTMLElement>(".space");
-  const canvas = root?.querySelector<HTMLCanvasElement>(".space__stars");
+  const layers = [...(root?.querySelectorAll<HTMLElement>(".space__layer") ?? [])];
+  const objects = root?.querySelector<HTMLElement>(".space__objects");
+  const depthTint = root?.querySelector<HTMLElement>(".space__depth");
   const twinkles = root?.querySelector<HTMLElement>(".space__twinkles");
   const meteor = root?.querySelector<HTMLElement>(".space__meteor");
 
-  if (root && canvas && twinkles && meteor) {
-    let paintedW = 0, paintedH = 0;
+  if (root && layers.length === 3 && objects && depthTint && twinkles && meteor) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const TILE = 1200; // height of each star layer's repeating tile, in css px
+    // how fast each layer slides per px scrolled: far, mid, near
+    const SPEED = [0.05, 0.14, 0.32];
 
-    function paint() {
-      const W = window.innerWidth, H = window.innerHeight;
-      // a phone's address bar sliding changes the height a little; keep the same sky then
-      if (W === paintedW && Math.abs(H - paintedH) < 160) return;
+    // seeded randomness, so every page (and every repaint) draws the same sky
+    const seeded = (seed: number) => () => {
+      seed = (seed + 0x6d2b79f5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    const gauss = (rand: () => number) => (rand() + rand() + rand() - 1.5) / 1.5; // roughly -1..1, bell shaped
+    const rgba = ([r, g, b]: RGB, a: number) => `rgba(${r},${g},${b},${a.toFixed(3)})`;
+
+    // ---------- star layers ----------
+    let paintedW = 0;
+    let urls: string[] = [];
+
+    function paintLayers() {
+      const W = window.innerWidth;
+      if (W === paintedW) return;
       paintedW = W;
-      paintedH = H;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas!.width = Math.round(W * dpr);
-      canvas!.height = Math.round(H * dpr);
-      const g = canvas!.getContext("2d")!;
-      g.scale(dpr, dpr);
-      // seeded, so every page draws the same sky
-      let seed = 20261018;
-      const rand = () => {
-        seed = (seed + 0x6d2b79f5) | 0;
-        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-      };
-      const temps = ["220,232,255", "200,218,255", "255,240,214", "255,226,190", "180,200,235"];
       const mobile = W < 768;
-      // close to the hero's sky, a touch sparser so body copy stays easy to read
-      const count = Math.round((W * H) / (mobile ? 1300 : 700));
-      for (let i = 0; i < count; i++) {
-        const x = rand() * W, y = rand() * H;
-        const r = rand() < 0.94 ? 0.3 + rand() * 0.45 : 0.8 + rand() * 0.7;
-        const col = temps[Math.floor(rand() * temps.length)];
-        const a = 0.18 + rand() * 0.5;
-        if (r > 1.1) {
-          const gl = g.createRadialGradient(x, y, 0, x, y, r * 4);
-          gl.addColorStop(0, `rgba(${col},${(a * 0.3).toFixed(2)})`);
-          gl.addColorStop(1, `rgba(${col},0)`);
-          g.fillStyle = gl;
-          g.beginPath();
-          g.arc(x, y, r * 4, 0, Math.PI * 2);
-          g.fill();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const temps: RGB[] = [[220, 232, 255], [200, 218, 255], [255, 240, 214], [255, 226, 190], [180, 200, 235]];
+      // per layer: stars per 1000 square px, radius range, alpha range
+      const spec = [
+        { density: mobile ? 0.55 : 0.9, r: [0.25, 0.6], a: [0.15, 0.5] },
+        { density: mobile ? 0.18 : 0.3, r: [0.5, 1.0], a: [0.3, 0.7] },
+        { density: mobile ? 0.03 : 0.05, r: [0.9, 1.6], a: [0.5, 0.9] },
+      ];
+      urls.forEach((u) => URL.revokeObjectURL(u));
+      urls = [];
+      spec.forEach((sp, li) => {
+        const rand = seeded(20261018 + li * 977);
+        const c = document.createElement("canvas");
+        c.width = Math.round(W * dpr);
+        c.height = Math.round(TILE * dpr);
+        const g = c.getContext("2d")!;
+        g.scale(dpr, dpr);
+        const count = Math.round((W * TILE * sp.density) / 1000);
+        for (let i = 0; i < count; i++) {
+          const x = rand() * W, y = rand() * TILE;
+          const r = sp.r[0] + rand() * (sp.r[1] - sp.r[0]);
+          const a = sp.a[0] + rand() * (sp.a[1] - sp.a[0]);
+          const col = temps[Math.floor(rand() * temps.length)];
+          // drawn again across the tile's seam, so the repeat never cuts a star in half
+          for (const dy of [0, -TILE, TILE]) {
+            const yy = y + dy;
+            if (yy < -8 || yy > TILE + 8) continue;
+            if (r > 0.9) {
+              const gl = g.createRadialGradient(x, yy, 0, x, yy, r * 4);
+              gl.addColorStop(0, rgba(col, a * 0.3));
+              gl.addColorStop(1, rgba(col, 0));
+              g.fillStyle = gl;
+              g.beginPath();
+              g.arc(x, yy, r * 4, 0, Math.PI * 2);
+              g.fill();
+            }
+            g.fillStyle = rgba(col, a);
+            g.beginPath();
+            g.arc(x, yy, r, 0, Math.PI * 2);
+            g.fill();
+          }
         }
-        g.fillStyle = `rgba(${col},${a.toFixed(2)})`;
-        g.beginPath();
-        g.arc(x, y, r, 0, Math.PI * 2);
-        g.fill();
-      }
-
-      // a few bright flare stars, like the hero's
-      for (let i = 0; i < (mobile ? 3 : 6); i++) {
-        const x = rand() * W, y = rand() * H, sz = 2.6 + (i % 3) * 1.4;
-        const gl = g.createRadialGradient(x, y, 0, x, y, sz * 3.2);
-        gl.addColorStop(0, "rgba(220,232,255,.4)");
-        gl.addColorStop(1, "rgba(220,232,255,0)");
-        g.fillStyle = gl;
-        g.beginPath();
-        g.arc(x, y, sz * 3.2, 0, Math.PI * 2);
-        g.fill();
-        g.strokeStyle = "rgba(230,240,255,.45)";
-        g.lineWidth = 0.6;
-        g.beginPath();
-        g.moveTo(x - sz * 2, y); g.lineTo(x + sz * 2, y);
-        g.moveTo(x, y - sz * 2); g.lineTo(x, y + sz * 2);
-        g.stroke();
-        g.fillStyle = "#f4f8ff";
-        g.beginPath();
-        g.arc(x, y, 1.1 + (i % 3) * 0.3, 0, Math.PI * 2);
-        g.fill();
-      }
+        // the near layer also carries a few bright flare stars
+        if (li === 2) {
+          for (let i = 0; i < (mobile ? 2 : 4); i++) {
+            const x = rand() * W, y = 40 + rand() * (TILE - 80), sz = 2.6 + (i % 3) * 1.4;
+            const gl = g.createRadialGradient(x, y, 0, x, y, sz * 3.2);
+            gl.addColorStop(0, "rgba(220,232,255,.4)");
+            gl.addColorStop(1, "rgba(220,232,255,0)");
+            g.fillStyle = gl;
+            g.beginPath();
+            g.arc(x, y, sz * 3.2, 0, Math.PI * 2);
+            g.fill();
+            g.strokeStyle = "rgba(230,240,255,.45)";
+            g.lineWidth = 0.6;
+            g.beginPath();
+            g.moveTo(x - sz * 2, y); g.lineTo(x + sz * 2, y);
+            g.moveTo(x, y - sz * 2); g.lineTo(x, y + sz * 2);
+            g.stroke();
+            g.fillStyle = "#f4f8ff";
+            g.beginPath();
+            g.arc(x, y, 1.1 + (i % 3) * 0.3, 0, Math.PI * 2);
+            g.fill();
+          }
+        }
+        c.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          urls.push(url);
+          const el = layers[li];
+          el.style.backgroundImage = `url(${url})`;
+          el.style.backgroundSize = `${W}px ${TILE}px`;
+          el.style.height = `calc(100% + ${TILE}px)`;
+        });
+      });
 
       // a handful of stars that breathe
+      const rand = seeded(424242);
       twinkles!.replaceChildren(
         ...Array.from({ length: mobile ? 14 : 30 }, () => {
           const s = document.createElement("i");
@@ -157,6 +228,178 @@
         }),
       );
     }
+
+    // ---------- deep-space objects, painted once as sprites ----------
+    const S = 512; // sprite size in px
+
+    function sprite(paint: (g: CanvasRenderingContext2D, rand: () => number) => void, seed: number) {
+      const c = document.createElement("canvas");
+      c.width = c.height = S;
+      const g = c.getContext("2d")!;
+      g.translate(S / 2, S / 2);
+      g.globalCompositeOperation = "lighter";
+      paint(g, seeded(seed));
+      return c;
+    }
+    function glow(g: CanvasRenderingContext2D, x: number, y: number, r: number, col: RGB, a: number) {
+      const gl = g.createRadialGradient(x, y, 0, x, y, r);
+      gl.addColorStop(0, rgba(col, a));
+      gl.addColorStop(1, rgba(col, 0));
+      g.fillStyle = gl;
+      g.beginPath();
+      g.arc(x, y, r, 0, Math.PI * 2);
+      g.fill();
+    }
+    function dot(g: CanvasRenderingContext2D, x: number, y: number, r: number, col: RGB, a: number) {
+      g.fillStyle = rgba(col, a);
+      g.beginPath();
+      g.arc(x, y, r, 0, Math.PI * 2);
+      g.fill();
+    }
+
+    // a spiral galaxy, tilted toward us: logarithmic arms of stars, pink star-forming knots, a warm core
+    const spiral = (arm: RGB, core: RGB, arms: number, tilt: number, spin: number) => (g: CanvasRenderingContext2D, rand: () => number) => {
+      g.scale(1, tilt);
+      g.rotate(spin);
+      glow(g, 0, 0, S * 0.46, arm, 0.08);
+      for (let n = 0; n < 4200; n++) {
+        const a = n % arms;
+        const t = Math.pow(rand(), 0.8) * 3.4 * Math.PI;
+        const r = Math.min(S * 0.45, S * 0.035 * Math.exp(0.24 * t));
+        const th = t + (a * 2 * Math.PI) / arms;
+        const sc = r * 0.2;
+        const x = r * Math.cos(th) + gauss(rand) * sc, y = r * Math.sin(th) + gauss(rand) * sc;
+        const fade = 1 - r / (S * 0.48);
+        if (rand() < 0.04) glow(g, x, y, 3 + rand() * 4, [255, 120, 190], 0.35 * fade);
+        else dot(g, x, y, 0.5 + rand() * 1.0, arm, (0.25 + rand() * 0.55) * fade);
+      }
+      glow(g, 0, 0, S * 0.2, core, 0.55);
+      glow(g, 0, 0, S * 0.07, [255, 250, 240], 0.9);
+    };
+    // an elliptical galaxy: a smooth warm glow, densest at the middle
+    const elliptical = (core: RGB) => (g: CanvasRenderingContext2D, rand: () => number) => {
+      g.scale(1, 0.62);
+      g.rotate(0.5);
+      glow(g, 0, 0, S * 0.45, core, 0.12);
+      glow(g, 0, 0, S * 0.25, core, 0.3);
+      glow(g, 0, 0, S * 0.08, [255, 245, 230], 0.8);
+      for (let n = 0; n < 900; n++) {
+        const x = gauss(rand) * S * 0.3, y = gauss(rand) * S * 0.3;
+        dot(g, x, y, 0.4 + rand() * 0.7, core, 0.15 + rand() * 0.3);
+      }
+    };
+    // a nebula: overlapping clouds of colored gas with a few young stars inside
+    const nebula = (...cols: RGB[]) => (g: CanvasRenderingContext2D, rand: () => number) => {
+      // many faint, wide clouds, each mostly one color, so the hues stay distinct instead of adding up to white
+      for (let n = 0; n < 70; n++) {
+        const col = cols[n % cols.length];
+        const ox = (n % cols.length) - (cols.length - 1) / 2; // each color drifts to its own side of the cloud
+        const x = ox * S * 0.08 + gauss(rand) * S * 0.26, y = ox * S * 0.04 + gauss(rand) * S * 0.2;
+        glow(g, x, y, S * (0.05 + rand() * 0.15), col, 0.035 + rand() * 0.05);
+      }
+      // brighter filaments along a curve
+      for (let n = 0; n < 50; n++) {
+        const t = rand() * Math.PI * 1.4 - 0.7;
+        const x = Math.sin(t) * S * 0.24 + gauss(rand) * S * 0.035, y = Math.cos(t * 1.3) * S * 0.13 + gauss(rand) * S * 0.035;
+        glow(g, x, y, S * (0.015 + rand() * 0.035), cols[0], 0.06 + rand() * 0.07);
+      }
+      for (let n = 0; n < 40; n++) dot(g, gauss(rand) * S * 0.3, gauss(rand) * S * 0.24, 0.5 + rand() * 0.9, [235, 240, 255], 0.4 + rand() * 0.5);
+      for (let n = 0; n < 3; n++) {
+        const x = gauss(rand) * S * 0.15, y = gauss(rand) * S * 0.12;
+        glow(g, x, y, 10, [230, 240, 255], 0.6);
+        dot(g, x, y, 1.6, [255, 255, 255], 1);
+      }
+    };
+    // a globular star cluster: a dense ball of old stars
+    const cluster = (col: RGB) => (g: CanvasRenderingContext2D, rand: () => number) => {
+      glow(g, 0, 0, S * 0.22, col, 0.18);
+      for (let n = 0; n < 1400; n++) {
+        const r = Math.abs(gauss(rand)) * S * 0.2, th = rand() * Math.PI * 2;
+        dot(g, r * Math.cos(th), r * Math.sin(th), 0.4 + rand() * 0.8, col, 0.3 + rand() * 0.6);
+      }
+      glow(g, 0, 0, S * 0.06, [255, 250, 235], 0.7);
+    };
+
+    // kind, painter, on-screen size relative to the base, peak opacity
+    const KINDS: { paint: ReturnType<typeof spiral>; size: number; peak: number }[] = [
+      { paint: spiral([170, 200, 255], [255, 236, 205], 2, 0.42, 0.6), size: 1, peak: 0.8 },
+      { paint: nebula([236, 72, 153], [45, 212, 191], [129, 140, 248]), size: 1.35, peak: 0.85 },
+      { paint: elliptical([255, 218, 175]), size: 0.6, peak: 0.75 },
+      { paint: nebula([52, 211, 153], [56, 189, 248], [167, 139, 250]), size: 1.3, peak: 0.85 },
+      { paint: spiral([205, 180, 255], [255, 222, 200], 3, 0.6, -0.3), size: 0.9, peak: 0.8 },
+      { paint: nebula([251, 146, 60], [244, 63, 94], [250, 204, 21]), size: 1.25, peak: 0.7 },
+      { paint: cluster([200, 220, 255]), size: 0.5, peak: 0.85 },
+    ];
+    const sprites: (HTMLCanvasElement | undefined)[] = [];
+    const spriteFor = (k: number) => (sprites[k] ??= sprite(KINDS[k].paint, 777 + k * 31));
+
+    // the journey: object i waits at a depth (in viewport heights of scroll), off to one side of the content
+    const GAP = 0.75, FIRST = 0.5, REACH = 1.2;
+    const objRand = (i: number) => seeded(9001 + i * 7919);
+    function plan(i: number) {
+      const rand = objRand(i);
+      // never the same kind twice in a row
+      const prevKind = i > 0 ? Math.floor(objRand(i - 1)() * KINDS.length) : -1;
+      let kind = Math.floor(rand() * KINDS.length);
+      if (kind === prevKind) kind = (kind + 1) % KINDS.length;
+      const left = i % 2 === 0;
+      return { kind, side: left ? 0.06 + rand() * 0.2 : 0.74 + rand() * 0.2, spin: (rand() - 0.5) * 50 };
+    }
+    const live = new Map<number, { el: HTMLCanvasElement; kind: number; side: number; spin: number }>();
+
+    function update() {
+      const vh = window.innerHeight, vw = window.innerWidth;
+      const scroll = window.scrollY;
+      const depth = scroll / vh;
+
+      layers.forEach((el, i) => {
+        const shift = reduce ? 0 : (scroll * SPEED[i]) % TILE;
+        el.style.transform = `translate3d(0, ${-shift}px, 0)`;
+      });
+      depthTint!.style.opacity = String(Math.min(1, depth / 9));
+
+      const lo = Math.max(0, Math.ceil((depth - REACH - FIRST) / GAP));
+      const hi = Math.floor((depth + REACH - FIRST) / GAP);
+      for (const [i, o] of live) {
+        if (i < lo || i > hi) {
+          o.el.remove();
+          live.delete(i);
+        }
+      }
+      const base = Math.min(620, Math.max(280, vw * 0.38));
+      for (let i = lo; i <= hi; i++) {
+        let o = live.get(i);
+        if (!o) {
+          const p = plan(i);
+          const el = document.createElement("canvas");
+          el.width = el.height = S;
+          el.getContext("2d")!.drawImage(spriteFor(p.kind), 0, 0);
+          objects!.appendChild(el);
+          o = { el, ...p };
+          live.set(i, o);
+        }
+        // d runs -REACH (just rising into view below) to +REACH (passing out the top)
+        const d = depth - (FIRST + i * GAP);
+        const k = KINDS[o.kind];
+        const size = base * k.size;
+        const y = reduce ? vh * 0.5 : vh * (0.5 - d * 0.62);
+        const scale = reduce ? 1 : 0.55 + ((d + REACH) / (2 * REACH)) * 0.95; // grows as you approach
+        const opacity = Math.max(0, 1 - (d / REACH) ** 2) * k.peak;
+        o.el.style.width = o.el.style.height = `${size}px`;
+        o.el.style.opacity = opacity.toFixed(3);
+        o.el.style.transform = `translate3d(${vw * o.side - size / 2}px, ${y - size / 2}px, 0) scale(${scale.toFixed(3)}) rotate(${o.spin.toFixed(1)}deg)`;
+      }
+    }
+
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        update();
+      });
+    };
 
     // now and then a shooting star crosses the sky
     function fly() {
@@ -180,8 +423,15 @@
       }, 9000 + Math.random() * 9000);
     }
 
-    paint();
-    window.addEventListener("resize", paint);
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) scheduleMeteor();
+    paintLayers();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      paintLayers();
+      update();
+    });
+    // the backdrop persists across page navigations; each new page starts the journey from its own scroll
+    document.addEventListener("astro:after-swap", update);
+    if (!reduce) scheduleMeteor();
   }
 </script>
