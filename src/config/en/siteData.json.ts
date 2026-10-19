@@ -5,9 +5,9 @@ const siteData: SiteDataProps = {
   name: "Christopher A. Rotunno",
   // Your website's title and description (meta fields)
   title:
-    "Christopher A. Rotunno | Data Analytics Engineer & BI Leader",
+    "Christopher A. Rotunno | Analytics Engineer · SI Orchestration",
   description:
-    "Analytics engineer turned sales leader: data pipelines, dashboards, and the client trust that turns insight into results. Based in St. Augustine, FL.",
+    "I design the system. SI builds it. I make sure it works. Analytics engineer connecting ten years of data across four industries, based in St. Augustine, FL.",
 
   // Your information for blog post purposes
   author: {
@@ -18,8 +18,8 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-social-v3.jpg",
-    alt: "Christopher A. Rotunno | Data Analytics Engineer & BI Leader",
+    src: "/images/og-social-v4.jpg",
+    alt: "Christopher A. Rotunno, Analytics Engineer and SI Orchestration: I connect the dots",
   },
 };
 
