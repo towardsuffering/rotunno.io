@@ -121,6 +121,9 @@ const imageUrl = trimEndSlash(Astro.site?.toString() || "") + rawImageSrc;
 <!-- who wrote the page, for link previews (LinkedIn's Post Inspector looks for it) -->
 <meta name="author" content={siteData.author.name} />
 
+<!-- ties shared links to the site's Facebook app, for Facebook's link insights -->
+<meta property="fb:app_id" content="1661292045363502" />
+
 <!-- hreflang attributes -->
 <HrefLang />
 
