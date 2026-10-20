@@ -964,7 +964,13 @@ const steps = [
     let builtWidth = -1, builtHeight = -1;
     let captionsRight = 0; // right edge of the caption column, in canvas pixels
     let labelY: number[] = []; // bottom edge of each formed cluster
-    function build() {
+    // the build runs in short slices with a break between them, so the page stays responsive while the
+    // sky is set up (one long task here showed up as Lighthouse "blocking time" on slow phones);
+    // a newer build (a resize mid-way) cancels an older one at its next break
+    let buildRun = 0;
+    const nextTask = () => new Promise<void>((r) => setTimeout(r, 0));
+    async function build() {
+      const run = ++buildRun;
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = canvas!.clientWidth;
       H = canvas!.clientHeight;
@@ -977,13 +983,16 @@ const steps = [
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       placeMap();
       buildWall();
+      await nextTask();
+      if (run !== buildRun) return;
       paintStarfield(); // after the walls, so no background star sits inside a constellation
       // the map can move on resize; scattered points it now covers find a new spot
       if (targets[0]) targets[0] = targets[0].map((t) => (hit(clear, t.x, t.y) ? scatterPoint() : t));
       // a height-only resize (phone address bar sliding) keeps every point where it is
       if (W === builtWidth && Math.abs(H - builtHeight) < 160) return;
-      builtWidth = W;
-      builtHeight = H;
+      builtWidth = -1; // draw() pauses while the points and targets are rebuilt
+      await nextTask();
+      if (run !== buildRun) return;
       const cap = section!.querySelector<HTMLElement>(".converge__captions");
       captionsRight = cap ? cap.getBoundingClientRect().right - canvas!.getBoundingClientRect().left : 0;
 
@@ -998,7 +1007,10 @@ const steps = [
           size: 1.1 + Math.random() * 1.1,
         }));
       }
-      targets = [chaosTargets(), clusterTargets(), chartTargets(), wordTargets()];
+      const chaos = chaosTargets(), cluster = clusterTargets(), chart = chartTargets();
+      await nextTask();
+      if (run !== buildRun) return;
+      targets = [chaos, cluster, chart, wordTargets()];
       labelY = GROUPS.map(() => 0);
       particles.forEach((p, i) => (labelY[p.group] = Math.max(labelY[p.group], targets[1][i].y)));
       const s = stage();
@@ -1014,6 +1026,9 @@ const steps = [
         p.x = targets[0][i].x;
         p.y = targets[0][i].y;
       });
+      // last, so draw() only runs once every part is in place
+      builtWidth = W;
+      builtHeight = H;
     }
 
     const forced = new URLSearchParams(location.search).get("p");

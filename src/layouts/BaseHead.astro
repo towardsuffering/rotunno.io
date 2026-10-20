@@ -63,10 +63,8 @@ const adsOnPage = adsEnabled && /^\/(fr\/)?blog(\/|$)/.test(Astro.url.pathname);
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
-<!-- Preconnect to 3rd-party origins -->
-<link rel="preconnect" href="https://www.googletagmanager.com" />
+<!-- GA loads late (see below), so a DNS lookup is all it's worth warming up; a preconnect would go unused -->
 <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-<link rel="preconnect" href="https://www.google-analytics.com" />
 
 <!-- The site is dark only. Run early so nothing flashes light; this also clears a light choice
      saved by the old theme toggle. -->
@@ -121,7 +119,14 @@ const adsOnPage = adsEnabled && /^\/(fr\/)?blog(\/|$)/.test(Astro.url.pathname);
     ad_personalization: 'granted',
   });
 
+  // GA waits for the visitor's first interaction (or 6s after load for someone who only reads),
+  // so its ~140ms of script never lands while the page is still settling (Lighthouse "blocking time")
+  var gaLoaded = false;
+  var gaEvents = ['pointerdown', 'pointermove', 'keydown', 'scroll', 'touchstart'];
   function loadGA() {
+    if (gaLoaded) return;
+    gaLoaded = true;
+    gaEvents.forEach(function(e) { window.removeEventListener(e, loadGA); });
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=G-5987GZPQBW';
@@ -132,10 +137,12 @@ const adsOnPage = adsEnabled && /^\/(fr\/)?blog(\/|$)/.test(Astro.url.pathname);
     };
   }
 
+  gaEvents.forEach(function(e) { window.addEventListener(e, loadGA, { once: true, passive: true }); });
+  function loadGALater() { setTimeout(loadGA, 6000); }
   if (document.readyState === 'complete') {
-    loadGA();
+    loadGALater();
   } else {
-    window.addEventListener('load', loadGA);
+    window.addEventListener('load', loadGALater);
   }
 
   document.addEventListener('astro:after-swap', function() {
