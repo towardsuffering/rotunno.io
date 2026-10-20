@@ -26,14 +26,15 @@ const {
   noindex = false,
 } = Astro.props as Props;
 
-import InterVariable from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2";
+// ads only where ad slots live (the blog), so the portfolio pages stay free of ad scripts and their cookies
+const adsOnPage = adsEnabled && /^\/(fr\/)?blog(\/|$)/.test(Astro.url.pathname);
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" initial-scale="1.0" />
 
-<!-- local font preload for better performance -->
-<link rel="preload" href={InterVariable} as="font" type="font/woff2" crossorigin="anonymous" />
+<!-- no font preload: the size-matched "Inter Fallback" (src/styles/fonts.css) paints the text right away
+     and Inter swaps in without moving anything, so preloading it would only compete with the page itself -->
 
 <!-- Favicons -->
 <!-- Google search shows a crawlable square icon that's a multiple of 48px, so offer PNG + ICO beside the SVG -->
@@ -44,11 +45,11 @@ import InterVariable from "@fontsource-variable/inter/files/inter-latin-wght-nor
 <meta name="apple-mobile-web-app-title" content="Rotunno" />
 <link rel="manifest" href="/favicons/site.webmanifest" />
 
-<!-- Google AdSense, only when configured in src/config/ads.ts: the ownership meta tag plus Google's
-     own loader tag, exactly as AdSense asks for it in <head> (async, so it doesn't block rendering) -->
+<!-- Google AdSense, only when configured in src/config/ads.ts: the ownership meta tag on every page,
+     and Google's own loader tag (async, so it doesn't block rendering) on blog pages only -->
 {adsEnabled && <meta name="google-adsense-account" content={adsConfig.client} />}
 {
-  adsEnabled && (
+  adsOnPage && (
     <script
       is:inline
       async

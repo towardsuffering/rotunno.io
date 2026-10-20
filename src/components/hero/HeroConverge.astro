@@ -32,6 +32,51 @@ const steps = [
 
 <section id="converge" class="converge" aria-label="Hero section">
   <div class="converge__sticky">
+    <!-- the copy comes first in the markup so the browser reaches (and paints) the headline before the
+         heavy constellation SVGs below; stacking is set by z-index, so it still draws on top -->
+    <div class="converge__captions">
+      <div class="converge__step converge__step--hero is-active" data-step="0">
+        <p class="converge__tag">01 / Fragmented</p>
+        <h1 class="converge__headline font-heading">
+          Ten years.<br />Four industries.
+        </h1>
+        <p class="converge__role"><span aria-hidden="true"></span>Analytics Engineer · SI Orchestration</p>
+        <p class="converge__beats">
+          <span>I design the system.</span>
+          <span>SI builds it.</span>
+          <span>I make sure it works.</span>
+        </p>
+        <p class="converge__signature">I connect the dots.</p>
+        <div class="flex flex-wrap gap-4">
+          <Button type="button" href="/Rotunno_Resume.pdf" download="Rotunno_Resume.pdf" variant="primary" class="md:text-lg" aria-label="Download CV">
+            <div class="flex items-center gap-2">
+              <span>Download CV</span>
+              <Icon name="tabler/download" aria-hidden="true" class="size-5" />
+            </div>
+          </Button>
+          <a
+            href="https://calendly.com/chrisrotunno-_my2/30min"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Schedule a Call"
+            class="inline-flex items-center gap-2 px-4 py-2 text-white/70 transition-colors hover:text-white md:text-lg"
+          >
+            <Icon name="tabler/calendar" aria-hidden="true" class="size-5" />
+            <span>Schedule a Call</span>
+          </a>
+        </div>
+      </div>
+      {
+        steps.map((s, i) => (
+          <div class="converge__step" data-step={i + 1}>
+            <p class="converge__tag">{s.tag}</p>
+            <h2 class="converge__title">{s.title}</h2>
+            <p class="converge__body">{s.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
     <!-- deep space: faint nebulae and the Milky Way band, behind everything -->
     <div class="converge__space" aria-hidden="true" data-sky></div>
     <!-- thousands of tiny distant stars, painted once per size (see paintStarfield) -->
@@ -100,49 +145,6 @@ const steps = [
     <!-- over the dots, so they drift behind it, softened but still bright -->
     <div class="converge__plate" aria-hidden="true" data-plate data-sky></div>
 
-    <div class="converge__captions">
-      <div class="converge__step converge__step--hero is-active" data-step="0">
-        <p class="converge__tag">01 / Fragmented</p>
-        <h1 class="converge__headline font-heading">
-          Ten years.<br />Four industries.
-        </h1>
-        <p class="converge__role"><span aria-hidden="true"></span>Analytics Engineer · SI Orchestration</p>
-        <p class="converge__beats">
-          <span>I design the system.</span>
-          <span>SI builds it.</span>
-          <span>I make sure it works.</span>
-        </p>
-        <p class="converge__signature">I connect the dots.</p>
-        <div class="flex flex-wrap gap-4">
-          <Button type="button" href="/Rotunno_Resume.pdf" download="Rotunno_Resume.pdf" variant="primary" class="md:text-lg" aria-label="Download CV">
-            <div class="flex items-center gap-2">
-              <span>Download CV</span>
-              <Icon name="tabler/download" aria-hidden="true" class="size-5" />
-            </div>
-          </Button>
-          <a
-            href="https://calendly.com/chrisrotunno-_my2/30min"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Schedule a Call"
-            class="inline-flex items-center gap-2 px-4 py-2 text-white/70 transition-colors hover:text-white md:text-lg"
-          >
-            <Icon name="tabler/calendar" aria-hidden="true" class="size-5" />
-            <span>Schedule a Call</span>
-          </a>
-        </div>
-      </div>
-      {
-        steps.map((s, i) => (
-          <div class="converge__step" data-step={i + 1}>
-            <p class="converge__tag">{s.tag}</p>
-            <h2 class="converge__title">{s.title}</h2>
-            <p class="converge__body">{s.body}</p>
-          </div>
-        ))
-      }
-    </div>
-
     <div class="converge__rail" aria-hidden="true">
       {[0, 1, 2, 3].map((i) => <span data-dot={i} class:list={{ "is-active": i === 0 }} />)}
     </div>
@@ -201,6 +203,19 @@ const steps = [
     -webkit-backdrop-filter: blur(1.5px);
     pointer-events: none;
     transition: opacity 0.3s linear;
+  }
+  /* placeMap sizes the plate and spots House and Bank from the measured copy; until it has, they stay
+     unpainted, so they appear in place instead of jumping there (a layout shift Lighthouse counts) */
+  .converge:not([data-placed]) .converge__plate,
+  .converge:not([data-placed]) .converge__mini--house,
+  .converge:not([data-placed]) .converge__mini--bank {
+    visibility: hidden;
+  }
+  /* phones: Florida's spot comes from the copy's height too */
+  @media (max-width: 767px) {
+    .converge:not([data-placed]) .converge__map {
+      visibility: hidden;
+    }
   }
   /* layered: dots, then the plate, then Florida and the copy on top, crisp */
   .converge__map,
@@ -766,10 +781,18 @@ const steps = [
           Object.assign(bank.style, { left: `${x - mx}px`, top: `${y - my}px` });
           bank.style.visibility = fits ? "" : "hidden";
         }
+        markPlaced();
         return;
       }
       const top = hero.getBoundingClientRect().bottom - canvas!.getBoundingClientRect().top + 4;
       el.style.setProperty("--map-top", `${Math.round(top)}px`);
+      markPlaced();
+    }
+
+    // show the placed pieces once the web font is in, since the swap re-wraps the copy and would move them again
+    function markPlaced() {
+      if (document.fonts.status === "loaded") section!.dataset.placed = "";
+      else document.fonts.ready.then(placeMap);
     }
 
     // thousands of faint background stars, thicker along the Milky Way band

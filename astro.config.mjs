@@ -10,6 +10,10 @@ import icon from "astro-icon";
 // https://astro.build/config
 export default defineConfig({
   site: "https://rotunno.ai",
+  // inline every stylesheet so no CSS request blocks the first paint (Lighthouse "render-blocking requests")
+  build: {
+    inlineStylesheets: "always",
+  },
   // i18n configuration must match src/config/translations.json.ts
   i18n: {
     defaultLocale: "en",
