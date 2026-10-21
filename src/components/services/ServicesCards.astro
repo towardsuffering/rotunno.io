@@ -226,6 +226,8 @@ const STEP_STARS: Star[] = [[4, 2, 0.8], [96, 2, 0.8], [1.5, 6, 0.9], [98.5, 6, 
 </style>
 
 <script>
+  import { onScrollWhileNear } from "@/js/scrollUtils";
+
   // Each pillar gets its own continuous focus amount (0-1) based on how
   // close its center is to a reference line, independent of the others —
   // so it reads as fluid, per-card life rather than one shared spotlight.
@@ -289,8 +291,7 @@ const STEP_STARS: Star[] = [[4, 2, 0.8], [96, 2, 0.8], [1.5, 6, 0.9], [98.5, 6, 
     });
 
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    if (list) onScrollWhileNear(list, update);
   }
 
   initCapabilitiesFocus();

@@ -106,6 +106,8 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
 </style>
 
 <script>
+  import { onScrollWhileNear } from "@/js/scrollUtils";
+
   // Ties the number of revealed characters to how far this heading has
   // scrolled through a fixed band of the viewport, so it types in
   // scrolling down and un-types scrolling back up. Everything from
@@ -156,8 +158,7 @@ const heroShardWords = heroShardChars.reduce<(typeof heroShardChars)[]>(
       }
 
       update();
-      window.addEventListener("scroll", update, { passive: true });
-      window.addEventListener("resize", update);
+      onScrollWhileNear(group, update);
     });
   }
 

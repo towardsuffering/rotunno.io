@@ -345,7 +345,7 @@
       const left = i % 2 === 0;
       return { kind, side: left ? 0.06 + rand() * 0.2 : 0.74 + rand() * 0.2, spin: (rand() - 0.5) * 50 };
     }
-    const live = new Map<number, { el: HTMLCanvasElement; kind: number; side: number; spin: number }>();
+    const live = new Map<number, { el: HTMLCanvasElement; kind: number; side: number; spin: number; size: number }>();
 
     function update() {
       const vh = window.innerHeight, vw = window.innerWidth;
@@ -375,7 +375,7 @@
           el.width = el.height = S;
           el.getContext("2d")!.drawImage(spriteFor(p.kind), 0, 0);
           objects!.appendChild(el);
-          o = { el, ...p };
+          o = { el, size: 0, ...p };
           live.set(i, o);
         }
         // d runs -REACH (just rising into view below) to +REACH (passing out the top)
@@ -385,7 +385,11 @@
         const y = reduce ? vh * 0.5 : vh * (0.5 - d * 0.62);
         const scale = reduce ? 1 : 0.55 + ((d + REACH) / (2 * REACH)) * 0.95; // grows as you approach
         const opacity = Math.max(0, 1 - (d / REACH) ** 2) * k.peak;
-        o.el.style.width = o.el.style.height = `${size}px`;
+        // size only changes on resize; rewriting it every frame would make the browser re-check layout
+        if (o.size !== size) {
+          o.el.style.width = o.el.style.height = `${size}px`;
+          o.size = size;
+        }
         o.el.style.opacity = opacity.toFixed(3);
         o.el.style.transform = `translate3d(${vw * o.side - size / 2}px, ${y - size / 2}px, 0) scale(${scale.toFixed(3)}) rotate(${o.spin.toFixed(1)}deg)`;
       }
@@ -422,6 +426,16 @@
         scheduleMeteor();
       }, 9000 + Math.random() * 9000);
     }
+
+    // paint each galaxy and nebula ahead of time, one per idle moment, so none is drawn in the middle of a scroll
+    const idle = (cb: () => void) => ("requestIdleCallback" in window ? requestIdleCallback(() => cb()) : setTimeout(cb, 200));
+    let warmed = 0;
+    const warmNext = () => {
+      if (warmed >= KINDS.length) return;
+      spriteFor(warmed++);
+      idle(warmNext);
+    };
+    idle(warmNext);
 
     paintLayers();
     update();

@@ -653,6 +653,11 @@ const steps = [
     const ac = new AbortController();
     const signal = ac.signal;
     document.addEventListener("astro:before-swap", () => { alive = false; ac.abort(); }, { once: true });
+    // once the hero has scrolled away, skip drawing without measuring the page every frame
+    let onScreen = true;
+    const io = new IntersectionObserver(([entry]) => (onScreen = entry.isIntersecting));
+    io.observe(section);
+    signal.addEventListener("abort", () => io.disconnect());
     placeNote();
     window.addEventListener("scroll", placeNote, { passive: true, signal });
     window.addEventListener("resize", placeNote, { signal });
@@ -1051,7 +1056,7 @@ const steps = [
 
     function draw(time: number) {
       if (builtWidth < 0) return;
-      if (section!.getBoundingClientRect().bottom <= 0) return;
+      if (!onScreen) return;
       // each step holds fully formed for the outer 20% of its scroll range on each side,
       // so the shape is in focus wherever a swipe happens to stop near it
       const raw = progress() * (STAGES - 1);

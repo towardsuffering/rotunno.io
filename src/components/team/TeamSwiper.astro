@@ -213,6 +213,8 @@ const shardWords = shardChars.reduce<(typeof shardChars)[]>(
 </style>
 
 <script>
+  import { onScrollWhileNear } from "@/js/scrollUtils";
+
   // Ties the number of revealed characters across the whole sentence to
   // how far it has scrolled through a fixed band of the viewport, so it
   // types in scrolling down and un-types scrolling back up. The word
@@ -273,8 +275,7 @@ const shardWords = shardChars.reduce<(typeof shardChars)[]>(
       }
 
       update();
-      window.addEventListener("scroll", update, { passive: true });
-      window.addEventListener("resize", update);
+      onScrollWhileNear(group, update);
     });
   }
 

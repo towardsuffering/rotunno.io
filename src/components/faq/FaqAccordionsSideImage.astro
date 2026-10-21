@@ -88,6 +88,8 @@ const faqData = getTranslatedData("faqData", currLocale);
 </style>
 
 <script>
+  import { onScrollWhileNear } from "@/js/scrollUtils";
+
   // Each question gets its own continuous focus amount (0-1) based on how
   // close its center is to a reference line, rather than one shared
   // "active index" — so it reads as smooth, independent fluidity per
@@ -143,8 +145,7 @@ const faqData = getTranslatedData("faqData", currLocale);
     });
 
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    if (list) onScrollWhileNear(list, update);
   }
 
   initFaqFocus();
