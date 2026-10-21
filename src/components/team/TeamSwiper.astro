@@ -48,9 +48,9 @@ const shardWords = shardChars.reduce<(typeof shardChars)[]>(
         <div class="flex flex-col gap-4" data-mos="fade-right" data-mos-anchor="#team-trigger">
           <Badge>About Me</Badge>
           <h3 class="text-foreground h2">Christopher A. Rotunno</h3>
-          <p class="text-lg font-heading font-semibold leading-snug md:text-2xl" style="color: #34d399;">
+          <p class="tw-headline text-lg font-heading font-semibold leading-snug md:text-2xl" style="color: #34d399;">
             <span class="typewriter-group"
-              ><span class="rounded-md px-1.5 py-0.5" style="background: #34d399; color: #0f172a;"
+              ><span class="rounded-md px-1.5 py-0.5 whitespace-nowrap" style="background: #34d399; color: #0f172a;"
                 ><span class="tw-slice" data-text={badgeText} data-role="badge"
                   ><span class="sr-only">{badgeText}</span
                   ><span class="tw-slice-visible" aria-hidden="true"></span
@@ -163,6 +163,11 @@ const shardWords = shardChars.reduce<(typeof shardChars)[]>(
   .founder-card:hover .founder-photo {
     transform: scale(1.04);
     filter: brightness(1.05) contrast(1.05);
+  }
+
+  /* even line lengths, so a long word like "fragmented" doesn't leave a short line with a gap after "turn" */
+  .tw-headline {
+    text-wrap: balance;
   }
 
   /* inline-block words with margin spacing: wraps only between words and survives HTML minification,
