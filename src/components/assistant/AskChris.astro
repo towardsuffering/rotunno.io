@@ -195,9 +195,30 @@ import { ASSISTANT_MAX_CHARS, ASSISTANT_MAX_TURNS, ASSISTANT_SUGGESTIONS } from 
   .ask__send:disabled {
     opacity: 0.5;
   }
-  @media (max-width: 480px) {
+  /* phones: full-screen panel sized to the area above the keyboard (set from visualViewport in the script) */
+  @media (max-width: 640px) {
     .ask__launcher span {
       display: none;
+    }
+    .ask[data-open] .ask__launcher {
+      display: none;
+    }
+    .ask__panel {
+      position: fixed;
+      top: var(--ask-top, 0px);
+      left: 0;
+      width: 100%;
+      height: var(--ask-height, 100dvh);
+      border: 0;
+      border-radius: 0;
+    }
+    /* 16px keeps iOS Safari from zooming the page when the box is focused */
+    .ask__input {
+      font-size: 1rem;
+    }
+    :global(html.ask-lock),
+    :global(html.ask-lock body) {
+      overflow: hidden;
     }
   }
 </style>
@@ -230,6 +251,18 @@ import { ASSISTANT_MAX_CHARS, ASSISTANT_MAX_TURNS, ASSISTANT_SUGGESTIONS } from 
     let busy = false;
     let checked = false;
     let round = 0; // ignores follow-ups that arrive after a newer question
+    const mobile = window.matchMedia("(max-width: 640px)");
+
+    // iOS keeps the page height when the keyboard opens, so size the phone panel to what's actually visible
+    function fitViewport() {
+      const vv = window.visualViewport;
+      if (!vv || panel.hidden) return;
+      root.style.setProperty("--ask-height", `${vv.height}px`);
+      root.style.setProperty("--ask-top", `${vv.offsetTop}px`);
+      log.scrollTop = log.scrollHeight;
+    }
+    window.visualViewport?.addEventListener("resize", fitViewport);
+    window.visualViewport?.addEventListener("scroll", fitViewport);
 
     function setStatus(online: boolean) {
       dot.dataset.state = online ? "online" : "offline";
@@ -248,8 +281,12 @@ import { ASSISTANT_MAX_CHARS, ASSISTANT_MAX_TURNS, ASSISTANT_SUGGESTIONS } from 
     function open(show: boolean) {
       panel.hidden = !show;
       toggle.setAttribute("aria-expanded", String(show));
+      root.toggleAttribute("data-open", show);
+      document.documentElement.classList.toggle("ask-lock", show && mobile.matches);
       if (show) {
-        input.focus();
+        fitViewport();
+        // on phones, let visitors see the suggestions before the keyboard covers them
+        if (!mobile.matches) input.focus();
         if (!checked) {
           checked = true;
           checkStatus();
