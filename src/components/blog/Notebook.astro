@@ -1,0 +1,205 @@
+---
+/**
+ * Renders a Jupyter notebook inside a blog post, straight from the .ipynb file, so the post and the
+ * downloadable notebook never drift apart. Markdown cells become prose, code cells are highlighted,
+ * pandas tables keep their HTML, and Plotly figures stay interactive (plotly.js loads only when a
+ * chart nears the screen).
+ *
+ *   import notebook from "./analysis.ipynb?raw";
+ *   import notebookUrl from "./analysis.ipynb?url";
+ *   <Notebook source={notebook} download={notebookUrl} colab="src/data/blog/en/my-post/analysis.ipynb" />
+ */
+import { Code } from "astro:components";
+import { marked } from "marked";
+
+interface Props {
+  source: string; // the .ipynb file's text
+  download?: string; // URL of the notebook file, for the download button
+  colab?: string; // repo path of the notebook, for the Open in Colab button
+}
+
+type Output = {
+  output_type: string;
+  text?: string | string[];
+  data?: Record<string, string | string[] | object>;
+};
+type Cell = { cell_type: "markdown" | "code" | "raw"; source: string | string[]; outputs?: Output[] };
+
+const { source, download, colab } = Astro.props as Props;
+const cells = (JSON.parse(source).cells as Cell[]).filter((c) => c.cell_type !== "raw");
+const text = (s: string | string[] | undefined) => (Array.isArray(s) ? s.join("") : (s ?? ""));
+const repo = "towardsuffering/rotunno.io";
+
+// the post already has a title, so the notebook's own h1 is dropped
+const markdown = (src: string) => marked.parse(src.replace(/^# .*\n+/m, ""), { async: false }) as string;
+// pandas tables ship their own <style> block; the site's table styles take over instead
+const tableHtml = (html: string) => html.replace(/<style[\s\S]*?<\/style>/g, "").replace(/ border="1"/g, "");
+
+function render(output: Output) {
+  if (output.output_type === "stream") return { kind: "text", value: text(output.text) };
+  const data = output.data ?? {};
+  if (data["application/vnd.plotly.v1+json"]) return { kind: "plotly", value: JSON.stringify(data["application/vnd.plotly.v1+json"]) };
+  if (data["image/png"]) return { kind: "image", value: `data:image/png;base64,${text(data["image/png"] as string)}` };
+  // Plotly's Jupyter loader is a script-only HTML output with nothing to show, so it is skipped
+  if (data["text/html"]) {
+    const html = text(data["text/html"] as string[]);
+    if (!html.replace(/<script[\s\S]*?<\/script>/g, "").trim()) return null;
+    return { kind: "html", value: tableHtml(html) };
+  }
+  if (data["text/plain"]) return { kind: "text", value: text(data["text/plain"] as string[]) };
+  return null;
+}
+
+let codeCount = 0;
+---
+
+<div class="notebook">
+  {
+    (download || colab) && (
+      <div class="notebook__actions">
+        {download && (
+          <a class="notebook__button" href={download} download>
+            Download the notebook (.ipynb)
+          </a>
+        )}
+        {colab && (
+          <a class="notebook__button" href={`https://colab.research.google.com/github/${repo}/blob/main/${colab}`} target="_blank" rel="noopener">
+            Open in Google Colab
+          </a>
+        )}
+      </div>
+    )
+  }
+
+  {
+    cells.map((cell) =>
+      cell.cell_type === "markdown" ? (
+        <div class="notebook__markdown" set:html={markdown(text(cell.source))} />
+      ) : (
+        <div class="notebook__cell">
+          <div class="notebook__in">
+            <span class="notebook__prompt">In [{++codeCount}]</span>
+            <Code code={text(cell.source)} lang="python" theme="css-variables" wrap />
+          </div>
+          {(cell.outputs ?? []).map(render).map(
+            (out) =>
+              out && (
+                <div class={`notebook__out notebook__out--${out.kind}`}>
+                  {out.kind === "text" && <pre>{out.value}</pre>}
+                  {out.kind === "html" && <div class="notebook__table" set:html={out.value} />}
+                  {out.kind === "image" && <img src={out.value} alt="Notebook output chart" loading="lazy" />}
+                  {out.kind === "plotly" && (
+                    <div class="notebook__plot" data-notebook-plot>
+                      <script type="application/json" set:html={out.value} />
+                      <p class="notebook__plot-loading">Loading interactive chart...</p>
+                    </div>
+                  )}
+                </div>
+              ),
+          )}
+        </div>
+      ),
+    )
+  }
+</div>
+
+<style>
+  .notebook {
+    margin-block: 2rem;
+  }
+  .notebook__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .notebook__button {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .notebook__button:hover {
+    border-color: var(--color-primary);
+  }
+  .notebook__cell {
+    margin-block: 1.5rem;
+  }
+  .notebook__prompt {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--color-muted-foreground);
+    font-family: ui-monospace, monospace;
+    font-size: 0.75rem;
+  }
+  .notebook__in :global(pre) {
+    margin: 0;
+  }
+  .notebook__out {
+    margin-top: 0.5rem;
+    border-left: 2px solid var(--color-border);
+    padding-left: 1rem;
+  }
+  .notebook__out pre {
+    margin: 0;
+    padding: 0.5rem 0;
+    background: none;
+    color: var(--color-muted-foreground);
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+  }
+  .notebook__table {
+    overflow-x: auto;
+    font-size: 0.8rem;
+  }
+  .notebook__table :global(table) {
+    margin: 0;
+  }
+  .notebook__plot {
+    min-height: 420px;
+  }
+  .notebook__plot-loading {
+    color: var(--color-muted-foreground);
+    font-size: 0.85rem;
+  }
+  .notebook__out--plotly {
+    border-left: 0;
+    padding-left: 0;
+  }
+</style>
+
+<script>
+  // draw each Plotly chart when it nears the screen; plotly.js itself loads on the first one
+  function initNotebookPlots() {
+    const plots = document.querySelectorAll<HTMLElement>("[data-notebook-plot]:not([data-drawn])");
+    if (!plots.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(async (entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          io.unobserve(el);
+          el.dataset.drawn = "1";
+          const fig = JSON.parse(el.querySelector("script")!.textContent || "{}");
+          const Plotly = (await import("plotly.js-cartesian-dist-min")).default;
+          el.querySelector(".notebook__plot-loading")?.remove();
+          const chart = document.createElement("div");
+          el.append(chart);
+          await Plotly.newPlot(chart, fig.data, { ...fig.layout, autosize: true }, {
+            responsive: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ["select2d", "lasso2d", "autoScale2d", "toggleSpikelines"],
+          });
+        });
+      },
+      { rootMargin: "400px 0px" },
+    );
+    plots.forEach((el) => io.observe(el));
+  }
+
+  initNotebookPlots();
+  document.addEventListener("astro:page-load", initNotebookPlots);
+</script>

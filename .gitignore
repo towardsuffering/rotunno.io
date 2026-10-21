@@ -24,3 +24,6 @@ pnpm-debug.log*
 .netlify
 .vercel
 .wrangler
+
+# notebook python environment
+notebooks/.venv/

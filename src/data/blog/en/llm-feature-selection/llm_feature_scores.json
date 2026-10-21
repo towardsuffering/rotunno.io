@@ -1,0 +1,296 @@
+{
+ "model": "minicpm-v",
+ "prompt": "You are helping select features for a model that predicts whether a person's annual income is above $50,000, using records from the 1994 U.S. Census.\n\nFeatures:\n- age: Age in years\n- workclass: Employer type: private, self-employed, government, and so on\n- fnlwgt: Census sampling weight: how many people in the population this row represents\n- education: Highest level of education, as a label\n- education.num: The same education level, as a number from 1 to 16\n- marital.status: Married, never married, divorced, and so on\n- occupation: Broad job category\n- relationship: Role in the household: husband, wife, own child, and so on\n- race: Race as recorded by the census\n- sex: Sex as recorded by the census\n- capital.gain: Income from investment gains\n- capital.loss: Losses from investments\n- hours.per.week: Usual hours worked per week\n- native.country: Country of origin\n\nFor each feature, give an importance score from 0 (useless for predicting income) to 1 (extremely useful), based on your knowledge of what drives income. Score features independently; several can share a score.\nReply with only a JSON object mapping each feature name to {\"score\": number, \"reason\": \"one short sentence\"}.",
+ "runs": [
+  {
+   "age": {
+    "score": 0.7,
+    "reason": "Income generally increases with experience and age up to a point."
+   },
+   "workclass": {
+    "score": 0.6,
+    "reason": "Employer type often correlates with industry stability and pay scales."
+   },
+   "fnlwgt": {
+    "score": 0.0,
+    "reason": "This is a sampling weight for population estimation, not a predictor of individual income."
+   },
+   "education": {
+    "score": 0.8,
+    "reason": "Higher education levels are strongly correlated with higher earning potential."
+   },
+   "education.num": {
+    "score": 0.8,
+    "reason": "Provides the same predictive information as education but in a numeric format suitable for models."
+   },
+   "marital.status": {
+    "score": 0.4,
+    "reason": "Married individuals often have higher household incomes or dual incomes, serving as a weak proxy."
+   },
+   "occupation": {
+    "score": 0.9,
+    "reason": "The specific job category is one of the strongest direct indicators of salary level."
+   },
+   "relationship": {
+    "score": 0.3,
+    "reason": "Role in household correlates with being a primary breadwinner but is less direct than occupation."
+   },
+   "race": {
+    "score": 0.2,
+    "reason": "While systemic disparities exist, it is a sensitive and often less predictive feature compared to economic factors."
+   },
+   "sex": {
+    "score": 0.3,
+    "reason": "Gender pay gaps exist, making it a weak but statistically relevant predictor in this dataset context."
+   },
+   "capital.gain": {
+    "score": 0.7,
+    "reason": "Significant investment gains often indicate wealth and higher overall financial status."
+   },
+   "capital.loss": {
+    "score": 0.4,
+    "reason": "Investment losses can indicate active investing or financial trouble, offering some context."
+   },
+   "hours.per.week": {
+    "score": 0.6,
+    "reason": "Working more hours generally leads to higher income, especially for hourly workers."
+   },
+   "native.country": {
+    "score": 0.2,
+    "reason": "Country of origin may correlate with immigration status and job opportunities but is a weak direct predictor."
+   }
+  },
+  {
+   "age": {
+    "score": 0.7,
+    "reason": "Income generally increases with experience and age until retirement."
+   },
+   "workclass": {
+    "score": 0.6,
+    "reason": "Employer type often correlates with industry stability and pay scales."
+   },
+   "fnlwgt": {
+    "score": 0.1,
+    "reason": "This is a sampling weight for population estimation, not a predictor of individual income."
+   },
+   "education": {
+    "score": 0.8,
+    "reason": "Higher education levels are strongly correlated with higher earning potential."
+   },
+   "education.num": {
+    "score": 0.8,
+    "reason": "Provides a numerical ordinal representation of education, highly predictive of income."
+   },
+   "marital.status": {
+    "score": 0.4,
+    "reason": "Married individuals often have higher household incomes or dual incomes, but it's a weaker individual predictor."
+   },
+   "occupation": {
+    "score": 0.9,
+    "reason": "Job category is one of the strongest direct determinants of salary level."
+   },
+   "relationship": {
+    "score": 0.3,
+    "reason": "Reflects household role which correlates with employment status but is less direct than occupation."
+   },
+   "race": {
+    "score": 0.5,
+    "reason": "Systemic disparities exist in income across racial groups, making it a relevant statistical predictor."
+   },
+   "sex": {
+    "score": 0.5,
+    "reason": "Gender pay gaps make sex a relevant statistical predictor for income distribution."
+   },
+   "capital.gain": {
+    "score": 0.7,
+    "reason": "Significant investment gains often indicate higher wealth and upper-income status."
+   },
+   "capital.loss": {
+    "score": 0.4,
+    "reason": "Investment losses may correlate with high-income individuals who invest more, but is noisier than gain."
+   },
+   "hours.per.week": {
+    "score": 0.6,
+    "reason": "Working more hours generally increases income, especially for hourly workers."
+   },
+   "native.country": {
+    "score": 0.3,
+    "reason": "Country of origin may correlate with immigration status and job opportunities, but is a weaker predictor."
+   }
+  },
+  {
+   "age": {
+    "score": 0.7,
+    "reason": "Income generally increases with age and experience up to a point."
+   },
+   "workclass": {
+    "score": 0.6,
+    "reason": "Employer type often correlates with industry stability and pay scales."
+   },
+   "fnlwgt": {
+    "score": 0.0,
+    "reason": "This is a sampling weight for population estimation, not a predictor of individual income."
+   },
+   "education": {
+    "score": 0.8,
+    "reason": "Higher education levels are strongly correlated with higher earning potential."
+   },
+   "education.num": {
+    "score": 0.8,
+    "reason": "Provides the same predictive power as 'education' but in a numerical format suitable for models."
+   },
+   "marital.status": {
+    "score": 0.4,
+    "reason": "Marriage status can correlate with income due to household dynamics and labor force participation."
+   },
+   "occupation": {
+    "score": 0.8,
+    "reason": "The specific job category is one of the strongest direct predictors of salary."
+   },
+   "relationship": {
+    "score": 0.3,
+    "reason": "Role in household often correlates with gender and employment status, which affect income."
+   },
+   "race": {
+    "score": 0.5,
+    "reason": "Racial disparities in income exist in the data, though it is a sensitive and complex factor."
+   },
+   "sex": {
+    "score": 0.6,
+    "reason": "Gender pay gaps are present in the census data, making sex a relevant predictor."
+   },
+   "capital.gain": {
+    "score": 0.7,
+    "reason": "Significant investment gains often indicate higher wealth and income levels."
+   },
+   "capital.loss": {
+    "score": 0.4,
+    "reason": "Investment losses may correlate with high-income individuals who take larger financial risks."
+   },
+   "hours.per.week": {
+    "score": 0.6,
+    "reason": "Working more hours generally leads to higher weekly and annual income, especially for hourly workers."
+   },
+   "native.country": {
+    "score": 0.3,
+    "reason": "Country of origin may correlate with immigration status and job opportunities, but is less direct than occupation."
+   }
+  },
+  {
+   "age": {
+    "score": 0.7,
+    "reason": "Income generally increases with age and experience up to a point."
+   },
+   "workclass": {
+    "score": 0.6,
+    "reason": "Employer type often correlates with industry stability and pay scales."
+   },
+   "fnlwgt": {
+    "score": 0.1,
+    "reason": "This is a sampling weight for population estimation, not a predictor of individual income."
+   },
+   "education": {
+    "score": 0.8,
+    "reason": "Higher education levels are strongly correlated with higher earning potential."
+   },
+   "education.num": {
+    "score": 0.8,
+    "reason": "Provides the same predictive information as 'education' but in a numerical format."
+   },
+   "marital.status": {
+    "score": 0.4,
+    "reason": "Married individuals often have higher incomes due to dual earners or stability, but it's less direct than education."
+   },
+   "occupation": {
+    "score": 0.9,
+    "reason": "The specific job category is one of the strongest determinants of salary."
+   },
+   "relationship": {
+    "score": 0.3,
+    "reason": "Correlates with marital status and gender roles, which have some influence on income."
+   },
+   "race": {
+    "score": 0.5,
+    "reason": "Systemic inequalities mean race can be a statistically significant predictor, though it reflects social bias."
+   },
+   "sex": {
+    "score": 0.6,
+    "reason": "Gender pay gaps make sex a relevant statistical predictor of income in this dataset."
+   },
+   "capital.gain": {
+    "score": 0.7,
+    "reason": "Large investment gains often indicate wealth and higher overall financial status."
+   },
+   "capital.loss": {
+    "score": 0.4,
+    "reason": "Investment losses can indicate high-risk financial behavior or wealth levels, but is noisier than gain."
+   },
+   "hours.per.week": {
+    "score": 0.6,
+    "reason": "Working more hours generally leads to higher income, especially for hourly workers."
+   },
+   "native.country": {
+    "score": 0.3,
+    "reason": "Country of origin may correlate with immigration status and job opportunities, but is a weaker predictor."
+   }
+  },
+  {
+   "age": {
+    "score": 0.7,
+    "reason": "Income generally increases with age and experience up to a point."
+   },
+   "workclass": {
+    "score": 0.6,
+    "reason": "Employer type often correlates with industry stability and pay scales."
+   },
+   "fnlwgt": {
+    "score": 0.1,
+    "reason": "This is a sampling weight for population estimation, not a predictor of individual income."
+   },
+   "education": {
+    "score": 0.8,
+    "reason": "Higher education levels are strongly correlated with higher earning potential."
+   },
+   "education.num": {
+    "score": 0.8,
+    "reason": "Same as education; provides a numerical ordinal scale for learning algorithms."
+   },
+   "marital.status": {
+    "score": 0.4,
+    "reason": "Married individuals often have higher incomes due to dual earners or stability, but it's a weaker predictor than education."
+   },
+   "occupation": {
+    "score": 0.7,
+    "reason": "The specific job category is a direct determinant of salary range."
+   },
+   "relationship": {
+    "score": 0.3,
+    "reason": "Role in household (e.g., husband) often correlates with being the primary breadwinner, but is less direct than occupation."
+   },
+   "race": {
+    "score": 0.5,
+    "reason": "There are documented disparities in income across racial groups, making it a statistically relevant feature."
+   },
+   "sex": {
+    "score": 0.5,
+    "reason": "Gender pay gaps exist, making sex a relevant statistical predictor despite ethical considerations."
+   },
+   "capital.gain": {
+    "score": 0.6,
+    "reason": "Large investment gains often indicate higher wealth and income levels."
+   },
+   "capital.loss": {
+    "score": 0.4,
+    "reason": "Investment losses can indicate active trading or high-income volatility, but is less predictive than gain."
+   },
+   "hours.per.week": {
+    "score": 0.6,
+    "reason": "Working more hours generally leads to higher weekly and annual income, especially for hourly workers."
+   },
+   "native.country": {
+    "score": 0.3,
+    "reason": "Country of origin may correlate with immigration status and job opportunities, but is a weaker predictor."
+   }
+  }
+ ]
+}
