@@ -13,6 +13,7 @@ import RelatedPosts from "@/components/related-posts/RelatedPosts.astro";
 import TableOfContents from "@/components/table-of-contents/TableOfContents.astro";
 import Tag from "@/components/tag/Tag.astro";
 import { getReadingTime } from "@/js/blogUtils";
+import { postNotebookMinutes } from "@/js/notebookUtils";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { formatDate } from "@/js/textUtils";
 import { getLocalizedRoute } from "@/js/translationUtils";
@@ -28,7 +29,7 @@ interface Props {
 const { post, headings } = Astro.props as Props;
 const { title, description, authors, pubDate, categories, tags, updatedDate, heroImage, socialImage, youtubeId } =
   post.data;
-const readingTime = getReadingTime(post.body);
+const readingTime = getReadingTime(post.body, postNotebookMinutes(post.filePath));
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(currLocale);

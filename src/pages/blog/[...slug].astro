@@ -23,7 +23,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const post = Astro.props as Props;
 const { Content, headings } = await render(post);
 // a post built from a notebook gets the notebook's headings in its table of contents too
-const allHeadings = [...headings, ...(await postNotebookHeadings(post.filePath))];
+const allHeadings = [...headings, ...postNotebookHeadings(post.filePath)];
 ---
 
 <BlogLayoutSidebar post={post} headings={allHeadings}>

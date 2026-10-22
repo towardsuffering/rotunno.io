@@ -3,6 +3,7 @@ import { type CollectionEntry, getEntries } from "astro:content";
 
 import PostCover from "@/components/blog/PostCover.astro";
 import { getReadingTime } from "@/js/blogUtils";
+import { postNotebookMinutes } from "@/js/notebookUtils";
 import { getLocaleFromUrl } from "@/js/localeUtils";
 import { formatDate, humanize, slugify } from "@/js/textUtils";
 import { getLocalizedRoute } from "@/js/translationUtils";
@@ -28,7 +29,7 @@ const { title, description, categories, authors, pubDate, youtubeId } = post.dat
 const currLocale = getLocaleFromUrl(Astro.url);
 const authorsData = await getEntries(authors);
 const href = getLocalizedRoute(currLocale, `/blog/${post.id}/`);
-const readingTime = getReadingTime(post.body);
+const readingTime = getReadingTime(post.body, postNotebookMinutes(post.filePath));
 const isFeature = variant === "feature";
 ---
 
