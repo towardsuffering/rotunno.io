@@ -10,7 +10,9 @@
  *   <Notebook source={notebook} download={notebookUrl} colab="src/data/blog/en/my-post/analysis.ipynb" />
  */
 import { Code } from "astro:components";
-import { marked } from "marked";
+import { Marked } from "marked";
+
+import { slugify, stripTitle } from "@/js/notebookUtils";
 
 interface Props {
   source: string; // the .ipynb file's text
@@ -30,8 +32,15 @@ const cells = (JSON.parse(source).cells as Cell[]).filter((c) => c.cell_type !==
 const text = (s: string | string[] | undefined) => (Array.isArray(s) ? s.join("") : (s ?? ""));
 const repo = "towardsuffering/rotunno.io";
 
-// the post already has a title, so the notebook's own h1 is dropped
-const markdown = (src: string) => marked.parse(src.replace(/^# .*\n+/m, ""), { async: false }) as string;
+// headings get the same ids the table of contents links to (see notebookHeadings)
+const marked = new Marked({
+  renderer: {
+    heading({ tokens, depth, text }) {
+      return `<h${depth} id="${slugify(text)}">${this.parser.parseInline(tokens)}</h${depth}>\n`;
+    },
+  },
+});
+const markdown = (src: string) => marked.parse(stripTitle(src), { async: false }) as string;
 // pandas tables ship their own <style> block; the site's table styles take over instead
 const tableHtml = (html: string) => html.replace(/<style[\s\S]*?<\/style>/g, "").replace(/ border="1"/g, "");
 

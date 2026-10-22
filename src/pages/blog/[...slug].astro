@@ -6,6 +6,7 @@ import { render } from "astro:content";
 import ExternalLink from "@/components/markdown-components/ExternalLink.astro";
 import { defaultLocale } from "@/config/siteSettings.json";
 import { getAllPosts } from "@/js/blogUtils";
+import { postNotebookHeadings } from "@/js/notebookUtils";
 import BlogLayoutCenter from "@/layouts/BlogLayoutCenter.astro";
 import BlogLayoutSidebar from "@/layouts/BlogLayoutSidebar.astro";
 
@@ -21,8 +22,10 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const post = Astro.props as Props;
 const { Content, headings } = await render(post);
+// a post built from a notebook gets the notebook's headings in its table of contents too
+const allHeadings = [...headings, ...(await postNotebookHeadings(post.filePath))];
 ---
 
-<BlogLayoutSidebar post={post} headings={headings}>
+<BlogLayoutSidebar post={post} headings={allHeadings}>
   <Content components={{ a: ExternalLink }} />
 </BlogLayoutSidebar>
