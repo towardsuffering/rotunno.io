@@ -19,7 +19,7 @@ interface Props {
 }
 
 const { post } = Astro.props as Props;
-const { title, description, authors, categories, tags, pubDate, updatedDate, heroImage } =
+const { title, description, authors, categories, tags, pubDate, updatedDate, heroImage, socialImage } =
   post.data;
 
 const currLocale = getLocaleFromUrl(Astro.url);
@@ -31,7 +31,7 @@ const authorsData = await getEntries(authors);
   type="blog"
   title={title}
   description={description}
-  image={heroImage}
+  image={socialImage ?? heroImage}
   authorsData={authorsData}
   postFrontmatter={post.data}
 >

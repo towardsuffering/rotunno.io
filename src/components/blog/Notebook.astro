@@ -77,10 +77,10 @@ let codeCount = 0;
         <div class="notebook__markdown" set:html={markdown(text(cell.source))} />
       ) : (
         <div class="notebook__cell">
-          <div class="notebook__in">
-            <span class="notebook__prompt">In [{++codeCount}]</span>
+          <details class="notebook__in">
+            <summary class="notebook__prompt">Show code · In [{++codeCount}]</summary>
             <Code code={text(cell.source)} lang="python" theme="css-variables" wrap />
-          </div>
+          </details>
           {(cell.outputs ?? []).map(render).map(
             (out) =>
               out && (
@@ -128,12 +128,20 @@ let codeCount = 0;
   .notebook__cell {
     margin-block: 1.5rem;
   }
+  /* code is folded by default so the prose and charts carry the post; readers open what they want */
   .notebook__prompt {
-    display: block;
+    width: fit-content;
     margin-bottom: 0.25rem;
     color: var(--color-muted-foreground);
     font-family: ui-monospace, monospace;
     font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .notebook__prompt:hover {
+    color: var(--color-primary);
+  }
+  .notebook__in[open] .notebook__prompt {
+    margin-bottom: 0.5rem;
   }
   .notebook__in :global(pre) {
     margin: 0;
@@ -172,17 +180,18 @@ let codeCount = 0;
 </style>
 
 <script>
-  // draw each Plotly chart when it nears the screen; plotly.js itself loads on the first one
+  // draw each Plotly chart when it nears the screen; plotly.js itself loads on the first one.
+  // astro:page-load also fires on the first load, so each chart is claimed once to avoid drawing it twice
   function initNotebookPlots() {
-    const plots = document.querySelectorAll<HTMLElement>("[data-notebook-plot]:not([data-drawn])");
+    const plots = document.querySelectorAll<HTMLElement>("[data-notebook-plot]:not([data-observed])");
     if (!plots.length) return;
+    plots.forEach((el) => (el.dataset.observed = "1"));
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach(async (entry) => {
           if (!entry.isIntersecting) return;
           const el = entry.target as HTMLElement;
           io.unobserve(el);
-          el.dataset.drawn = "1";
           const fig = JSON.parse(el.querySelector("script")!.textContent || "{}");
           const Plotly = (await import("plotly.js-cartesian-dist-min")).default;
           el.querySelector(".notebook__plot-loading")?.remove();

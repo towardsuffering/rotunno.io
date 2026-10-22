@@ -34,6 +34,8 @@ const blogCollection = defineCollection({
         .optional(),
       // CSS object-position for cropping the hero image, e.g. "50% 30%"
       heroFocus: z.string().optional(),
+      // 1200x630 card shown when the post is shared on social sites; falls back to heroImage
+      socialImage: image().optional(),
       // force an illustrated fallback theme (see src/js/coverScenes.ts) when there is no heroImage
       coverTheme: z.string().optional(),
       // YouTube video id (the part after "v=") for the video version, shown under the title

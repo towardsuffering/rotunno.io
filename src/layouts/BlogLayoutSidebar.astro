@@ -26,7 +26,7 @@ interface Props {
 }
 
 const { post, headings } = Astro.props as Props;
-const { title, description, authors, pubDate, categories, tags, updatedDate, heroImage, youtubeId } =
+const { title, description, authors, pubDate, categories, tags, updatedDate, heroImage, socialImage, youtubeId } =
   post.data;
 const readingTime = getReadingTime(post.body);
 
@@ -39,7 +39,7 @@ const authorsData = await getEntries(authors);
   type="blog"
   title={title}
   description={description}
-  image={heroImage}
+  image={socialImage ?? heroImage}
   authorsData={authorsData}
   postFrontmatter={post.data}
 >
