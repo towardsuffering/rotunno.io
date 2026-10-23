@@ -13,7 +13,7 @@ import { getAllPosts } from "@/js/blogUtils";
 // you can switch the RSS locale here to something else if desired
 const rssLocale = defaultLocale;
 
-// this is needed for getAuthorName() and getAuthorEmail() below
+// this is needed for getAuthorName() below
 const authors: CollectionEntry<"authors">[] = await getCollection("authors");
 
 export const GET: APIRoute = async (context) => {
@@ -34,6 +34,7 @@ export const GET: APIRoute = async (context) => {
     xmlns: {
       media: "http://search.yahoo.com/mrss/",
       atom: "http://www.w3.org/2005/Atom",
+      dc: "http://purl.org/dc/elements/1.1/",
     },
     // add atom:link to be compatible with atom
     customData: `<atom:link href="${site}rss.xml" rel="self" type="application/rss+xml" />`,
@@ -42,21 +43,21 @@ export const GET: APIRoute = async (context) => {
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
-      author: `${getAuthorEmail(post.data.authors[0].id)} (${getAuthorName(
-        post.data.authors[0].id,
-      )})`,
 
-      // custom data example, define in XML tags
-      // this adds the blog post image
-      customData: post.data.heroImage
-        ? `<media:content
+      // the author goes in dc:creator by name only, since RSS <author> requires an email
+      // and a plain address in the feed gets harvested by spammers
+      // this also adds the blog post image
+      customData:
+        `<dc:creator>${getAuthorName(post.data.authors[0].id)}</dc:creator>` +
+        (post.data.heroImage
+          ? `<media:content
           type="image/${post.data.heroImage.format == "jpg" ? "jpeg" : "png"}"
           width="${post.data.heroImage.width}"
           height="${post.data.heroImage.height}"
           medium="image"
           url="${getImageUrl(post)}" />
       `
-        : "",
+          : ""),
 
       // Compute RSS link from post `slug`
       link: getLocalizedRoute(rssLocale, `/blog/${post.id}/`),
@@ -75,19 +76,6 @@ const getAuthorName = (authorSlug: string) => {
   });
 
   return authorName;
-};
-
-// --------------------------------------------------------
-// map the post author slug to the author email
-const getAuthorEmail = (authorSlug: string) => {
-  let authorEmail = "";
-  authors.map((author) => {
-    if (author.id === authorSlug) {
-      authorEmail = author.data.email;
-    }
-  });
-
-  return authorEmail;
 };
 
 // --------------------------------------------------------
