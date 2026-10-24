@@ -18,8 +18,8 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-social-v7.jpg",
-    alt: "Christopher A. Rotunno, Analytics Engineer and SI Orchestration: I connect the dots",
+    src: "/images/og-social-v8.jpg",
+    alt: "Christopher A. Rotunno, The Elvis of Super Intelligence: a broadcast microphone with a neural network for a grille, sending its signal to working professionals. I connect the working class to super intelligence",
   },
 };
 

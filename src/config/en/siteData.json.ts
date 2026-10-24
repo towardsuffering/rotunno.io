@@ -5,9 +5,9 @@ const siteData: SiteDataProps = {
   name: "Christopher A. Rotunno",
   // Your website's title and description (meta fields)
   title:
-    "Christopher A. Rotunno | Analytics Engineer · SI Orchestration",
+    "Christopher A. Rotunno | The Elvis of Super Intelligence",
   description:
-    "I design the system. SI builds it. I make sure it works. Analytics engineer connecting ten years of data across four industries, based in St. Augustine, FL.",
+    "Analytics engineer bringing super intelligence to the working class: plain-English writing, notebooks anyone can run, and a daily Tidbit of the Day. Based in St. Augustine, FL.",
 
   // Your information for blog post purposes
   author: {
@@ -18,8 +18,8 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-social-v7.jpg",
-    alt: "Christopher A. Rotunno, Analytics Engineer and SI Orchestration: I connect the dots",
+    src: "/images/og-social-v8.jpg",
+    alt: "Christopher A. Rotunno, The Elvis of Super Intelligence: a broadcast microphone with a neural network for a grille, sending its signal to working professionals. I connect the working class to super intelligence",
   },
 };
 

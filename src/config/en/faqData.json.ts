@@ -14,7 +14,7 @@ export const faqData: FaqItem[] = [
     question: "What industries have you worked in?",
     answer: `Ten years across four industries. I've been on both sides of the dashboard:
 <ul>
-<li>Built analytics systems in financial services and retail</li>
+<li>Worked inside analytics teams in financial services and retail</li>
 <li>Ran the floor in food service and home improvement</li>
 </ul>
 That means I don't just model how a business works. I've lived the parts a dashboard usually misses.`,

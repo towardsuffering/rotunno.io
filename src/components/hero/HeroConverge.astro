@@ -2,8 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import Button from "@/components/button/Button.astro";
-import FloridaConstellation from "@/components/hero/FloridaConstellation.astro";
-import MiniConstellation from "@/components/hero/MiniConstellation.astro";
+import CrossoverConstellation from "@/components/hero/CrossoverConstellation.astro";
 
 // a faint star-chart grid behind the sky: declination arcs and right-ascension lines,
 // drawn around a center far below the view so they curve gently across it
@@ -22,11 +21,13 @@ const GRID = (() => {
   return [...arcs, ...spokes];
 })();
 
-// Scroll-driven hero: scattered data points sort, structure, and finally spell "confidence."
+// Scroll-driven hero, told as a rise: the come-up (who and why), the roots (scattered points sort into
+// the working world they came from), the crossover (how SI reaches them: the blog and Tidbit of the Day),
+// and the encore (they spell "confidence").
 const steps = [
-  { tag: "02 / Organized", title: "Every tidbit starts somewhere.", body: "A sale on the floor, a dispatch call, a line in a ledger. I've worked where it starts: finance, retail, food service, home improvement." },
-  { tag: "03 / Structured", title: "Followed end to end.", body: "From the floor to the dashboard, I trace where it bends, breaks, or gets lost." },
-  { tag: "04 / Trusted", title: "Turned into confidence.", body: "Numbers people stop second-guessing, so they can make the call." },
+  { tag: "02 / The Roots", title: "Raised on the floor.", body: "Closing shifts, sales floors, and spreadsheets, across finance, retail, food service, and home improvement. That's where I learned what working people actually need." },
+  { tag: "03 / The Crossover", title: "From the lab to the break room.", body: "Research papers become blog posts anyone can run. Hard-won lessons become a daily Tidbit. Super intelligence stops being something done to working people, and becomes something they use." },
+  { tag: "04 / The Encore", title: "Turned into confidence.", body: "Not super intelligence people put up with. The kind they reach for, and ask for again." },
 ];
 ---
 
@@ -36,33 +37,28 @@ const steps = [
          heavy constellation SVGs below; stacking is set by z-index, so it still draws on top -->
     <div class="converge__captions">
       <div class="converge__step converge__step--hero is-active" data-step="0">
-        <p class="converge__tag">01 / Fragmented</p>
+        <p class="converge__tag">01 / The Come-Up</p>
         <h1 class="converge__headline font-heading">
-          I know where<br />the data lies.
+          The Elvis of<br /><span class="converge__headline-si">Super Intelligence.</span>
         </h1>
-        <p class="converge__role"><span aria-hidden="true"></span>Analytics Engineer · SI Orchestration</p>
-        <p class="converge__beats">
-          <span>I design the system.</span>
-          <span>SI builds it.</span>
-          <span>I make sure it works.</span>
-        </p>
-        <p class="converge__signature">I connect the dots.</p>
+        <!-- why the name, right under it: his crossover, then the same move for SI -->
+        <p class="converge__why">Elvis carried a sound born in the American South to people who'd never heard it.</p>
+        <p class="converge__signature">I connect the working class to super intelligence.</p>
         <div class="flex flex-wrap gap-4">
-          <Button type="button" href="/Rotunno_Resume.pdf" download="Rotunno_Resume.pdf" variant="primary" class="md:text-lg" aria-label="Download CV">
+          <Button href="/blog" variant="primary" class="md:text-lg">
             <div class="flex items-center gap-2">
-              <span>Download CV</span>
-              <Icon name="tabler/download" aria-hidden="true" class="size-5" />
+              <span>Read the Blog</span>
+              <Icon name="tabler/arrow-narrow-right" aria-hidden="true" class="size-5" />
             </div>
           </Button>
           <a
-            href="https://calendly.com/chrisrotunno-_my2/30min"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Schedule a Call"
+            href="/Rotunno_Resume.pdf"
+            download="Rotunno_Resume.pdf"
+            aria-label="Download CV"
             class="inline-flex items-center gap-2 px-4 py-2 text-white/70 transition-colors hover:text-white md:text-lg"
           >
-            <Icon name="tabler/calendar" aria-hidden="true" class="size-5" />
-            <span>Schedule a Call</span>
+            <Icon name="tabler/download" aria-hidden="true" class="size-5" />
+            <span>Download CV</span>
           </a>
         </div>
       </div>
@@ -85,61 +81,9 @@ const steps = [
     <svg class="converge__grid" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-sky>
       {GRID.map((d) => <path d={d} />)}
     </svg>
-    <!-- home base as a constellation, under the particles; it fades as the shapes take over -->
+    <!-- the crossover as a constellation, under the particles; it fades as the shapes take over -->
     <div class="converge__map" data-map data-sky>
-      <FloridaConstellation class="h-full w-full" />
-      <!-- east of the peninsula, over the ocean; sized with Florida -->
-      <div class="converge__mini converge__mini--cart">
-        <MiniConstellation
-          label="RETAIL"
-          viewBox="0 0 110 96"
-          stars={[[6, 12], [22, 16], [32, 58], [92, 58], [102, 26], [26, 30], [40, 72], [86, 72], [44, 84], [82, 84]]}
-          lines={[[0, 1, 5, 4, 3, 2, 6, 7], [1, 2], [8], [9]]}
-          wall={[[5, 4, 3, 2]]}
-          class="h-full w-full"
-        />
-      </div>
-      <div class="converge__mini converge__mini--bank">
-        <MiniConstellation
-          label="FINANCE"
-          viewBox="0 0 100 100"
-          stars={[[10, 34], [50, 10], [90, 34], [22, 40], [22, 76], [50, 40], [50, 76], [78, 40], [78, 76], [8, 84], [92, 84]]}
-          lines={[[0, 1, 2, 0], [3, 4], [5, 6], [7, 8], [9, 10]]}
-          wall={[[1, 2, 10, 9, 0]]}
-          class="h-full w-full"
-        />
-      </div>
-    </div>
-    <!-- two smaller, dimmer constellations in the open sky: the data side and the home side -->
-    <div class="converge__mini converge__mini--cart-sky" data-sky>
-      <MiniConstellation
-        label="RETAIL"
-        viewBox="0 0 110 96"
-        stars={[[6, 12], [22, 16], [32, 58], [92, 58], [102, 26], [26, 30], [40, 72], [86, 72], [44, 84], [82, 84]]}
-        lines={[[0, 1, 5, 4, 3, 2, 6, 7], [1, 2], [8], [9]]}
-        wall={[[5, 4, 3, 2]]}
-        class="h-full w-full"
-      />
-    </div>
-    <div class="converge__mini converge__mini--chart" data-sky>
-      <MiniConstellation
-        label="ANALYTICS"
-        viewBox="0 0 120 92"
-        stars={[[8, 70], [28, 58], [46, 62], [66, 40], [86, 33], [108, 12], [8, 78], [112, 78]]}
-        lines={[[0, 1, 2, 3, 4, 5], [6, 7]]}
-        wall={[[0, 1, 2, 3, 4, 5, 7, 6]]}
-        class="h-full w-full"
-      />
-    </div>
-    <div class="converge__mini converge__mini--house" data-sky>
-      <MiniConstellation
-        label="HOME SERVICES"
-        viewBox="0 0 100 96"
-        stars={[[14, 78], [86, 78], [86, 44], [50, 12], [14, 44], [70, 26], [70, 14], [42, 78], [42, 58], [58, 58], [58, 78]]}
-        lines={[[0, 1, 2, 3, 4, 0], [5, 6], [7, 8, 9, 10]]}
-        wall={[[0, 1, 2, 3, 4]]}
-        class="h-full w-full"
-      />
+      <CrossoverConstellation class="h-full w-full" />
     </div>
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
     <!-- over the dots, so they drift behind it, softened but still bright -->
@@ -151,7 +95,7 @@ const steps = [
 
     <div class="converge__hint">
       <p class="converge__hint-action" aria-hidden="true">Scroll <span>↓</span><span class="converge__hint-cursor"> &nbsp;·&nbsp; move your cursor to connect the dots</span></p>
-      <p class="converge__hint-note">Illustration only: every dot here is fictional.</p>
+      <p class="converge__hint-note">Illustration only.</p>
     </div>
   </div>
 </section>
@@ -189,7 +133,7 @@ const steps = [
     pointer-events: none;
     transition: opacity 0.3s linear;
   }
-  /* desktop: one frosted glass plate over the sky and under the copy, wrapping the headline and Florida
+  /* desktop: one frosted glass plate over the sky and under the copy, wrapping the headline and the crossover
      (sized in placeMap); light enough that the dots passing behind it stay clearly visible */
   .converge__plate {
     position: absolute;
@@ -204,22 +148,19 @@ const steps = [
     pointer-events: none;
     transition: opacity 0.3s linear;
   }
-  /* placeMap sizes the plate and spots House and Bank from the measured copy; until it has, they stay
-     unpainted, so they appear in place instead of jumping there (a layout shift Lighthouse counts) */
-  .converge:not([data-placed]) .converge__plate,
-  .converge:not([data-placed]) .converge__mini--house,
-  .converge:not([data-placed]) .converge__mini--bank {
+  /* placeMap sizes the plate from the measured copy; until it has, it stays unpainted, so it
+     appears in place instead of jumping there (a layout shift Lighthouse counts) */
+  .converge:not([data-placed]) .converge__plate {
     visibility: hidden;
   }
-  /* phones: Florida's spot comes from the copy's height too */
+  /* phones: the crossover's spot comes from the copy's height too */
   @media (max-width: 767px) {
     .converge:not([data-placed]) .converge__map {
       visibility: hidden;
     }
   }
-  /* layered: dots, then the plate, then Florida and the copy on top, crisp */
-  .converge__map,
-  .converge__mini {
+  /* layered: dots, then the plate, then the crossover and the copy on top, crisp */
+  .converge__map {
     z-index: 2;
   }
   .converge__captions {
@@ -250,7 +191,7 @@ const steps = [
   .converge__space {
     transition: opacity 0.3s linear;
     background:
-      /* teal nebula behind Florida, violet one low on the left */
+      /* teal nebula behind the crossover, violet one low on the left */
       radial-gradient(ellipse 38% 30% at 74% 42%, rgba(52, 211, 153, 0.07), transparent 70%),
       radial-gradient(ellipse 30% 24% at 16% 82%, rgba(139, 92, 246, 0.07), transparent 70%),
       radial-gradient(ellipse 26% 18% at 88% 12%, rgba(56, 189, 248, 0.05), transparent 70%),
@@ -306,65 +247,6 @@ const steps = [
     stroke-dasharray: 2 6;
     vector-effect: non-scaling-stroke;
   }
-  .converge__mini {
-    position: absolute;
-    pointer-events: none;
-    transition: opacity 0.3s linear;
-  }
-  /* above the headline, toward the right end of the caption column */
-  .converge__mini--chart {
-    top: 9%;
-    left: calc(max(0px, (100% - 86rem) / 2) + 64px + min(520px, 40vw) - 90px);
-    width: 150px;
-  }
-  /* below the buttons */
-  .converge__mini--house {
-    bottom: 11%;
-    left: calc(max(0px, (100% - 86rem) / 2) + 64px + 190px);
-    width: 100px;
-  }
-  /* inside the Florida box (percentages of it), in the open water east of the peninsula */
-  /* top right corner, above the Northeast Florida label */
-  .converge__mini--cart {
-    top: -13%;
-    left: 85%;
-    width: 15%;
-  }
-  /* wide screens: Retail moves out to the window's top right corner, past the content area */
-  .converge__mini--cart-sky {
-    display: none;
-    top: max(104px, 6%);
-    right: 3vw;
-    width: 150px;
-  }
-  @media (min-width: 1600px) and (min-height: 721px) {
-    .converge__mini--cart {
-      display: none;
-    }
-    .converge__mini--cart-sky {
-      display: block;
-    }
-  }
-  /* phones: Florida alone; the small ones would be clutter at this size */
-  @media (max-width: 767px) {
-    .converge__mini--cart,
-    .converge__mini--bank {
-      display: none;
-    }
-  }
-  /* out in the open sky past the plate; placeMap sets its exact spot from the plate's edges */
-  .converge__mini--bank {
-    top: 74%;
-    left: 101%;
-    width: 10%;
-  }
-  /* tablets, phones and short screens: no room beside the text, so only Florida's group shows */
-  @media (max-width: 1023px), (max-height: 720px) {
-    .converge__mini--chart,
-    .converge__mini--house {
-      display: none;
-    }
-  }
   #converge-canvas {
     position: absolute;
     inset: 0;
@@ -408,31 +290,16 @@ const steps = [
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 2px 24px rgba(120, 170, 255, 0.18));
   }
-  .converge__role {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 0 0 1.5rem;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.26em;
-    text-transform: uppercase;
-    color: #7dd3fc;
+  /* spelled out, a size down so it holds one line under "The Elvis of" */
+  .converge__headline-si {
+    font-size: 0.7em;
+    white-space: nowrap;
   }
-  .converge__role span {
-    width: 2.25rem;
-    height: 1px;
-    flex: none;
-    background: linear-gradient(90deg, #38bdf8, rgba(56, 189, 248, 0.15));
-  }
-  .converge__beats {
-    display: grid;
-    gap: 0.2rem;
-    margin: 0 0 1.25rem;
+  .converge__why {
+    max-width: 30rem;
+    margin: 0 0 0.6rem;
     font-size: clamp(1.05rem, 1.35vw, 1.3rem);
-    font-weight: 400;
     line-height: 1.45;
-    letter-spacing: -0.005em;
     color: rgba(226, 234, 246, 0.82);
   }
   .converge__signature {
@@ -444,6 +311,8 @@ const steps = [
     letter-spacing: -0.01em;
     color: #34d399;
     text-shadow: 0 0 22px rgba(52, 211, 153, 0.35);
+    /* on narrow phones it wraps as two even lines, not one with a single word left alone */
+    text-wrap: balance;
     background: linear-gradient(90deg, rgba(52, 211, 153, 0.9), rgba(52, 211, 153, 0)) left bottom / 100% 1px no-repeat;
   }
   @media (max-width: 767px) {
@@ -451,39 +320,21 @@ const steps = [
       font-size: clamp(2rem, 10.3vw, 3rem);
       margin-bottom: 0.9rem;
     }
-    .converge__role {
-      gap: 0.5rem;
-      margin-bottom: 1.1rem;
-      font-size: min(0.66rem, 3.05vw);
-      letter-spacing: 0.1em;
-      white-space: nowrap;
-    }
-    .converge__role span {
-      width: 1.25rem;
-    }
-    .converge__beats {
-      margin-bottom: 1rem;
+    .converge__why {
+      margin-bottom: 0.5rem;
     }
     .converge__signature {
       margin-bottom: 1.2rem;
     }
   }
   /* short phones (most phones once the browser's bars are counted): a tighter stack, so
-     Florida gets real room under the buttons */
+     the crossover gets real room under the buttons */
   @media (max-width: 767px) and (max-height: 800px) {
     .converge__headline {
       margin-bottom: 0.7rem;
     }
-    .converge__role {
-      margin-bottom: 0.8rem;
-    }
-    .converge__beats {
-      display: block;
-      margin-bottom: 0.7rem;
+    .converge__why {
       font-size: 1rem;
-    }
-    .converge__beats span::after {
-      content: " ";
     }
     .converge__signature {
       margin-bottom: 1rem;
@@ -579,7 +430,7 @@ const steps = [
       bottom: 14px;
       font-size: 0.7rem;
     }
-    /* the step dots already say there's more; the space goes to Florida */
+    /* the step dots already say there's more; the space goes to the crossover */
     .converge__hint-action {
       display: none;
     }
@@ -693,7 +544,7 @@ const steps = [
       off.width = W; off.height = H;
       const o = off.getContext("2d")!;
       o.beginPath();
-      // Florida and every visible small constellation; hidden ones measure zero and are skipped
+      // the crossover and every visible small constellation; hidden ones measure zero and are skipped
       section!.querySelectorAll<SVGSVGElement>("svg[data-shape]").forEach((svg) => {
         const r = svg.getBoundingClientRect();
         if (!r.width || !r.height) return;
@@ -738,54 +589,24 @@ const steps = [
       clear = read();
     }
 
-    // phones: Florida sits under the hero copy, which wraps to a different height on every phone
+    // phones: the crossover sits under the hero copy, which wraps to a different height on every phone
     function placeMap() {
       const el = section!.querySelector<HTMLElement>("[data-map]");
       const hero = section!.querySelector<HTMLElement>(".converge__step--hero");
       if (!el || !hero) return;
       if (W >= 768) {
         el.style.removeProperty("--map-top");
-        // the plate wraps the headline and Florida (the map's right edge holds Retail and Finance, which stay outside)
+        // the plate wraps the headline and the crossover
         const plate = section!.querySelector<HTMLElement>("[data-plate]");
         if (!plate) return;
         const c = canvas!.getBoundingClientRect(), h = hero.getBoundingClientRect(), m = el.getBoundingClientRect();
         const pad = 28;
-        const l = Math.min(h.left, m.left) - c.left - pad, r = m.left + m.width * 0.93 - c.left + pad;
+        const l = Math.min(h.left, m.left) - c.left - pad, r = m.left + m.width - c.left + pad;
         // never up into the nav on short screens
         const nav = document.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
         const t = Math.max(nav + 8, Math.min(h.top, m.top) - pad) - c.top, b = Math.max(h.bottom, m.bottom) - c.top + pad;
         Object.assign(plate.style, { left: `${l}px`, top: `${t}px`, width: `${r - l}px`, height: `${b - t}px` });
 
-        // Home Services and Finance sit well clear of the plate, so they read as their own stars;
-        // the gap shrinks a little on short screens, and where even that won't fit they step aside
-        const gap = 44, minGap = 28;
-        const hr = section!.querySelector<HTMLElement>(".converge__hint")?.getBoundingClientRect();
-        // room below the plate for a box at x..x+w: down to the screen edge, or the scroll hint if it's in the way
-        const floorAt = (x: number, w: number) =>
-          hr && x < hr.right - c.left && x + w > hr.left - c.left ? hr.top - c.top - 8 : H - 12;
-        const below = (x: number, w: number, h: number) => {
-          const y = b + Math.min(gap, floorAt(x, w) - h - b);
-          return { y, fits: y - b >= minGap };
-        };
-        const house = section!.querySelector<HTMLElement>(".converge__mini--house");
-        if (house) {
-          // diagonal from the copy: under the plate's left end
-          const x = l + 48, { y, fits } = below(x, house.offsetWidth, house.offsetHeight);
-          Object.assign(house.style, { left: `${x}px`, top: `${y}px`, bottom: "auto" });
-          house.style.visibility = !house.offsetHeight || fits ? "" : "hidden";
-        }
-        const bank = el.querySelector<HTMLElement>(".converge__mini--bank");
-        if (bank) {
-          const bw = bank.offsetWidth, bh = bank.offsetHeight, mx = m.left - c.left, my = m.top - c.top;
-          let x = r + gap, y = my + m.height * 0.74 - bh / 2, fits = x + bw < W - 16;
-          if (!fits) {
-            // no room to the right: below the plate's right end instead
-            x = r - bw - 48;
-            ({ y, fits } = below(x, bw, bh));
-          }
-          Object.assign(bank.style, { left: `${x - mx}px`, top: `${y - my}px` });
-          bank.style.visibility = fits ? "" : "hidden";
-        }
         markPlaced();
         return;
       }
@@ -1104,7 +925,7 @@ const steps = [
 
         const spring = forced !== null || reduce ? 1 : 0.14;
         const nx = p.x + (tx - p.x) * spring, ny = p.y + (ty - p.y) * spring;
-        // while Florida is on screen, no dot crosses its border; it waits at the edge instead
+        // while the crossover is on screen, no dot crosses its border; it waits at the edge instead
         if (!(mapAlpha > 0.02 && hit(inside, nx, ny) && !hit(inside, p.x, p.y))) {
           p.x = nx;
           p.y = ny;
