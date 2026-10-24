@@ -1,8 +1,9 @@
 ---
 /**
- * "Translate" menu: opens the current page in Google Translate's website proxy
- * (rotunno-ai.translate.goog), which machine-translates every page and keeps links inside the
- * translation as the visitor browses. Nothing loads from Google until a language is picked.
+ * "Translate" menu: translates the page in place with Google's website translator, so the visitor
+ * stays on this site and every script and animation keeps running (the translate.goog proxy broke
+ * them). The choice lives in Google's own "googtrans" cookie, so later pages load translated too.
+ * Nothing loads from Google until a language is picked.
  * A native select, so a long list stays easy to scroll and type into on phones.
  */
 import { Icon } from "astro-icon/components";
@@ -76,15 +77,12 @@ const LANGUAGES: [string, string][] = [
   ["zu", "isiZulu (Zulu)"],
 ];
 
-// the proxy's host for this site: dots become dashes (and dashes double), under translate.goog
-const site = new URL(Astro.site ?? "https://rotunno.ai");
-const proxyHost = `${site.hostname.replace(/-/g, "--").replace(/\./g, "-")}.translate.goog`;
 ---
 
-<label class:list={["translate-select text-muted-foreground hover:text-primary-accent relative inline-flex items-center gap-1 transition-colors", className]}>
+<label translate="no" class:list={["notranslate translate-select text-muted-foreground hover:text-primary-accent relative inline-flex items-center gap-1 transition-colors", className]}>
   <Icon name="tabler/language" aria-hidden="true" class="size-4 shrink-0" />
   <span class="sr-only">Translate this site</span>
-  <select data-translate data-site={site.origin} data-proxy={proxyHost} class="translate-select__menu">
+  <select data-translate class="translate-select__menu">
     <option value="" selected>Translate</option>
     <option value="en">English (original)</option>
     {LANGUAGES.map(([code, label]) => <option value={code}>{label}</option>)}
@@ -116,28 +114,71 @@ const proxyHost = `${site.hostname.replace(/-/g, "--").replace(/\./g, "-")}.tran
   }
 </style>
 
-<script>
-  // one listener for every menu on the page, set up once (the nav survives view transitions)
-  if (!(window as any).__translateSelect) {
-    (window as any).__translateSelect = true;
-    document.addEventListener("change", (event) => {
-      const menu = event.target as HTMLSelectElement;
-      if (!menu.matches?.("select[data-translate]") || !menu.value) return;
-      const path = location.pathname + location.hash;
-      // English goes back to the site itself; any other language opens the page through the proxy
-      location.href =
-        menu.value === "en"
-          ? menu.dataset.site + path
-          : `https://${menu.dataset.proxy}${location.pathname}?_x_tr_sl=en&_x_tr_tl=${menu.value}&_x_tr_hl=${menu.value}${location.hash}`;
-    });
-  }
+<script is:inline>
+  // inline and run once per full page load: it has to manage Google's script and cookie itself
+  (function () {
+    const COOKIE = "googtrans";
+    const current = () => {
+      const m = document.cookie.match(/(?:^|;\s*)googtrans=\/en\/([^;]+)/);
+      return m && m[1] !== "en" ? decodeURIComponent(m[1]) : "";
+    };
+    // Google may write the cookie on the bare domain as well, so clear both
+    const setCookie = (value) => {
+      const expiry = value ? "" : ";expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      document.cookie = `${COOKIE}=${value};path=/${expiry}`;
+      document.cookie = `${COOKIE}=${value};path=/;domain=${location.hostname}${expiry}`;
+      document.cookie = `${COOKIE}=${value};path=/;domain=.${location.hostname.replace(/^www\./, "")}${expiry}`;
+    };
+    // a link ending in #googtrans(en|es) opens the site already in that language
+    const linked = location.hash.match(/googtrans\(en\|([\w-]+)\)/);
+    if (linked) setCookie(linked[1] === "en" ? "" : `/en/${linked[1]}`);
+    const showCurrent = () =>
+      document.querySelectorAll("select[data-translate]").forEach((menu) => (menu.value = current()));
 
-  // inside a translation, the menu shows the language being read
-  function showCurrent() {
-    const lang = new URLSearchParams(location.search).get("_x_tr_tl");
-    if (!lang) return;
-    document.querySelectorAll<HTMLSelectElement>("select[data-translate]").forEach((menu) => (menu.value = lang));
-  }
-  showCurrent();
-  document.addEventListener("astro:page-load", showCurrent);
+    if (!window.__translateSelect) {
+      window.__translateSelect = true;
+      document.addEventListener("change", (event) => {
+        const menu = event.target;
+        if (!menu.matches || !menu.matches("select[data-translate]") || !menu.value) return;
+        setCookie(menu.value === "en" ? "" : `/en/${menu.value}`);
+        location.reload();
+      });
+      // a translated page can't follow a client-side page swap, so load the next page in full instead
+      document.addEventListener("astro:after-swap", () => {
+        if (current()) location.reload();
+        else showCurrent();
+      });
+      // load Google's translator only when a language has been chosen
+      if (current()) {
+        window.googleTranslateInit = () =>
+          new window.google.translate.TranslateElement({ pageLanguage: "en", autoDisplay: false }, "google-translate-host");
+        const host = document.createElement("div");
+        host.id = "google-translate-host";
+        host.hidden = true;
+        document.body.appendChild(host);
+        const script = document.createElement("script");
+        script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateInit";
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    }
+    showCurrent();
+  })();
 </script>
+
+<style is:global>
+  /* hide the bar and hover popups Google adds, and keep the page from shifting down for them */
+  body > .skiptranslate,
+  iframe.skiptranslate,
+  #goog-gt-tt,
+  .goog-te-balloon-frame {
+    display: none !important;
+  }
+  body {
+    top: 0 !important;
+  }
+  font[style] {
+    background: none !important;
+    box-shadow: none !important;
+  }
+</style>
