@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import MobileLanguageSelect from "@/components/language-select/MobileLanguageSelect.astro";
+import TranslateSelect from "@/components/language-select/TranslateSelect.astro";
 import MobileNavDropdown from "@/components/nav/mobile-nav/MobileNavDropdown.astro";
 //components
 import NavLink from "@/components/nav/NavLink.astro";
@@ -74,6 +75,10 @@ import { locales } from "@/config/siteSettings.json";
         <Button variant="primary" class="w-full" href="https://calendly.com/chrisrotunno-_my2/30min" target="_blank" rel="noopener noreferrer">
           Schedule a Call
         </Button>
+      </div>
+
+      <div class="mt-4 flex justify-center px-4 text-base">
+        <TranslateSelect />
       </div>
 
       <div class="mt-4 flex items-start justify-between pr-2 pl-4">
