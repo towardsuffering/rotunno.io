@@ -1,0 +1,251 @@
+---
+/**
+ * Fragmented tidbits into confidence, as a constellation: scattered stars on the left (the messy
+ * fragments: a spreadsheet here, a gut call there) drift along dotted paths into one point, and come
+ * out the other side as a clean chart whose line climbs to the brightest star.
+ * Same frame as the old Florida map, so HeroConverge's layout around it is unchanged.
+ */
+import { starHash, starLook } from "./starLook";
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+type Pt = [number, number];
+const VIEWBOX = [28, -20, 306, 214];
+
+// the fragments: scattered, uneven, no two at the same height
+const fragments: Pt[] = [
+  [46, 22], [78, 8], [104, 34], [58, 58], [92, 70], [40, 96],
+  [74, 104], [110, 118], [52, 138], [88, 150], [64, 176], [112, 168],
+];
+// where they come together, just left of the chart
+const merge: Pt = [140, 158];
+
+// the chart: axes, faint gridlines, rising bars and the line that climbs over them
+const chart = { x0: 160, x1: 322, y0: 168, y1: 4 };
+const points: Pt[] = [[178, 146], [210, 128], [242, 112], [274, 78], [306, 38]];
+const peak = points[points.length - 1];
+const grid = [128, 88, 48];
+const bars = points.map(([x, y]) => ({ x: x - 9, y: y + 10, h: chart.y0 - y - 10 }));
+const lineD = [merge, ...points].map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join("");
+
+// the chart's frame is a wall for HeroConverge's dots
+const frame: Pt[] = [
+  ...Array.from({ length: 9 }, (_, i) => [chart.x0 - 6 + i * 21, chart.y1 - 6] as Pt),
+  ...Array.from({ length: 9 }, (_, i) => [chart.x1 + 6, chart.y1 - 6 + i * 22] as Pt),
+  ...Array.from({ length: 9 }, (_, i) => [chart.x1 + 6 - i * 21, chart.y0 + 6] as Pt),
+  ...Array.from({ length: 9 }, (_, i) => [chart.x0 - 6, chart.y0 + 6 - i * 22] as Pt),
+];
+const shape = JSON.stringify({ viewBox: VIEWBOX, rings: [frame] });
+
+const stars = (pts: Pt[], green = false) => pts.map(([x, y]) => ({ x, y, h: starHash(x, y), ...starLook(starHash(x, y), green) }));
+const fragmentStars = stars(fragments);
+const lineStars = stars(points.slice(0, -1), true);
+const glowColors = [...new Set([...fragmentStars, ...lineStars].map((s) => s.glow))];
+const gid = (c: string) => `cf-glow-${c.slice(1)}`;
+const [px, py] = peak;
+const label = { fill: "#a5bedb", "font-size": "4.6", "font-weight": "600", "font-family": "Inter Variable, system-ui, sans-serif", "letter-spacing": "1.5", "text-anchor": "middle" };
+---
+
+<svg class={className} viewBox={VIEWBOX.join(" ")} data-shape={shape} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    {
+      glowColors.map((c) => (
+        <radialGradient id={gid(c)}>
+          <stop offset="0" stop-color={c} stop-opacity="0.9" />
+          <stop offset="0.3" stop-color={c} stop-opacity="0.32" />
+          <stop offset="1" stop-color={c} stop-opacity="0" />
+        </radialGradient>
+      ))
+    }
+    <radialGradient id="cf-star-glow-green">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0.7" />
+      <stop offset="1" stop-color="#34d399" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- the fragments' paths, flowing into one point -->
+  {fragments.map(([x, y], i) => <path d={`M${x} ${y}Q${(x + merge[0]) / 2} ${(y + merge[1]) / 2 + (i % 2 ? 8 : -8)} ${merge[0]} ${merge[1]}`} class="cf-flow" style={`--fd: ${((i * 0.37) % 2).toFixed(2)}s`} />)}
+
+  <!-- the chart: axes, gridlines, bars -->
+  {grid.map((y) => <line x1={chart.x0} y1={y} x2={chart.x1} y2={y} class="cf-grid" />)}
+  {bars.map((b) => <rect x={b.x} y={b.y} width="18" height={b.h} rx="1.5" class="cf-bar" />)}
+  <path d={`M${chart.x0} ${chart.y1}V${chart.y0}H${chart.x1}`} class="cf-glow" />
+  <path d={`M${chart.x0} ${chart.y1}V${chart.y0}H${chart.x1}`} class="cf-axis" />
+
+  <!-- the line that climbs out of the merge point, drawn in -->
+  <path d={lineD} class="cf-line-glow" />
+  <path d={lineD} class="cf-line" pathLength="100" />
+
+  {/* styled inline, so the labels stay small and pale even where the dev server drops the scoped styles */}
+  <text x="78" y="192" {...label}>FRAGMENTS</text>
+  <text x={(chart.x0 + chart.x1) / 2} y="182" {...label}>CONFIDENCE</text>
+
+  {
+    [...fragmentStars, ...lineStars].map((s) => (
+      <g class="cf-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
+        <circle cx={s.x} cy={s.y} r={s.bloom} fill={`url(#${gid(s.glow)})`} opacity="0.3" />
+        <circle cx={s.x} cy={s.y} r={s.halo} fill={`url(#${gid(s.glow)})`} opacity="0.85" />
+        {s.spike > 0 && <path d={`M${s.x - s.spike} ${s.y}H${s.x + s.spike}M${s.x} ${s.y - s.spike}V${s.y + s.spike}`} stroke={s.color} class="cf-spikes" />}
+        <circle cx={s.x} cy={s.y} r={s.core} fill={s.color} />
+      </g>
+    ))
+  }
+
+  <!-- the merge point, a quiet node -->
+  <circle cx={merge[0]} cy={merge[1]} r="1.8" fill="#a7f3d0" />
+
+  <!-- the top of the line: the brightest star -->
+  <g>
+    <circle cx={px} cy={py} r="14" fill="url(#cf-star-glow-green)" class="cf-peak-glow" />
+    <circle cx={px} cy={py} r="2.6" fill="#ecfdf5" />
+    <path d={`M${px} ${py - 8}V${py + 8}M${px - 8} ${py}H${px + 8}`} class="cf-spike" />
+  </g>
+</svg>
+
+<style>
+  svg {
+    overflow: visible;
+  }
+  /* dotted paths, their dots drifting toward the merge point */
+  .cf-flow {
+    fill: none;
+    stroke: #a5bedb;
+    stroke-opacity: 0.45;
+    stroke-width: 0.6;
+    stroke-linecap: round;
+    stroke-dasharray: 0 3.2;
+    animation: cf-drift 2.4s linear calc(-1 * var(--fd)) infinite;
+  }
+  @keyframes cf-drift {
+    to {
+      stroke-dashoffset: -6.4;
+    }
+  }
+  .cf-grid {
+    stroke: #a5bedb;
+    stroke-opacity: 0.12;
+    stroke-width: 0.4;
+    stroke-dasharray: 1.5 2.5;
+  }
+  .cf-bar {
+    fill: #34d399;
+    fill-opacity: 0.07;
+    stroke: #34d399;
+    stroke-opacity: 0.22;
+    stroke-width: 0.4;
+  }
+  .cf-axis {
+    fill: none;
+    stroke: #c7d6ea;
+    stroke-opacity: 0.55;
+    stroke-width: 0.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* a soft halo under the lines, so the figure glows instead of reading as a wireframe */
+  .cf-glow,
+  .cf-line-glow {
+    fill: none;
+    stroke: #7dd3fc;
+    stroke-opacity: 0.09;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .cf-line-glow {
+    stroke: #34d399;
+    stroke-opacity: 0.14;
+  }
+  /* the line draws itself in, holds, and draws again */
+  .cf-line {
+    fill: none;
+    stroke: #6ee7b7;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+    animation: cf-draw 6s ease-in-out infinite;
+  }
+  @keyframes cf-draw {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    35%,
+    90% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+  /* each star scintillates on its own rhythm, already mid-cycle when the page opens */
+  .cf-star {
+    animation: cf-scint var(--tw) ease-in-out calc(-1 * var(--d)) infinite;
+  }
+  @keyframes cf-scint {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    13% {
+      opacity: 0.78;
+    }
+    21% {
+      opacity: 0.96;
+    }
+    37% {
+      opacity: 0.6;
+    }
+    52% {
+      opacity: 1;
+    }
+    68% {
+      opacity: 0.84;
+    }
+    83% {
+      opacity: 0.95;
+    }
+  }
+  .cf-spikes {
+    stroke-width: 0.3;
+    stroke-opacity: 0.55;
+    stroke-linecap: round;
+  }
+  .cf-peak-glow {
+    animation: cf-pulse 2.6s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes cf-pulse {
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.25);
+    }
+  }
+  .cf-spike {
+    stroke: #ecfdf5;
+    stroke-opacity: 0.7;
+    stroke-width: 0.5;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cf-star,
+    .cf-flow,
+    .cf-line,
+    .cf-peak-glow {
+      animation: none;
+    }
+    .cf-line {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

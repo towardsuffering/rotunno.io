@@ -7,12 +7,8 @@ import { getLocalizedRoute } from "@/js/translationUtils";
 
 const currLocale = getLocaleFromUrl(Astro.url);
 
+// in the order the work happens: structure the fragments, fix what breaks, catch the pattern, hand it to people
 const pillars = [
-  {
-    icon: "tabler/users",
-    title: "Empowering Others",
-    slug: "empowering-others",
-  },
   {
     icon: "tabler/briefcase",
     title: "Finding Structure",
@@ -24,9 +20,14 @@ const pillars = [
     slug: "troubleshooting-systems",
   },
   {
-    icon: "tabler/palette",
+    icon: "tabler/chart-dots",
     title: "Predicting Patterns",
     slug: "predicting-patterns",
+  },
+  {
+    icon: "tabler/users",
+    title: "Empowering Others",
+    slug: "empowering-others",
   },
 ];
 
@@ -57,7 +58,10 @@ const STEP_STARS: Star[] = [[4, 2, 0.8], [96, 2, 0.8], [1.5, 6, 0.9], [98.5, 6, 
 
 <section id="capabilities-cards" class="my-12 py-12">
   <div class="site-container" id="capabilities-cards-trigger">
-    <h2 class="h2 mx-auto max-w-3xl text-center" data-reveal="pop">Core Capabilities</h2>
+    <h2 class="h2 mx-auto max-w-3xl text-center" data-reveal="pop">How I Connect the Dots</h2>
+    <p class="text-muted-foreground mx-auto mt-4 max-w-2xl text-center md:text-lg">
+      Four pillars, in the order the work happens: from scattered data to a call someone can make with confidence.
+    </p>
 
     <div class="temple relative mx-auto mt-16 max-w-5xl">
       <!-- roof: a constellation pediment over a starlit beam -->

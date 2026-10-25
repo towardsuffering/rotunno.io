@@ -3,7 +3,7 @@ import { type FaqItem } from "../types/configDataTypes";
 export const faqData: FaqItem[] = [
   {
     question: "What kind of roles are you targeting?",
-    answer: `Data Analytics Engineer and BI Leader roles that put me in a seat with visibility into the whole operation, not just one team's slice of it:
+    answer: `Analytics Engineer, BI Leader, and applied AI roles that put me in a seat with visibility into the whole operation, not just one team's slice of it:
 <ul>
 <li>Analytical, business-strategy driven work: turning scattered, untrusted data into decisions people actually act on</li>
 <li>Enough scope to see how the entire company's operations connect, not a siloed dashboard for one department</li>
@@ -14,8 +14,8 @@ export const faqData: FaqItem[] = [
     question: "What industries have you worked in?",
     answer: `Ten years across four industries. I've been on both sides of the dashboard:
 <ul>
-<li>Worked inside analytics teams in financial services and retail</li>
-<li>Ran the floor in food service and home improvement</li>
+<li>Worked inside financial and operational data teams</li>
+<li>Worked the floor in retail, food service, and home improvement</li>
 </ul>
 That means I don't just model how a business works. I've lived the parts a dashboard usually misses.`,
   },
@@ -33,8 +33,17 @@ In practice: you don't need three hires to get from raw data to a dashboard your
     answer: `<ul>
 <li>Remote-first, ideally with a global, distributed team</li>
 <li>Open to hybrid, and open to relocating anywhere in the US for the right role</li>
-<li>Looking for compensation and benefits strong enough to make the move worth it for both of us</li>
 </ul>`,
+  },
+  {
+    question: "Can you lead or mentor a data team?",
+    answer: `Yes.
+<ul>
+<li>Built two teams from scratch</li>
+<li>Led 25+ people</li>
+<li>Mentored analysts into engineering roles</li>
+</ul>
+If you need someone who can write the pipeline and grow the people running it, that's the role I want.`,
   },
   {
     question: "What matters most to you in an offer?",
@@ -44,16 +53,6 @@ In practice: you don't need three hires to get from raw data to a dashboard your
 <li>Stock options matter too, but a real SLR benefit can outweigh a marginally better equity package elsewhere</li>
 </ul>
 If it's part of your package, put it on the table early.`,
-  },
-  {
-    question: "Can you lead or mentor a data team?",
-    answer: `Yes.
-<ul>
-<li>Built a team from scratch</li>
-<li>Cut a data vendor's cost by 80%</li>
-<li>Mentored analysts into engineering roles</li>
-</ul>
-If you need someone who can write the pipeline and grow the people running it, that's the role I want.`,
   },
   {
     question: "How do I get in touch?",

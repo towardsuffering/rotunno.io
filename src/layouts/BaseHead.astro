@@ -3,7 +3,6 @@ import { type CollectionEntry } from "astro:content";
 import { ClientRouter } from "astro:transitions";
 
 import Seo from "@/components/seo/Seo.astro";
-import { adsConfig, adsEnabled } from "@/config/ads";
 import siteSettings from "@/config/siteSettings.json";
 
 export interface Props {
@@ -26,8 +25,6 @@ const {
   noindex = false,
 } = Astro.props as Props;
 
-// ads only where ad slots live (the blog), so the portfolio pages stay free of ad scripts and their cookies
-const adsOnPage = adsEnabled && /^\/(fr\/)?blog(\/|$)/.test(Astro.url.pathname);
 ---
 
 <meta charset="utf-8" />
@@ -44,20 +41,6 @@ const adsOnPage = adsEnabled && /^\/(fr\/)?blog(\/|$)/.test(Astro.url.pathname);
 <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="Rotunno" />
 <link rel="manifest" href="/favicons/site.webmanifest" />
-
-<!-- Google AdSense, only when configured in src/config/ads.ts: the ownership meta tag on every page,
-     and Google's own loader tag (async, so it doesn't block rendering) on blog pages only -->
-{adsEnabled && <meta name="google-adsense-account" content={adsConfig.client} />}
-{
-  adsOnPage && (
-    <script
-      is:inline
-      async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsConfig.client}`}
-      crossorigin="anonymous"
-    />
-  )
-}
 
 <!-- other -->
 <meta name="generator" content={Astro.generator} />
@@ -101,9 +84,8 @@ const adsOnPage = adsEnabled && /^\/(fr\/)?blog(\/|$)/.test(Astro.url.pathname);
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
 
-  // Consent mode defaults by region. In the EEA, UK and Switzerland everything is denied
-  // until the visitor answers Google's consent message (AdSense Privacy & messaging),
-  // which updates these signals automatically. Elsewhere, no popup is shown.
+  // Consent mode defaults by region. In the EEA, UK and Switzerland everything stays denied
+  // (no consent banner, so no analytics cookies there). Elsewhere, analytics runs as normal.
   gtag('consent', 'default', {
     analytics_storage: 'denied',
     ad_storage: 'denied',

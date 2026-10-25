@@ -5,9 +5,9 @@ const siteData: SiteDataProps = {
   name: "Christopher A. Rotunno",
   // Your website's title and description (meta fields)
   title:
-    "Christopher A. Rotunno | The Elvis of Super Intelligence",
+    "Christopher A. Rotunno | Analytics Engineer · Super Intelligence",
   description:
-    "Analytics engineer bringing super intelligence to the working class: plain-English writing, notebooks anyone can run, and a daily Tidbit of the Day. Based in St. Augustine, FL.",
+    "Analytics engineer turning fragmented tidbits into confidence: messy data structured, patterns caught early, and answers made plain with AI. Plain-English writing, notebooks anyone can run, and a daily Tidbit of the Day. Based in St. Augustine, FL.",
 
   // Your information for blog post purposes
   author: {
@@ -18,8 +18,8 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-social-v8.jpg",
-    alt: "Christopher A. Rotunno, The Elvis of Super Intelligence: a broadcast microphone with a neural network for a grille, sending its signal to working professionals. I connect the working class to super intelligence",
+    src: "/images/og-social-v9.jpg",
+    alt: "Christopher A. Rotunno, analytics engineer: turning fragmented tidbits into confidence. Scattered stars flow together into a chart whose line climbs to the brightest star.",
   },
 };
 

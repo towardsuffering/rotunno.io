@@ -39,7 +39,7 @@ const footerColumns = [
           <div class="lg:max-w-sm">
             <SiteLogo />
             <p class="text-muted-foreground mt-4 font-medium md:max-w-xs">
-              Data analytics engineer and BI leader. Building pipelines, models, and dashboards that turn raw data into clear decisions.
+              Analytics engineer turning fragmented tidbits into confidence: messy data structured, patterns caught early, answers made plain with AI.
             </p>
             <div class="mt-5 flex items-center gap-4">
               <!-- LinkedIn -->
@@ -84,14 +84,6 @@ const footerColumns = [
       <p class="text-muted-foreground text-sm leading-normal font-medium">
         Copyright {today.getFullYear()} <span translate="no">{siteData.name}</span>. All Rights Reserved
       </p>
-      <!-- reopens Google's consent message for EEA/UK/CH visitors; falls back to the privacy page -->
-      <a
-        href="/privacy/"
-        id="privacy-settings"
-        class="text-muted-foreground hover:text-foreground inline-block px-2 py-1.5 text-xs underline underline-offset-2"
-      >
-        Privacy settings
-      </a>
       <div class="flex items-center justify-center gap-2 text-muted-foreground text-xs">
         <span>Built with</span>
         <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors flex min-h-6 items-center gap-1 px-1.5 py-1" aria-label="Astro">
@@ -106,18 +98,3 @@ const footerColumns = [
     </div>
   </div>
 </section>
-
-<script>
-  function initPrivacySettings() {
-    const link = document.getElementById("privacy-settings");
-    link?.addEventListener("click", (e) => {
-      const fc = (window as any).googlefc;
-      if (fc && typeof fc.showRevocationMessage === "function") {
-        e.preventDefault();
-        fc.showRevocationMessage();
-      }
-    });
-  }
-  initPrivacySettings();
-  document.addEventListener("astro:after-swap", initPrivacySettings);
-</script>

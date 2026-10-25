@@ -18,8 +18,8 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-social-v8.jpg",
-    alt: "Christopher A. Rotunno, The Elvis of Super Intelligence: a broadcast microphone with a neural network for a grille, sending its signal to working professionals. I connect the working class to super intelligence",
+    src: "/images/og-social-v9.jpg",
+    alt: "Christopher A. Rotunno, analytics engineer: turning fragmented tidbits into confidence. Scattered stars flow together into a chart whose line climbs to the brightest star.",
   },
 };
 

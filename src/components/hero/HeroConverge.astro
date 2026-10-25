@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import Button from "@/components/button/Button.astro";
-import CrossoverConstellation from "@/components/hero/CrossoverConstellation.astro";
+import ConfidenceConstellation from "@/components/hero/ConfidenceConstellation.astro";
 
 // a faint star-chart grid behind the sky: declination arcs and right-ascension lines,
 // drawn around a center far below the view so they curve gently across it
@@ -21,13 +21,13 @@ const GRID = (() => {
   return [...arcs, ...spokes];
 })();
 
-// Scroll-driven hero, told as a rise: the come-up (who and why), the roots (scattered points sort into
-// the working world they came from), the crossover (how SI reaches them: the blog and Tidbit of the Day),
-// and the encore (they spell "confidence").
+// Scroll-driven hero: the mission, the experience behind it (scattered points sort into the working world
+// they came from), the approach (how SI reaches them: the blog and Tidbit of the Day), and the outcome
+// (they spell "confidence").
 const steps = [
-  { tag: "02 / The Roots", title: "Raised on the floor.", body: "Closing shifts, sales floors, and spreadsheets, across finance, retail, food service, and home improvement. That's where I learned what working people actually need." },
-  { tag: "03 / The Crossover", title: "From the lab to the break room.", body: "Research papers become blog posts anyone can run. Hard-won lessons become a daily Tidbit. Super intelligence stops being something done to working people, and becomes something they use." },
-  { tag: "04 / The Encore", title: "Turned into confidence.", body: "Not super intelligence people put up with. The kind they reach for, and ask for again." },
+  { tag: "02 / Experience", title: "Ten years. Four industries.", body: "Inside financial and operational data teams. Out on the floor in retail, food service, and home improvement sales. Each role left a fragment: a spreadsheet, a closing shift, a handoff that broke. Put together, they show where the numbers and the work drift apart." },
+  { tag: "03 / Approach", title: "I connect the dots.", body: "Messy data gets structured. Patterns get caught before they become problems. Then super intelligence turns the answer into plain English: a blog post with a notebook anyone can run, or a daily Tidbit on LinkedIn." },
+  { tag: "04 / Outcome", title: "Confidence you can act on.", body: "The goal was never a prettier chart. It's the moment someone stops guessing and makes the call." },
 ];
 ---
 
@@ -37,13 +37,11 @@ const steps = [
          heavy constellation SVGs below; stacking is set by z-index, so it still draws on top -->
     <div class="converge__captions">
       <div class="converge__step converge__step--hero is-active" data-step="0">
-        <p class="converge__tag">01 / The Come-Up</p>
+        <p class="converge__tag">01 / Analytics Engineer</p>
         <h1 class="converge__headline font-heading">
-          The Elvis of<br /><span class="converge__headline-si">Super Intelligence.</span>
+          Turning fragmented tidbits <span class="converge__headline-si">into confidence.</span>
         </h1>
-        <!-- why the name, right under it: his crossover, then the same move for SI -->
-        <p class="converge__why">Elvis carried a sound born in the American South to people who'd never heard it.</p>
-        <p class="converge__signature">I connect the working class to super intelligence.</p>
+        <p class="converge__why">I structure messy data, fix broken handoffs, and catch patterns before they become problems. Then I use super intelligence to make the answers plain for the people doing the work.</p>
         <div class="flex flex-wrap gap-4">
           <Button href="/blog" variant="primary" class="md:text-lg">
             <div class="flex items-center gap-2">
@@ -81,9 +79,9 @@ const steps = [
     <svg class="converge__grid" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-sky>
       {GRID.map((d) => <path d={d} />)}
     </svg>
-    <!-- the crossover as a constellation, under the particles; it fades as the shapes take over -->
+    <!-- fragments into confidence as a constellation, under the particles; it fades as the shapes take over -->
     <div class="converge__map" data-map data-sky>
-      <CrossoverConstellation class="h-full w-full" />
+      <ConfidenceConstellation class="h-full w-full" />
     </div>
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
     <!-- over the dots, so they drift behind it, softened but still bright -->
@@ -95,7 +93,6 @@ const steps = [
 
     <div class="converge__hint">
       <p class="converge__hint-action" aria-hidden="true">Scroll <span>↓</span><span class="converge__hint-cursor"> &nbsp;·&nbsp; move your cursor to connect the dots</span></p>
-      <p class="converge__hint-note">Illustration only.</p>
     </div>
   </div>
 </section>
@@ -133,7 +130,7 @@ const steps = [
     pointer-events: none;
     transition: opacity 0.3s linear;
   }
-  /* desktop: one frosted glass plate over the sky and under the copy, wrapping the headline and the crossover
+  /* desktop: one frosted glass plate over the sky and under the copy, wrapping the headline and the signal
      (sized in placeMap); light enough that the dots passing behind it stay clearly visible */
   .converge__plate {
     position: absolute;
@@ -153,13 +150,13 @@ const steps = [
   .converge:not([data-placed]) .converge__plate {
     visibility: hidden;
   }
-  /* phones: the crossover's spot comes from the copy's height too */
+  /* phones: the signal's spot comes from the copy's height too */
   @media (max-width: 767px) {
     .converge:not([data-placed]) .converge__map {
       visibility: hidden;
     }
   }
-  /* layered: dots, then the plate, then the crossover and the copy on top, crisp */
+  /* layered: dots, then the plate, then the signal and the copy on top, crisp */
   .converge__map {
     z-index: 2;
   }
@@ -191,7 +188,7 @@ const steps = [
   .converge__space {
     transition: opacity 0.3s linear;
     background:
-      /* teal nebula behind the crossover, violet one low on the left */
+      /* teal nebula behind the signal, violet one low on the left */
       radial-gradient(ellipse 38% 30% at 74% 42%, rgba(52, 211, 153, 0.07), transparent 70%),
       radial-gradient(ellipse 30% 24% at 16% 82%, rgba(139, 92, 246, 0.07), transparent 70%),
       radial-gradient(ellipse 26% 18% at 88% 12%, rgba(56, 189, 248, 0.05), transparent 70%),
@@ -276,8 +273,10 @@ const steps = [
     opacity: 1;
     pointer-events: auto;
   }
-  /* the opening copy: a headline with weight, a title plate, a three-beat cadence, a signature */
+  /* the opening copy: a headline with weight, then one plain line on what the work is */
   .converge__headline {
+    max-width: 14em;
+    text-wrap: balance;
     margin: 0 0 1.1rem;
     font-size: clamp(2.6rem, 5.2vw, 4.3rem);
     font-weight: 700;
@@ -290,30 +289,20 @@ const steps = [
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 2px 24px rgba(120, 170, 255, 0.18));
   }
-  /* spelled out, a size down so it holds one line under "The Elvis of" */
+  /* the second line, a size down so the headline reads as a statement, not a wall of type */
+  /* the payoff, in the same green as the confidence star */
   .converge__headline-si {
-    font-size: 0.7em;
-    white-space: nowrap;
+    background: linear-gradient(180deg, #a7f3d0 0%, #34d399 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .converge__why {
     max-width: 30rem;
-    margin: 0 0 0.6rem;
+    margin: 0 0 2.25rem;
     font-size: clamp(1.05rem, 1.35vw, 1.3rem);
     line-height: 1.45;
     color: rgba(226, 234, 246, 0.82);
-  }
-  .converge__signature {
-    display: inline-block;
-    margin: 0 0 2.25rem;
-    padding-bottom: 0.4rem;
-    font-size: clamp(1.15rem, 1.6vw, 1.5rem);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: #34d399;
-    text-shadow: 0 0 22px rgba(52, 211, 153, 0.35);
-    /* on narrow phones it wraps as two even lines, not one with a single word left alone */
-    text-wrap: balance;
-    background: linear-gradient(90deg, rgba(52, 211, 153, 0.9), rgba(52, 211, 153, 0)) left bottom / 100% 1px no-repeat;
   }
   @media (max-width: 767px) {
     .converge__headline {
@@ -321,23 +310,18 @@ const steps = [
       margin-bottom: 0.9rem;
     }
     .converge__why {
-      margin-bottom: 0.5rem;
-    }
-    .converge__signature {
       margin-bottom: 1.2rem;
     }
   }
   /* short phones (most phones once the browser's bars are counted): a tighter stack, so
-     the crossover gets real room under the buttons */
+     the signal gets real room under the buttons */
   @media (max-width: 767px) and (max-height: 800px) {
     .converge__headline {
       margin-bottom: 0.7rem;
     }
     .converge__why {
-      font-size: 1rem;
-    }
-    .converge__signature {
       margin-bottom: 1rem;
+      font-size: 1rem;
     }
     .converge__step--hero .flex-wrap {
       row-gap: 0.25rem;
@@ -430,7 +414,7 @@ const steps = [
       bottom: 14px;
       font-size: 0.7rem;
     }
-    /* the step dots already say there's more; the space goes to the crossover */
+    /* the step dots already say there's more; the space goes to the signal */
     .converge__hint-action {
       display: none;
     }
@@ -544,7 +528,7 @@ const steps = [
       off.width = W; off.height = H;
       const o = off.getContext("2d")!;
       o.beginPath();
-      // the crossover and every visible small constellation; hidden ones measure zero and are skipped
+      // the signal and every visible small constellation; hidden ones measure zero and are skipped
       section!.querySelectorAll<SVGSVGElement>("svg[data-shape]").forEach((svg) => {
         const r = svg.getBoundingClientRect();
         if (!r.width || !r.height) return;
@@ -589,14 +573,14 @@ const steps = [
       clear = read();
     }
 
-    // phones: the crossover sits under the hero copy, which wraps to a different height on every phone
+    // phones: the signal sits under the hero copy, which wraps to a different height on every phone
     function placeMap() {
       const el = section!.querySelector<HTMLElement>("[data-map]");
       const hero = section!.querySelector<HTMLElement>(".converge__step--hero");
       if (!el || !hero) return;
       if (W >= 768) {
         el.style.removeProperty("--map-top");
-        // the plate wraps the headline and the crossover
+        // the plate wraps the headline and the signal
         const plate = section!.querySelector<HTMLElement>("[data-plate]");
         if (!plate) return;
         const c = canvas!.getBoundingClientRect(), h = hero.getBoundingClientRect(), m = el.getBoundingClientRect();
@@ -925,7 +909,7 @@ const steps = [
 
         const spring = forced !== null || reduce ? 1 : 0.14;
         const nx = p.x + (tx - p.x) * spring, ny = p.y + (ty - p.y) * spring;
-        // while the crossover is on screen, no dot crosses its border; it waits at the edge instead
+        // while the signal is on screen, no dot crosses its border; it waits at the edge instead
         if (!(mapAlpha > 0.02 && hit(inside, nx, ny) && !hit(inside, p.x, p.y))) {
           p.x = nx;
           p.y = ny;

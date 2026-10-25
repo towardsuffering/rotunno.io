@@ -19,10 +19,10 @@
   canvas,svg{position:absolute;inset:0}
   .text{position:absolute;left:64px;top:50%;transform:translateY(-50%);width:600px}
   .name{font-size:27px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#34d399;margin-bottom:20px}
-  .head{margin:0;font-weight:800;font-size:104px;line-height:.96;letter-spacing:-.035em;
+  .head{margin:0;font-weight:800;font-size:80px;text-wrap:balance;line-height:.96;letter-spacing:-.035em;
     background:linear-gradient(180deg,#fff 0%,#eef3fb 55%,#b9c6da 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
     filter:drop-shadow(0 2px 22px rgba(120,170,255,.2))}
-  .si{font-size:.6em}
+  .si{background:linear-gradient(180deg,#a7f3d0 0%,#34d399 100%);-webkit-background-clip:text;background-clip:text}
   .why{margin:26px 0 14px;font-size:29px;line-height:1.3;font-weight:500;color:rgba(236,242,250,.92);letter-spacing:-.005em}
   .sig{text-wrap:balance;font-size:33px;font-weight:800;letter-spacing:-.01em;color:#34d399;text-shadow:0 0 18px rgba(52,211,153,.35)}
   .url{margin-top:22px;font-size:28px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#34d399;text-shadow:0 0 18px rgba(52,211,153,.35)}
@@ -32,26 +32,18 @@
   <svg id="s" width="1200" height="630" viewBox="0 0 1200 630"></svg>
   <div class="text">
     <div class="name">Christopher A. Rotunno</div>
-    <h1 class="head">The Elvis of<br><span class="si">Super Intelligence.</span></h1>
-    <div class="why">Elvis carried a sound born in the American South to people who'd never heard it.</div>
-    <div class="sig">I connect the working class to super intelligence.</div>
+    <h1 class="head">Turning fragmented tidbits <span class="si">into confidence.</span></h1>
+    <div class="why">Analytics engineer: messy data structured, patterns caught early, answers made plain.</div>
     <div class="url">rotunno.ai</div>
   </div>
 </div>
 </div>
 <script>
-// the crossover, same shapes as src/components/hero/CrossoverConstellation.astro (its viewBox units)
-const CAPSULE="M100 14H100A26 26 0 0 1 126 40V72A26 26 0 0 1 100 98H100A26 26 0 0 1 74 72V40A26 26 0 0 1 100 14Z";
-const STAND=["M100 98V180","M76 184a24 5 0 1 0 48 0a24 5 0 1 0 -48 0"], MIC_STARS=[[100,14],[100,98],[100,180],[76,184],[124,184]];
-const LAYERS=[[[86,40],[86,56],[86,72]],[[100,32],[100,48],[100,64],[100,80]],[[113,44],[113,68]]], OUT=[126,56];
-// the professionals the signal reaches: a head and shoulders with the mark of their trade
-const person=(cx,cy,mark)=>({lines:[`M${cx-6} ${cy-8}a6 6 0 1 0 12 0a6 6 0 1 0 -12 0`,`M${cx-13} ${cy+14}Q${cx-13} ${cy+1} ${cx} ${cy+1}Q${cx+13} ${cy+1} ${cx+13} ${cy+14}`,...mark],stars:[[cx-13,cy+14],[cx+13,cy+14],[cx,cy-14]],glow:[cx,cy]});
-const PEOPLE=[
-  person(240,6,["M240 8L237.6 11L240 19L242.4 11Z"]),
-  person(292,46,["M285 49H299V58H285Z","M282 60H302","M287 56L291 53L294 54L297 51"]),
-  person(292,112,["M286 126V118H298V126","M286 118L289 114","M298 118L295 114"]),
-  person(240,150,["M231 142.5A9 9 0 0 1 249 142.5","M229 142.5H251"]),
-];
+// fragments into confidence, same shapes as src/components/hero/ConfidenceConstellation.astro (its viewBox units)
+const FRAGMENTS=[[46,22],[78,8],[104,34],[58,58],[92,70],[40,96],[74,104],[110,118],[52,138],[88,150],[64,176],[112,168]];
+const MERGE=[140,158];
+const CHART={x0:160,x1:322,y0:168,y1:4};
+const POINTS=[[178,146],[210,128],[242,112],[274,78],[306,38]], PEAK=POINTS.at(-1);
 let seed=20261018;const rnd=()=>{seed=(seed+0x6d2b79f5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296};
 const sub=d=>d.split("M").filter(p=>p.trim()).map(p=>[...p.replace(/Z/g,"").matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]));
 function rdp(p,e){if(p.length<3)return p;const a=p[0],b=p[p.length-1];let w=0,at=0;for(let i=1;i<p.length-1;i++){const[x,y]=p[i];const L=Math.hypot(b[0]-a[0],b[1]-a[1])||1;const d=Math.abs((b[1]-a[1])*x-(b[0]-a[0])*y+b[0]*a[1]-b[1]*a[0])/L;if(d>w){w=d;at=i}}if(w<=e)return[a,b];return[...rdp(p.slice(0,at+1),e).slice(0,-1),...rdp(p.slice(at),e)]}
@@ -60,12 +52,12 @@ const hash=(x,y)=>{const v=Math.sin(x*12.9898+y*78.233)*43758.5453;return v-Math
 const TEMPS=["#e6f1ff","#e6f1ff","#e6f1ff","#d4e4ff","#c9dcff","#fff1d6","#ffe0b8"];
 const W=1200,H=630,dpr=2;
 
-// the crossover on the right half, beside the copy
-const K=1.85, OX=606, OY=140;
+// the chart on the right half, beside the copy
+const K=1.75, OX=600, OY=150;
 const T=([x,y])=>[OX+x*K,OY+y*K];
-const outline=[Array.from({length:32},(_,i)=>{const t=i/32*Math.PI*2;return T([100+26*Math.cos(t),56+42*Math.sin(t)])})];
+const outline=[[[CHART.x0-6,CHART.y1-6],[CHART.x1+6,CHART.y1-6],[CHART.x1+6,CHART.y0+6],[CHART.x0-6,CHART.y0+6]].map(T)];
 
-// starfield, kept out of the microphone and quieter behind the copy
+// starfield, kept out of the chart and quieter behind the copy
 const cv=document.getElementById("c");cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+"px";cv.style.height=H+"px";
 const g=cv.getContext("2d");g.scale(dpr,dpr);
 const mask=new Path2D();outline.forEach(r=>{r.forEach(([x,y],i)=>i?mask.lineTo(x,y):mask.moveTo(x,y));mask.closePath()});
@@ -78,7 +70,7 @@ for(let i=0;i<1300;i++){const x=rnd()*W,y=rnd()*H;
   if(r>1.4){const gl=g.createRadialGradient(x,y,0,x,y,r*4);gl.addColorStop(0,`rgba(${col},${(a*.35).toFixed(2)})`);gl.addColorStop(1,`rgba(${col},0)`);g.fillStyle=gl;g.beginPath();g.arc(x,y,r*4,0,Math.PI*2);g.fill()}
   g.fillStyle=`rgba(${col},${a.toFixed(2)})`;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()}
 
-// a distant spiral galaxy, low in the open sky between the copy and the microphone
+// a distant spiral galaxy, low in the open sky between the copy and the chart
 (function(cx,cy,R){g.save();g.translate(cx,cy);g.scale(1,.42);g.rotate(.5);g.globalCompositeOperation="lighter";
   const glow=(x,y,r,c,a)=>{const gl=g.createRadialGradient(x,y,0,x,y,r);gl.addColorStop(0,`rgba(${c},${a})`);gl.addColorStop(1,`rgba(${c},0)`);g.fillStyle=gl;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()};
   glow(0,0,R,"170,200,255",.1);
@@ -126,17 +118,19 @@ const lstar=(x,y,green=false,sc=.75)=>{const h=hash(x,y),color=green?(h>.7?"#ecf
   el("circle",{cx:x,cy:y,r:(5.5+h*4.5)*sc,fill:grad(glow),opacity:.3},G);el("circle",{cx:x,cy:y,r:(2.2+h*2.2)*sc,fill:grad(glow),opacity:.85},G);
   el("circle",{cx:x,cy:y,r:((green?1.05:.75)+h*.9)*sc*1.3,fill:color},G)};
 const hg=el("radialGradient",{id:"hg"},defs);el("stop",{offset:0,"stop-color":"#34d399","stop-opacity":.75},hg);el("stop",{offset:1,"stop-color":"#34d399","stop-opacity":0},hg);
-// the microphone, its SI grille and the brightest star where the signal leaves
-[CAPSULE,...STAND].forEach(d=>line(d));
-const links=[...LAYERS.slice(0,-1).flatMap((l,i)=>l.flatMap(a=>LAYERS[i+1].map(b=>[a,b]))),...LAYERS.at(-1).map(b=>[b,OUT])];
-links.forEach(([a,b])=>el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:"#34d399","stroke-opacity":.65,"stroke-width":.8},G));
-// the broadcast
-[18,34,50].forEach(r=>{const a=46*Math.PI/180,[mx,my]=OUT;
-  el("path",{d:`M${mx+r*Math.cos(-a)} ${my+r*Math.sin(-a)}A${r} ${r} 0 0 1 ${mx+r*Math.cos(a)} ${my+r*Math.sin(a)}`,fill:"none",stroke:"#a7f3d0","stroke-opacity":.85,"stroke-width":1.9,"stroke-linecap":"round","stroke-dasharray":"0 5"},G)});
-// the people it reaches, lit green
-PEOPLE.forEach(p=>{el("circle",{cx:p.glow[0],cy:p.glow[1],r:26,fill:"url(#hg)",opacity:.75},G);p.lines.forEach(d=>line(d))});
-[...MIC_STARS,...PEOPLE.flatMap(p=>p.stars)].forEach(([x,y])=>lstar(x,y));
-LAYERS.flat().forEach(([x,y])=>lstar(x,y,true));
-el("circle",{cx:OUT[0],cy:OUT[1],r:14,fill:"url(#hg)"},G);el("circle",{cx:OUT[0],cy:OUT[1],r:2.8,fill:"#ecfdf5"},G);
-el("path",{d:`M${OUT[0]} ${OUT[1]-8}V${OUT[1]+8}M${OUT[0]-8} ${OUT[1]}H${OUT[0]+8}`,stroke:"#ecfdf5","stroke-opacity":.7,"stroke-width":.5},G);
+// the fragments' dotted paths into the merge point
+FRAGMENTS.forEach(([x,y],i)=>el("path",{d:`M${x} ${y}Q${(x+MERGE[0])/2} ${(y+MERGE[1])/2+(i%2?8:-8)} ${MERGE[0]} ${MERGE[1]}`,fill:"none",stroke:"#a5bedb","stroke-opacity":.55,"stroke-width":.9,"stroke-linecap":"round","stroke-dasharray":"0 3.2"},G));
+// the chart: gridlines, bars, axes
+[128,88,48].forEach(y=>el("line",{x1:CHART.x0,y1:y,x2:CHART.x1,y2:y,stroke:"#a5bedb","stroke-opacity":.18,"stroke-width":.5,"stroke-dasharray":"1.5 2.5"},G));
+POINTS.forEach(([x,y])=>el("rect",{x:x-9,y:y+10,width:18,height:CHART.y0-y-10,rx:1.5,fill:"#34d399","fill-opacity":.1,stroke:"#34d399","stroke-opacity":.35,"stroke-width":.5},G));
+line(`M${CHART.x0} ${CHART.y1}V${CHART.y0}H${CHART.x1}`);
+// the line climbing out of the merge point
+const lineD=[MERGE,...POINTS].map(([x,y],i)=>`${i?"L":"M"}${x} ${y}`).join("");
+el("path",{d:lineD,fill:"none",stroke:"#34d399","stroke-opacity":.2,"stroke-width":5,"stroke-linecap":"round","stroke-linejoin":"round"},G);
+el("path",{d:lineD,fill:"none",stroke:"#6ee7b7","stroke-width":1.4,"stroke-linecap":"round","stroke-linejoin":"round"},G);
+FRAGMENTS.forEach(([x,y])=>lstar(x,y));
+POINTS.slice(0,-1).forEach(([x,y])=>lstar(x,y,true));
+el("circle",{cx:MERGE[0],cy:MERGE[1],r:1.8,fill:"#a7f3d0"},G);
+el("circle",{cx:PEAK[0],cy:PEAK[1],r:16,fill:"url(#hg)"},G);el("circle",{cx:PEAK[0],cy:PEAK[1],r:2.8,fill:"#ecfdf5"},G);
+el("path",{d:`M${PEAK[0]} ${PEAK[1]-9}V${PEAK[1]+9}M${PEAK[0]-9} ${PEAK[1]}H${PEAK[0]+9}`,stroke:"#ecfdf5","stroke-opacity":.7,"stroke-width":.5},G);
 </script></body></html>

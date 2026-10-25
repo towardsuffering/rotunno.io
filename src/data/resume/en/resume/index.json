@@ -1,17 +1,17 @@
 {
-  "summary": "Data analytics engineer and BI leader who has been on both sides of the dashboard. Built financial data pipelines and analytics systems from scratch. Ran the floor in retail, food service, and home improvement. That combination is rare: low-level pipeline architecture paired with the operational context that makes dashboards actually useful. Now focused on a BI leadership seat with full visibility into how a business connects, not a siloed view of one team's slice.",
+  "summary": "Analytics engineer turning fragmented tidbits into confidence. Ten years on both sides of the dashboard: inside financial and operational data teams, and on the floor in food service, retail, and home services sales. Built data pipelines and BI systems from the ground up, and now sees every day how dispatch, scheduling, and customer conversion actually work at the branch level. Looking for an analytics or AI seat where technical depth and frontline context combine into tools teams actually adopt, with outcomes you can measure.",
   "diplomas": [
     {
       "title": "M.S. Business Analytics",
       "school": "University of Colorado Boulder, Leeds School of Business",
       "year": 2023,
-      "focus": "Statistical methods, decision science, predictive/prescriptive analytics, ML/AI, NLP, deep learning, data warehouses, cloud computing"
+      "focus": "ML/AI, NLP, deep learning, statistical methods, cloud computing, data warehouses"
     },
     {
       "title": "M.B.A.",
       "school": "Middle Tennessee State University",
       "year": 2024,
-      "focus": "Business strategy, contracts, P&L, management"
+      "focus": "Business strategy, P&L management, cross-functional leadership"
     }
   ],
   "certifications": [],
@@ -23,57 +23,84 @@
       "dates": "May 2026 – Present",
       "location": "Northeast Florida",
       "responsibilities": [
-        "Generate qualified leads and set in-home HVAC service appointments inside Home Depot locations, engaging homeowners on energy efficiency upgrades, AC replacement, and comfort solutions.",
-        "Operate in a commission-driven performance environment, consistently hitting daily activity targets through disciplined customer engagement and product knowledge."
+        "Operate inside a retail lead generation program, with daily exposure to the customer acquisition funnel, appointment scheduling, and the dispatch handoff that AI-driven optimization products are designed to improve.",
+        "See firsthand where scheduling friction, conversion drop-off, and dispatch sequencing create inefficiency at the branch level: the ground-truth context most teams building software for field service never have.",
+        "Consistently hit performance targets in a commission-driven environment through disciplined activity management and customer-focused engagement."
       ]
     },
     {
       "title": "Retail Brand Ambassador",
       "company": "Renuity Home",
       "companyImage": "./index/experience/renuity/companyImage.svg",
-      "dates": "Nov 2025 – Apr 2026",
+      "dates": "November 2025 – April 2026",
       "location": "Northeast Florida",
       "responsibilities": [
-        "Achieved S-Tier status, the highest internal performance designation, through top-tier lead generation and appointment setting for home improvement consultations.",
-        "Delivered face-to-face product presentations in retail and event settings, converting homeowner conversations into scheduled in-home consultations at a rate that ranked among the top performers in the region."
+        "Achieved S-Tier status, the highest internal performance designation, in a multi-location home improvement sales operation.",
+        "Developed a deep understanding of homeowner decision journeys, in-home consultation conversion, and the handoffs between marketing, sales, and field delivery."
       ]
     },
     {
-      "title": "Founder & Data Engineer",
+      "title": "Founder and Data Engineer",
       "company": "Root Labs",
       "companyImage": "./index/experience/0/companyImage.jpg",
-      "dates": "Feb 2023 – Sep 2025",
+      "dates": "February 2023 – September 2025",
       "location": "Nashville, TN",
       "responsibilities": [
-        "Architected a custom API ingestion pipeline that cut third-party financial data costs by 80%, replacing recurring vendor spend with internal data control.",
-        "Built and led a team of 4 developers through the full cycle of a SQL ORM-based data pipeline in Python, navigating infrastructure constraints from architecture through deployment.",
-        "Organized 10+ technical meetups with 100+ attendees, cultivating local talent pipelines and expanding a professional network across Nashville's data and tech community."
+        "Owned product strategy and the business case end to end for a financial data pipeline platform: defined success metrics, made build-vs-buy decisions, and led a team of 4 through architecture, development, and deployment.",
+        "Designed an API ingestion pipeline that cut third-party data costs by 80%, replacing recurring vendor spend with internal data control.",
+        "Translated complex operational data problems into engineering requirements, aligned technical and non-technical stakeholders, and tracked outcomes against agreed baselines.",
+        "Organized 10+ technical meetups with 100+ attendees, growing local talent and a professional network across Nashville's data and tech community."
       ]
     },
     {
       "title": "Data Analyst",
       "company": "AE Global Solutions Inc. (DBA Socrates Platform)",
       "companyImage": "./index/experience/1/companyImage.jpg",
-      "dates": "Feb 2018 – Nov 2021",
+      "dates": "February 2018 – November 2021",
       "location": "St. Petersburg, FL",
       "responsibilities": [
-        "Maintained 99% system uptime across 24/7 data center operations supporting critical financial data infrastructure.",
-        "Processed and validated 200GB+ of daily financial data, improving pipeline efficiency by 30% while sustaining 99% accuracy across all outputs.",
-        "Expanded data product offerings by 120% through partnerships with external providers including S&P and Reuters."
+        "Maintained 99% uptime across 24/7 financial data operations processing 200GB+ daily, with full responsibility for data governance, pipeline integrity, and stakeholder reporting.",
+        "Expanded data product offerings by 120% through S&P and Reuters partnerships, owning the business case and cross-functional coordination for each integration."
       ]
     }
   ],
   "skillGroups": [
     {
-      "category": "Engineering",
+      "category": "AI and Analytics",
       "items": [
+        "Machine Learning",
+        "NLP",
+        "Predictive Modeling",
+        "Pipeline Architecture",
         "SQL",
         "Python",
-        "ETL/Data Pipelines",
-        "Data Modeling",
-        "RESTful APIs",
-        "Spark",
-        "Docker"
+        "ETL/ELT",
+        "Feature Engineering",
+        "KPI Framework Design",
+        "A/B Testing",
+        "Experiment Design"
+      ]
+    },
+    {
+      "category": "Product and Program",
+      "items": [
+        "Business Case Development",
+        "Roadmap Ownership",
+        "Stakeholder Alignment",
+        "Cross-functional Leadership",
+        "Vendor and Partner Management",
+        "Agile and PMO Environments"
+      ]
+    },
+    {
+      "category": "Field Operations",
+      "items": [
+        "Dispatch and Scheduling",
+        "Customer Conversion",
+        "Frontline Team Dynamics",
+        "Change Management",
+        "Adoption and Training",
+        "Branch-level P&L Awareness"
       ]
     },
     {
@@ -82,21 +109,11 @@
         "AWS",
         "Azure",
         "GCP",
-        "Hadoop",
-        "Cloud-Native Architecture",
-        "High-Availability Systems"
-      ]
-    },
-    {
-      "category": "Analytics and BI",
-      "items": [
-        "Tableau",
         "Power BI",
-        "Scikit-Learn",
-        "NLP",
-        "Supervised/Unsupervised ML",
-        "Feature Engineering",
-        "Financial Data Analysis"
+        "Tableau",
+        "Microsoft Fabric (familiarity)",
+        "High-Availability Systems",
+        "Data Governance"
       ]
     }
   ],

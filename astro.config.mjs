@@ -35,7 +35,6 @@ export default defineConfig({
       imports: [
         // https://github.com/delucis/astro-auto-import
         "@/components/admonition/Admonition.astro",
-        "@/components/ads/AdSlot.astro",
         "@/components/markdown-components/Figure.astro",
       ],
     }),
