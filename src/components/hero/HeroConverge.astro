@@ -507,8 +507,9 @@ const steps = [
     // the area the shapes are drawn in, leaving room for captions
     function stage() {
       if (mobile) {
-        const y = Math.max(305, H * 0.4);
-        return { x: 16, y, w: W - 32, h: Math.max(160, H - y - 90) };
+        // below the tallest step's text, so the shapes never run into a caption
+        const y = Math.max(305, H * 0.4, captionsBottom + 34);
+        return { x: 16, y, w: W - 32, h: Math.max(200, H - y - 56) };
       }
       // shapes start clear of the captions, which line up with the site name
       const left = Math.max(Math.min(W * 0.42, 560), captionsRight + 40);
@@ -773,6 +774,7 @@ const steps = [
 
     let builtWidth = -1, builtHeight = -1;
     let captionsRight = 0; // right edge of the caption column, in canvas pixels
+    let captionsBottom = 0; // phones: bottom edge of the tallest scroll step's text, in canvas pixels
     let labelY: number[] = []; // bottom edge of each formed cluster
     // the build runs in short slices with a break between them, so the page stays responsive while the
     // sky is set up (one long task here showed up as Lighthouse "blocking time" on slow phones);
@@ -805,6 +807,11 @@ const steps = [
       if (run !== buildRun) return;
       const cap = section!.querySelector<HTMLElement>(".converge__captions");
       captionsRight = cap ? cap.getBoundingClientRect().right - canvas!.getBoundingClientRect().left : 0;
+      const canvasTop = canvas!.getBoundingClientRect().top;
+      captionsBottom = Math.max(
+        0,
+        ...[...section!.querySelectorAll<HTMLElement>(".converge__step:not(.converge__step--hero)")].map((el) => el.getBoundingClientRect().bottom - canvasTop),
+      );
 
       const count = mobile ? 800 : 2400;
       if (particles.length !== count) {

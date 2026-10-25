@@ -20,6 +20,18 @@ const fragments: Pt[] = [
   [46, 22], [78, 8], [104, 34], [58, 58], [92, 70], [40, 96],
   [74, 104], [110, 118], [52, 138], [88, 150], [64, 176], [112, 168],
 ];
+// each fragment is a small broken shard (3 or 4 jagged corners), in the colors of the scattered data
+const SHARD_COLORS = ["#7dd3fc", "#c4b5fd", "#fbbf24", "#f9a8d4", "#a5f3fc"];
+const shards = fragments.map(([x, y], i) => {
+  const n = 3 + (i % 2);
+  const turn = i * 1.7;
+  const pts = Array.from({ length: n }, (_, k) => {
+    const a = turn + (k / n) * Math.PI * 2 + ((i * 7 + k * 3) % 5) * 0.18;
+    const rad = 5.4 + ((i * 5 + k * 11) % 7) * 0.7;
+    return `${(x + Math.cos(a) * rad).toFixed(1)},${(y + Math.sin(a) * rad).toFixed(1)}`;
+  });
+  return { x, y, points: pts.join(" "), color: SHARD_COLORS[i % SHARD_COLORS.length], d: ((i * 0.53) % 3).toFixed(2) };
+});
 // where they come together, just left of the chart
 const merge: Pt = [140, 158];
 
@@ -41,9 +53,8 @@ const frame: Pt[] = [
 const shape = JSON.stringify({ viewBox: VIEWBOX, rings: [frame] });
 
 const stars = (pts: Pt[], green = false) => pts.map(([x, y]) => ({ x, y, h: starHash(x, y), ...starLook(starHash(x, y), green) }));
-const fragmentStars = stars(fragments);
 const lineStars = stars(points.slice(0, -1), true);
-const glowColors = [...new Set([...fragmentStars, ...lineStars].map((s) => s.glow))];
+const glowColors = [...new Set(lineStars.map((s) => s.glow))];
 const gid = (c: string) => `cf-glow-${c.slice(1)}`;
 const [px, py] = peak;
 const label = { fill: "#a5bedb", "font-size": "4.6", "font-weight": "600", "font-family": "Inter Variable, system-ui, sans-serif", "letter-spacing": "1.5", "text-anchor": "middle" };
@@ -84,12 +95,22 @@ const label = { fill: "#a5bedb", "font-size": "4.6", "font-weight": "600", "font
   <text x={(chart.x0 + chart.x1) / 2} y="182" {...label}>CONFIDENCE</text>
 
   {
-    [...fragmentStars, ...lineStars].map((s) => (
+    lineStars.map((s) => (
       <g class="cf-star" style={`--d: ${(s.h * 3).toFixed(2)}s; --tw: ${s.twinkle}`}>
         <circle cx={s.x} cy={s.y} r={s.bloom} fill={`url(#${gid(s.glow)})`} opacity="0.3" />
         <circle cx={s.x} cy={s.y} r={s.halo} fill={`url(#${gid(s.glow)})`} opacity="0.85" />
         {s.spike > 0 && <path d={`M${s.x - s.spike} ${s.y}H${s.x + s.spike}M${s.x} ${s.y - s.spike}V${s.y + s.spike}`} stroke={s.color} class="cf-spikes" />}
         <circle cx={s.x} cy={s.y} r={s.core} fill={s.color} />
+      </g>
+    ))
+  }
+
+  <!-- the fragments: bright broken shards, each glowing along its own edges -->
+  {
+    shards.map((f) => (
+      <g class="cf-shard" style={`--d: ${f.d}s`}>
+        <polygon points={f.points} fill="none" stroke={f.color} stroke-opacity="0.22" stroke-width="3.2" stroke-linejoin="round" />
+        <polygon points={f.points} fill={f.color} fill-opacity="0.42" stroke={f.color} stroke-width="0.8" stroke-linejoin="round" />
       </g>
     ))
   }
@@ -112,9 +133,9 @@ const label = { fill: "#a5bedb", "font-size": "4.6", "font-weight": "600", "font
   /* dotted paths, their dots drifting toward the merge point */
   .cf-flow {
     fill: none;
-    stroke: #a5bedb;
-    stroke-opacity: 0.45;
-    stroke-width: 0.6;
+    stroke: #c7d6ea;
+    stroke-opacity: 0.7;
+    stroke-width: 0.9;
     stroke-linecap: round;
     stroke-dasharray: 0 3.2;
     animation: cf-drift 2.4s linear calc(-1 * var(--fd)) infinite;
@@ -211,6 +232,19 @@ const label = { fill: "#a5bedb", "font-size": "4.6", "font-weight": "600", "font
       opacity: 0.95;
     }
   }
+  /* each shard drifts a little, still scattered, never settled */
+  .cf-shard {
+    animation: cf-jitter 3s ease-in-out calc(-1 * var(--d)) infinite;
+  }
+  @keyframes cf-jitter {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(0.8px, -1.2px);
+    }
+  }
   .cf-spikes {
     stroke-width: 0.3;
     stroke-opacity: 0.55;
@@ -239,6 +273,7 @@ const label = { fill: "#a5bedb", "font-size": "4.6", "font-weight": "600", "font
   }
   @media (prefers-reduced-motion: reduce) {
     .cf-star,
+    .cf-shard,
     .cf-flow,
     .cf-line,
     .cf-peak-glow {

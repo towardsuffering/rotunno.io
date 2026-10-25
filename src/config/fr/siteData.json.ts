@@ -18,8 +18,8 @@ const siteData: SiteDataProps = {
 
   // default image for meta tags if the page doesn't have an image already
   defaultImage: {
-    src: "/images/og-social-v9.jpg",
-    alt: "Christopher A. Rotunno, analytics engineer: turning fragmented tidbits into confidence. Scattered stars flow together into a chart whose line climbs to the brightest star.",
+    src: "/images/og-social-v10.jpg",
+    alt: "Christopher A. Rotunno, analytics engineer: turning fragmented tidbits into confidence. Scattered shards of data flow together into a chart whose line climbs to the brightest star.",
   },
 };
 
