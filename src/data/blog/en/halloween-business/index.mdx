@@ -1,0 +1,37 @@
+---
+title: "Halloween Lasts One Night. The Business Behind It Runs All Year."
+description: A data science case study on the business of Halloween. Walmart and wholesale data from Hugging Face show when stock is bought, when shoppers buy, and how much a store should order when it can't know, with the full notebook to run yourself.
+draft: false
+authors:
+  - main-author
+pubDate: 2026-10-31
+heroImage: ./cover.jpg
+socialImage: ./social.jpg
+heroCredit:
+  author: "WineCountryInn (Wikivoyage)"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Pumpkins_Farmer%27s_Market_Montreal_Canada.JPG"
+  license: "Public domain"
+categories:
+  - data-science
+  - business
+tags:
+  - halloween
+  - retail
+  - supply-chain
+  - forecasting
+  - inventory
+  - data-science
+  - python
+  - hugging-face
+---
+
+import Notebook from "@/components/blog/Notebook.astro";
+import notebook from "./halloween_business.ipynb?raw";
+import notebookUrl from "./halloween_business.ipynb?url";
+
+<Notebook
+  source={notebook}
+  download={notebookUrl}
+  colab="src/data/blog/en/halloween-business/halloween_business.ipynb"
+/>
