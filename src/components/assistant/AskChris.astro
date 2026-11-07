@@ -266,7 +266,7 @@ import { ASSISTANT_MAX_CHARS, ASSISTANT_MAX_TURNS, ASSISTANT_SUGGESTIONS } from 
 
     function setStatus(online: boolean) {
       dot.dataset.state = online ? "online" : "offline";
-      status.textContent = online ? "Online" : "Offline: Chris's PC is asleep. Try again later.";
+      status.textContent = online ? "Online" : "Offline right now. Try again later.";
     }
 
     async function checkStatus() {
