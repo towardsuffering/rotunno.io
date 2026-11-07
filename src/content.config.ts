@@ -47,6 +47,8 @@ const blogCollection = defineCollection({
       mappingKey: z.string().optional(),
       // blog posts will be excluded from build if draft is "true"
       draft: z.boolean().optional(),
+      // pins the post next to the home page headline; otherwise the newest post goes there
+      featured: z.boolean().optional(),
     }),
 });
 

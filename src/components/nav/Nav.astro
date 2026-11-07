@@ -184,6 +184,12 @@ const showBlogPointer = Astro.url.pathname === "/";
   .navbar--scrolled .blog-pointer {
     opacity: 0;
   }
+  /* short desktop screens: the home hero's cards fill the height, so the note would sit on them */
+  @media (min-width: 1024px) and (max-height: 940px) {
+    .navbar--has-hero.navbar--initial .blog-pointer {
+      display: none;
+    }
+  }
   /* handwritten note at the arrow's tail */
   .blog-pointer__note {
     position: absolute;

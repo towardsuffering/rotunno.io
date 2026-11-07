@@ -2,6 +2,11 @@
 import { Icon } from "astro-icon/components";
 
 import Button from "@/components/button/Button.astro";
+import PostCover from "@/components/blog/PostCover.astro";
+import { getAllPosts } from "@/js/blogUtils";
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { formatDate } from "@/js/textUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
 
 // a faint star-chart grid behind the sky: declination arcs and right-ascension lines,
 // drawn around a center far below the view so they curve gently across it
@@ -23,6 +28,11 @@ const GRID = (() => {
 // Scroll-driven hero: the mission, the experience behind it (scattered points sort into the working world
 // they came from), the approach (how SI reaches them: the blog and Tidbit of the Day), and the outcome
 // (they spell "confidence").
+// next to the headline: the pinned post (featured: true), else the newest one
+const locale = getLocaleFromUrl(Astro.url);
+const posts = await getAllPosts(locale);
+const lead = posts.find((p) => p.data.featured) ?? posts[0];
+
 const steps = [
   { tag: "02 / Experience", title: "Ten years. Four industries.", body: "Inside financial and operational data teams. Out on the floor in retail, food service, and home improvement sales. Each role left a fragment: a spreadsheet, a closing shift, a handoff that broke. Put together, they show where the numbers and the work drift apart." },
   { tag: "03 / Approach", title: "I connect the dots.", body: "Messy data gets structured. Patterns get caught before they become problems. Then super intelligence turns the answer into plain English: a blog post with a notebook anyone can run, or a daily Tidbit on LinkedIn." },
@@ -58,6 +68,28 @@ const steps = [
             <span>Download CV</span>
           </a>
         </div>
+        {/* the lead post rides in the opening step: same top and bottom as the copy, and it leaves with it */}
+        {
+          lead && (
+            <a href={getLocalizedRoute(locale, `/blog/${lead.id}/`)} class="converge__lead">
+              <div class:list={["converge__lead-art", lead.data.heroImage && "converge__lead-art--photo"]}>
+                <PostCover post={lead} width={1000} eager={true} />
+              </div>
+              <div class="converge__lead-body">
+                <p class="converge__lead-tag">
+                  {lead.data.featured ? "Featured post" : "Latest post"}
+                  <span aria-hidden="true"> · </span>
+                  <time datetime={lead.data.pubDate.toISOString()}>{formatDate(lead.data.pubDate, locale)}</time>
+                </p>
+                <h2 class="converge__lead-title font-heading">{lead.data.title}</h2>
+                <p class="converge__lead-desc">{lead.data.description}</p>
+                <span class="converge__lead-more">
+                  Read the post <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </a>
+          )
+        }
       </div>
       {
         steps.map((s, i) => (
@@ -111,6 +143,139 @@ const steps = [
   /* the copy sits over the dots, crisp */
   .converge__captions {
     z-index: 3;
+  }
+  /* desktop: two glass cards of one height, side by side across the site container. The left one wraps the
+     opening copy (drawn as the step's ::before, so the copy stays where it is, in line with the site name);
+     the right one holds the lead post. Its right edge is the container's, in line with the nav's last button.
+     Widths are measured in the sticky frame (cqw), which excludes the scrollbar, like the nav. */
+  .converge__sticky {
+    container-type: inline-size;
+  }
+  .converge__lead {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .converge__step--hero::before,
+    .converge__lead {
+      border: 1px solid rgba(165, 190, 219, 0.12);
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(12, 26, 50, 0.42), rgba(4, 10, 22, 0.34));
+      box-shadow: 0 24px 70px -24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
+    }
+    /* a little below center, so the cards clear the handwritten note under the nav's Blog link */
+    .converge .converge__captions {
+      top: calc(50% + 30px);
+    }
+    .converge__step--hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -40px -48px;
+      pointer-events: none;
+    }
+    .converge__lead {
+      --m: max(0px, (100cqw - 86rem) / 2);
+      position: absolute;
+      top: -40px;
+      bottom: -40px;
+      left: calc(min(520px, 40vw) + 48px + 24px);
+      display: flex;
+      flex-direction: column;
+      width: calc(100cqw - 2 * var(--m) - 80px - min(520px, 40vw) - 72px);
+      overflow: hidden;
+      transition: border-color 0.25s ease;
+    }
+    .converge__lead:hover,
+    .converge__lead:focus-visible {
+      border-color: rgba(52, 211, 153, 0.4);
+    }
+  }
+  /* the post's illustration fills whatever height the text leaves */
+  .converge__lead-art {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(165, 190, 219, 0.1);
+  }
+  .converge__lead-art {
+    position: relative;
+  }
+  .converge__lead-art > :global(div),
+  .converge__lead-art :global(figure) {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  .converge__lead-art :global(img),
+  .converge__lead-art :global(svg) {
+    transition:
+      transform 0.7s ease,
+      filter 0.5s ease;
+  }
+  .converge__lead:hover .converge__lead-art :global(img),
+  .converge__lead:hover .converge__lead-art :global(svg) {
+    transform: scale(1.03);
+  }
+  /* a cover photo is toned to the page: its light and shadow, the sky's navy and teal; hover shows the original */
+  .converge__lead-art--photo :global(img) {
+    filter: grayscale(1) contrast(1.08) brightness(0.8);
+  }
+  .converge__lead-art--photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #1d3f73 0%, #12485a 60%, #1f6b5c 100%);
+    mix-blend-mode: color;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .converge__lead:hover .converge__lead-art--photo :global(img),
+  .converge__lead:focus-visible .converge__lead-art--photo :global(img) {
+    filter: none;
+  }
+  .converge__lead:hover .converge__lead-art--photo::after,
+  .converge__lead:focus-visible .converge__lead-art--photo::after {
+    opacity: 0;
+  }
+  .converge__lead-body {
+    padding: 1.5rem 1.75rem 1.75rem;
+  }
+  .converge__lead-tag {
+    margin: 0 0 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #34d399;
+  }
+  .converge__lead-title {
+    margin: 0 0 0.6rem;
+    font-size: clamp(1.25rem, 0.4rem + 1.4vw, 1.65rem);
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #f4f8ff;
+  }
+  .converge__lead-desc {
+    display: -webkit-box;
+    margin: 0 0 1rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(226, 234, 246, 0.75);
+  }
+  .converge__lead-more {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1;
+    color: rgba(226, 234, 246, 0.9);
+  }
+  .converge__lead:hover .converge__lead-more {
+    color: #34d399;
   }
   .converge__space,
   .converge__stars {
@@ -491,6 +656,9 @@ const steps = [
       if (cr && cr.width) {
         const x0 = cr.left - c.left - 12, y0 = cr.top - c.top - 8;
         copyBox = { x0, y0, x1: x0 + cr.width + 24, y1: y0 + cr.height + 16 };
+        // the lead post sits beside the copy (desktop), so the quiet box reaches across to it
+        const lr = copy!.querySelector<HTMLElement>(".converge__lead")?.getBoundingClientRect();
+        if (lr && lr.width) copyBox.x1 = Math.max(copyBox.x1, lr.right - c.left + 12);
       }
       const read = () => {
         const d = o.getImageData(0, 0, W, H).data, m = new Uint8Array(W * H);
@@ -531,7 +699,9 @@ const steps = [
       const c = canvas!.getBoundingClientRect();
       const step = section!.querySelector<HTMLElement>(".converge__step.is-active") ?? section!.querySelector<HTMLElement>(".converge__step");
       const cr = step?.getBoundingClientRect();
-      const quiet = cr ? { l: cr.left - c.left - 30, r: cr.right - c.left + 30, t: cr.top - c.top - 30, b: cr.bottom - c.top + 30 } : null;
+      const lr = step?.querySelector<HTMLElement>(".converge__lead")?.getBoundingClientRect();
+      const right = lr && lr.width ? Math.max(cr!.right, lr.right) : cr?.right ?? 0;
+      const quiet = cr ? { l: cr.left - c.left - 30, r: right - c.left + 30, t: cr.top - c.top - 30, b: cr.bottom - c.top + 30 } : null;
       for (let i = 0; i < count; i++) {
         const x = rand() * W, y = rand() * H;
         const d = Math.abs((x - W / 2) * nx + (y - H / 2) * ny) / Math.max(W, H);
