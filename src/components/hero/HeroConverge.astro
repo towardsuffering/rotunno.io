@@ -2,7 +2,6 @@
 import { Icon } from "astro-icon/components";
 
 import Button from "@/components/button/Button.astro";
-import ConfidenceConstellation from "@/components/hero/ConfidenceConstellation.astro";
 
 // a faint star-chart grid behind the sky: declination arcs and right-ascension lines,
 // drawn around a center far below the view so they curve gently across it
@@ -79,13 +78,7 @@ const steps = [
     <svg class="converge__grid" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-sky>
       {GRID.map((d) => <path d={d} />)}
     </svg>
-    <!-- fragments into confidence as a constellation, under the particles; it fades as the shapes take over -->
-    <div class="converge__map" data-map data-sky>
-      <ConfidenceConstellation class="h-full w-full" />
-    </div>
     <canvas id="converge-canvas" aria-hidden="true"></canvas>
-    <!-- over the dots, so they drift behind it, softened but still bright -->
-    <div class="converge__plate" aria-hidden="true" data-plate data-sky></div>
 
     <div class="converge__rail" aria-hidden="true">
       {[0, 1, 2, 3].map((i) => <span data-dot={i} class:list={{ "is-active": i === 0 }} />)}
@@ -115,69 +108,9 @@ const steps = [
     height: 100svh;
     overflow: hidden;
   }
-  .converge__map {
-    position: absolute;
-    top: 50%;
-    right: calc(max(0px, (100% - 86rem) / 2) + 16px);
-    /* as big as the space right of the captions allows: page width, minus the container margins,
-       the caption column (its 64px inset plus up to 520px), and a 24px gap */
-    width: min(
-      960px,
-      calc(100% - 2 * max(0px, (100% - 86rem) / 2) - 64px - min(520px, 40vw) - 16px - 24px)
-    );
-    aspect-ratio: 306 / 214;
-    transform: translateY(-50%);
-    pointer-events: none;
-    transition: opacity 0.3s linear;
-  }
-  /* desktop: one frosted glass plate over the sky and under the copy, wrapping the headline and the signal
-     (sized in placeMap); light enough that the dots passing behind it stay clearly visible */
-  .converge__plate {
-    position: absolute;
-    z-index: 1;
-    border: 1px solid rgba(165, 190, 219, 0.12);
-    border-radius: 28px;
-    background: linear-gradient(160deg, rgba(12, 26, 50, 0.42), rgba(4, 10, 22, 0.34));
-    box-shadow: 0 24px 70px -24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    /* frosted: dots behind it soften and dim, but still show through */
-    backdrop-filter: blur(1.5px);
-    -webkit-backdrop-filter: blur(1.5px);
-    pointer-events: none;
-    transition: opacity 0.3s linear;
-  }
-  /* placeMap sizes the plate from the measured copy; until it has, it stays unpainted, so it
-     appears in place instead of jumping there (a layout shift Lighthouse counts) */
-  .converge:not([data-placed]) .converge__plate {
-    visibility: hidden;
-  }
-  /* phones: the signal's spot comes from the copy's height too */
-  @media (max-width: 767px) {
-    .converge:not([data-placed]) .converge__map {
-      visibility: hidden;
-    }
-  }
-  /* layered: dots, then the plate, then the signal and the copy on top, crisp */
-  .converge__map {
-    z-index: 2;
-  }
+  /* the copy sits over the dots, crisp */
   .converge__captions {
     z-index: 3;
-  }
-  @media (max-width: 767px) {
-    .converge__plate {
-      display: none;
-    }
-  }
-  @media (max-width: 767px) {
-    /* phones: in the open space under the captions; --map-top is measured from the copy (see placeMap) */
-    .converge__map {
-      top: var(--map-top, max(330px, 44%));
-      right: 16px;
-      left: 16px;
-      width: auto;
-      max-height: calc(100% - var(--map-top, max(330px, 44%)) - 36px);
-      transform: none;
-    }
   }
   .converge__space,
   .converge__stars {
@@ -551,7 +484,7 @@ const steps = [
         }
       });
       // dots may pass behind the opening copy, faded there so the text stays clean (see draw):
-      // on a phone the copy covers most of the screen, and on desktop the glass plate sets it apart
+      // on a phone the copy covers most of the screen; on desktop the copy sits right on the sky
       const copy = section!.querySelector<HTMLElement>(".converge__step--hero");
       const cr = copy?.getBoundingClientRect();
       copyBox = null;
@@ -572,38 +505,6 @@ const steps = [
       o.lineJoin = "round";
       o.stroke();
       clear = read();
-    }
-
-    // phones: the signal sits under the hero copy, which wraps to a different height on every phone
-    function placeMap() {
-      const el = section!.querySelector<HTMLElement>("[data-map]");
-      const hero = section!.querySelector<HTMLElement>(".converge__step--hero");
-      if (!el || !hero) return;
-      if (W >= 768) {
-        el.style.removeProperty("--map-top");
-        // the plate wraps the headline and the signal
-        const plate = section!.querySelector<HTMLElement>("[data-plate]");
-        if (!plate) return;
-        const c = canvas!.getBoundingClientRect(), h = hero.getBoundingClientRect(), m = el.getBoundingClientRect();
-        const pad = 28;
-        const l = Math.min(h.left, m.left) - c.left - pad, r = m.left + m.width - c.left + pad;
-        // never up into the nav on short screens
-        const nav = document.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
-        const t = Math.max(nav + 8, Math.min(h.top, m.top) - pad) - c.top, b = Math.max(h.bottom, m.bottom) - c.top + pad;
-        Object.assign(plate.style, { left: `${l}px`, top: `${t}px`, width: `${r - l}px`, height: `${b - t}px` });
-
-        markPlaced();
-        return;
-      }
-      const top = hero.getBoundingClientRect().bottom - canvas!.getBoundingClientRect().top + 4;
-      el.style.setProperty("--map-top", `${Math.round(top)}px`);
-      markPlaced();
-    }
-
-    // show the placed pieces once the web font is in, since the swap re-wraps the copy and would move them again
-    function markPlaced() {
-      if (document.fonts.status === "loaded") section!.dataset.placed = "";
-      else document.fonts.ready.then(placeMap);
     }
 
     // thousands of faint background stars, thicker along the Milky Way band
@@ -640,8 +541,8 @@ const steps = [
         const r = mobile
           ? (rand() < 0.94 ? 0.25 + rand() * 0.45 : 0.7 + rand() * 0.5)
           : (rand() < 0.94 ? 0.28 + rand() * 0.45 : 0.8 + rand() * 0.7);
-        // (desktop's plate already sets the copy apart, so its stars stay brighter there)
-        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.12 : 0.8) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
+        // (desktop has no plate behind the copy, so its stars dim there too, a little less than a phone's)
+        const dim = quiet && x > quiet.l && x < quiet.r && y > quiet.t && y < quiet.b ? (mobile ? 0.12 : 0.4) : !mobile && y < 110 ? 0.45 : 1; // and the nav stays quiet on desktop
         const col = temps[Math.floor(rand() * temps.length)];
         const a = (mobile ? 0.15 + rand() * 0.5 : 0.18 + rand() * 0.5) * dim;
         if (!mobile && r > 1.25) {
@@ -793,7 +694,6 @@ const steps = [
       canvas!.width = Math.round(W * dpr);
       canvas!.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      placeMap();
       buildWall();
       await nextTask();
       if (run !== buildRun) return;
@@ -936,9 +836,9 @@ const steps = [
         const p = particles[i];
         const on = linked.has(i);
         let alpha = twinkle && !on ? 1 - twinkle * (0.5 + 0.5 * Math.sin(t * (1.2 + p.seed * 2.8) + p.phase * 4)) : 1;
-        // behind the opening copy a dot dims: barely there on a phone, still clearly visible on desktop's plate
+        // behind the opening copy a dot dims: barely there on a phone, softened on desktop so the type stays clean
         if (copyBox && p.x > copyBox.x0 && p.x < copyBox.x1 && p.y > copyBox.y0 && p.y < copyBox.y1) {
-          const floor = mobile ? 0.08 : 0.75;
+          const floor = mobile ? 0.08 : 0.35;
           alpha *= floor + (1 - floor) * clamp01(s * 2);
         }
         ctx.globalAlpha = alpha;
