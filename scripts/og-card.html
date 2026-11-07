@@ -17,7 +17,10 @@
       linear-gradient(118deg, transparent 22%, rgba(150,175,215,.06) 36%, rgba(200,212,240,.13) 47%, rgba(235,220,240,.11) 52%, rgba(150,175,215,.06) 62%, transparent 74%),
       radial-gradient(ellipse at 50% 0%, #0c1f3d 0%, #050d1c 55%, #02060e 100%);}
   canvas,svg{position:absolute;inset:0}
-  .text{position:absolute;left:64px;top:50%;transform:translateY(-50%);width:600px}
+  /* the same frosted glass card that holds the copy on the site's hero */
+  .card{position:absolute;left:28px;top:34px;bottom:34px;width:700px;border:1px solid rgba(165,190,219,.16);border-radius:30px;
+    background:linear-gradient(160deg,rgba(12,26,50,.58),rgba(4,10,22,.48));box-shadow:0 24px 70px -24px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07)}
+  .text{position:absolute;left:76px;top:50%;transform:translateY(-50%);width:600px}
   .name{font-size:27px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#34d399;margin-bottom:20px}
   .head{margin:0;font-weight:800;font-size:80px;text-wrap:balance;line-height:.96;letter-spacing:-.035em;
     background:linear-gradient(180deg,#fff 0%,#eef3fb 55%,#b9c6da 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
@@ -29,7 +32,7 @@
 </style></head><body>
 <div id="stage">
   <canvas id="c"></canvas>
-  <svg id="s" width="1200" height="630" viewBox="0 0 1200 630"></svg>
+  <div class="card"></div>
   <div class="text">
     <div class="name">Christopher A. Rotunno</div>
     <h1 class="head">Turning fragmented tidbits <span class="si">into confidence.</span></h1>
@@ -39,49 +42,31 @@
 </div>
 </div>
 <script>
-// fragments into confidence, same shapes as src/components/hero/ConfidenceConstellation.astro (its viewBox units)
-const FRAGMENTS=[[46,22],[78,8],[104,34],[58,58],[92,70],[40,96],[74,104],[110,118],[52,138],[88,150],[64,176],[112,168]];
-const MERGE=[140,158];
-const CHART={x0:160,x1:322,y0:168,y1:4};
-const POINTS=[[178,146],[210,128],[242,112],[274,78],[306,38]], PEAK=POINTS.at(-1);
 let seed=20261018;const rnd=()=>{seed=(seed+0x6d2b79f5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296};
-const sub=d=>d.split("M").filter(p=>p.trim()).map(p=>[...p.replace(/Z/g,"").matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]));
-function rdp(p,e){if(p.length<3)return p;const a=p[0],b=p[p.length-1];let w=0,at=0;for(let i=1;i<p.length-1;i++){const[x,y]=p[i];const L=Math.hypot(b[0]-a[0],b[1]-a[1])||1;const d=Math.abs((b[1]-a[1])*x-(b[0]-a[0])*y+b[0]*a[1]-b[1]*a[0])/L;if(d>w){w=d;at=i}}if(w<=e)return[a,b];return[...rdp(p.slice(0,at+1),e).slice(0,-1),...rdp(p.slice(at),e)]}
-const ring=(p,e)=>{const s=rdp(p,e);return s.length>2&&s[0][0]===s.at(-1)[0]&&s[0][1]===s.at(-1)[1]?s.slice(0,-1):s};
-const hash=(x,y)=>{const v=Math.sin(x*12.9898+y*78.233)*43758.5453;return v-Math.floor(v)};
-const TEMPS=["#e6f1ff","#e6f1ff","#e6f1ff","#d4e4ff","#c9dcff","#fff1d6","#ffe0b8"];
 const W=1200,H=630,dpr=2;
 
-// the chart on the right half, beside the copy
-const K=1.75, OX=600, OY=150;
-const T=([x,y])=>[OX+x*K,OY+y*K];
-// the chart and the fragments' field stay clear of background stars, so the shards read as shards
-const outline=[[[CHART.x0-6,CHART.y1-6],[CHART.x1+6,CHART.y1-6],[CHART.x1+6,CHART.y0+6],[CHART.x0-6,CHART.y0+6]].map(T),[[30,-4],[136,-4],[136,190],[30,190]].map(T)];
-
-// starfield, kept out of the chart and quieter behind the copy
+// starfield, quieter behind the copy card
 const cv=document.getElementById("c");cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+"px";cv.style.height=H+"px";
 const g=cv.getContext("2d");g.scale(dpr,dpr);
-const mask=new Path2D();outline.forEach(r=>{r.forEach(([x,y],i)=>i?mask.lineTo(x,y):mask.moveTo(x,y));mask.closePath()});
 const temps=["220,232,255","200,218,255","255,240,214","255,226,190","180,200,235"];
 for(let i=0;i<1300;i++){const x=rnd()*W,y=rnd()*H;
   const band=Math.abs((x-W*.5)*Math.cos(.5)+(y-H/2)*Math.sin(.5)*1.6)/W; if(rnd()>.35+.65*Math.exp(-((band/.14)**2)))continue;
-  if(g.isPointInPath(mask,x,y))continue;
-  let a=.45+rnd()*.5; if(x<650&&y>90&&y<560)a*=.5;
+  let a=.45+rnd()*.5; if(x<730&&y>34&&y<596)a*=.35;
   const r=rnd()<.85?1+rnd()*.6:1.7+rnd()*1.1, col=temps[Math.floor(rnd()*temps.length)];
   if(r>1.4){const gl=g.createRadialGradient(x,y,0,x,y,r*4);gl.addColorStop(0,`rgba(${col},${(a*.35).toFixed(2)})`);gl.addColorStop(1,`rgba(${col},0)`);g.fillStyle=gl;g.beginPath();g.arc(x,y,r*4,0,Math.PI*2);g.fill()}
   g.fillStyle=`rgba(${col},${a.toFixed(2)})`;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()}
 
-// a distant spiral galaxy, low in the open sky between the copy and the chart
+// a distant spiral galaxy in the open sky right of the card
 (function(cx,cy,R){g.save();g.translate(cx,cy);g.scale(1,.42);g.rotate(.5);g.globalCompositeOperation="lighter";
   const glow=(x,y,r,c,a)=>{const gl=g.createRadialGradient(x,y,0,x,y,r);gl.addColorStop(0,`rgba(${c},${a})`);gl.addColorStop(1,`rgba(${c},0)`);g.fillStyle=gl;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill()};
   glow(0,0,R,"170,200,255",.1);
   for(let n=0;n<1600;n++){const arm=n%2,t=Math.pow(rnd(),.8)*3.4*Math.PI,r=Math.min(R*.95,R*.07*Math.exp(.24*t)),th=t+arm*Math.PI;
     const sc=r*.2,gs=()=>(rnd()+rnd()+rnd()-1.5)/1.5;const x=r*Math.cos(th)+gs()*sc,y=r*Math.sin(th)+gs()*sc,f=1-r/R;
     if(rnd()<.04)glow(x,y,2.5,"255,120,190",.35*f);else{g.fillStyle=`rgba(180,205,255,${((.25+rnd()*.55)*f).toFixed(2)})`;g.beginPath();g.arc(x,y,.4+rnd()*.7,0,Math.PI*2);g.fill()}}
-  glow(0,0,R*.4,"255,236,205",.55);glow(0,0,R*.14,"255,250,240",.9);g.restore()})(560,572,62);
+  glow(0,0,R*.4,"255,236,205",.55);glow(0,0,R*.14,"255,250,240",.9);g.restore()})(960,400,86);
 
 // a few bright foreground stars with flares, out in the open sky
-[[40,40],[660,40],[1170,300],[560,300],[1160,600],[30,600],[380,40]].forEach(([x,y],i)=>{
+[[1170,60],[790,90],[1150,300],[860,560],[1160,590],[780,330],[1040,160]].forEach(([x,y],i)=>{
   const s=3+(i%3)*1.6;const gl=g.createRadialGradient(x,y,0,x,y,s*3.2);gl.addColorStop(0,"rgba(220,232,255,.55)");gl.addColorStop(1,"rgba(220,232,255,0)");
   g.fillStyle=gl;g.beginPath();g.arc(x,y,s*3.2,0,Math.PI*2);g.fill();
   g.strokeStyle="rgba(230,240,255,.55)";g.lineWidth=.6;g.beginPath();g.moveTo(x-s*2,y);g.lineTo(x+s*2,y);g.moveTo(x,y-s*2);g.lineTo(x,y+s*2);g.stroke();
@@ -93,50 +78,7 @@ function meteor(x,y,ang,len){const dx=Math.cos(ang),dy=Math.sin(ang),tx=x-dx*len
   g.save();g.strokeStyle=lg;g.lineCap="round";g.lineWidth=2;g.beginPath();g.moveTo(x,y);g.lineTo(tx,ty);g.stroke();
   const hg=g.createRadialGradient(x,y,0,x,y,9);hg.addColorStop(0,"rgba(236,253,245,.9)");hg.addColorStop(1,"rgba(236,253,245,0)");
   g.fillStyle=hg;g.beginPath();g.arc(x,y,9,0,Math.PI*2);g.fill();g.fillStyle="#fff";g.beginPath();g.arc(x,y,1.8,0,Math.PI*2);g.fill();g.restore()}
-meteor(470,70,Math.PI*.84,180);
+meteor(1080,90,Math.PI*.84,190);
 meteor(1150,560,Math.PI*.8,120);
 
-// svg constellations
-const S=document.getElementById("s"),NS="http://www.w3.org/2000/svg";
-const el=(n,a,p=S)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
-const defs=el("defs",{});
-const grads={};const grad=c=>{if(grads[c])return grads[c];const id="g"+c.slice(1);const rg=el("radialGradient",{id},defs);
-  [[0,.9],[.3,.32],[1,0]].forEach(([o,op])=>el("stop",{offset:o,"stop-color":c,"stop-opacity":op},rg));return grads[c]=`url(#${id})`};
-function star(x,y,h,green=false,scale=1){
-  const color=green?(h>.7?"#ecfdf5":"#a7f3d0"):TEMPS[Math.min(6,Math.floor(((h*13.37)%1)*7))];
-  const glow=green?"#34d399":color;
-  el("circle",{cx:x,cy:y,r:(5.5+h*4.5)*scale,fill:grad(glow),opacity:.3});
-  el("circle",{cx:x,cy:y,r:(2.2+h*2.2)*scale,fill:grad(glow),opacity:.85});
-  if(h>.72){const s=(4.5+h*4)*scale;el("path",{d:`M${x-s} ${y}H${x+s}M${x} ${y-s}V${y+s}`,stroke:color,"stroke-width":.45,"stroke-opacity":.55,"stroke-linecap":"round"})}
-  el("circle",{cx:x,cy:y,r:((green?1.05:.75)+h*.9)*scale,fill:color});
-}
-const poly=p=>p.map(q=>q.map(v=>v.toFixed(1)).join(",")).join(" ");
-// everything drawn in the component's own units, scaled into place
-const G=el("g",{transform:`translate(${OX} ${OY}) scale(${K})`});
-const line=(d,p=G)=>{el("path",{d,fill:"none",stroke:"#7dd3fc","stroke-opacity":.14,"stroke-width":4.5,"stroke-linecap":"round","stroke-linejoin":"round"},p);
-  el("path",{d,fill:"none",stroke:"#c7d6ea","stroke-opacity":.85,"stroke-width":1.5,"stroke-linecap":"round","stroke-linejoin":"round"},p)};
-const lstar=(x,y,green=false,sc=.75)=>{const h=hash(x,y),color=green?(h>.7?"#ecfdf5":"#a7f3d0"):TEMPS[Math.min(6,Math.floor(((h*13.37)%1)*7))],glow=green?"#34d399":color;
-  el("circle",{cx:x,cy:y,r:(5.5+h*4.5)*sc,fill:grad(glow),opacity:.3},G);el("circle",{cx:x,cy:y,r:(2.2+h*2.2)*sc,fill:grad(glow),opacity:.85},G);
-  el("circle",{cx:x,cy:y,r:((green?1.05:.75)+h*.9)*sc*1.3,fill:color},G)};
-const hg=el("radialGradient",{id:"hg"},defs);el("stop",{offset:0,"stop-color":"#34d399","stop-opacity":.75},hg);el("stop",{offset:1,"stop-color":"#34d399","stop-opacity":0},hg);
-// the fragments' dotted paths into the merge point
-FRAGMENTS.forEach(([x,y],i)=>el("path",{d:`M${x} ${y}Q${(x+MERGE[0])/2} ${(y+MERGE[1])/2+(i%2?8:-8)} ${MERGE[0]} ${MERGE[1]}`,fill:"none",stroke:"#c7d6ea","stroke-opacity":.75,"stroke-width":1.1,"stroke-linecap":"round","stroke-dasharray":"0 3.2"},G));
-// the chart: gridlines, bars, axes
-[128,88,48].forEach(y=>el("line",{x1:CHART.x0,y1:y,x2:CHART.x1,y2:y,stroke:"#a5bedb","stroke-opacity":.18,"stroke-width":.5,"stroke-dasharray":"1.5 2.5"},G));
-POINTS.forEach(([x,y])=>el("rect",{x:x-9,y:y+10,width:18,height:CHART.y0-y-10,rx:1.5,fill:"#34d399","fill-opacity":.1,stroke:"#34d399","stroke-opacity":.35,"stroke-width":.5},G));
-line(`M${CHART.x0} ${CHART.y1}V${CHART.y0}H${CHART.x1}`);
-// the line climbing out of the merge point
-const lineD=[MERGE,...POINTS].map(([x,y],i)=>`${i?"L":"M"}${x} ${y}`).join("");
-el("path",{d:lineD,fill:"none",stroke:"#34d399","stroke-opacity":.2,"stroke-width":5,"stroke-linecap":"round","stroke-linejoin":"round"},G);
-el("path",{d:lineD,fill:"none",stroke:"#6ee7b7","stroke-width":1.4,"stroke-linecap":"round","stroke-linejoin":"round"},G);
-// the fragments: bright broken shards, same shapes as the component
-const SHARD_COLORS=["#7dd3fc","#c4b5fd","#fbbf24","#f9a8d4","#a5f3fc"];
-FRAGMENTS.forEach(([x,y],i)=>{const n=3+(i%2),turn=i*1.7,c=SHARD_COLORS[i%SHARD_COLORS.length];
-  const pts=Array.from({length:n},(_,k)=>{const a=turn+k/n*Math.PI*2+((i*7+k*3)%5)*.18,rad=5.4+((i*5+k*11)%7)*.7;return `${(x+Math.cos(a)*rad).toFixed(1)},${(y+Math.sin(a)*rad).toFixed(1)}`}).join(" ");
-  el("polygon",{points:pts,fill:"none",stroke:c,"stroke-opacity":.25,"stroke-width":3.4,"stroke-linejoin":"round"},G);
-  el("polygon",{points:pts,fill:c,"fill-opacity":.45,stroke:c,"stroke-width":1,"stroke-linejoin":"round"},G)});
-POINTS.slice(0,-1).forEach(([x,y])=>lstar(x,y,true));
-el("circle",{cx:MERGE[0],cy:MERGE[1],r:1.8,fill:"#a7f3d0"},G);
-el("circle",{cx:PEAK[0],cy:PEAK[1],r:16,fill:"url(#hg)"},G);el("circle",{cx:PEAK[0],cy:PEAK[1],r:2.8,fill:"#ecfdf5"},G);
-el("path",{d:`M${PEAK[0]} ${PEAK[1]-9}V${PEAK[1]+9}M${PEAK[0]-9} ${PEAK[1]}H${PEAK[0]+9}`,stroke:"#ecfdf5","stroke-opacity":.7,"stroke-width":.5},G);
 </script></body></html>
