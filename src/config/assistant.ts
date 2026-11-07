@@ -58,8 +58,7 @@ const linkedin = `- Earlier roles: Data Quality Analyst, US Markets, at Intrinio
 - ARS Rescue Rooter (American Residential Services) is an HVAC company that sets appointments from booths inside Home Depot stores. Chris is employed by ARS, not by Home Depot.
 - Won a Predictive Challenge (April 2022) with a logistic regression model assessing loan applicant creditworthiness.
 - LinkedIn articles: "The Iran War Put Oil Back in the Headlines. I Wanted to Test Where Oil Actually Shows Up in the Economy." (March 2026), "Revenue Recognition: Why Businesses Can't Count Your Payment Until They've Earned It" (August 2025), "Financial Intelligence: The Language of Business" (August 2025).
-- LinkedIn Learning certifications include TensorFlow deep learning applications, API testing, R for Excel users, data science question framing, strategic thinking, and coaching employees.
-- Profile: linkedin.com/in/chris-rotunno. Instagram: @chrisrotunno.`;
+- LinkedIn Learning certifications include TensorFlow deep learning applications, API testing, R for Excel users, data science question framing, strategic thinking, and coaching employees.`;
 
 const faq = faqData.map((f) => `Q: ${f.question}\nA: ${stripHtml(f.answer)}`).join("\n\n");
 

@@ -75,13 +75,7 @@ export default function jsonLDGenerator(props: JsonLDProps) {
       "jobTitle": "Analytics Engineer",
       "url": "${import.meta.env.SITE}",
       "image": "${import.meta.env.SITE}${siteData.defaultImage.src}",
-      "address": { "@type": "PostalAddress", "addressLocality": "St. Augustine", "addressRegion": "FL", "addressCountry": "US" },
-      "sameAs": [
-        "https://www.linkedin.com/in/chris-rotunno/",
-        "https://www.facebook.com/crotunno92",
-        "https://www.instagram.com/chrisrotunno/",
-        "https://www.youtube.com/@chris-rotunno"
-      ]
+      "address": { "@type": "PostalAddress", "addressLocality": "St. Augustine", "addressRegion": "FL", "addressCountry": "US" }
       }
     </script>`;
 }
