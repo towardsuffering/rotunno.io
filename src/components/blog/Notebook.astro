@@ -31,6 +31,8 @@ const { source, download, colab } = Astro.props as Props;
 const cells = (JSON.parse(source).cells as Cell[]).filter((c) => c.cell_type !== "raw");
 const text = (s: string | string[] | undefined) => (Array.isArray(s) ? s.join("") : (s ?? ""));
 const repo = "towardsuffering/rotunno.io";
+// save under the notebook's real name: built URLs carry a hash (name.Ab12Cd.ipynb) and dev URLs a ?t= query
+const fileName = (colab ?? download ?? "notebook.ipynb").split("?")[0].split("/").pop()!.replace(/\.[\w-]{8}\.ipynb$/, ".ipynb");
 
 // headings get the same ids the table of contents links to (see notebookHeadings)
 const marked = new Marked({
@@ -67,7 +69,7 @@ let codeCount = 0;
     (download || colab) && (
       <div class="notebook__actions">
         {download && (
-          <a class="notebook__button" href={download} download>
+          <a class="notebook__button" href={download} download={fileName} data-notebook-download>
             Download the notebook (.ipynb)
           </a>
         )}
@@ -220,4 +222,25 @@ let codeCount = 0;
 
   initNotebookPlots();
   document.addEventListener("astro:page-load", initNotebookPlots);
+
+  // servers can send .ipynb as text (or with no type), and browsers then save it as .txt;
+  // building the file in the page with a notebook type keeps the .ipynb name everywhere
+  document.addEventListener("click", async (event) => {
+    const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[data-notebook-download]");
+    if (!link) return;
+    event.preventDefault();
+    try {
+      const response = await fetch(link.href);
+      if (!response.ok) throw new Error(String(response.status));
+      const blob = new Blob([await response.text()], { type: "application/x-ipynb+json" });
+      const url = URL.createObjectURL(blob);
+      const save = Object.assign(document.createElement("a"), { href: url, download: link.download || "notebook.ipynb" });
+      document.body.append(save);
+      save.click();
+      save.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      window.location.href = link.href;
+    }
+  });
 </script>

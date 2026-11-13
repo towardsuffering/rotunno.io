@@ -125,3 +125,10 @@
     Referrer-Policy            = "strict-origin-when-cross-origin"
     Permissions-Policy         = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy    = "upgrade-insecure-requests"
+
+# notebooks download as .ipynb, not as text
+[[headers]]
+  for = "/*.ipynb"
+  [headers.values]
+    Content-Type = "application/x-ipynb+json"
+    Content-Disposition = "attachment"
