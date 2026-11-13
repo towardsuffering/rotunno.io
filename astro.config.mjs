@@ -60,5 +60,10 @@ export default defineConfig({
     build: {
       assetsInlineLimit: 0,
     },
+    // notebook charts import plotly lazily; pre-bundle it at dev startup so a mid-session
+    // re-optimize can't leave pages requesting an outdated copy (504, charts stuck loading)
+    optimizeDeps: {
+      include: ["plotly.js-cartesian-dist-min"],
+    },
   },
 });
