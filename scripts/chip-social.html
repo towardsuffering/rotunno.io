@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Share image for the chip-earnings post: the cover's design at 1200x630. Render at 1600x840 with device scale 1.5, downsample to 1200x630.
+     chip-photo.jpg: "Semiconductor Wafer of Microelectronics" by DrHughManning, CC BY-SA 4.0, Wikimedia Commons. -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=block" rel="stylesheet">
+<style>
+html,body{margin:0}
+body{width:1600px;height:840px;overflow:hidden;font-family:Inter,sans-serif;background:#000;position:relative}
+.photo{position:absolute;inset:0;background:url(chip-photo.jpg) 70% 55%/cover;filter:saturate(.85) contrast(1.1) brightness(.85)}
+.shade{position:absolute;inset:0;background:
+  radial-gradient(ellipse 70% 70% at 70% 45%, transparent 30%, rgba(4,8,18,.5) 100%),
+  linear-gradient(90deg, rgba(3,8,16,.95) 0%, rgba(3,8,16,.84) 34%, rgba(3,8,16,.2) 56%, rgba(3,8,16,0) 72%),
+  linear-gradient(0deg, rgba(3,8,16,.7) 0%, rgba(3,8,16,0) 35%)}
+.bar{position:absolute;left:0;top:0;bottom:0;width:22px;background:linear-gradient(180deg,#34d399 0 50%,#f87171 50% 100%)}
+.copy{position:absolute;left:96px;top:50%;transform:translateY(-50%);width:640px;color:#fff}
+.kicker{font-size:28px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#34d399;margin-bottom:24px}
+.kicker .dot{color:rgba(255,255,255,.55);margin:0 6px}
+.big{font-size:84px;font-weight:900;line-height:.94;letter-spacing:-.04em;margin:0}
+.big span{color:#f87171}
+.sub{margin-top:32px;font-size:33px;font-weight:500;line-height:1.3;color:rgba(255,255,255,.9);width:600px}
+.site{position:absolute;left:96px;bottom:40px;color:#34d399;font-weight:800;font-size:28px;letter-spacing:.02em}
+.board{position:absolute;right:70px;top:50%;transform:translateY(-50%) rotate(-4deg);width:540px;
+  background:rgba(6,10,20,.8);border:2px solid rgba(248,113,113,.55);border-radius:28px;padding:30px 38px 26px;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+.board h2{margin:0 0 14px;font-size:22px;font-weight:800;letter-spacing:.18em;color:#fca5a5}
+.row{display:grid;grid-template-columns:140px 1fr 150px;align-items:center;padding:13px 0;border-top:1.5px solid rgba(148,163,184,.18);
+  font-family:"JetBrains Mono",monospace;color:#f1f5f9}
+.row .t{font-size:36px;font-weight:800}
+.row .p{font-size:32px;font-weight:600;color:#cbd5e1;text-align:right;padding-right:24px}
+.row .c{font-size:32px;font-weight:800;color:#f87171;text-align:right}
+.row.hi{background:linear-gradient(90deg,rgba(52,211,153,.14),rgba(52,211,153,0));margin:0 -38px;padding:13px 38px;border-top-color:rgba(52,211,153,.5)}
+.row.hi .t{color:#34d399}
+.tag{display:block;font-family:Inter,sans-serif;font-size:15px;font-weight:800;letter-spacing:.14em;color:#34d399;margin-top:2px}
+.foot{margin-top:14px;padding-top:16px;border-top:1.5px solid rgba(148,163,184,.18);font-size:22px;font-weight:700;color:#e2e8f0;display:flex;justify-content:space-between}
+.foot b{color:#34d399}.foot i{font-style:normal;color:#f87171}
+</style></head><body>
+<div class="photo"></div><div class="shade"></div><div class="bar"></div>
+<div class="copy">
+  <div class="kicker">Nvidia reports tonight</div>
+  <h1 class="big">Beating Wall Street's forecast <span>doesn't lift chip stocks.</span></h1>
+  <div class="sub">Nvidia, AMD, Micron, Broadcom, and TSMC beat it in 92% of their last 60 reports. The stock fell the next day after 55%.</div>
+</div>
+<div class="board">
+  <h2>MONDAY'S CLOSE · NOV 16</h2>
+  <div class="row hi"><div class="t">NVDA<span class="tag">TONIGHT</span></div><div class="p">$156.14</div><div class="c">▼ 4.1%</div></div>
+  <div class="row"><div class="t">AMD</div><div class="p">$504.28</div><div class="c">▼ 5.6%</div></div>
+  <div class="row"><div class="t">MU</div><div class="p">$719.02</div><div class="c">▼ 7.6%</div></div>
+  <div class="row"><div class="t">AVGO</div><div class="p">$333.40</div><div class="c">▼ 3.9%</div></div>
+  <div class="row"><div class="t">TSM</div><div class="p">$373.45</div><div class="c">▼ 6.3%</div></div>
+  <div class="foot"><span>Nvidia beat it <b>12 times in 12</b>. It fell after <i>7</i>.</span></div>
+</div>
+<div class="site">rotunno.ai</div>
+</body></html>

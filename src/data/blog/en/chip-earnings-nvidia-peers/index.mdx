@@ -1,0 +1,41 @@
+---
+title: "Beating Wall Street's Forecast Doesn't Lift Chip Stocks. Nvidia Reports Tonight."
+description: Nvidia, AMD, Micron, Broadcom, and TSMC beat Wall Street's forecast in 92% of their last 60 reports, and the stock fell the next day after 55%. What moves these stocks is the outlook and the price investors put on it. With the notebook to rerun every number.
+draft: false
+authors:
+  - main-author
+pubDate: 2026-11-17
+heroImage: ./cover-forecast.jpg
+socialImage: ./social-forecast.jpg
+heroCredit:
+  author: "DrHughManning"
+  source: "Wikimedia Commons"
+  url: "https://commons.wikimedia.org/wiki/File:Semiconductor_Wafer_of_Microelectronics.jpg"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/"
+categories:
+  - data-science
+  - business
+tags:
+  - nvidia
+  - semiconductors
+  - earnings
+  - stocks
+  - valuation
+  - supply-chain
+  - finance
+  - financial-intelligence
+  - data-science
+  - python
+  - fmp-api
+---
+
+import Notebook from "@/components/blog/Notebook.astro";
+import notebook from "./chip_earnings_peers.ipynb?raw";
+import notebookUrl from "./chip_earnings_peers.ipynb?url";
+
+<Notebook
+  source={notebook}
+  download={notebookUrl}
+  colab="src/data/blog/en/chip-earnings-nvidia-peers/chip_earnings_peers.ipynb"
+/>
