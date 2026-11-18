@@ -116,12 +116,15 @@ const {
       margin-top: 0.35rem;
       margin-bottom: 1rem;
     }
+    /* each inset clears a float on the opposite side, so two photos never pinch a sliver of text between them */
     .article-figure--inset {
       float: right;
+      clear: left;
       margin-left: 1.75rem;
     }
     .article-figure--inset-left {
       float: left;
+      clear: right;
       margin-right: 1.75rem;
     }
     /* natural shape (charts and documents stay whole), capped so tall photos don't run long */

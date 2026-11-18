@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=Caveat:wght@700&display=block" rel="stylesheet">
+<style>
+html,body{margin:0}
+body{width:1600px;height:960px;overflow:hidden;font-family:Inter,sans-serif;background:#000;position:relative}
+.photo{position:absolute;inset:0;background:url(cover-photo.jpg) 70% 55%/cover;filter:saturate(.95) contrast(1.05) brightness(1.12)}
+.shade{position:absolute;inset:0;background:
+  radial-gradient(ellipse 70% 70% at 68% 45%, transparent 30%, rgba(8,4,4,.5) 100%),
+  linear-gradient(90deg, rgba(40,6,10,.93) 0%, rgba(30,6,10,.78) 36%, rgba(10,4,4,.05) 62%, rgba(0,0,0,0) 82%),
+  linear-gradient(0deg, rgba(8,4,4,.7) 0%, rgba(8,4,4,0) 32%)}
+.bar{position:absolute;left:0;top:0;bottom:0;width:22px;background:linear-gradient(180deg,#d42a3a 0 50%,#1d8a4a 50% 100%)}
+.copy{position:absolute;left:96px;top:50%;transform:translateY(-50%);width:640px;color:#fff}
+.kicker{font-size:28px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#f6c453;margin-bottom:24px}
+.kicker .dot{color:rgba(255,255,255,.6);margin:0 10px}
+.big{font-size:100px;font-weight:900;line-height:.94;letter-spacing:-.04em;margin:0}
+.big span{color:#f6c453}
+.sub{margin-top:30px;font-size:34px;font-weight:500;line-height:1.3;color:rgba(255,255,255,.92)}
+.tag{position:relative;width:400px;background:#fbf6ea;border-radius:14px 14px 14px 14px;
+  padding:56px 40px 40px;box-shadow:0 30px 60px rgba(0,0,0,.55);color:#2a1a10;
+  clip-path:polygon(18% 0,82% 0,100% 12%,100% 100%,0 100%,0 12%)}
+.tag-wrap{position:absolute;right:120px;top:230px;transform:rotate(8deg);transform-origin:50% 0}
+.twine{position:absolute;left:50%;top:-170px;width:5px;height:216px;margin-left:-2px;background:#d42a3a;border-radius:3px;box-shadow:0 4px 10px rgba(0,0,0,.5);z-index:2}
+.tag:before{content:"";position:absolute;left:50%;top:26px;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#2a1414;box-shadow:inset 0 0 0 6px #c9a24a}
+.tag .to{font-size:24px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#b3202e;margin-top:20px}
+.tag .h{font-family:Caveat,cursive;font-size:84px;line-height:.95;margin:10px 0 14px;color:#1d5e36}
+.tag .from{font-size:24px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#b3202e;border-top:3px dashed rgba(42,26,16,.35);padding-top:16px}
+.tag .from i{font-family:Caveat,cursive;font-style:normal;font-size:44px;letter-spacing:0;text-transform:none;color:#2a1a10;margin-left:10px}
+.ribbon{position:absolute;right:430px;top:120px;width:8px;height:200px;background:#d42a3a;transform:rotate(-20deg);border-radius:4px;box-shadow:0 6px 14px rgba(0,0,0,.4)}
+</style></head><body>
+<div class="photo"></div><div class="shade"></div><div class="bar"></div>
+<div class="copy">
+  <div class="kicker">Holidays<span class="dot">·</span>Isolation<span class="dot">·</span>Data</div>
+  <h1 class="big">One wish, <span>two people lifted.</span></h1>
+  <div class="sub">Americans spend over 5 hours a day alone. Two words help both people.</div>
+</div>
+<div class="tag-wrap"><div class="twine"></div><div class="tag">
+  <div class="to">To: Anyone</div>
+  <div class="h">Happy holidays.<br>I mean it.</div>
+  <div class="from">From:<i>someone who needed it too</i></div>
+</div></div>
+</body></html>

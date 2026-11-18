@@ -223,6 +223,20 @@ let codeCount = 0;
   initNotebookPlots();
   document.addEventListener("astro:page-load", initNotebookPlots);
 
+  // plotly.js inserts its layout rules (layer stacking, modebar) once, via insertRule, into empty
+  // <style id="plotly.js-style-*"> tags in <head>. The client router replaces <head> on navigation,
+  // which drops those tags, and plotly never re-adds them, so charts render as stacked, broken layers.
+  // Copy the rules into the incoming page as plain text so they survive every swap.
+  document.addEventListener("astro:before-swap", (event) => {
+    document.querySelectorAll<HTMLStyleElement>('style[id^="plotly.js-style-"]').forEach((style) => {
+      if (!style.sheet || event.newDocument.getElementById(style.id)) return;
+      const copy = event.newDocument.createElement("style");
+      copy.id = style.id;
+      copy.textContent = Array.from(style.sheet.cssRules, (rule) => rule.cssText).join("\n");
+      event.newDocument.head.append(copy);
+    });
+  });
+
   // servers can send .ipynb as text (or with no type), and browsers then save it as .txt;
   // building the file in the page with a notebook type keeps the .ipynb name everywhere
   document.addEventListener("click", async (event) => {
